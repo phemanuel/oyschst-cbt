@@ -93,6 +93,9 @@
               </div>
             </div>
           </div>
+          @error('admission_no')
+									<span class="invalid-feedback">{{ $message }}</span>
+									@enderror
           <div class="form-group">
             <strong><label class="label">Programme</label></strong>
             <div class="input-group">
@@ -108,6 +111,9 @@
               </div>
             </div>
           </div>
+          @error('department')
+									<span class="invalid-feedback">{{ $message }}</span>
+									@enderror
           <div class="form-group">
             <button class="btn btn-primary submit-btn btn-block">Login</button>
           </div>

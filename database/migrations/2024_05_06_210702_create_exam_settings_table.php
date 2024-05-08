@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('semester');
             $table->string('department');
             $table->string('exam_type');
+            $table->string('exam_category');
             $table->integer('time_limit');
             $table->integer('no_of_qst');
             $table->timestamps();
