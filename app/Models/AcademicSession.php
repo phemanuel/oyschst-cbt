@@ -23,7 +23,6 @@ class AcademicSession extends Model
      */
     protected $fillable = [
         'session1',
-        'exam_type',
         'status',
     ];
 }

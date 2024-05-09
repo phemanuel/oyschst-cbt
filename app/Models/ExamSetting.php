@@ -23,16 +23,17 @@ class ExamSetting extends Model
      */
     protected $fillable = [
         'class', 
-        'subject1', 
-        'subject2', 
-        'subject3', 
-        'subject4', 
-        'subject5', 
+        // 'subject1', 
+        // 'subject2', 
+        // 'subject3', 
+        // 'subject4', 
+        // 'subject5', 
         'session1', 
         'semester', 
         'department', 
         'exam_type', 
+        'exam_category', 
         'time_limit', 
-        'no_of_qst'
+        'no_of_qst',
     ];
 }

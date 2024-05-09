@@ -65,6 +65,8 @@ Route::get('/', function () {
         //--exam setting
         Route::get('exam-setting', [DashboardController::class, 'examSetting'])
         ->name('exam-setting');
+        Route::put('exam-setting', [DashboardController::class, 'examSettingAction'])
+        ->name('exam-setting.action');
         Route::get('exam-type', [DashboardController::class, 'examType'])
         ->name('exam-type');
         Route::post('exam-type', [DashboardController::class, 'examTypeAction'])

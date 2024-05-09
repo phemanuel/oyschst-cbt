@@ -14,7 +14,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserSeeder::class);
-        // $this->call(SettingsSeeder::class);
-        // $this->call(CustomerSeeder::class);
+        $this->call(ExamSettingSeeder::class);
+        $this->call(AcademicSessionSeeder::class);
+        $this->call(DepartmentSeeder::class);
+        $this->call(LoadingCheckSeeder::class);
+        $this->call(SoftwareVersionSeeder::class);
+        $this->call(StudentAdmissionSeeder::class);
     }
 }

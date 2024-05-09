@@ -225,7 +225,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Set up the current exam settings.</h3>
+            <h3 class="box-title">Update the current exam settings.</h3>
             <p align="right"><a href="{{route('exam-type')}}" class="btn btn-success">Add exam type</a></p>
               
             </div>
@@ -240,18 +240,22 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form">
+            <form role="form" action="{{route('exam-setting.action')}}" method="post">
+              @csrf
+              @method('PUT')
               <div class="box-body">
               <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
-                    <option value="General">General</option>
-                    <option value="Semester">Semester</option>
+                  <option value="{{$examSetting->exam_category}}" selected>{{$examSetting->exam_category}}</option>
+                    <option value="GENERAL">GENERAL</option>
+                    <option value="SEMESTER">SEMESTER</option>
                   </select>
                 </div>
               <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <select name="exam_type" id="" class="form-control">
+                  <option value="{{$examSetting->exam_type}}" selected>{{$examSetting->exam_type}}</option>
                   @foreach($examtype as $rt)
 				<option value="{{$rt->exam_type}}">{{$rt->exam_type}}</option>
 				@endforeach
@@ -260,6 +264,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
                   <select name="department" id="" class="form-control">
+                  <option value="{{$examSetting->department}}" selected>{{$examSetting->department}}</option>
                   @foreach($dept as $rs)
 				<option value="{{$rs->department}}">{{$rs->department}}</option>
 				@endforeach
@@ -267,22 +272,25 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="department" id="" class="form-control">
+                  <select name="session1" id="" class="form-control">
+                  <option value="{{$examSetting->session1}}" selected>{{$examSetting->session1}}</option>
                   @foreach($acad_sessions as $rd)
-				<option value="{{$rd->department}}">{{$rd->session1}}</option>
+				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
 				@endforeach
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Semester</label>
-                  <select name="department" id="" class="form-control">                  
+                  <select name="semester" id="" class="form-control"> 
+                  <option value="{{$examSetting->semester}}" selected>{{$examSetting->semester}}</option>                 
 				<option value="First">First</option>
 				<option value="Second">Second</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
-                  <select name="level" id="" class="form-control">                  
+                  <select name="class" id="" class="form-control">
+                  <option value="{{$examSetting->class}}" selected>{{$examSetting->class}}</option>                  
 				<option value="100">100</option>
 				<option value="200">200</option>
                 <option value="300">300</option>
@@ -294,7 +302,8 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">No of Question</label>
-                  <select name="no_of_qst" id="" class="form-control">                  
+                  <select name="no_of_qst" id="" class="form-control"> 
+                  <option value="{{$examSetting->no_of_qst}}" selected>{{$examSetting->no_of_qst}}</option>                 
 				<option value="10">10</option>
 				<option value="20">20</option>
                 <option value="30">30</option>
@@ -309,14 +318,14 @@
                 </div>  
                 <div class="form-group">
                   <label for="exampleInputEmail1">Time Limit</label>
-                  <input type="text" name="time_limit" class="form-control">
+                  <input type="text" name="time_limit" class="form-control" value="{{$examSetting->time_limit}}">
                 </div>             
                 
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Update</button>
               </div>
             </form>
           </div>

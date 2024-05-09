@@ -19,7 +19,9 @@ class UserSeeder extends Seeder
         ], [
             'name' => 'Admin CBT',
             'email'=>'admin@gmail.com',
-            'password' => bcrypt('password'),            
+            'password' => bcrypt('password'), 
+            'email_verified_status' => 1,
+            'login_attempts' => 0,           
         ]);
     }
 }

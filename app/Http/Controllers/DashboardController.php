@@ -10,6 +10,7 @@ use App\Models\Question;
 use App\Models\AcademicSession;
 use App\Models\SoftwareVersion;
 use App\Models\ExamType;
+use App\Models\ExamSetting;
 
 class DashboardController extends Controller
 {
@@ -37,8 +38,9 @@ class DashboardController extends Controller
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examtype = ExamType::orderBy('exam_type')->get();
+        $examSetting = ExamSetting::first();
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
-        'examtype'));
+        'examtype','examSetting'));
     }
 
     public function examType()
@@ -76,6 +78,40 @@ class DashboardController extends Controller
 
             return redirect()->back()->with('error', 'An error occurred during adding exam type. Please try again.');
         }
+    }
+
+    public function examSettingAction(Request $request)
+    {
+        try {
+            // Validate form input
+            $validatedData = $request->validate([
+                'exam_category' => 'required',
+                'exam_type' => 'required',
+                'department' => 'required',
+                'session1' => 'required',
+                'semester' => 'required',
+                'class' => 'required',
+                'no_of_qst' => 'required',
+                'time_limit' => 'required',
+            ]);
+
+            // Find the exam setting to update
+            $examSetting = ExamSetting::first();
+
+            // Update the exam setting with the validated data
+            $examSetting->update($validatedData);
+
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Exam setting updated successfully.');
+            }catch (ValidationException $e) {
+                // Validation failed. Redirect back with validation errors.
+                return redirect()->back()->withErrors($e->errors())->withInput();
+            } catch (Exception $e) {
+                // Log the error
+                Log::error('Error during user registration: ' . $e->getMessage());
+    
+                return redirect()->back()->with('error', 'An error occurred during exam settings update. Please try again.');
+            }
     }
 
 }

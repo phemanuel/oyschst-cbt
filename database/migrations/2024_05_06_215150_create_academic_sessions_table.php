@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('academic_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('session1');
-            $table->string('exam_type');
+            // $table->string('exam_type');
             $table->enum('status',['active', 'Inactive',]);
             $table->timestamps();
         });
