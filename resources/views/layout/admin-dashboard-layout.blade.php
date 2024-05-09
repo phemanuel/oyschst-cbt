@@ -138,8 +138,8 @@
           </a>
         </li>
         <li>
-          <a href="{{route('import-student')}}">
-            <i class="fa fa-book"></i> <span>Import Student List</span>
+          <a href="{{route('student')}}">
+            <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

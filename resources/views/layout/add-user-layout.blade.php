@@ -126,7 +126,7 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('exam-setting')}}">
             <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
@@ -166,7 +166,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('users')}}">
             <i class="fa fa-user"></i> <span>Users</span>
             <span class="pull-right-container">
@@ -209,11 +209,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Exam Setting        
+        Add User        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Exam Setting</li>
+        <li class="active">Add User</li>
       </ol>
     </section>
 
@@ -225,8 +225,8 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Add exam types.</h3>
-            <p align="right"><a href="{{route('exam-setting')}}" class="btn btn-success">Back to exam settings</a></p>
+            <h3 class="box-title">Create a  user.</h3>
+            <p align="right"><a href="{{route('users')}}" class="btn btn-success">Back to User List</a></p>
               
             </div>
             @if(session('success'))
@@ -240,37 +240,35 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('exam-type.action')}}" method="post">
-                @csrf
+            <form role="form" action="{{route('add-user.action')}}" method="post">
+              @csrf              
               <div class="box-body">              
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Type</label>
-                  <input type="text" name="exam_type" class="form-control">
+                  <label for="exampleInputEmail1">Name</label>
+                  <input type="text" name="name" class="form-control" value="{{old('name')}}">
+                </div>             
+                @error('name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email Address</label>
+                  <input type="email" name="email" class="form-control" value="{{old('email')}}">
+                </div>             
+                @error('email')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Password</label>
+                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
+                </div>             
+                @error('password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Confirm Password</label>
+                  <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
                 </div>             
                 
-                <!-- Display the available departments   -->
-                <table class="table table-striped">
-                      <tr>           
-                      <th></th> 
-                        <th>Exam Type</th>                        
-                        <th>Created On</th>                       
-                      </tr>
-
-                      @if ($examType->count() > 0)
-			@foreach ($examType as $rd)
-                      <tr> 
-                        <td></td>                         
-                        <td>{{$rd->exam_type}}</td>                        
-                        <td>{{$rd->created_at}}</td>                        
-                      </tr>  
-                      @endforeach
-		@else
-		<tr>
-			<td colspan="8">Users not available.</td>
-		</tr>
-		@endif                                   
-                    </table>
-                    {{ $examType->links() }}
               </div>
               <!-- /.box-body -->
 

@@ -126,7 +126,7 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('exam-setting')}}">
             <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
@@ -158,7 +158,7 @@
             </span>
           </a>
         </li>        
-        <li>
+        <li class="active">
           <a href="{{route('change-course')}}">
             <i class="fa fa-laptop"></i> <span>Change of Course</span>
             <span class="pull-right-container">
@@ -209,11 +209,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Exam Setting        
+        Change Course        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Exam Setting</li>
+        <li class="active">Change Course</li>
       </ol>
     </section>
 
@@ -225,8 +225,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Add exam types.</h3>
-            <p align="right"><a href="{{route('exam-setting')}}" class="btn btn-success">Back to exam settings</a></p>
+            <h3 class="box-title">Change the course of a student.</h3>           
               
             </div>
             @if(session('success'))
@@ -240,42 +239,22 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('exam-type.action')}}" method="post">
-                @csrf
+            <form role="form" action="{{route('change-course-view')}}" method="post">
+              @csrf              
               <div class="box-body">              
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Type</label>
-                  <input type="text" name="exam_type" class="form-control">
+                  <label for="exampleInputEmail1">Reg/Matric No</label>
+                  <input type="text" name="admission_no" class="form-control" value="{{old('admission_no')}}">
                 </div>             
+                @error('name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
                 
-                <!-- Display the available departments   -->
-                <table class="table table-striped">
-                      <tr>           
-                      <th></th> 
-                        <th>Exam Type</th>                        
-                        <th>Created On</th>                       
-                      </tr>
-
-                      @if ($examType->count() > 0)
-			@foreach ($examType as $rd)
-                      <tr> 
-                        <td></td>                         
-                        <td>{{$rd->exam_type}}</td>                        
-                        <td>{{$rd->created_at}}</td>                        
-                      </tr>  
-                      @endforeach
-		@else
-		<tr>
-			<td colspan="8">Users not available.</td>
-		</tr>
-		@endif                                   
-                    </table>
-                    {{ $examType->links() }}
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-primary">Proceed</button>
               </div>
             </form>
           </div>
