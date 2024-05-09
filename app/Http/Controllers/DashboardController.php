@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CollegeSetup;
+use App\Models\CbtClass;
 
 class DashboardController extends Controller
 {
@@ -27,6 +29,7 @@ class DashboardController extends Controller
 
     public function indexAdmin()
     {
+        $collegeSetup = CollegeSetup::first();
         $students = StudentAdmission::all();
         $users = User::all();
         $departments = Department::all();
@@ -34,25 +37,28 @@ class DashboardController extends Controller
         $softwareVersion = SoftwareVersion::first();
 
         return view('dashboard.admin-dashboard', compact('students', 'users', 'departments', 'questions',
-    'softwareVersion'));
+    'softwareVersion', 'collegeSetup'));
     }
 
     public function examSetting()
     {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examtype = ExamType::orderBy('exam_type')->get();
         $examSetting = ExamSetting::first();
+        $class = CbtClass::orderBy('class')->get();
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
-        'examtype','examSetting'));
+        'examtype','examSetting', 'collegeSetup', 'class'));
     }
 
     public function examType()
     {
+        $collegeSetup = CollegeSetup::first();
         $examType = ExamType::Paginate(10);
         $softwareVersion = SoftwareVersion::first();
-        return view('dashboard.exam-type', compact('softwareVersion', 'examType'));
+        return view('dashboard.exam-type', compact('softwareVersion', 'examType', 'collegeSetup'));
     }
 
     public function examTypeAction(Request $request)
@@ -123,10 +129,11 @@ class DashboardController extends Controller
     public function Users()
     {
         try {
+            $collegeSetup = CollegeSetup::first();
             $users = User::paginate(10);
             $softwareVersion = SoftwareVersion::first();
             
-            return view('dashboard.users', compact('users', 'softwareVersion'));
+            return view('dashboard.users', compact('users', 'softwareVersion', 'collegeSetup'));
         } catch (\Exception $e) {
             // Handle any exceptions that may occur
             // Log the error or redirect to a generic error page
@@ -138,8 +145,9 @@ class DashboardController extends Controller
 
     public function addUser()
     {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        return view('dashboard.add-user', compact('softwareVersion'));
+        return view('dashboard.add-user', compact('softwareVersion', 'collegeSetup'));
     }
 
     public function addUserAction(Request $request)
@@ -186,12 +194,14 @@ class DashboardController extends Controller
 
     public function changeCourse()
     {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        return view('dashboard.change-course', compact('softwareVersion'));
+        return view('dashboard.change-course', compact('softwareVersion', 'collegeSetup'));
     }
 
     public function changeCourseView(Request $request)
     {
+
         try{
             $validatedData = $request->validate([
             'admission_no' => 'required|string',
@@ -199,12 +209,14 @@ class DashboardController extends Controller
         $admission_no = $validatedData['admission_no'];
         $dept = Department::orderBy('department')->get();
         $softwareVersion = SoftwareVersion::first();
+        $collegeSetup = CollegeSetup::first();
         $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->get();
         if(!$checkAdmission){
             return redirect()->route('change-course')->with('error', 'Invalid Reg No/Matric No.');
         }
 
-        return view('dashboard.change-course-view', compact('softwareVersion','checkAdmission', 'dept'));
+        return view('dashboard.change-course-view', compact('softwareVersion','checkAdmission', 'dept', 
+        'collegeSetup'));
         
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -246,9 +258,10 @@ class DashboardController extends Controller
 
     public function addCourse()
     {
+        $collegeSetup = CollegeSetup::first();
         $courses = Department::paginate(10);
         $softwareVersion = SoftwareVersion::first();
-        return view('dashboard.add-course', compact('courses', 'softwareVersion'));
+        return view('dashboard.add-course', compact('courses', 'softwareVersion', 'collegeSetup'));
     }
 
     public function addCourseAction(Request $request)
@@ -276,8 +289,9 @@ class DashboardController extends Controller
 
     public function loginStatus()
     {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        return view('dashboard.student-login-status', compact('softwareVersion'));
+        return view('dashboard.student-login-status', compact('softwareVersion','collegeSetup'));
     }
 
     public function loginStatusView(Request $request)
@@ -289,12 +303,14 @@ class DashboardController extends Controller
         $admission_no = $validatedData['admission_no'];
         $dept = Department::orderBy('department')->get();
         $softwareVersion = SoftwareVersion::first();
+        $collegeSetup = CollegeSetup::first();
         $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->get();
         if(!$checkAdmission){
             return redirect()->route('login-status')->with('error', 'Invalid Reg No/Matric No.');
         }
 
-        return view('dashboard.student-login-status-view', compact('softwareVersion','checkAdmission', 'dept'));
+        return view('dashboard.student-login-status-view', compact('softwareVersion','checkAdmission', 
+        'dept', 'collegeSetup'));
         
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -336,11 +352,122 @@ class DashboardController extends Controller
 
     public function collegeSetup()
     {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $courses = Department::paginate(10);
         $softwareVersion = SoftwareVersion::first();
-        return view('dashboard.college-setup', compact('courses', 'softwareVersion'));
+        $classes = CbtClass::paginate(10);
+        return view('dashboard.college-setup', compact('courses', 'softwareVersion','collegeSetup',
+    'classes'));
         
+    }    
+
+    public function addClassAction(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'class' => 'required|string',
+            ]);       
+
+            $class = CbtClass::create([
+                'class' => $validatedData['class'],                     
+            ]);
+
+            return redirect()->route('college-setup')->with('success-class', 'Class/Level has been created successfully.');
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during class registration: ' . $e->getMessage());
+
+            return redirect()->back()->with('error-class', 'An error occurred during department. Please try again.');
+        }
     }
 
+    public function addCourseCollegeAction(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'department' => 'required|string',
+            ]);       
+
+            $dept = Department::create([
+                'department' => $validatedData['department'],                     
+            ]);
+
+            return redirect()->route('college-setup')->with('success-dept', 'Department has been created successfully.');
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during department registration: ' . $e->getMessage());
+
+            return redirect()->back()->with('error-dept', 'An error occurred during department. Please try again.');
+        }
+    }
+
+    public function collegeSetupAction(Request $request)
+    {
+        try {
+            // Validate form input
+            $validatedData = $request->validate([
+                'name' => 'required',
+                'email' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'web_url' => 'required',
+                'file'  => 'nullable',
+            ]);
+
+            $collegeSetup = CollegeSetup::first();
+
+            if ($request->hasFile('file')) {   
+                $userCertificateFile = $request->file('file');
+                $fileId = uniqid();                
+                // Generate filenames                 
+                $userCertificateFilename = $fileId . '_avatar' . $userCertificateFile->getClientOriginalExtension();
+                // Store file
+                $certificatePath = $userCertificateFile->storeAs('college', $userCertificateFilename, 'public');
+                $collegeSetup->avatar = $certificatePath  ;           
+            }    
+
+            // Update the exam setting with the validated data
+            $collegeSetup->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'phone' => $validatedData['phone'],
+                'address' => $validatedData['address'],
+                'web_url' => $validatedData['web_url'],
+            ]);
+
+            // Redirect back with success message
+            return redirect()->back()->with('success-college', 'College setup updated successfully.');
+            }catch (ValidationException $e) {
+                // Validation failed. Redirect back with validation errors.
+                return redirect()->back()->withErrors($e->errors())->withInput();
+            } catch (Exception $e) {
+                // Log the error
+                Log::error('Error during college setting: ' . $e->getMessage());
+    
+                return redirect()->back()->with('error-college', 'An error occurred during exam settings update. Please try again.');
+            }
+    }
+
+    public function student()
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $student = StudentAdmission::Paginate(20);
+        return view('dashboard.student', compact('softwareVersion','collegeSetup','student'));
+    }
+
+    public function studentCreate()
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $class = CbtClass::orderBy('class')->get();
+        return view('dashboard.student-create', compact('softwareVersion','collegeSetup','class'));
+    }
 }

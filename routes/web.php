@@ -74,6 +74,18 @@ Route::get('/', function () {
         //--student list
         Route::get('student', [DashboardController::class, 'student'])
         ->name('student');
+        Route::get('student-import', [DashboardController::class, 'studentImport'])
+        ->name('student-import');
+        Route::get('student-create', [DashboardController::class, 'studentCreate'])
+        ->name('student-create');
+        Route::post('student-create', [DashboardController::class, 'studentCreateAction'])
+        ->name('student-create.action');
+        Route::get('student-edit/{id}', [DashboardController::class, 'studentEdit'])
+        ->name('student-edit');
+        Route::put('student-edit/{id}', [DashboardController::class, 'studentEditAction'])
+        ->name('student-edit.action');
+        Route::delete('student/{id}', [DashboardController::class, 'studentDelete'])
+        ->name('student-delete.action');
         //--change course
         Route::get('change-course', [DashboardController::class, 'changeCourse'])
         ->name('change-course');
@@ -85,6 +97,11 @@ Route::get('/', function () {
         ->name('add-course');
         Route::post('add-course', [DashboardController::class, 'addCourseAction'])
         ->name('add-course.action');
+        Route::post('add-course-college', [DashboardController::class, 'addCourseCollegeAction'])
+        ->name('add-course-college.action');
+        //--Add class/level--        
+        Route::post('add-class', [DashboardController::class, 'addClassAction'])
+        ->name('add-class.action');
         //--student login status
         Route::get('login-status', [DashboardController::class, 'loginStatus'])
         ->name('login-status');
@@ -95,6 +112,8 @@ Route::get('/', function () {
         //--college update
         Route::get('college-setup', [DashboardController::class, 'collegeSetup'])
         ->name('college-setup');
+        Route::put('college-setup', [DashboardController::class, 'collegeSetupAction'])
+        ->name('college-setup.action');
         //--exam upload
         Route::get('question-upload', [DashboardController::class, 'questionUpload'])
         ->name('question-upload');

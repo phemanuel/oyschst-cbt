@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('college_setups', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email');
+            $table->string('avatar');
+            $table->string('phone');
+            $table->string('address');
+            $table->string('web_url');
             $table->timestamps();
         });
     }

@@ -142,7 +142,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('student')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -166,7 +166,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('users')}}">
             <i class="fa fa-user"></i> <span>Users</span>
             <span class="pull-right-container">
@@ -209,76 +209,73 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin Users       
+        Student       
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Admin Users</li>
+        <li class="active">Student</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-            <h3 class="box-title">List of Users.</h3>
-            <p align="right"><a href="{{route('add-user')}}" class="btn btn-success">Add User</a></p>
-              
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title"></h3>
+              <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a>
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                <a href="{{route('student-import')}}" class="btn btn-info">Import Student</a>
+                </div>
+              </div>
             </div>
-            @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
             <!-- /.box-header -->
-            <!-- form start -->
-            <table class="table table-striped">
-                      <tr>           
-                      <th>ID</th> 
-                        <th>Admin Name</th>
-                        <th>Email Address</th>
-                        <th>Created On</th>
-                        <th>Action</th>
-                      </tr>
-
-                      @if ($users->count() > 0)
-			@foreach ($users as $key => $rd)
-                      <tr> 
-                        <td>{{$key +1}}</td>                         
-                        <td>{{$rd->name}}</td>
-                        <td><div class="badge badge-info">{{$rd->email}}</div></td>
-                        <td>{{$rd->created_at}}</td>
-                        <td><a href="#" class="btn btn-outline-primary">Edit</a></td>
-                      </tr>  
-                      @endforeach
-		@else
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Programme</th>
+                  <th>Level</th>
+                  <th>Phone No</th>
+                  <th>State</th>
+                  <th>Login Status</th>
+                  <th>Actions</th>
+                </tr>
+                @if ($student->count() > 0)
+                @foreach ($student as $key => $rs)
+                <tr>
+                    <td>{{ $key + 1 }}</td>
+                    <td>{{ $rs->Surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
+                    <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->phone_no }}</td>
+                    <td>{{ $rs->state }}</td>
+                    @if ($rs->login_status == '0')
+                    <td><span class="label label-danger">{{ $rs->login_status }}</span></td>
+                    @elseif ($rs->login_status == '1')
+                    <td><span class="label label-success">{{ $rs->login_status }}</span></td>
+                    @endif
+                    <td> <a class="label label-primary" href="{{route('student-edit.action', ['id' => $rs->id])}}">Edit</a>
+                    <a class="label label-danger" href="{{route('student-delete.action', ['id' => $rs->id])}}">Delete</a>                    
+                </td>
+                </tr>
+                @endforeach
+                @else
 		<tr>
-			<td colspan="8">Users not available.</td>
+			<td colspan="8">Students not available.</td>
 		</tr>
-		@endif                                   
-                    </table>
-                    {{ $users->links() }}
+        @endif
+              </table>
+              {{ $student->links() }}
+            </div>
+            <!-- /.box-body -->
           </div>
           <!-- /.box -->
-
         </div>
-        <!--/.col (left) -->
-        <!-- right column -->
-        <div class="col-md-6">
-          
-          
-        </div>
-        <!--/.col (right) -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>

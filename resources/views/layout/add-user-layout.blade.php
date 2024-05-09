@@ -50,7 +50,7 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>dmin</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><img src="{{asset('favicon.png')}}" alt="College Logo" width="30" height="30"> <b>Admin</b></span>
+      <span class="logo-lg"><img src="{{asset($collegeSetup->avatar)}}" alt="College Logo" width="30" height="30"> <b>Admin</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -67,13 +67,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dashboard/dist/img/avatar5.png" class="user-image" alt="User Image">
+              <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{auth()->user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+                <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
 
                 <p>
                   {{auth()->user()->name}}
@@ -297,7 +297,7 @@
     <div class="pull-right hidden-xs">
       <b>Version</b> {{$softwareVersion->version}}
     </div>
-    <strong>&copy; 2020-<?php echo date('Y')  ?> <a target="_blank" href="https://www.oyschst.edu.ng">Oyo State College of Health Science and Technology</a>.</strong>
+    <strong>&copy; 2020-<?php echo date('Y')  ?> <a target="_blank" href="{{$collegeSetup->web_url}}">{{$collegeSetup->name}}</a>.</strong>
   </footer>
 
   <!-- Control Sidebar -->

@@ -50,7 +50,7 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>dmin</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><img src="{{asset('favicon.png')}}" alt="College Logo" width="30" height="30"> <b>Admin</b></span>
+      <span class="logo-lg"><img src="{{asset($collegeSetup->avatar)}}" alt="College Logo" width="30" height="30"> <b>Admin</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -67,13 +67,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dashboard/dist/img/avatar5.png" class="user-image" alt="User Image">
+              <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{auth()->user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+                <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
 
                 <p>
                   {{auth()->user()->name}}
@@ -228,51 +228,71 @@
             <h3 class="box-title">Set up College.</h3>
             
             </div>
-            @if(session('success'))
+            @if(session('success-college'))
 						<div class="alert alert-success">
-							{{ session('success') }}
+							{{ session('success-college') }}
 						</div>
-          @elseif(session('error'))
+          @elseif(session('error-college'))
 						<div class="alert alert-danger">
-							{{ session('error') }}
+							{{ session('error-college') }}
 						</div>
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('add-user.action')}}" method="post">
-              @csrf              
+            <form role="form" action="{{route('college-setup.action')}}" method="post" enctype="multipart/form-data">
+              @csrf    
+              @method('PUT')          
               <div class="box-body">              
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="text" name="name" class="form-control" value="{{old('name')}}">
+                  <label for="exampleInputEmail1">College Name</label>
+                  <input type="text" name="name" class="form-control" value="{{$collegeSetup->name}}">
                 </div>             
                 @error('name')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
                   <label for="exampleInputEmail1">Email Address</label>
-                  <input type="email" name="email" class="form-control" value="{{old('email')}}">
+                  <input type="email" name="email" class="form-control" value="{{$collegeSetup->email}}">
                 </div>             
                 @error('email')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Password</label>
-                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
+                  <label for="exampleInputEmail1">Phone No</label>
+                  <input type="text" name="phone" class="form-control" value="{{$collegeSetup->phone}}">
                 </div>             
-                @error('password')
+                @error('phone')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Confirm Password</label>
-                  <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
+                  <label for="exampleInputEmail1">Address</label>
+                  <textarea name="address" id="" class="form-control">{{$collegeSetup->address}}</textarea>
+                </div> 
+                @error('address')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Website Url(optional)</label>
+                  <input type="text" name="web_url" class="form-control" value="{{$collegeSetup->web_url}}">
                 </div>             
-                
+                @error('web_url')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
+                <div class="form-group">
+                  <label for="exampleInputEmail1">College Avatar</label>
+                  <input type="file" name="file"  class="form-control" />
+                </div>             
+                @error('file')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
+                <img src="{{asset($collegeSetup->avatar)}}" alt="" width="50" height="50">
+              
+
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-primary">Update</button>
               </div>
             </form>
           </div>
@@ -283,46 +303,50 @@
             <h3 class="box-title">Add Class/Level.</h3>           
               
             </div>
-            @if(session('success'))
+            @if(session('success-class'))
 						<div class="alert alert-success">
-							{{ session('success') }}
+							{{ session('success-class') }}
 						</div>
-          @elseif(session('error'))
+          @elseif(session('error-class'))
 						<div class="alert alert-danger">
-							{{ session('error') }}
+							{{ session('error-class') }}
 						</div>
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('add-user.action')}}" method="post">
+            <form role="form" action="{{route('add-class.action')}}" method="post">
               @csrf              
               <div class="box-body">              
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="text" name="name" class="form-control" value="{{old('name')}}">
+                  <label for="exampleInputEmail1">Class/Level</label>
+                  <input type="text" name="class" class="form-control" value="{{old('class')}}">
                 </div>             
-                @error('name')
+                @error('class')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email Address</label>
-                  <input type="email" name="email" class="form-control" value="{{old('email')}}">
-                </div>             
-                @error('email')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Password</label>
-                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
-                </div>             
-                @error('password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Confirm Password</label>
-                  <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
-                </div>             
-                
+                @enderror                      
+                <!-- Display the available departments   -->
+                <table class="table table-striped">
+                      <tr>           
+                      <th></th> 
+                        <th>Class/Level</th>                        
+                        <th>Created On</th>                       
+                      </tr>
+
+                      @if ($classes->count() > 0)
+			@foreach ($classes as $key => $rd)
+                      <tr> 
+                        <td>{{$key +1}}</td>                         
+                        <td>{{$rd->class}}</td>                        
+                        <td>{{$rd->created_at}}</td>                        
+                      </tr>  
+                      @endforeach
+		@else
+		<tr>
+			<td colspan="8">Class/Level not available.</td>
+		</tr>
+		@endif                                   
+                    </table>
+                    {{ $classes->links() }}
               </div>
               <!-- /.box-body -->
 
@@ -343,18 +367,18 @@
             <h3 class="box-title">Add Programme.</h3>           
               
             </div>
-            @if(session('success'))
+            @if(session('success-dept'))
 						<div class="alert alert-success">
-							{{ session('success') }}
+							{{ session('success-dept') }}
 						</div>
-          @elseif(session('error'))
+          @elseif(session('error-dept'))
 						<div class="alert alert-danger">
-							{{ session('error') }}
+							{{ session('error-dept') }}
 						</div>
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('add-course.action')}}" method="post">
+            <form role="form" action="{{route('add-course-college.action')}}" method="post">
               @csrf              
               <div class="box-body">              
                 <div class="form-group">
@@ -373,16 +397,16 @@
                       </tr>
 
                       @if ($courses->count() > 0)
-			@foreach ($courses as $rd)
+			@foreach ($courses as $key => $rd)
                       <tr> 
-                        <td></td>                         
+                        <td>{{$key +1}}</td>                         
                         <td>{{$rd->department}}</td>                        
                         <td>{{$rd->created_at}}</td>                        
                       </tr>  
                       @endforeach
 		@else
 		<tr>
-			<td colspan="8">Users not available.</td>
+			<td colspan="8">Departments not available.</td>
 		</tr>
 		@endif                                   
                     </table>
@@ -415,7 +439,7 @@
     <div class="pull-right hidden-xs">
       <b>Version</b> {{$softwareVersion->version}}
     </div>
-    <strong>&copy; 2020-<?php echo date('Y')  ?> <a target="_blank" href="https://www.oyschst.edu.ng">Oyo State College of Health Science and Technology</a>.</strong>
+    <strong>&copy; 2020-<?php echo date('Y')  ?> <a target="_blank" href="{{$collegeSetup->web_url}}">{{$collegeSetup->name}}</a>.</strong>
   </footer>
 
   <!-- Control Sidebar -->

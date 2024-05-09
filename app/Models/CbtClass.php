@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class CbtClass extends Model
 {
     use HasFactory;
+
+    protected $fillable =[
+        'class',
+    ];
 }

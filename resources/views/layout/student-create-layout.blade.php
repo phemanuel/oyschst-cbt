@@ -142,7 +142,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('student')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -166,7 +166,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('users')}}">
             <i class="fa fa-user"></i> <span>Users</span>
             <span class="pull-right-container">
@@ -209,11 +209,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin Users       
+        Add User        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Admin Users</li>
+        <li class="active">Add User</li>
       </ol>
     </section>
 
@@ -225,8 +225,8 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">List of Users.</h3>
-            <p align="right"><a href="{{route('add-user')}}" class="btn btn-success">Add User</a></p>
+            <h3 class="box-title">Create a  user.</h3>
+            <p align="right"><a href="{{route('student')}}" class="btn btn-success">Back to Student List</a></p>
               
             </div>
             @if(session('success'))
@@ -240,32 +240,75 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <table class="table table-striped">
-                      <tr>           
-                      <th>ID</th> 
-                        <th>Admin Name</th>
-                        <th>Email Address</th>
-                        <th>Created On</th>
-                        <th>Action</th>
-                      </tr>
+            <form role="form" action="{{route('student-create.action')}}" method="post">
+              @csrf              
+              <div class="box-body">              
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Surname</label>
+                  <input type="text" name="name" class="form-control" value="{{old('surname')}}">
+                </div>             
+                @error('surname')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">First Name</label>
+                  <input type="text" name="first_name" class="form-control" value="{{old('first_name')}}">
+                </div>             
+                @error('first_name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Other Name</label>
+                  <input type="text" name="other_name" class="form-control" value="{{old('other_name')}}">
+                </div>             
+                @error('other_name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Programme</label>
+                  <select name="class" id="" class="form-control">
+                  <option value="{{$examSetting->class}}" selected>{{$examSetting->class}}</option>                  
+                  @foreach($class as $rd)
+				<option value="{{$rd->class}}">{{$rd->class}}</option>
+				@endforeach
+                  </select>
+                </div>             
+                @error('department')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Level</label>
+                  <select name="class" id="" class="form-control">
+                  <option value="{{$examSetting->class}}" selected>{{$examSetting->class}}</option>                  
+                  @foreach($class as $rd)
+				<option value="{{$rd->class}}">{{$rd->class}}</option>
+				@endforeach
+                  </select>
+                </div>             
+                @error('department')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Level</label>
+                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
+                </div>             
+                @error('password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">State</label>
+                  <input type="text" name="state" class="form-control" value="{{old('state')}}">
+                </div>             
+                @error('state')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
+              <!-- /.box-body -->
 
-                      @if ($users->count() > 0)
-			@foreach ($users as $key => $rd)
-                      <tr> 
-                        <td>{{$key +1}}</td>                         
-                        <td>{{$rd->name}}</td>
-                        <td><div class="badge badge-info">{{$rd->email}}</div></td>
-                        <td>{{$rd->created_at}}</td>
-                        <td><a href="#" class="btn btn-outline-primary">Edit</a></td>
-                      </tr>  
-                      @endforeach
-		@else
-		<tr>
-			<td colspan="8">Users not available.</td>
-		</tr>
-		@endif                                   
-                    </table>
-                    {{ $users->links() }}
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </form>
           </div>
           <!-- /.box -->
 
