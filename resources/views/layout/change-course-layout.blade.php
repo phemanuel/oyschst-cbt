@@ -133,10 +133,9 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>
-        <li>
-          <a href="{{route('question-upload')}}">
-            <i class="fa fa-share"></i> <span>Question Upload</span>
+        </li> <li>
+          <a href="{{route('question')}}">
+            <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

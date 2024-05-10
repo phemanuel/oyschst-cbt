@@ -133,10 +133,9 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>
-        <li>
-          <a href="{{route('question-upload')}}">
-            <i class="fa fa-share"></i> <span>Question Upload</span>
+        </li> <li>
+          <a href="{{route('question')}}">
+            <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -268,7 +267,7 @@
                     <td>{{ $key + 1 }}</td>
                     <td><img src="{{asset('uploads/'. $rs->picture_name)}}" alt="" width="50" height="50" class="img-circle"></td>
                     <td>{{$rs->admission_no}}</td>
-                    <td>{{ $rs->Surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
+                    <td>{{ $rs->surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->phone_no }}</td>

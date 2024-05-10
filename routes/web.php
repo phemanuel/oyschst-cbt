@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,27 +75,39 @@ Route::get('/', function () {
         Route::post('exam-type', [DashboardController::class, 'examTypeAction'])
         ->name('exam-type.action');
         //--student list
-        Route::get('student', [DashboardController::class, 'student'])
+        Route::get('student', [StudentController::class, 'student'])
         ->name('student');
-        Route::get('student-import', [DashboardController::class, 'studentImport'])
-        ->name('student-import');
-        Route::get('student-create', [DashboardController::class, 'studentCreate'])
+        Route::get('student-create', [StudentController::class, 'studentCreate'])
         ->name('student-create');
-        Route::post('student-create', [DashboardController::class, 'studentCreateAction'])
+        Route::post('student-create', [StudentController::class, 'studentCreateAction'])
         ->name('student-create.action');
-        Route::get('student-edit/{id}', [DashboardController::class, 'studentEdit'])
+        Route::get('student-edit/{id}', [StudentController::class, 'studentEdit'])
         ->name('student-edit');
-        Route::put('student-edit/{id}', [DashboardController::class, 'studentEditAction'])
+        Route::put('student-edit/{id}', [StudentController::class, 'studentEditAction'])
         ->name('student-edit.action');
-        Route::delete('student/{id}', [DashboardController::class, 'studentDelete'])
-        ->name('student-delete.action');
+        Route::get('student/{id}', [StudentController::class, 'studentDelete'])
+        ->name('student-delete.action');        
+        Route::get('student-import', [StudentController::class, 'studentImport'])
+        ->name('student-import');
+        Route::post('student-import', [StudentController::class, 'studentImportAction'])
+        ->name('student-import.action');
+        //--student login status
+        Route::get('login-status', [StudentController::class, 'loginStatus'])
+        ->name('login-status');
+        Route::post('login-status-view', [StudentController::class, 'loginStatusView'])
+        ->name('login-status-view');
+        Route::post('login-status/{id}', [StudentController::class, 'loginStatusAction'])
+        ->name('login-status.action');
         //--change course
-        Route::get('change-course', [DashboardController::class, 'changeCourse'])
+        Route::get('change-course', [StudentController::class, 'changeCourse'])
         ->name('change-course');
-        Route::post('change-course-view', [DashboardController::class, 'changeCourseView'])
+        Route::post('change-course-view', [StudentController::class, 'changeCourseView'])
         ->name('change-course-view');
-        Route::post('change-course/{id}', [DashboardController::class, 'changeCourseAction'])
+        Route::post('change-course/{id}', [StudentController::class, 'changeCourseAction'])
         ->name('change-course.action');
+        Route::post('search', [StudentController::class, 'search'])
+        ->name('search'); 
+        //---Add programmes
         Route::get('add-course', [DashboardController::class, 'addCourse'])
         ->name('add-course');
         Route::post('add-course', [DashboardController::class, 'addCourseAction'])
@@ -101,24 +116,21 @@ Route::get('/', function () {
         ->name('add-course-college.action');
         //--Add class/level--        
         Route::post('add-class', [DashboardController::class, 'addClassAction'])
-        ->name('add-class.action');
-        //--student login status
-        Route::get('login-status', [DashboardController::class, 'loginStatus'])
-        ->name('login-status');
-        Route::post('login-status-view', [DashboardController::class, 'loginStatusView'])
-        ->name('login-status-view');
-        Route::post('login-status/{id}', [DashboardController::class, 'loginStatusAction'])
-        ->name('login-status.action');
+        ->name('add-class.action');        
         //--college update
         Route::get('college-setup', [DashboardController::class, 'collegeSetup'])
         ->name('college-setup');
         Route::put('college-setup', [DashboardController::class, 'collegeSetupAction'])
         ->name('college-setup.action');
         //--exam upload
-        Route::get('question-upload', [DashboardController::class, 'questionUpload'])
+        Route::get('question', [QuestionController::class, 'question'])
+        ->name('question');
+        Route::get('question-upload', [QuestionController::class, 'questionUpload'])
         ->name('question-upload');
+        Route::post('question-upload', [QuestionController::class, 'questionUploadAction'])
+        ->name('question-upload.action');
         //--report
-        Route::get('report', [DashboardController::class, 'report'])
+        Route::get('report', [ReportController::class, 'report'])
         ->name('report');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
@@ -126,11 +138,7 @@ Route::get('/', function () {
         Route::get('add-user', [DashboardController::class, 'addUser'])
         ->name('add-user'); 
         Route::post('add-user', [DashboardController::class, 'addUserAction'])
-        ->name('add-user.action'); 
-        Route::post('search', [DashboardController::class, 'search'])
-        ->name('search');
-
-        
+        ->name('add-user.action');                
 
         //--Send mail routes
         Route::get('send-mail-fail/{transaction_id}', [MailController::class, 'mailFailed'])
