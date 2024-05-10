@@ -25,5 +25,8 @@ class StudentAdmission extends Model
         'session1', 
         'login_status',
         'email',
+        'user_type', 
+        'password',
+        'login_attempts',
     ];
 }

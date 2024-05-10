@@ -127,6 +127,9 @@ Route::get('/', function () {
         ->name('add-user'); 
         Route::post('add-user', [DashboardController::class, 'addUserAction'])
         ->name('add-user.action'); 
+        Route::post('search', [DashboardController::class, 'search'])
+        ->name('search');
+
         
 
         //--Send mail routes

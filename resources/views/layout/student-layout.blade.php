@@ -230,12 +230,30 @@
                 <a href="{{route('student-import')}}" class="btn btn-info">Import Student</a>
                 </div>
               </div>
-            </div>
+              
+              <div class="box-header">
+              <h3 class="box-title"></h3>
+              
+              <div class="box-tools">
+              <form action="{{ route('search') }}" method="post" class="form-inline">
+                @csrf
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
+
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+              </div>
+              <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
+                  <th>Avatar</th>
+                  <th>Reg/Matric No</th>
                   <th>Name</th>
                   <th>Programme</th>
                   <th>Level</th>
@@ -248,6 +266,8 @@
                 @foreach ($student as $key => $rs)
                 <tr>
                     <td>{{ $key + 1 }}</td>
+                    <td><img src="{{asset('uploads/'. $rs->picture_name)}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <td>{{$rs->admission_no}}</td>
                     <td>{{ $rs->Surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>

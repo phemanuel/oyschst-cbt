@@ -468,6 +468,160 @@ class DashboardController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $class = CbtClass::orderBy('class')->get();
-        return view('dashboard.student-create', compact('softwareVersion','collegeSetup','class'));
+        $dept = Department::orderBy('department')->get();
+        $acad_sessions = AcademicSession::orderBy('session1')->get();
+        return view('dashboard.student-create', compact('softwareVersion','collegeSetup','class',
+    'dept','acad_sessions'));
+    }
+
+    public function studentCreateAction(Request $request)
+    {
+        
+        try {
+            // Validate form input
+            $validatedData = $request->validate([
+                'session1' => 'required|string',
+                'admission_no' => 'required|string',
+                'surname' => 'required|string',
+                'first_name' => 'required|string',
+                'other_name' => 'required|string',
+                'department' => 'required|string',
+                'sex' => 'required|string',
+                'level' => 'required|string',
+                'phone_no' => 'required|string',
+                'state' => 'required|string',
+                'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageName = $validatedData['admission_no'] . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('uploads'), $imageName);                             
+            }            
+            
+            //===Create student
+            $studentCreate = StudentAdmission::create([
+                'session1' => $validatedData['session1'],
+                'admission_no' => $validatedData['admission_no'], 
+                'surname' => $validatedData['surname'], 
+                'first_name' => $validatedData['first_name'],
+                'other_name' => $validatedData['other_name'],
+                'department' => $validatedData['department'], 
+                'sex'        => $validatedData['sex'],  
+                'level'      => $validatedData['level'],  
+                'phone_no'   => $validatedData['phone_no'], 
+                'phone_no1'   => $validatedData['phone_no'],
+                'user_name'   => $validatedData['phone_no'],
+                'password'   => $validatedData['phone_no'],
+                'user_type'   => "student",
+                'login_status' => 0,
+                'login_attempts' => 0,
+                'state'      => $validatedData['state'], 
+                'picture_name' => $imageName,
+                             
+            ]);
+
+            return redirect()->back()->with('success', 'Student admission record created successfully.');
+
+        }catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during student registration: ' . $e->getMessage());
+
+            return redirect()->back()->with('error-college', 'An error occurred during student registration. Please try again.');
+        }
+    }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+
+        // Perform search query
+        $results = StudentAdmission::where('admission_no', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('Surname', 'LIKE', "%{$searchTerm}%")
+            ->paginate(20);
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $student = StudentAdmission::Paginate(20);
+        return view('dashboard.student-search', compact('softwareVersion','collegeSetup','student',
+    'results'));
+    }
+
+    public function studentEdit($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $class = CbtClass::orderBy('class')->get();
+        $dept = Department::orderBy('department')->get();
+        $acad_sessions = AcademicSession::orderBy('session1')->get();      
+        $studentData = StudentAdmission::where('id', $id)->get();
+
+        if(!$studentData){
+            return redirect()->route('student')->with('error', 'A problem ocurred while processing student data.');
+        }
+
+        return view('dashboard.student-edit', compact('softwareVersion','collegeSetup','class',
+        'dept','acad_sessions', 'studentData'));
+    }
+
+    public function studentEditAction($id)
+    {
+        try {
+            // Validate form input
+            $validatedData = $request->validate([
+                'session1' => 'required|string',
+                'admission_no' => 'required|string',
+                'surname' => 'required|string',
+                'first_name' => 'required|string',
+                'other_name' => 'required|string',
+                'department' => 'required|string',
+                'sex' => 'required|string',
+                'level' => 'required|string',
+                'phone_no' => 'required|string',
+                'state' => 'required|string',
+                'file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            $studentData = StudentAdmission::where('id', $id)->get();
+
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageName = $validatedData['admission_no'] . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('uploads'), $imageName); 
+                $studentData->picture_name = $imageName;
+            }            
+                        
+            //===Update student
+            $studentData->update([
+                'session1' => $validatedData['session1'],
+                'admission_no' => $validatedData['admission_no'], 
+                'surname' => $validatedData['surname'], 
+                'first_name' => $validatedData['first_name'],
+                'other_name' => $validatedData['other_name'],
+                'department' => $validatedData['department'], 
+                'sex'        => $validatedData['sex'],  
+                'level'      => $validatedData['level'],  
+                'phone_no'   => $validatedData['phone_no'], 
+                'phone_no1'   => $validatedData['phone_no'],
+                'user_name'   => $validatedData['phone_no'],
+                'password'   => $validatedData['phone_no'],
+                'state'      => $validatedData['state'], 
+                
+                             
+            ]);
+
+            return redirect()->back()->with('success', 'Student data updated successfully.');
+
+        }catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during student edit: ' . $e->getMessage());
+
+            return redirect()->back()->with('error-college', 'An error occurred during student data update. Please try again.');
+        }
     }
 }

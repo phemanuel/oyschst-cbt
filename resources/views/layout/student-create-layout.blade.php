@@ -240,12 +240,31 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('student-create.action')}}" method="post">
+            <form role="form" action="{{route('student-create.action')}}" method="post" enctype="multipart/form-data">
               @csrf              
-              <div class="box-body">              
+              <div class="box-body">  
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Academic Session</label>
+                  <select name="session1" id="" class="form-control">
+                  <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                  
+                  @foreach($acad_sessions as $rd)
+				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
+				@endforeach
+                  </select>
+                </div>             
+                @error('session1')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Reg/Matric No</label>
+                  <input type="text" name="admission_no" class="form-control" value="{{old('admission_no')}}">
+                </div>             
+                @error('admission_no')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror            
                 <div class="form-group">
                   <label for="exampleInputEmail1">Surname</label>
-                  <input type="text" name="name" class="form-control" value="{{old('surname')}}">
+                  <input type="text" name="surname" class="form-control" value="{{old('surname')}}">
                 </div>             
                 @error('surname')
                     <span class="invalid-feedback">{{ $message }}</span>
@@ -266,10 +285,10 @@
                 @enderror
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
-                  <select name="class" id="" class="form-control">
-                  <option value="{{$examSetting->class}}" selected>{{$examSetting->class}}</option>                  
-                  @foreach($class as $rd)
-				<option value="{{$rd->class}}">{{$rd->class}}</option>
+                  <select name="department" class="form-control">
+                  <option value="{{old('department')}}" selected>{{old('department')}}</option>                  
+                  @foreach($dept as $rd)
+				<option value="{{$rd->department}}">{{$rd->department}}</option>
 				@endforeach
                   </select>
                 </div>             
@@ -278,21 +297,31 @@
                 @enderror
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
-                  <select name="class" id="" class="form-control">
-                  <option value="{{$examSetting->class}}" selected>{{$examSetting->class}}</option>                  
+                  <select name="level" id="" class="form-control">
+                  <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
                   @foreach($class as $rd)
 				<option value="{{$rd->class}}">{{$rd->class}}</option>
 				@endforeach
                   </select>
                 </div>             
-                @error('department')
+                @error('level')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Level</label>
-                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
+                  <label for="exampleInputEmail1">Phone No</label>
+                  <input type="text" name="phone_no" class="form-control" value="{{old('phone_no')}}">
                 </div>             
-                @error('password')
+                @error('phone_no')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Gender</label>
+                  <select name="sex" id="" class="form-control">
+                  <option value="Male" selected>Male</option> 
+                  <option value="Female">Female</option> 
+                  </select>
+                </div>             
+                @error('sex')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
@@ -302,6 +331,13 @@
                 @error('state')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Student Avatar</label>
+                  <input type="file" name="file"  class="form-control" />
+                </div>             
+                @error('file')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
               </div>
               <!-- /.box-body -->
 
