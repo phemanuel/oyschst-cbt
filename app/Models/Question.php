@@ -22,16 +22,16 @@ class Question extends Model
      * @var array
      */
     protected $fillable = [
-        'questionno', 
-        'noofquestion', 
+        'question_no', 
+        'no_of_qst', 
         'session1', 
-        'department', 
-        'subject', 
-        'uploadnoofquestion', 
-        'class', 
-        'minute', 
-        'examtype', 
-        'questiontype', 
+        'department',
+        'upload_no_of_qst', 
+        'class',
+        'exam_type', 
+        'exam_category',
+        'exam_mode',  
+        'question_type', 
         'answer', 
         'question', 
         'graphic'

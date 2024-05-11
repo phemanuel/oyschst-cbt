@@ -32,7 +32,8 @@ class ExamSetting extends Model
         'semester', 
         'department', 
         'exam_type', 
-        'exam_category', 
+        'exam_category',
+        'exam_mode', 
         'time_limit', 
         'no_of_qst',
     ];

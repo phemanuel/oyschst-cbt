@@ -19,5 +19,6 @@ class QuestionSetting extends Model
         'exam_category',
         'exam_status',
         'exam_date',
+        'exam_mode',
     ];
 }

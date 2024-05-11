@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->integer('questionno')->nullable();
-            $table->integer('noofquestion')->nullable();
-            $table->string('session1', 9)->nullable();
-            $table->string('department', 53)->nullable();
-            $table->string('subject', 16)->nullable();
-            $table->integer('uploadnoofquestion')->nullable();
-            $table->string('class', 2)->nullable();
-            $table->integer('minute')->nullable();
-            $table->string('examtype', 4)->nullable();
-            $table->string('questiontype', 4)->nullable();
-            $table->string('answer', 1)->nullable();
-            $table->string('question', 338)->nullable();
-            $table->string('graphic', 9)->nullable();
+            $table->integer('question_no')->nullable();
+            $table->integer('no_of_qst')->nullable();
+            $table->string('session1')->nullable();
+            $table->string('department')->nullable();
+            $table->integer('upload_no_of_qst')->nullable();
+            $table->string('class')->nullable();
+            $table->string('exam_type')->nullable();
+            $table->string('exam_category')->nullable();
+            $table->string('exam_mode')->nullable();
+            $table->string('question_type')->nullable();
+            $table->string('answer')->nullable();
+            $table->text('question')->nullable();
+            $table->string('graphic')->nullable();
             $table->timestamps();
         });
     }

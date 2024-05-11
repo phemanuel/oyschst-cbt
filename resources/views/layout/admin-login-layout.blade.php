@@ -106,19 +106,8 @@
             
           </div>
         </form>
-      </div>
-      <ul class="auth-footer">
-        <li>
-          <a href="#">Conditions</a>
-        </li>
-        <li>
-          <a href="#">Help</a>
-        </li>
-        <li>
-          <a href="#">Terms</a>
-        </li>
-      </ul>
-      <p class="footer-text text-center">copyright © 2020 - <?php echo date('Y') ?> Oyo State College of HEalth Science and Technology.</p>
+      </div>     
+      
     </div>
   </div>
 </div>

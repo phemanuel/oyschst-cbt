@@ -208,89 +208,159 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Bank       
+        Question Upload(Objectives)        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Question Bank</li>
+        <li class="active">Question Upload(Objectives)</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title"></h3>
-              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('question-upload')}}" class="btn btn-info">Upload Question</a>
-                </div>
-              </div>
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+            <h3 class="box-title">Upload Questions for different departments.</h3>
+            <p align="right"><a href="{{route('question')}}" class="btn btn-success">Back to Questions</a></p>
               
-              <div class="box-header">
-              <h3 class="box-title"></h3>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tr>
-                  <th>ID</th>
-                  <th>Academic Session</th>
-                  <th>Department</th>
-                  <th>Level</th>
-                  <th>Exam Mode</th>
-                  <th>Exam Category</th>
-                  <th>Exam Type</th>
-                  <th>Exam Date</th>
-                  <th>No of Questions</th>
-                  <th>Duration</th>
-                  <th>Status</th>
-                  <th>Created On</th>
-                  <th>Actions</th>
-                </tr>
-                @if ($questionSetting->count() > 0)
-                @foreach ($questionSetting as $key => $rs)
-                <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->picture_name)}}" alt="" width="50" height="50" class="img-circle"></td>
-                    <td>{{$rs->session1}}</td>
-                    <td>{{ $rs->department }}</td>
-                    <td>{{ $rs->level }}</td>
-                    <td>{{ $rs->exam_mode }}</td>
-                    <td>{{ $rs->exam_category}}</td>
-                    <td>{{ $rs->exam_type }}</td>
-                    <td>{{ $rs->exam_date }}</td>
-                    <td>{{ $rs->no_of_qst }}</td>
-                    <td>{{ $rs->duration }}</td>
-                    @if ($rs->exam_status == 'Inactive')
-                    <td><span class="label label-danger">{{ $rs->exam_status }}</span></td>
-                    @elseif ($rs->exam_status == 'Active')
-                    <td><span class="label label-success">{{ $rs->exam_status }}</span></td>
-                    @endif
-                    <td> 
-                      @if($rs->exam_status == 'Inactive')
-                      <a class="label label-primary" href="{{route('question-edit.action', ['id' => $rs->id])}}">Enable</a>
-                      @elseif ($rs->exam_status == 'Active')
-                      <a class="label label-danger" href="{{route('question-edit.action', ['id' => $rs->id])}}">Disable</a>                    
-                      @endif
-                    </td>
-                </tr>
-                @endforeach
-                @else
-		<tr>
-			<td colspan="8">Questions not available.</td>
-		</tr>
-        @endif
-              </table>
-              {{ $questionSetting->links() }}
             </div>
-            <!-- /.box-body -->
+            @if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('question-upload-obj.action')}}" method="post" enctype="multipart/form-data">
+              @csrf              
+              <div class="box-body">  
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Academic Session</label>
+                  <select name="session1" id="" class="form-control">
+                  <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                  
+                  @foreach($acad_sessions as $rd)
+				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
+				@endforeach
+                  </select>
+                </div>             
+                @error('session1')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Programme</label>
+                  <select name="department" class="form-control">
+                  <option value="{{old('department')}}" selected>{{old('department')}}</option>                  
+                  @foreach($dept as $rd)
+				<option value="{{$rd->department}}">{{$rd->department}}</option>
+				@endforeach
+                  </select>
+                </div>   
+                <p><a href="{{route('college-setup')}}"><u> Create Programme</u> </a></p>          
+                @error('department')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Level</label>
+                  <select name="level" id="" class="form-control">
+                  <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
+                  @foreach($class as $rd)
+				<option value="{{$rd->class}}">{{$rd->class}}</option>
+				@endforeach
+                  </select>
+                </div> 
+                <p><a href="{{route('college-setup')}}"><u> Create Class/Level</u> </a></p>            
+                @error('level')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror                
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Category</label>
+                  <select name="exam_category" id="" class="form-control">
+                  <option value="GENERAL" selected>GENERAL</option> 
+                  <option value="SEMESTER">SEMESTER</option> 
+                  </select>
+                </div>             
+                @error('exam_category')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Type</label>
+                  <select name="exam_type" id="" class="form-control">
+                  <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                  
+                  @foreach($examType as $rd)
+				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
+				@endforeach
+                  </select>
+                </div>     
+                <p><a href="{{route('exam-type')}}"><u> Create Exam Type</u> </a></p>        
+                @error('exam_type')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">No of questions to upload</label>
+                  <select name="no_of_qst" class="form-control">
+                  <option value="10" selected>10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="50">50</option>
+                  <option value="60">60</option>
+                  <option value="70">70</option>
+                  <option value="80">80</option>
+                  <option value="90">90</option>
+                  <option value="100">100</option>
+                </select>
+                </div>             
+                @error('no_of_qst')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Duration(Minutes)</label>
+                  <input type="text" name="duration" class="form-control" value="{{old('duration')}}">
+                </div>             
+                @error('duration')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Date</label>
+                <div class="input-group date">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control pull-right" id="datepicker" name="exam_date" value="{{old('exam_date')}}">
+                </div> 
+  </div>           
+                @error('exam_date')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+               
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Start Upload</button>
+              </div>
+            </form>
           </div>
           <!-- /.box -->
+
         </div>
+        <!--/.col (left) -->
+        <!-- right column -->
+        <div class="col-md-6">
+          
+          
+        </div>
+        <!--/.col (right) -->
       </div>
+      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>
@@ -498,42 +568,101 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('dashboard/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('dashboard/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<!-- Morris.js charts -->
-<script src="{{asset('dashboard/bower_components/raphael/raphael.min.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/morris.js/morris.min.js')}}"></script>
-<!-- Sparkline -->
-<script src="{{asset('dashboard/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script>
-<!-- jvectormap -->
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
-<!-- jQuery Knob Chart -->
-<script src="{{asset('dashboard/bower_components/jquery-knob/dist/jquery.knob.min.js')}}"></script>
-<!-- daterangepicker -->
+<!-- Select2 -->
+<script src="{{asset('dashboard/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+<!-- InputMask -->
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.js')}}"></script>
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.date.extensions.js')}}"></script>
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
+<!-- date-range-picker -->
 <script src="{{asset('dashboard/bower_components/moment/min/moment.min.js')}}"></script>
 <script src="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-<!-- datepicker -->
+<!-- bootstrap datepicker -->
 <script src="{{asset('dashboard/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
-<!-- Slimscroll -->
+<!-- bootstrap color picker -->
+<script src="{{asset('dashboard/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js')}}"></script>
+<!-- bootstrap time picker -->
+<script src="{{asset('dashboard/plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<!-- SlimScroll -->
 <script src="{{asset('dashboard/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
+<!-- iCheck 1.0.1 -->
+<script src="{{asset('dashboard/plugins/iCheck/icheck.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('dashboard/bower_components/fastclick/lib/fastclick.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('dashboard/dist/js/adminlte.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('dashboard/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
+<!-- Page script -->
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    //Timepicker
+    $('.timepicker').timepicker({
+      showInputs: false
+    })
+  })
+</script>
 </body>
 </html>

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('department');
             $table->string('exam_type');
             $table->string('exam_category');
+            $table->string('exam_mode');
             $table->integer('time_limit');
             $table->integer('no_of_qst');
             $table->timestamps();

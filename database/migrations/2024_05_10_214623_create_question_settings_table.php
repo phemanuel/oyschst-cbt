@@ -20,7 +20,8 @@ return new class extends Migration
             $table->integer('duration');
             $table->string('exam_type');
             $table->string('exam_category');
-            $table->string('exam_status');
+            $table->enum('exam_status',['Active','Inactive']);
+            $table->string('exam_mode');
             $table->date('exam_date');
             $table->timestamps();
         });

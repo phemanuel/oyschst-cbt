@@ -122,13 +122,26 @@ Route::get('/', function () {
         ->name('college-setup');
         Route::put('college-setup', [DashboardController::class, 'collegeSetupAction'])
         ->name('college-setup.action');
-        //--exam upload
+        //--Questions
         Route::get('question', [QuestionController::class, 'question'])
         ->name('question');
         Route::get('question-upload', [QuestionController::class, 'questionUpload'])
         ->name('question-upload');
-        Route::post('question-upload', [QuestionController::class, 'questionUploadAction'])
-        ->name('question-upload.action');
+        //-----Questions Objectives
+        Route::get('question-upload-obj', [QuestionController::class, 'questionUploadObj'])
+        ->name('question-upload-obj');
+        Route::post('question-upload-obj', [QuestionController::class, 'questionUploadOjAction'])
+        ->name('question-upload-obj.action');
+        //---Questions Fill in the Gaps
+        Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
+        ->name('question-upload-fill-gap');
+        Route::post('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGapAction'])
+        ->name('question-upload-fill-gap.action');
+        //----Questions theory
+        Route::get('question-upload-theory', [QuestionController::class, 'questionUploadTheory'])
+        ->name('question-upload-theory');
+        Route::post('question-upload-theory', [QuestionController::class, 'questionUploadTheoryAction'])
+        ->name('question-upload-theory.action');
         //--report
         Route::get('report', [ReportController::class, 'report'])
         ->name('report');
