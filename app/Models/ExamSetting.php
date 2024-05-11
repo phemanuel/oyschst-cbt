@@ -36,5 +36,6 @@ class ExamSetting extends Model
         'exam_mode', 
         'time_limit', 
         'no_of_qst',
+        'course',
     ];
 }

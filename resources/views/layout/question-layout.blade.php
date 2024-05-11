@@ -215,7 +215,17 @@
         <li class="active">Question Bank</li>
       </ol>
     </section>
-
+<div>
+@if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+</div>
     <!-- Main content -->
     <section class="content">
     <div class="row">
@@ -253,8 +263,7 @@
                 @if ($questionSetting->count() > 0)
                 @foreach ($questionSetting as $key => $rs)
                 <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->picture_name)}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <td>{{ $key + 1 }}</td>                    
                     <td>{{$rs->session1}}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>
@@ -269,11 +278,12 @@
                     @elseif ($rs->exam_status == 'Active')
                     <td><span class="label label-success">{{ $rs->exam_status }}</span></td>
                     @endif
+                    <td>{{$rs->created_at}}</td>
                     <td> 
                       @if($rs->exam_status == 'Inactive')
-                      <a class="label label-primary" href="{{route('question-edit.action', ['id' => $rs->id])}}">Enable</a>
+                      <a class="label label-primary" href="{{route('question-edit.action', ['questionId' => $rs->id])}}">Enable</a>
                       @elseif ($rs->exam_status == 'Active')
-                      <a class="label label-danger" href="{{route('question-edit.action', ['id' => $rs->id])}}">Disable</a>                    
+                      <a class="label label-danger" href="{{route('question-edit.action', ['questionId' => $rs->id])}}">Disable</a>                    
                       @endif
                     </td>
                 </tr>

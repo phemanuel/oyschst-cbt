@@ -57,16 +57,18 @@ class QuestionController extends Controller
 
     public function questionUploadObjAction(Request $request)
     {
+        
         try {
             $validatedData = $request->validate([
-                'session' => 'required|string',
+                'session1' => 'required|string',
                 'department' => 'required|string',
                 'level' => 'required|string',
                 'exam_category' => 'required|string',
                 'exam_type' => 'required|string',   
                 'duration' => 'required|string',
                 'exam_date' => 'required|string', 
-                'no_of_qst' => 'required|integer',     
+                'no_of_qst' => 'required|integer',  
+                'course' => 'required|string',    
             ]);                        
 
             // Check if the exam type already exists
@@ -76,29 +78,52 @@ class QuestionController extends Controller
                                             ->where('department', $validatedData['department'])
                                             ->where('session1', $validatedData['session1'])
                                             ->where('no_of_qst', $validatedData['no_of_qst'])
-                                            ->get();
+                                            ->first();
         
         if ($existingQuestion) {
             // If the question already exists, redirect back with an error message
-            return redirect()->route('question-upload-obj')->with('error', 'question already exists, you can edit.');
+            return redirect()->route('question')->with('error', 'Question already exists, you can only edit.');
         }
-
+            //---Create a record for the question in the questionsetting table----
             $questionSetting = QuestionSetting::create([
                 'session1' => $validatedData['session1'],
                 'department' => $validatedData['department'],
                 'level' => $validatedData['level'],
                 'exam_category' => $validatedData['exam_category'],
-                'exam_type' => $validated['exam_type'],
-                'exam_mode' => 'OBJECTIVES',
+                'exam_type' => $validatedData['exam_type'],
+                'exam_mode' => 'OBJECTIVE',
                 'exam_status' => 'Inactive',
+                'no_of_qst' => $validatedData['no_of_qst'],
                 'duration' => $validatedData['duration'],
-                'exam_date' => $validatedData['exam_date'],                                            
+                'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
+                'course' => $validatedData['course'],                                          
             ]);
 
-            $collegeSetup = CollegeSetup::first();
-            $softwareVersion = SoftwareVersion::first();
+            //--Create a dummy question for the said no of question selected in the question table
+            $num_questions = $validatedData['no_of_qst'];
+            for ($i = 1; $i <= $num_questions; $i++) {
+                Question::create([
+                    'question_no' => $i,
+                    'question' => "Question".$i,
+                    'exam_mode' => 'OBJECTIVE',
+                    'exam_type' => $validatedData['exam_type'],
+                    'exam_category' => $validatedData['exam_category'],
+                    'session1' => $validatedData['session1'],
+                    'department' => $validatedData['department'],
+                    'level' => $validatedData['level'],
+                    'course' => $validatedData['course'],
+                    'no_of_qst' => $validatedData['no_of_qst'],
+                    'upload_no_of_qst' => $validatedData['no_of_qst'],
+                    'question_type' => 'text',
+                    'answer' => 'E',
+                    'graphic' => 'blank.jpg',
+                ]);
+            }            
+            
+            $questionId = $questionSetting->id;
         
-            return view('questions.question-upload-obj-view', compact('softwareVersion','collegeSetup'));
+            return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
+            
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -109,5 +134,12 @@ class QuestionController extends Controller
             return redirect()->back()->with('error', 'An error occurred during question Upload. Please try again.');
         }        
         
+    }
+
+    public function questionView($id)
+    {
+        return response()->json([
+            'id' => $id,
+        ]);
     }
 }

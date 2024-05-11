@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('exam_status',['Active','Inactive']);
             $table->string('exam_mode');
             $table->date('exam_date');
+            $table->string('course');
             $table->timestamps();
         });
     }

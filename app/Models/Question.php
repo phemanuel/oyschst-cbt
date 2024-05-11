@@ -27,13 +27,14 @@ class Question extends Model
         'session1', 
         'department',
         'upload_no_of_qst', 
-        'class',
+        'level',
         'exam_type', 
         'exam_category',
         'exam_mode',  
         'question_type', 
         'answer', 
         'question', 
-        'graphic'
+        'graphic',
+        'course',
     ];
 }
