@@ -131,6 +131,8 @@ Route::get('/', function () {
         ->name('question-view');
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
         ->name('question-edit');
+        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
+        ->name('question-enable');
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
         ->name('question-edit.action');
         //-----Questions Objectives

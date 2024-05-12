@@ -6,9 +6,6 @@
   <title>@yield('pageTitle')</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="shortcut icon" href="{{ asset('/favicon.png') }}">
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="{{asset('dashboard/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
   <!-- Font Awesome -->
@@ -20,14 +17,6 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{asset('dashboard/dist/css/skins/_all-skins.min.css')}}">
-  <!-- Morris chart -->
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/morris.js/morris.css')}}">
-  <!-- jvectormap -->
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/jvectormap/jquery-jvectormap.css')}}">
-  <!-- Date Picker -->
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.css')}}">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
 
@@ -39,12 +28,13 @@
   <![endif]-->
 
   <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-  <header class="main-header">
+<header class="main-header">
     <!-- Logo -->
     <a href="{{route('admin-dashboard')}}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -133,7 +123,8 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li> 
+        <li class="active">
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -141,7 +132,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('student')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -208,101 +199,75 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Bank       
+        Question Upload      
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Question Bank</li>
+        <li class="active">Question Upload</li>
       </ol>
     </section>
-<div>
-@if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
-</div>
+
     <!-- Main content -->
     <section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
             <div class="box-header">
-              <h3 class="box-title"></h3>
-              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('question-upload')}}" class="btn btn-info">Upload Question</a>
-                </div>
-              </div>
+                <table class="table table-hover">
+                    <tr>
+                        <td> <strong>Academic Session:</strong> </td>
+                        <td>{{$question->session1}}</td>
+                        <td><strong>Exam Mode:</strong> </td>
+                        <td>{{$question->exam_mode}}</td>
+                    </tr>
+                    <tr>
+                    <td><strong>Programme:</strong> </td>
+                        <td>{{$question->department}}</td>                    
+                        <td><strong>Exam Type:</strong> </td>
+                        <td>{{$question->exam_type}}</td>
+
+                    </tr>                   
+                    <tr>
+                    <td> <strong>Course/Subject</strong></td>
+                        <td>{{$question->course}}</td>
+                        <td><strong>Exam Category:</strong> </td>
+                        <td>{{$question->exam_category}}</td>
+                        
+                    </tr>                    
+                    <tr>
+                    <td><strong>Level:</strong> </td>
+                        <td>{{$question->level}}</td>                        
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
               
-              <div class="box-header">
-              <h3 class="box-title"></h3>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tr>
-                  <th>ID</th>
-                  <th>Academic Session</th>
-                  <th>Department</th>
-                  <th>Level</th>
-                  <th>Exam Mode</th>
-                  <th>Exam Category</th>
-                  <th>Exam Type</th>
-                  <th>Exam Date</th>
-                  <th>No of Questions</th>
-                  <th>Duration</th>
-                  <th>Status</th>
-                  <th>Created On</th>
-                  <th>Actions</th>
-                </tr>
-                @if ($questionSetting->count() > 0)
-                @foreach ($questionSetting as $key => $rs)
-                <tr>
-                    <td>{{ $key + 1 }}</td>                    
-                    <td>{{$rs->session1}}</td>
-                    <td>{{ $rs->department }}</td>
-                    <td>{{ $rs->level }}</td>
-                    <td>{{ $rs->exam_mode }}</td>
-                    <td>{{ $rs->exam_category}}</td>
-                    <td>{{ $rs->exam_type }}</td>
-                    <td>{{ $rs->exam_date }}</td>
-                    <td>{{ $rs->no_of_qst }}</td>
-                    <td>{{ $rs->duration }}</td>
-                    @if ($rs->exam_status == 'Inactive')
-                    <td><span class="label label-danger">{{ $rs->exam_status }}</span>
-                    <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>
-                  </td>
-                    @elseif ($rs->exam_status == 'Active')
-                    <td><span class="label label-success">{{ $rs->exam_status }}</span>
-                    <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a>
-                  </td>
-                    @endif                    
-                    <td>{{$rs->created_at}}</td>
-                    <td> 
-                      
-                      <a class="label label-success" href="{{route('question-edit.action', ['questionId' => $rs->id])}}">Edit</a>
-                     
-                    </td>
-                </tr>
-                @endforeach
-                @else
-		<tr>
-			<td colspan="8">Questions not available.</td>
-		</tr>
-        @endif
-              </table>
-              {{ $questionSetting->links() }}
+              <h3><strong>Question {{$question->question_no}} of {{$question->no_of_qst}}</strong> </h3>          
             </div>
-            <!-- /.box-body -->
+            <!-- /.box-header -->
+            <hr>
+            <div class="box-body pad">
+              <form>
+                    <textarea id="editor1" name="editor1" rows="10" cols="80">
+                                            {{$question->question}}
+                    </textarea>
+                    <hr>
+                     <table>
+                        <tr>
+                            <td><a href="#" class="btn btn-info">Previous</a></td>
+                            <td>&nbsp;&nbsp;</td>
+                            <td><a href="#" class="btn btn-primary">Next</a></td>
+                        </tr>
+                     </table>
+              </form>
+            </div>
           </div>
           <!-- /.box -->
+
         </div>
+        <!-- /.col-->
       </div>
+      <!-- ./row -->
     </section>
     <!-- /.content -->
   </div>
@@ -512,40 +477,26 @@
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('dashboard/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('dashboard/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<!-- Morris.js charts -->
-<script src="{{asset('dashboard/bower_components/raphael/raphael.min.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/morris.js/morris.min.js')}}"></script>
-<!-- Sparkline -->
-<script src="{{asset('dashboard/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script>
-<!-- jvectormap -->
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
-<!-- jQuery Knob Chart -->
-<script src="{{asset('dashboard/bower_components/jquery-knob/dist/jquery.knob.min.js')}}"></script>
-<!-- daterangepicker -->
-<script src="{{asset('dashboard/bower_components/moment/min/moment.min.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-<!-- datepicker -->
-<script src="{{asset('dashboard/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
-<!-- Slimscroll -->
-<script src="{{asset('dashboard/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('dashboard/bower_components/fastclick/lib/fastclick.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('dashboard/dist/js/adminlte.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('dashboard/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
+<!-- CK Editor -->
+<script src="{{asset('dashboard/bower_components/ckeditor/ckeditor.js')}}"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+<script>
+  $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1')
+    //bootstrap WYSIHTML5 - text editor
+    $('.textarea').wysihtml5()
+  })
+</script>
 </body>
 </html>

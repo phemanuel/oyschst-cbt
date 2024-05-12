@@ -138,8 +138,31 @@ class QuestionController extends Controller
 
     public function questionView($id)
     {
-        return response()->json([
-            'id' => $id,
-        ]);
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+
+        $questionSetting = QuestionSetting::where('id', $id)->first();       
+        
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $session1 = $questionSetting->session1;
+        $no_of_qst = $questionSetting->no_of_qst;
+
+        $question = Question::where('exam_type', $exam_type)
+        ->where('exam_category', $exam_category)
+        ->where('exam_mode', $exam_mode)
+        ->where('department', $department)
+        ->where('session1', $session1)
+        ->where('no_of_qst', $no_of_qst)
+        ->where('question_no', 1)
+        ->first();
+
+        if (!$question){
+            return view('question')->with('error', 'An error occurred. Please try again.');   
+        }
+        return view('questions.question-view', compact('softwareVersion', 'collegeSetup','question'));
     }
 }
