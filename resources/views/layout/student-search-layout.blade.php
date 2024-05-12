@@ -182,8 +182,8 @@
           </a>
         </li>
         <li>
-          <a href="{{route('report')}}">
-            <i class="fa fa-folder"></i> <span>Report</span>
+          <a href="{{route('result')}}">
+            <i class="fa fa-folder"></i> <span>Result</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -240,7 +240,7 @@
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
 
                     <div class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="btn btn-success">Search</button>
                     </div>
                 </div>
             </form>

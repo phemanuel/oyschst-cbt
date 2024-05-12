@@ -182,8 +182,8 @@
           </a>
         </li>
         <li>
-          <a href="{{route('report')}}">
-            <i class="fa fa-folder"></i> <span>Report</span>
+          <a href="{{route('result')}}">
+            <i class="fa fa-folder"></i> <span>Result</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

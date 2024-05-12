@@ -21,6 +21,7 @@ use App\Models\CbtClass;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
+use Illuminate\Support\Facades\Session;
 
 class QuestionController extends Controller
 {
@@ -29,7 +30,8 @@ class QuestionController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $questionSetting = QuestionSetting::Paginate(20);
+        $questionSetting = QuestionSetting::orderBy('created_at', 'desc')->Paginate(20)
+        ;
 
         return view('questions.question', compact('softwareVersion','collegeSetup','questionSetting'));
     }
@@ -167,18 +169,24 @@ class QuestionController extends Controller
         ,'question','questionSetting'));
     }
 
-    public function questionSave(Request $request , $id, $currentQuestionNo )
+    public function questionSave(Request $request , $id)
     {
         $action = $request->input('action');
         $question = $request->input('question');
         $answer = $request->input('answer');
+        $currentQuestionNo = $request->input('currentQuestionNo');
+        
+        //---Keep Question and Answer data
+        Session::put('question', $question);
+        Session::put('answer', $answer);
+        Session::put('currentQuestionNo', $currentQuestionNo);
     
         if ($action == 'previous') {
             // Call the function to handle previous action
-            return $this->questionPrevious($id, $currentQuestionNo, $question, $answer);
+            return $this->questionPrevious($id);
         } elseif ($action == 'next') {
             // Call the function to handle next action
-            return $this->questionNext($id, $currentQuestionNo, $question, $answer);
+            return $this->questionNext($id);
         } else {
             // Handle other actions or default behavior
             // For example, return a response indicating an invalid action
@@ -188,7 +196,7 @@ class QuestionController extends Controller
     
 
 
-    public function questionNext(Request $request , $id, $currentQuestionNo)
+    public function questionNext($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
@@ -201,9 +209,28 @@ class QuestionController extends Controller
         $department = $questionSetting->department;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
+        $question = Session::get('question');
+        $answer = Session::get('answer');
+        $currentQuestionNo = Session::get('currentQuestionNo');
 
         // Check if current question number is less than total questions
-        if ($currentQuestionNo < $no_of_qst) {      
+        if ($currentQuestionNo < $no_of_qst) { 
+            
+            //----Update Current Question --------------------------------
+            $questionUpdate = Question::where('exam_type', $exam_type)
+            ->where('exam_category', $exam_category)
+            ->where('exam_mode', $exam_mode)
+            ->where('department', $department)
+            ->where('session1', $session1)
+            ->where('no_of_qst', $no_of_qst)
+            ->where('question_no', $currentQuestionNo)
+            ->first();
+
+            $questionUpdate->update([
+                'question' => $question,
+                'answer' => $answer,
+            ]);
+
             // Increment question number
             $nextQuestionNo = $currentQuestionNo + 1;
 
@@ -224,11 +251,25 @@ class QuestionController extends Controller
             return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
         'questionSetting'));
         } else {
-            return redirect()->route('question-view')->with('error', 'You have reached the last question.');
+            //----Update Current Question --------------------------------
+            $questionUpdate = Question::where('exam_type', $exam_type)
+            ->where('exam_category', $exam_category)
+            ->where('exam_mode', $exam_mode)
+            ->where('department', $department)
+            ->where('session1', $session1)
+            ->where('no_of_qst', $no_of_qst)
+            ->where('question_no', $currentQuestionNo)
+            ->first();
+
+            $questionUpdate->update([
+                'question' => $question,
+                'answer' => $answer,
+            ]);
+            return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
         }
     }
 
-    public function questionPrevious(Request $request , $id, $currentQuestionNo)
+    public function questionPrevious($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
@@ -241,9 +282,28 @@ class QuestionController extends Controller
         $department = $questionSetting->department;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
+        $question = Session::get('question');
+        $answer = Session::get('answer');
+        $currentQuestionNo = Session::get('currentQuestionNo');
 
         // Check if current question number is greater than 1
         if ($currentQuestionNo > 1) {  
+
+            //----Update Current Question --------------------------------
+            $questionUpdate = Question::where('exam_type', $exam_type)
+            ->where('exam_category', $exam_category)
+            ->where('exam_mode', $exam_mode)
+            ->where('department', $department)
+            ->where('session1', $session1)
+            ->where('no_of_qst', $no_of_qst)
+            ->where('question_no', $currentQuestionNo)
+            ->first();
+
+            $questionUpdate->update([
+                'question' => $question,
+                'answer' => $answer,
+            ]);
+
             // Decrement question number
             $previousQuestionNo = $currentQuestionNo - 1;
 
@@ -264,46 +324,104 @@ class QuestionController extends Controller
             return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
             'questionSetting'));
         } else {
-            return redirect()->route('question-view')->with('error', 'You are already at the first question.');
+            //----Update Current Question --------------------------------
+            $questionUpdate = Question::where('exam_type', $exam_type)
+            ->where('exam_category', $exam_category)
+            ->where('exam_mode', $exam_mode)
+            ->where('department', $department)
+            ->where('session1', $session1)
+            ->where('no_of_qst', $no_of_qst)
+            ->where('question_no', $currentQuestionNo)
+            ->first();
+
+            $questionUpdate->update([
+                'question' => $question,
+                'answer' => $answer,
+            ]);
+            return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You are already at the first question.');
         }
     }
 
-    // public function questionSave(Request $request, $id , $currentQuestionNo)
-    // {
-    //     $collegeSetup = CollegeSetup::first();
-    //     $softwareVersion = SoftwareVersion::first();
-    //     $questionSetting = QuestionSetting::where('id', $id)->first();    
+    public function questionSearch(Request $request, $id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $questionSetting = QuestionSetting::where('id', $id)->first();    
         
-    //     $validatedData = $request->validate([                
-    //         'question' => 'required|string', 
-    //         'answer' => 'required|string',               
-    //     ]);
+        $validatedData = $request->validate([                
+            'qst_search' => 'required|integer',          
+        ]);        
         
-    //     //--get variables
-    //     $exam_type = $questionSetting->exam_type;
-    //     $exam_category = $questionSetting->exam_category;
-    //     $exam_mode = $questionSetting->exam_mode;
-    //     $department = $questionSetting->department;
-    //     $session1 = $questionSetting->session1;
-    //     $no_of_qst = $questionSetting->no_of_qst;
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $session1 = $questionSetting->session1;
+        $no_of_qst = $questionSetting->no_of_qst;
+        $currentQuestionNo = $validatedData['qst_search'];
 
-    //     //----Update Current Question --------------------------------
-    //     $question = Question::where('exam_type', $exam_type)
-    //     ->where('exam_category', $exam_category)
-    //     ->where('exam_mode', $exam_mode)
-    //     ->where('department', $department)
-    //     ->where('session1', $session1)
-    //     ->where('no_of_qst', $no_of_qst)
-    //     ->where('question_no', $currentQuestionNo)
-    //     ->first();
+        // Retrieve search question
+        $question = Question::where('exam_type', $exam_type)
+        ->where('exam_category', $exam_category)
+        ->where('exam_mode', $exam_mode)
+        ->where('department', $department)
+        ->where('session1', $session1)
+        ->where('no_of_qst', $no_of_qst)
+        ->where('question_no', $currentQuestionNo)
+        ->first();
 
-    //     $question->update([
-    //         'question' => $validatedData['question'],
-    //         'answer' => $validatedData['answer'],
-    //     ]);
+        if (!$question) {           
+            return redirect()->route('question-view', [
+                'id' => $id,
+                // 'currentQuestionNo' => $currentQuestionNo
+            ])->with('error', 'Search question not found.');
+        }
 
-    //     return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
-    //     'questionSetting'));
-    // }
+        return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
+        'questionSetting'));        
+    }
+
+    public function questionSettingSearch(Request $request)
+    {
+        $searchTerm = $request->input('search');
+
+        // Perform search query
+        $questionSetting = QuestionSetting::where('session1', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('department', 'LIKE', "%{$searchTerm}%")
+            ->paginate(20);
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();        
+        return view('questions.question-search', compact('softwareVersion','collegeSetup',
+    'questionSetting'));
+    }
+
+    public function questionEnable($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first(); 
+
+        // Retrieve the question setting by ID
+        $questionSetting = QuestionSetting::find($id);
+
+        // Check if the question setting exists
+        if (!$questionSetting) {
+            return redirect()->route('question')->with('error', 'Question setting not found.');
+        }
+
+        // Retrieve all records except the one with the given ID
+        $inactiveQuestionSettings = QuestionSetting::where('id', '!=', $id)
+            ->get();
+
+        // Update all other records to be inactive
+        foreach ($inactiveQuestionSettings as $inactiveQuestionSetting) {
+            $inactiveQuestionSetting->update(['exam_status' => 'Inactive']);
+        }
+
+        // Update the specific record to be active
+        $questionSetting->update(['exam_status' => 'Active']);
+
+        return redirect()->route('question')->with('success', 'Question enabled successfully.');
+    }
 
 }

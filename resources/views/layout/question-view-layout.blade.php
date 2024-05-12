@@ -174,8 +174,8 @@
           </a>
         </li>
         <li>
-          <a href="{{route('report')}}">
-            <i class="fa fa-folder"></i> <span>Report</span>
+          <a href="{{route('result')}}">
+            <i class="fa fa-folder"></i> <span>Result</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -244,30 +244,48 @@
               </tr>
               
             </table>
+            <form action="{{route('question-search', ['id' => $questionSetting->id])}}" method="post">
+              @csrf
+            <table width="100%">
+            <tr>
+                              <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->no_of_qst}}</strong> </h3></td>
+                <td width="9%">Question No: </td>
+                <td width="15%"><input type="text" name="qst_search" class="form-control"> </td>
+                <td width="8%"><button type="submit" class="btn btn-success">Search</button></td>
+              </tr>
+              </table>
+            </form>
               
-              <h3><strong>Question {{$question->question_no}} of {{$question->no_of_qst}}</strong> </h3>          
+                        
             </div>
             <!-- /.box-header -->
             <hr>
             <div class="box-body pad">
-              <form action="{{ route('question-save', ['id' => $questionSetting->id, 'currentQuestionNo' => $question->question_no]) }}"
+              <form action="{{ route('question-save', ['id' => $questionSetting->id]) }}"
               method="post">
               @csrf
-                  <p>Question:</p>
+                 <strong><p>Question:</p></strong> 
                     <textarea id="editor1" name="question" rows="10" cols="80">
                                             {{$question->question}}
                     </textarea>
                     <hr>
-                    <p>Answer : <input type="text" class="form-control" name="answer" value="{{$question->answer}}"></p>
+                    <p><strong>Answer :</strong> 
+                    <input type="text" class="form-control" name="answer" value="{{$question->answer}}"></p>
                     <table width="100%">                    
                       
-                      <tr>
-                                                  <td width="9%"><button type="submit" class="btn btn-success">Save</button></td>
-                                                  <td width="78%">&nbsp;</td>
-                     <td width="8%">&nbsp;&nbsp;<button type="submit" name="action" value="previous" class="btn btn-primary">Previous</button></td>
-                    <td width="8%">&nbsp;&nbsp;<button type="submit" name="action" value="next" class="btn btn-info">Next</button></td>
-                      </tr>
+  <tr>
+    <td width="8%"><button type="submit" name="action" value="previous" class="btn btn-primary">Previous</button></td>
+    <td width="75%"><button type="submit" name="action" value="next" class="btn btn-info">Next</button></td>
+    <td width="7%">&nbsp;</td>
+    <td width="10%">&nbsp;</td>
+  </tr>
                                            </table>
+</body>
+</html>
+
+</body>
+</html>
+                  <input type="hidden" name="currentQuestionNo" value="{{$question->question_no}}">
               </form>
             </div>
           </div>

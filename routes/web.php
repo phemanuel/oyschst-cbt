@@ -141,12 +141,16 @@ Route::get('/', function () {
         ->name('question-edit');
         Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
         ->name('question-enable');
-        Route::get('question-next/{id}/{currentQuestionNo}', [QuestionController::class, 'questionNext'])
+        Route::get('question-next/{id}', [QuestionController::class, 'questionNext'])
         ->name('question-next');
-        Route::get('question-previous/{id}/{currentQuestionNo}', [QuestionController::class, 'questionPrevious'])
+        Route::get('question-previous/{id}', [QuestionController::class, 'questionPrevious'])
         ->name('question-previous');
-        Route::post('question-save/{id}/{currentQuestionNo}', [QuestionController::class, 'questionSave'])
+        Route::post('question-search/{id}', [QuestionController::class, 'questionSearch'])
+        ->name('question-search');
+        Route::post('question-save/{id}', [QuestionController::class, 'questionSave'])
         ->name('question-save');
+        Route::post('question-setting-search', [QuestionController::class, 'questionSettingSearch'])
+        ->name('question-setting-search');
 
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
@@ -159,8 +163,8 @@ Route::get('/', function () {
         Route::post('question-upload-theory', [QuestionController::class, 'questionUploadTheoryAction'])
         ->name('question-upload-theory.action');
         //--report
-        Route::get('report', [ReportController::class, 'report'])
-        ->name('report');
+        Route::get('result', [ReportController::class, 'result'])
+        ->name('result');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 
