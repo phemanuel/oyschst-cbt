@@ -23,18 +23,18 @@ Route::get('/', function () {
 });
 
     //------Reset Password Route
-    Route::get('/forgot-password', function () {
-        return view('auth.forgot-password');
-    })->middleware('guest')->name('password.request');
-    Route::post('/forgot-password', [CustomForgotPasswordController::class, 'forgotPassword'])
-        ->middleware('guest')
-        ->name('password.email');
-    Route::get('/reset-password/{token}/{email}', function ($token,$email) {
-        return view('auth.user-reset-password', ['token' => $token , 'email' => $email]);
-    })->middleware('guest')->name('password.reset');
-    Route::post('/reset-password', [CustomForgotPasswordController::class, 'resetPassword'])
-        ->middleware('guest')
-        ->name('password.update');
+    // Route::get('/forgot-password', function () {
+    //     return view('auth.forgot-password');
+    // })->middleware('guest')->name('password.request');
+    // Route::post('/forgot-password', [CustomForgotPasswordController::class, 'forgotPassword'])
+    //     ->middleware('guest')
+    //     ->name('password.email');
+    // Route::get('/reset-password/{token}/{email}', function ($token,$email) {
+    //     return view('auth.user-reset-password', ['token' => $token , 'email' => $email]);
+    // })->middleware('guest')->name('password.reset');
+    // Route::post('/reset-password', [CustomForgotPasswordController::class, 'resetPassword'])
+    //     ->middleware('guest')
+    //     ->name('password.update');
 
     // Home route
     Route::get('/', [AuthController::class, 'home'])->name('home');
@@ -174,32 +174,14 @@ Route::get('/', function () {
         ->name('add-user.action');                
 
         //--Send mail routes
-        Route::get('send-mail-fail/{transaction_id}', [MailController::class, 'mailFailed'])
-        ->name('send-mail-fail');
-        Route::get('send-mail-success/{transaction_id}', [MailController::class, 'mailSuccess'])
-        ->name('send-mail-success');
-        //---User change password --------------------------------
-        Route::get('change-password', [AuthController::class, 'changePassword'])
-            ->name('change-password');  
+        // Route::get('send-mail-fail/{transaction_id}', [MailController::class, 'mailFailed'])
+        // ->name('send-mail-fail');
+        // Route::get('send-mail-success/{transaction_id}', [MailController::class, 'mailSuccess'])
+        // ->name('send-mail-success');
+        // //---User change password --------------------------------
+        // Route::get('change-password', [AuthController::class, 'changePassword'])
+        //     ->name('change-password');  
     });
-
      
-        //===========Verify email address routes================================
-    Route::get('email-verify', [MailController::class, 'emailVerify'])
-    ->name('email-verify');
-    Route::get('email-verify-done/{token}', [MailController::class, 'emailVerifyDone'])
-    ->name('email-verify-done');
-    Route::post('resend-verification-email', [MailController::class, 'resendEmailVerification'])
-    ->name('resend-verification-email');
-    Route::post('resend-verification', [MailController::class, 'resendVerification'])
-    ->name('resend-verification');
-    Route::post('email-not-verify', [MailController::class, 'emailNotVerify'])
-    ->name('email-not-verify');
-    
-    //----send mail route
-    Route::get('send-mail', [MailController::class, 'index'])
-    ->name('send-mail');
-
-    Route::get('user-check', [DashboardController::class, 'userCheck'])
-        ->name('user-check');
+      
 

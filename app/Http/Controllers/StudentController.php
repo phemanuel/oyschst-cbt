@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\CollegeSetup;
 use App\Models\CbtClass;
 use Maatwebsite\Excel\Facades\Excel;
@@ -348,18 +349,59 @@ class StudentController extends Controller
 
     public function studentImportAction(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:csv,xls,xlsx',
-        ]);
+         // Validate the uploaded file
+        //  $validatedData = $request->validate([
+        //     'session1' => 'required|string',
+        //     'file' => 'required|mimes:csv|max:10240', // Max 10MB, only Excel files allowed
+        // ]);
 
-        try {
-            Excel::import(new StudentsImport, $request->file('file'));
-            
-        return back();
+        // Process the uploaded Excel file
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getRealPath();            
+            $session1 =  $request->get('session1');
 
-            return redirect()->back()->with('success', 'Students imported successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while importing students.');
-        }
+            if (($handle = fopen($fileName, "r")) !== FALSE) {
+                $headers = fgetcsv($handle, 10000, ","); // Read headers
+                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE) {
+                    $data = array_combine($headers, $column); // Combine headers with data
+
+                    // Insert data into database
+                    DB::table('student_admissions')->insert([
+                        'admission_no' => $data['admission_no'],                    
+                        'surname' => $data['surname'],
+                        'first_name' => $data['first_name'],
+                        'other_name' => $data['other_name'],
+                        'department' => $data['department'],
+                        'phone_no' => $data['phone_no'],
+                        'phone_no1' => $data['phone_no'],
+                        'state' => $data['state'],
+                        'level' => $data['level'],
+                        'sex' => $data['sex'],
+                        'user_name' => $data['phone_no'],
+                        'password' => $data['phone_no'],
+                        'session1' => $session1,
+                        'user_type' => 'student',
+                        'picture_name' => 'blank.jpg',
+                        'login_status' => 0,
+                        'login_attempts' => 0,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]);
+                }
+                fclose($handle);
+                // $type = "success";
+                // $message = "CSV Data Imported into the Database";
+                // Redirect back with success message
+            return redirect()->back()->with('success', 'Student list imported successfully.');
+            } else {
+                // Log or handle missing data
+            Log::warning('Missing data in row: ' . json_encode($row));
+            return redirect()->back()->with('error', 'Student list import not successful.');
+            }  
+        } else {
+           
+           return redirect()->back()->with('error', 'No file was uploaded.');
+        }  
     }
 }
