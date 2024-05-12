@@ -318,25 +318,30 @@
               <div class="box-body">              
                 <div class="form-group">
                   <label for="exampleInputEmail1">Class/Level</label>
-                  <input type="text" name="class" class="form-control" value="{{old('class')}}">
+                  <input type="text" name="level" class="form-control" value="{{old('level')}}">
                 </div>             
                 @error('class')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror                      
+                @enderror 
+                <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>                     
                 <!-- Display the available departments   -->
                 <table class="table table-striped">
                       <tr>           
                       <th></th> 
                         <th>Class/Level</th>                        
-                        <th>Created On</th>                       
+                        <th>Created On</th> 
+                        <th>Actions</th>                      
                       </tr>
 
                       @if ($classes->count() > 0)
 			@foreach ($classes as $key => $rd)
                       <tr> 
                         <td>{{$key +1}}</td>                         
-                        <td>{{$rd->class}}</td>                        
-                        <td>{{$rd->created_at}}</td>                        
+                        <td>{{$rd->level}}</td>                        
+                        <td>{{$rd->created_at}}</td>
+                        <td><a class="label label-danger" href="{{route('delete-class.action', ['id' => $rd->id])}}">Delete</a> </td>                        
                       </tr>  
                       @endforeach
 		@else
@@ -349,9 +354,7 @@
               </div>
               <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
-              </div>
+              
             </form>
           </div>
           <!-- /.box -->
@@ -387,12 +390,16 @@
                 @error('name')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
+                <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
                 <!-- Display the available departments   -->
                 <table class="table table-striped">
                       <tr>           
                       <th></th> 
                         <th>Programme</th>                        
-                        <th>Created On</th>                       
+                        <th>Created On</th>  
+                        <th>Actions</th>                     
                       </tr>
 
                       @if ($courses->count() > 0)
@@ -400,7 +407,8 @@
                       <tr> 
                         <td>{{$key +1}}</td>                         
                         <td>{{$rd->department}}</td>                        
-                        <td>{{$rd->created_at}}</td>                        
+                        <td>{{$rd->created_at}}</td> 
+                        <td><a class="label label-danger" href="{{route('delete-dept.action', ['id' => $rd->id])}}">Delete</a> </td>                       
                       </tr>  
                       @endforeach
 		@else
@@ -413,9 +421,7 @@
               </div>
               <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
-              </div>
+              
             </form>
           </div>
           <!-- /.box -->

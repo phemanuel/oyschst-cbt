@@ -133,7 +133,8 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li> 
+        <li class="active">
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -141,7 +142,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('student')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">

@@ -37,7 +37,21 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
 
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -227,7 +241,9 @@
               <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a>
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('student-import')}}" class="btn btn-info">Import Student</a>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-success">
+                Import all Students
+              </button>
                 </div>
               </div>
               
@@ -299,6 +315,37 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <div class="modal modal-info fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import Student List.</h4>
+              </div>
+              <div class="modal-body">
+                <p>Importing students from a CSV (Comma Separated Values) file is a convenient way to bulk upload questions into a system. 
+                Here's how the process typically works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-student-csv')}}">You can download a sample template here.</a></li>
+                    <li> Click on import.</li>
+                    <li> This will upload all students for the specified criteria.</li>
+                    <li> You can edit each student as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <a href="{{route('student-import')}}" class="btn btn-outline">Proceed</a>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">

@@ -10,6 +10,6 @@ class CbtClass extends Model
     use HasFactory;
 
     protected $fillable =[
-        'class',
+        'level',
     ];
 }

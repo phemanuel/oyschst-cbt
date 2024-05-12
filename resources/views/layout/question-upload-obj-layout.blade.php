@@ -31,6 +31,21 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
 
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -224,8 +239,18 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Upload Questions for different departments.</h3>
-            <p align="right"><a href="{{route('question')}}" class="btn btn-success">Back to Questions</a></p>
+            <table width="100%">
+<tr>
+                  <td width="88%"><h3 class="box-title">Upload single question at a time.</h3></td>
+    <td width="12%"><p align="right"><a href="{{route('question')}}" class="btn btn-success">Back to Questions</a></p></td>
+  </tr>
+                <tr>
+                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-success">
+                Get more Info about this module
+              </button></td>
+                  <td></td>
+                </tr>
+              </table>
               
             </div>
             @if(session('success'))
@@ -271,8 +296,8 @@
                   <label for="exampleInputEmail1">Level</label>
                   <select name="level" id="" class="form-control">
                   <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
-                  @foreach($class as $rd)
-				<option value="{{$rd->class}}">{{$rd->class}}</option>
+                  @foreach($level as $rd)
+				<option value="{{$rd->level}}">{{$rd->level}}</option>
 				@endforeach
                   </select>
                 </div> 
@@ -360,6 +385,164 @@
 
         </div>
         <!--/.col (left) -->
+
+        
+<!-- left column -->
+<div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+            <table width="100%">
+<tr>
+                  <td width="88%"><h3 class="box-title">Import all Questions.(CSV format)</h3></td>
+    <td width="12%"><p align="right"><a href="{{route('question')}}" class="btn btn-success">Back to Questions</a></p></td>
+  </tr>
+                <tr>
+                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-success1">
+                Get more Info about this module
+              </button></td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+            @if(session('success-import'))
+						<div class="alert alert-success">
+							{{ session('success-import') }}
+						</div>
+          @elseif(session('error-import'))
+						<div class="alert alert-danger">
+							{{ session('error-import') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('question-upload-obj-import.action')}}" method="post" enctype="multipart/form-data">
+              @csrf              
+              <div class="box-body">  
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Academic Session</label>
+                  <select name="session1" id="" class="form-control">
+                  <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                  
+                  @foreach($acad_sessions as $rd)
+				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
+				@endforeach
+                  </select>
+                </div>             
+                @error('session1')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Programme</label>
+                  <select name="department" class="form-control">
+                  <option value="{{old('department')}}" selected>{{old('department')}}</option>                  
+                  @foreach($dept as $rd)
+				<option value="{{$rd->department}}">{{$rd->department}}</option>
+				@endforeach
+                  </select>
+                </div>   
+                <p><a href="{{route('college-setup')}}"><u> Create Programme</u> </a></p>          
+                @error('department')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Level</label>
+                  <select name="level" id="" class="form-control">
+                  <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
+                  @foreach($level as $rd)
+				<option value="{{$rd->level}}">{{$rd->level}}</option>
+				@endforeach
+                  </select>
+                </div> 
+                <p><a href="{{route('college-setup')}}"><u> Create Class/Level</u> </a></p>            
+                @error('level')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror                
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Category</label>
+                  <select name="exam_category" id="" class="form-control">
+                  <option value="GENERAL" selected>GENERAL</option> 
+                  <option value="SEMESTER">SEMESTER</option> 
+                  </select>
+                </div>             
+                @error('exam_category')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Type</label>
+                  <select name="exam_type" id="" class="form-control">
+                  <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                  
+                  @foreach($examType as $rd)
+				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
+				@endforeach
+                  </select>
+                </div>     
+                <p><a href="{{route('exam-type')}}"><u> Create Exam Type</u> </a></p>        
+                @error('exam_type')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Course/Subject</label>
+                  <input type="text" name="course" class="form-control" value="{{old('course')}}">
+                </div>             
+                @error('course')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">No of questions to upload</label>
+                  <select name="no_of_qst" class="form-control">
+                  <option value="10" selected>10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="50">50</option>
+                  <option value="60">60</option>
+                  <option value="70">70</option>
+                  <option value="80">80</option>
+                  <option value="90">90</option>
+                  <option value="100">100</option>
+                </select>
+                </div>             
+                @error('no_of_qst')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Duration(Minutes)</label>
+                  <input type="text" name="duration" class="form-control" value="{{old('duration')}}">
+                </div>             
+                @error('duration')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Date</label>
+                <div class="input-group date">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control pull-right" id="datepicker" name="exam_date" value="{{old('exam_date')}}">
+                </div> 
+  </div>           
+                @error('exam_date')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">File (CSV Format)</label>
+                  <input type="file" name="file"  class="form-control" />
+                </div>             
+                @error('file')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Start Import</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->
+
+        </div>
+        <!--/.col (left) -->
         <!-- right column -->
         <div class="col-md-6">
           
@@ -371,6 +554,68 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <div class="modal modal-info fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Upload Single Questions.</h4>
+              </div>
+              <div class="modal-body">
+                <p>Uploading questions one at a time is suitable when you want to manually review and input each question. 
+                  Here's how this process generally works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li> Click on Start Upload.</li>
+                    <li> This will generate a dummy template for the specified no of questions.</li>
+                    <li> You can start editing the questions as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-outline">Save changes</button> -->
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal modal-info fade" id="modal-success1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import all questions.</h4>
+              </div>
+              <div class="modal-body">
+              <p>Importing questions from a CSV (Comma Separated Values) file is a convenient way to bulk upload questions into a system. 
+                Here's how the process typically works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template here.</a></li>
+                    <li> Click on Start Import.</li>
+                    <li> This will upload all the questions for the specified no of questions.</li>
+                    <li> You can start editing the questions as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-outline">Save changes</button> -->
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">

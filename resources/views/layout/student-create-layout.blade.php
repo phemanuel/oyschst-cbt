@@ -298,8 +298,8 @@
                   <label for="exampleInputEmail1">Level</label>
                   <select name="level" id="" class="form-control">
                   <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
-                  @foreach($class as $rd)
-				<option value="{{$rd->class}}">{{$rd->class}}</option>
+                  @foreach($level as $rd)
+				<option value="{{$rd->level}}">{{$rd->level}}</option>
 				@endforeach
                   </select>
                 </div>             

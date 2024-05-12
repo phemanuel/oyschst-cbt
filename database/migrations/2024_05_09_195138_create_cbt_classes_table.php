@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cbt_classes', function (Blueprint $table) {
             $table->id();
-            $table->string('class');
+            $table->string('level');
             $table->timestamps();
         });
     }

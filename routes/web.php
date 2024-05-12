@@ -91,6 +91,8 @@ Route::get('/', function () {
         ->name('student-import');
         Route::post('student-import', [StudentController::class, 'studentImportAction'])
         ->name('student-import.action');
+        Route::get('download-student-csv', [StudentController::class, 'downloadStudentCsv'])
+        ->name('download-student-csv');
         //--student login status
         Route::get('login-status', [StudentController::class, 'loginStatus'])
         ->name('login-status');
@@ -114,9 +116,13 @@ Route::get('/', function () {
         ->name('add-course.action');
         Route::post('add-course-college', [DashboardController::class, 'addCourseCollegeAction'])
         ->name('add-course-college.action');
+        Route::get('course/{id}', [DashboardController::class, 'deleteDeptAction'])
+        ->name('delete-dept.action'); 
         //--Add class/level--        
         Route::post('add-class', [DashboardController::class, 'addClassAction'])
-        ->name('add-class.action');        
+        ->name('add-class.action'); 
+        Route::get('class/{id}', [DashboardController::class, 'deleteClassAction'])
+        ->name('delete-class.action'); 
         //--college update
         Route::get('college-setup', [DashboardController::class, 'collegeSetup'])
         ->name('college-setup');
@@ -127,12 +133,15 @@ Route::get('/', function () {
         ->name('question');
         Route::get('question-upload', [QuestionController::class, 'questionUpload'])
         ->name('question-upload');
-        
+        Route::get('download-question-csv', [QuestionController::class, 'downloadQuestionCsv'])
+        ->name('download-question-csv');        
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
         ->name('question-edit.action');
         //-----Questions Objectives
         Route::get('question-upload-obj', [QuestionController::class, 'questionUploadObj'])
         ->name('question-upload-obj');
+        Route::post('question-upload-obj-import', [QuestionController::class, 'questionUploadObjImportAction'])
+        ->name('question-upload-obj-import.action');
         Route::post('question-upload-obj', [QuestionController::class, 'questionUploadObjAction'])
         ->name('question-upload-obj.action');
         Route::get('question-view/{questionId}', [QuestionController::class, 'questionView'])

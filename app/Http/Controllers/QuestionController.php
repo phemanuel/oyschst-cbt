@@ -22,6 +22,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
@@ -48,11 +50,11 @@ class QuestionController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $class = CbtClass::orderBy('class')->get();
+        $level = CbtClass::orderBy('level')->get();
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examType = ExamType::Paginate(10);
-        return view('questions.question-upload-obj', compact('softwareVersion','collegeSetup','class',
+        return view('questions.question-upload-obj', compact('softwareVersion','collegeSetup','level',
     'dept','acad_sessions', 'examType'));
 
     }
@@ -421,7 +423,28 @@ class QuestionController extends Controller
         // Update the specific record to be active
         $questionSetting->update(['exam_status' => 'Active']);
 
+        //----Update current exam settings---
+        $examSetting = ExamSetting::first();
+        $examSetting->update([
+            'level' => $questionSetting->level,
+            'course' => $questionSetting->course,
+            'session1' => $questionSetting->session1,
+            'department' => $questionSetting->department,
+            'exam_type' => $questionSetting->exam_type,
+            'exam_category' => $questionSetting->exam_category,
+            'exam_mode' => $questionSetting->exam_mode,
+            'no_of_qst' => $questionSetting->no_of_qst,
+            'duration' => $questionSetting->duration,
+        ]);
+
         return redirect()->route('question')->with('success', 'Question enabled successfully.');
     }
+
+    public function downloadQuestionCsv()
+    {
+        $filePath = public_path('sample/question.csv');
+
+        return Response::download($filePath, 'question_sample.csv', ['Content-Type' => 'text/csv']);
+    }    
 
 }

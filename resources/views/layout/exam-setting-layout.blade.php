@@ -288,10 +288,10 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
-                  <select name="class" id="" class="form-control">
-                  <option value="{{$examSetting->class}}" selected>{{$examSetting->class}}</option>                  
-                  @foreach($class as $rd)
-				<option value="{{$rd->class}}">{{$rd->class}}</option>
+                  <select name="level" id="" class="form-control">
+                  <option value="{{$examSetting->level}}" selected>{{$examSetting->level}}</option>                  
+                  @foreach($level as $rd)
+				<option value="{{$rd->level}}">{{$rd->level}}</option>
 				@endforeach
                   </select>
                 </div>

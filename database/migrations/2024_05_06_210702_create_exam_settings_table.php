@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('exam_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('class');
+            $table->string('level');
             // $table->string('subject1');
             // $table->string('subject2');
             // $table->string('subject3');
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('course');
             $table->integer('time_limit');
             $table->integer('no_of_qst');
+            $table->integer('duration');
             $table->timestamps();
         });
     }

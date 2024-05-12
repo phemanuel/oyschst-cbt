@@ -51,9 +51,9 @@ class DashboardController extends Controller
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examtype = ExamType::orderBy('exam_type')->get();
         $examSetting = ExamSetting::first();
-        $class = CbtClass::orderBy('class')->get();
+        $level = CbtClass::orderBy('level')->get();
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
-        'examtype','examSetting', 'collegeSetup', 'class'));
+        'examtype','examSetting', 'collegeSetup', 'level'));
     }
 
     public function examType()
@@ -105,7 +105,7 @@ class DashboardController extends Controller
                 'department' => 'required',
                 'session1' => 'required',
                 'semester' => 'required',
-                'class' => 'required',
+                'level' => 'required',
                 'no_of_qst' => 'required',
                 'time_limit' => 'required',
             ]);
@@ -230,7 +230,7 @@ class DashboardController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $courses = Department::paginate(10);
+        $courses = Department::paginate(15);
         $classes = CbtClass::paginate(10);
         return view('dashboard.college-setup', compact('courses', 'softwareVersion','collegeSetup',
     'classes'));
@@ -241,11 +241,11 @@ class DashboardController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'class' => 'required|string',
+                'level' => 'required|string',
             ]);       
 
-            $class = CbtClass::create([
-                'class' => $validatedData['class'],                     
+            $level = CbtClass::create([
+                'level' => $validatedData['level'],                     
             ]);
 
             return redirect()->route('college-setup')->with('success-class', 'Class/Level has been created successfully.');
@@ -260,6 +260,20 @@ class DashboardController extends Controller
         }
     }
 
+    public function deleteClassAction($id)
+    {
+        try {
+            $class = cbtClass::findOrFail($id);
+            $class->delete();
+
+            return redirect()->route('college-setup')->with('success-class', 'Class/Level deleted successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = 'Error-delete class: ' . $e->getMessage();
+            Log::error($errorMessage);
+            return redirect()->route('college-setup')->with('error-class', 'There was a problem deleting class.');
+        }
+    }
+
     public function addCourseCollegeAction(Request $request)
     {
         try {
@@ -271,15 +285,29 @@ class DashboardController extends Controller
                 'department' => $validatedData['department'],                     
             ]);
 
-            return redirect()->route('college-setup')->with('success-dept', 'Department has been created successfully.');
+            return redirect()->route('college-setup')->with('success-dept', 'Programme has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
             // Log the error
-            Log::error('Error during department registration: ' . $e->getMessage());
+            Log::error('Error during Programme registration: ' . $e->getMessage());
 
-            return redirect()->back()->with('error-dept', 'An error occurred during department. Please try again.');
+            return redirect()->back()->with('error-dept', 'An error occurred during Programme. Please try again.');
+        }
+    }
+
+    public function deleteDeptAction($id)
+    {
+        try {
+            $dept = Department::findOrFail($id);
+            $dept->delete();
+
+            return redirect()->route('college-setup')->with('success-dept', 'Programme deleted successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = 'Error-delete Programme: ' . $e->getMessage();
+            Log::error($errorMessage);
+            return redirect()->route('college-setup')->with('error-dept', 'There was a problem deleting programme.');
         }
     }
 

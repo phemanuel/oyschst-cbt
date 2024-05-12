@@ -22,7 +22,7 @@ class ExamSetting extends Model
      * @var array
      */
     protected $fillable = [
-        'class', 
+        'level', 
         // 'subject1', 
         // 'subject2', 
         // 'subject3', 
@@ -37,5 +37,6 @@ class ExamSetting extends Model
         'time_limit', 
         'no_of_qst',
         'course',
+        'duration', 
     ];
 }

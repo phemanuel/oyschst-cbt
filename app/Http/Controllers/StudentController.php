@@ -22,6 +22,8 @@ use App\Models\CbtClass;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -165,10 +167,10 @@ class StudentController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $class = CbtClass::orderBy('class')->get();
+        $level = CbtClass::orderBy('level')->get();
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();
-        return view('dashboard.student-create', compact('softwareVersion','collegeSetup','class',
+        return view('dashboard.student-create', compact('softwareVersion','collegeSetup','level',
     'dept','acad_sessions'));
     }
 
@@ -403,5 +405,12 @@ class StudentController extends Controller
            
            return redirect()->back()->with('error', 'No file was uploaded.');
         }  
+    }
+
+    public function downloadStudentCsv()
+    {
+        $filePath = public_path('sample/student.csv');
+
+        return Response::download($filePath, 'student_sample.csv', ['Content-Type' => 'text/csv']);
     }
 }

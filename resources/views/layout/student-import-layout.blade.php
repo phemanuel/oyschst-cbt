@@ -256,7 +256,7 @@
                 @enderror
 
                 <div class="form-group">
-                  <label for="exampleInputEmail1">File (Excel Format)</label>
+                  <label for="exampleInputEmail1">File (CSV Format)</label>
                   <input type="file" name="file"  class="form-control" />
                 </div>             
                 @error('file')
