@@ -127,12 +127,7 @@ Route::get('/', function () {
         ->name('question');
         Route::get('question-upload', [QuestionController::class, 'questionUpload'])
         ->name('question-upload');
-        Route::get('question-view/{questionId}', [QuestionController::class, 'questionView'])
-        ->name('question-view');
-        Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
-        ->name('question-edit');
-        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
-        ->name('question-enable');
+        
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
         ->name('question-edit.action');
         //-----Questions Objectives
@@ -140,6 +135,17 @@ Route::get('/', function () {
         ->name('question-upload-obj');
         Route::post('question-upload-obj', [QuestionController::class, 'questionUploadObjAction'])
         ->name('question-upload-obj.action');
+        Route::get('question-view/{questionId}', [QuestionController::class, 'questionView'])
+        ->name('question-view');
+        Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
+        ->name('question-edit');
+        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
+        ->name('question-enable');
+        Route::get('question-next/{id}/{currentQuestionNo}', [QuestionController::class, 'questionNext'])
+        ->name('question-next');
+        Route::get('question-previous/{id}/{currentQuestionNo}', [QuestionController::class, 'questionPrevious'])
+        ->name('question-previous');
+
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
         ->name('question-upload-fill-gap');

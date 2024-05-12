@@ -285,7 +285,7 @@
                     <td>{{$rs->created_at}}</td>
                     <td> 
                       
-                      <a class="label label-success" href="{{route('question-edit.action', ['questionId' => $rs->id])}}">Edit</a>
+                      <a class="label label-success" href="{{route('question-view', ['questionId' => $rs->id])}}">Edit</a>
                      
                     </td>
                 </tr>

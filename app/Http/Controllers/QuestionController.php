@@ -163,6 +163,90 @@ class QuestionController extends Controller
         if (!$question){
             return view('question')->with('error', 'An error occurred. Please try again.');   
         }
-        return view('questions.question-view', compact('softwareVersion', 'collegeSetup','question'));
+        return view('questions.question-view', compact('softwareVersion', 'collegeSetup'
+        ,'question','questionSetting'));
     }
+
+    public function questionNext($id, $currentQuestionNo)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $questionSetting = QuestionSetting::where('id', $id)->first();       
+        
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $session1 = $questionSetting->session1;
+        $no_of_qst = $questionSetting->no_of_qst;
+
+        // Check if current question number is less than total questions
+        if ($currentQuestionNo < $no_of_qst) {
+            // Increment question number
+            $nextQuestionNo = $currentQuestionNo + 1;
+
+            // Retrieve next question
+            $question = Question::where('exam_type', $exam_type)
+                ->where('exam_category', $exam_category)
+                ->where('exam_mode', $exam_mode)
+                ->where('department', $department)
+                ->where('session1', $session1)
+                ->where('no_of_qst', $no_of_qst)
+                ->where('question_no', $nextQuestionNo)
+                ->first();
+
+            if (!$question) {
+                return redirect()->route('question-view')->with('error', 'Next question not found.');
+            }
+            //----Update Current Question --------------------------------
+            
+
+            return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
+        'questionSetting'));
+        } else {
+            return redirect()->route('question-view')->with('error', 'You have reached the last question.');
+        }
+    }
+
+    public function questionPrevious($id, $currentQuestionNo)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $questionSetting = QuestionSetting::where('id', $id)->first();       
+        
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $session1 = $questionSetting->session1;
+        $no_of_qst = $questionSetting->no_of_qst;
+
+        // Check if current question number is greater than 1
+        if ($currentQuestionNo > 1) {
+            // Decrement question number
+            $previousQuestionNo = $currentQuestionNo - 1;
+
+            // Retrieve previous question
+            $question = Question::where('exam_type', $exam_type)
+                ->where('exam_category', $exam_category)
+                ->where('exam_mode', $exam_mode)
+                ->where('department', $department)
+                ->where('session1', $session1)
+                ->where('no_of_qst', $no_of_qst)
+                ->where('question_no', $previousQuestionNo)
+                ->first();
+
+            if (!$question) {
+                return redirect()->route('question-view')->with('error', 'Previous question not found.');
+            }
+
+            return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
+            'questionSetting'));
+        } else {
+            return redirect()->route('question-view')->with('error', 'You are already at the first question.');
+        }
+    }
+
 }

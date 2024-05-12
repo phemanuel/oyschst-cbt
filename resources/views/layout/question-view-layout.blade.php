@@ -7,6 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
+  <link rel="shortcut icon" href="{{ asset('/favicon.png') }}">
   <link rel="stylesheet" href="{{asset('dashboard/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{asset('dashboard/bower_components/font-awesome/css/font-awesome.min.css')}}">
@@ -202,7 +203,8 @@
         Question Upload      
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>  
+        <li><a href="{{route('question')}}">Question Bank</a></li>       
         <li class="active">Question Upload</li>
       </ol>
     </section>
@@ -254,9 +256,9 @@
                     <hr>
                      <table>
                         <tr>
-                            <td><a href="#" class="btn btn-info">Previous</a></td>
+                            <td><a href="{{ route('question-previous', ['id' => $questionSetting->id, 'currentQuestionNo' => $question->question_no]) }}" class="btn btn-info">Previous</a></td>
                             <td>&nbsp;&nbsp;</td>
-                            <td><a href="#" class="btn btn-primary">Next</a></td>
+                            <td><a href="{{ route('question-next', ['id' => $questionSetting->id, 'currentQuestionNo' => $question->question_no]) }}" class="btn btn-primary">Next</a></td>
                         </tr>
                      </table>
               </form>
