@@ -208,59 +208,66 @@
         <li class="active">Question Upload</li>
       </ol>
     </section>
-
+<div>
+@if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+</div>
     <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-md-12">
           <div class="box box-info">
             <div class="box-header">
-                <table class="table table-hover">
-                    <tr>
-                        <td> <strong>Academic Session:</strong> </td>
-                        <td>{{$question->session1}}</td>
-                        <td><strong>Exam Mode:</strong> </td>
-                        <td>{{$question->exam_mode}}</td>
-                    </tr>
-                    <tr>
-                    <td><strong>Programme:</strong> </td>
-                        <td>{{$question->department}}</td>                    
-                        <td><strong>Exam Type:</strong> </td>
-                        <td>{{$question->exam_type}}</td>
-
-                    </tr>                   
-                    <tr>
-                    <td> <strong>Course/Subject</strong></td>
-                        <td>{{$question->course}}</td>
-                        <td><strong>Exam Category:</strong> </td>
-                        <td>{{$question->exam_category}}</td>
-                        
-                    </tr>                    
-                    <tr>
-                    <td><strong>Level:</strong> </td>
-                        <td>{{$question->level}}</td>                        
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
+            <table width="100%" class="table table-hover">
+              <tr>
+                <td width="10%"><strong>Academic Session:</strong> </td>
+                <td width="29%">{{$question->session1}}</td>
+                <td><strong>Course/Subject</strong></td>
+                <td>{{$question->course}}</td>
+                <td width="16%"><strong>Exam Mode/Category:</strong> </td>
+                <td width="20%">{{$question->exam_mode}} / {{$question->exam_category}}</td>
+              </tr>
+              <tr>
+                <td><strong>Programme:</strong> </td>
+                <td>{{$question->department}}</td>
+                <td><strong>Level:</strong> </td>
+                <td>{{$question->level}}</td>
+                <td><strong>Exam Type:</strong> </td>
+                <td>{{$question->exam_type}}</td>
+              </tr>
+              
+            </table>
               
               <h3><strong>Question {{$question->question_no}} of {{$question->no_of_qst}}</strong> </h3>          
             </div>
             <!-- /.box-header -->
             <hr>
             <div class="box-body pad">
-              <form>
-                    <textarea id="editor1" name="editor1" rows="10" cols="80">
+              <form action="{{ route('question-save', ['id' => $questionSetting->id, 'currentQuestionNo' => $question->question_no]) }}"
+              method="post">
+              @csrf
+                  <p>Question:</p>
+                    <textarea id="editor1" name="question" rows="10" cols="80">
                                             {{$question->question}}
                     </textarea>
                     <hr>
-                     <table>
-                        <tr>
-                            <td><a href="{{ route('question-previous', ['id' => $questionSetting->id, 'currentQuestionNo' => $question->question_no]) }}" class="btn btn-info">Previous</a></td>
-                            <td>&nbsp;&nbsp;</td>
-                            <td><a href="{{ route('question-next', ['id' => $questionSetting->id, 'currentQuestionNo' => $question->question_no]) }}" class="btn btn-primary">Next</a></td>
-                        </tr>
-                     </table>
+                    <p>Answer : <input type="text" class="form-control" name="answer" value="{{$question->answer}}"></p>
+                    <table width="100%">                    
+                      
+                      <tr>
+                                                  <td width="9%"><button type="submit" class="btn btn-success">Save</button></td>
+                                                  <td width="78%">&nbsp;</td>
+                     <td width="8%">&nbsp;&nbsp;<button type="submit" name="action" value="previous" class="btn btn-primary">Previous</button></td>
+                    <td width="8%">&nbsp;&nbsp;<button type="submit" name="action" value="next" class="btn btn-info">Next</button></td>
+                      </tr>
+                                           </table>
               </form>
             </div>
           </div>

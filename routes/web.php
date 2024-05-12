@@ -145,6 +145,8 @@ Route::get('/', function () {
         ->name('question-next');
         Route::get('question-previous/{id}/{currentQuestionNo}', [QuestionController::class, 'questionPrevious'])
         ->name('question-previous');
+        Route::post('question-save/{id}/{currentQuestionNo}', [QuestionController::class, 'questionSave'])
+        ->name('question-save');
 
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])

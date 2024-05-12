@@ -167,7 +167,28 @@ class QuestionController extends Controller
         ,'question','questionSetting'));
     }
 
-    public function questionNext($id, $currentQuestionNo)
+    public function questionSave(Request $request , $id, $currentQuestionNo )
+    {
+        $action = $request->input('action');
+        $question = $request->input('question');
+        $answer = $request->input('answer');
+    
+        if ($action == 'previous') {
+            // Call the function to handle previous action
+            return $this->questionPrevious($id, $currentQuestionNo, $question, $answer);
+        } elseif ($action == 'next') {
+            // Call the function to handle next action
+            return $this->questionNext($id, $currentQuestionNo, $question, $answer);
+        } else {
+            // Handle other actions or default behavior
+            // For example, return a response indicating an invalid action
+            return response()->json(['error' => 'Invalid action'], 400);
+        }
+    }
+    
+
+
+    public function questionNext(Request $request , $id, $currentQuestionNo)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
@@ -182,7 +203,7 @@ class QuestionController extends Controller
         $no_of_qst = $questionSetting->no_of_qst;
 
         // Check if current question number is less than total questions
-        if ($currentQuestionNo < $no_of_qst) {
+        if ($currentQuestionNo < $no_of_qst) {      
             // Increment question number
             $nextQuestionNo = $currentQuestionNo + 1;
 
@@ -198,9 +219,7 @@ class QuestionController extends Controller
 
             if (!$question) {
                 return redirect()->route('question-view')->with('error', 'Next question not found.');
-            }
-            //----Update Current Question --------------------------------
-            
+            }            
 
             return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
         'questionSetting'));
@@ -209,7 +228,7 @@ class QuestionController extends Controller
         }
     }
 
-    public function questionPrevious($id, $currentQuestionNo)
+    public function questionPrevious(Request $request , $id, $currentQuestionNo)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
@@ -224,7 +243,7 @@ class QuestionController extends Controller
         $no_of_qst = $questionSetting->no_of_qst;
 
         // Check if current question number is greater than 1
-        if ($currentQuestionNo > 1) {
+        if ($currentQuestionNo > 1) {  
             // Decrement question number
             $previousQuestionNo = $currentQuestionNo - 1;
 
@@ -248,5 +267,43 @@ class QuestionController extends Controller
             return redirect()->route('question-view')->with('error', 'You are already at the first question.');
         }
     }
+
+    // public function questionSave(Request $request, $id , $currentQuestionNo)
+    // {
+    //     $collegeSetup = CollegeSetup::first();
+    //     $softwareVersion = SoftwareVersion::first();
+    //     $questionSetting = QuestionSetting::where('id', $id)->first();    
+        
+    //     $validatedData = $request->validate([                
+    //         'question' => 'required|string', 
+    //         'answer' => 'required|string',               
+    //     ]);
+        
+    //     //--get variables
+    //     $exam_type = $questionSetting->exam_type;
+    //     $exam_category = $questionSetting->exam_category;
+    //     $exam_mode = $questionSetting->exam_mode;
+    //     $department = $questionSetting->department;
+    //     $session1 = $questionSetting->session1;
+    //     $no_of_qst = $questionSetting->no_of_qst;
+
+    //     //----Update Current Question --------------------------------
+    //     $question = Question::where('exam_type', $exam_type)
+    //     ->where('exam_category', $exam_category)
+    //     ->where('exam_mode', $exam_mode)
+    //     ->where('department', $department)
+    //     ->where('session1', $session1)
+    //     ->where('no_of_qst', $no_of_qst)
+    //     ->where('question_no', $currentQuestionNo)
+    //     ->first();
+
+    //     $question->update([
+    //         'question' => $validatedData['question'],
+    //         'answer' => $validatedData['answer'],
+    //     ]);
+
+    //     return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
+    //     'questionSetting'));
+    // }
 
 }
