@@ -27,12 +27,22 @@ class DashboardController extends Controller
     //
     public function index()
     {
-        return view('dashboard.user-dashboard');
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+
+        $admission_no  = session::get('admission_no');
+        $department = session::get('department');
+
+        $studentData = StudentAdmission::where('admission_no', $admission_no)
+                        ->where('department', $department)
+                        ->first();
+
+        return view('student.pages.dashboard', compact('softwareVersion', 'collegeSetup', 'studentData'));
     }
 
     public function indexAdmin()
     {
-        $collegeSetup = CollegeSetup::first();
+        $collegeSetup = CollegeSetup::first(); 
         $students = StudentAdmission::all();
         $users = User::all();
         $departments = Department::all();
@@ -108,6 +118,8 @@ class DashboardController extends Controller
                 'level' => 'required',
                 'no_of_qst' => 'required',
                 'time_limit' => 'required',
+                'duration' => 'required',
+                'check_result' => 'required',
             ]);
 
             // Find the exam setting to update

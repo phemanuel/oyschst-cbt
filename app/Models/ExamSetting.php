@@ -38,5 +38,6 @@ class ExamSetting extends Model
         'no_of_qst',
         'course',
         'duration', 
+        'check_result',
     ];
 }

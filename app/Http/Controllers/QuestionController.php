@@ -24,6 +24,7 @@ use App\Models\QuestionSetting;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class QuestionController extends Controller
 {
@@ -100,7 +101,8 @@ class QuestionController extends Controller
                 'no_of_qst' => $validatedData['no_of_qst'],
                 'duration' => $validatedData['duration'],
                 'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
-                'course' => $validatedData['course'],                                          
+                'course' => $validatedData['course'],  
+                'check_result' => 1,                                         
             ]);
 
             //--Create a dummy question for the said no of question selected in the question table
@@ -405,6 +407,7 @@ class QuestionController extends Controller
 
         // Retrieve the question setting by ID
         $questionSetting = QuestionSetting::find($id);
+        $currentExamStatus = $questionSetting->exam_status;
 
         // Check if the question setting exists
         if (!$questionSetting) {
@@ -435,8 +438,12 @@ class QuestionController extends Controller
             'exam_mode' => $questionSetting->exam_mode,
             'no_of_qst' => $questionSetting->no_of_qst,
             'duration' => $questionSetting->duration,
+            'check_result' => $questionSetting->check_result,
         ]);
 
+        if($currentExamStatus == 'Active') {
+            return redirect()->route('question')->with('success', 'Question disabled successfully.');
+        }
         return redirect()->route('question')->with('success', 'Question enabled successfully.');
     }
 
@@ -446,56 +453,7 @@ class QuestionController extends Controller
 
         return Response::download($filePath, 'question_sample.csv', ['Content-Type' => 'text/csv']);
     }    
-
-    public function questionImpor()
-    {
-         //Validate the uploaded file
-        //  $validatedData = $request->validate([
-        //     'session1' => 'required|string',
-        //     'file' => 'required|mimetypes:text/csv,application/vnd.ms-excel,
-        //     application/octet-stream|max:10240',
-
-        // ]);
-
-        // Process the uploaded Excel file
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = $file->getRealPath();            
-            $session1 =  $request->get('session1');
-
-            if (($handle = fopen($fileName, "r")) !== FALSE) {
-                $headers = fgetcsv($handle, 10000, ","); // Read headers
-                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE) {
-                    $data = array_combine($headers, $column); // Combine headers with data
-
-                    // Insert data into database
-                    DB::table('student_admissions')->insert([
-                        'question' => $data['question'],                    
-                        'answer' => $data['answer'],                        
-                        'user_type' => 'student',
-                        'picture_name' => 'blank.jpg',
-                        'login_status' => 0,
-                        'login_attempts' => 0,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                    ]);
-                }
-                fclose($handle);
-                // $type = "success";
-                // $message = "CSV Data Imported into the Database";
-                // Redirect back with success message
-            return redirect()->back()->with('success', 'Student list imported successfully.');
-            } else {
-                // Log or handle missing data
-            Log::warning('Missing data in row: ' . json_encode($row));
-            return redirect()->back()->with('error', 'Student list import not successful.');
-            }  
-        } else {
-           
-           return redirect()->back()->with('error', 'No file was uploaded.');
-        }  
-    }
-
+    
     public function questionUploadObjImportAction(Request $request)
     {
         
@@ -507,7 +465,7 @@ class QuestionController extends Controller
                 'exam_category' => 'required|string',
                 'exam_type' => 'required|string',   
                 'duration' => 'required|string',
-                'exam_date' => 'required|string', 
+                'exam_date' => 'required', 
                 'no_of_qst' => 'required|integer',  
                 'course' => 'required|string',    
             ]);                        
@@ -537,42 +495,54 @@ class QuestionController extends Controller
                 'no_of_qst' => $validatedData['no_of_qst'],
                 'duration' => $validatedData['duration'],
                 'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
-                'course' => $validatedData['course'],                                          
+                'course' => $validatedData['course'],   
+                'check_result' => 1,                                       
             ]);
 
-            //--Create a dummy question for the said no of question selected in the question table
+            //--Import all question for the said no of question selected in the question table
             $num_questions = $validatedData['no_of_qst'];
-            if (($handle = fopen($fileName, "r")) !== FALSE) {
-                $headers = fgetcsv($handle, 10000, ","); // Read headers
-                $question_no = 1;
-                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE && $question_no <= $num_questions) {
-                    $data = array_combine($headers, $column); // Combine headers with data
+                if ($request->hasFile('file')) {
+                    $file = $request->file('file');
+                    $fileName = $file->getRealPath();        
+                    if (($handle = fopen($fileName, "r")) !== FALSE) {
+                        $headers = fgetcsv($handle, 10000, ","); // Read headers
+                        $question_no = 1;
+                        while (($column = fgetcsv($handle, 10000, ",")) !== FALSE && $question_no <= $num_questions) {
+                            $data = array_combine($headers, $column); // Combine headers with data                            
+                            $data['question'] = mb_convert_encoding($data['question'], 'UTF-8', 'UTF-8');
+                            // Insert data into database
+                            DB::table('questions')->insert([
+                                'question_no' => $question_no,
+                                'question' => $data['question'],                    
+                                'answer' => $data['answer'],                        
+                                'session1' => $validatedData['session1'],
+                                'department' => $validatedData['department'],
+                                'level' => $validatedData['level'],
+                                'exam_category' => $validatedData['exam_category'],
+                                'exam_type' => $validatedData['exam_type'],
+                                'exam_mode' => 'OBJECTIVE',
+                                'course' => $validatedData['course'],
+                                'no_of_qst' => $validatedData['no_of_qst'],
+                                'upload_no_of_qst' => $validatedData['no_of_qst'],
+                                'question_type' => 'text',
+                                'graphic' => 'blank.jpg',
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                            ]);
+                            
+                            $question_no++; 
+                        }
+                        fclose($handle);
+                    } else {
+                        // Log or handle missing data
+                    Log::warning('Missing data in row: ' . json_encode($row));
+                    return redirect()->back()->with('error', 'Student list import not successful.');
+                    }  
+                } else {
             
-                    // Insert data into database
-                    DB::table('student_admissions')->insert([
-                        'question_no' => $question_no,
-                        'question' => $data['question'],                    
-                        'answer' => $data['answer'],                        
-                        'session1' => $validatedData['session1'],
-                        'department' => $validatedData['department'],
-                        'level' => $validatedData['level'],
-                        'exam_category' => $validatedData['exam_category'],
-                        'exam_type' => $validatedData['exam_type'],
-                        'exam_mode' => 'OBJECTIVE',
-                        'course' => $validatedData['course'],
-                        'no_of_qst' => $validatedData['no_of_qst'],
-                        'upload_no_of_qst' => $validatedData['no_of_qst'],
-                        'question_type' => 'text',
-                        'graphic' => 'blank.jpg',
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                    
-                    $question_no++; 
-                }
-                fclose($handle); 
-            }
-              
+                    return redirect()->back()->with('error', 'No file was uploaded.');
+                } 
+                         
             
             $questionId = $questionSetting->id;
         

@@ -272,6 +272,7 @@
                   <th>Exam Date</th>
                   <th>No of Questions</th>
                   <th>Duration</th>
+                  <th>Check Result</th>
                   <th>Status</th>
                   <th>Created On</th>
                   <th>Actions</th>
@@ -289,11 +290,12 @@
                     <td>{{ $rs->exam_date }}</td>
                     <td>{{ $rs->no_of_qst }}</td>
                     <td>{{ $rs->duration }}</td>
+                    <td>{{ $rs->check_result}}</td>
                     <td>{{ $rs->exam_status }}
                     @if ($rs->exam_status == 'Inactive')  
                     <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>
                     @elseif ($rs->exam_status == 'Active')
-                    <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a>
+                    <!-- <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a> -->
                     @endif 
                     </td>
                                        

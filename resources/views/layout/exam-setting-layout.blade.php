@@ -312,9 +312,23 @@
                   </select>
                 </div>  
                 <div class="form-group">
+                  <label for="exampleInputEmail1">Duration</label>
+                  <input type="text" name="duration" class="form-control" value="{{$examSetting->duration}}">
+                </div>  
+                
+                <div class="form-group">
                   <label for="exampleInputEmail1">Time Limit</label>
                   <input type="text" name="time_limit" class="form-control" value="{{$examSetting->time_limit}}">
-                </div>             
+                </div>  
+                <hr>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Result Check: </label>
+                  <label for="exampleInputEmail1">1(Display Result) 2(Do not display result) </label>
+                  <select name="check_result" id="" class="form-control">
+                    <option value="1" selected>1</option>
+                    <option value="0">0</option>
+                  </select>
+                </div>  
                 
               </div>
               <!-- /.box-body -->

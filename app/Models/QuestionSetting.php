@@ -21,5 +21,6 @@ class QuestionSetting extends Model
         'exam_date',
         'exam_mode',
         'course',
+        'check_result',
     ];
 }

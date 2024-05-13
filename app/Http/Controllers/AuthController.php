@@ -19,10 +19,11 @@ use Illuminate\Support\Facades\Session;
 class AuthController extends Controller
 {
     //----landing page
-    public function home()
-    {
-        $dept = Department::orderBy('department')->get();
-        return view('auth.user-login', compact('dept'));
+    public function home()    
+    {   
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        return view('home', compact('collegeSetup','softwareVersion'));
 
     }
 
@@ -48,6 +49,9 @@ class AuthController extends Controller
                 'admission_no' => 'required|string',
                 'department' => 'required|string',
             ]);
+
+            $admission_no = session::put('admission_no');
+            $department = session::put('department');
         
             // Attempt to authenticate the student
             $student = StudentAdmission::where('admission_no', $credentials['admission_no'])
