@@ -447,4 +447,147 @@ class QuestionController extends Controller
         return Response::download($filePath, 'question_sample.csv', ['Content-Type' => 'text/csv']);
     }    
 
+    public function questionImpor()
+    {
+         //Validate the uploaded file
+        //  $validatedData = $request->validate([
+        //     'session1' => 'required|string',
+        //     'file' => 'required|mimetypes:text/csv,application/vnd.ms-excel,
+        //     application/octet-stream|max:10240',
+
+        // ]);
+
+        // Process the uploaded Excel file
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getRealPath();            
+            $session1 =  $request->get('session1');
+
+            if (($handle = fopen($fileName, "r")) !== FALSE) {
+                $headers = fgetcsv($handle, 10000, ","); // Read headers
+                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE) {
+                    $data = array_combine($headers, $column); // Combine headers with data
+
+                    // Insert data into database
+                    DB::table('student_admissions')->insert([
+                        'question' => $data['question'],                    
+                        'answer' => $data['answer'],                        
+                        'user_type' => 'student',
+                        'picture_name' => 'blank.jpg',
+                        'login_status' => 0,
+                        'login_attempts' => 0,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]);
+                }
+                fclose($handle);
+                // $type = "success";
+                // $message = "CSV Data Imported into the Database";
+                // Redirect back with success message
+            return redirect()->back()->with('success', 'Student list imported successfully.');
+            } else {
+                // Log or handle missing data
+            Log::warning('Missing data in row: ' . json_encode($row));
+            return redirect()->back()->with('error', 'Student list import not successful.');
+            }  
+        } else {
+           
+           return redirect()->back()->with('error', 'No file was uploaded.');
+        }  
+    }
+
+    public function questionUploadObjImportAction(Request $request)
+    {
+        
+        try {
+            $validatedData = $request->validate([
+                'session1' => 'required|string',
+                'department' => 'required|string',
+                'level' => 'required|string',
+                'exam_category' => 'required|string',
+                'exam_type' => 'required|string',   
+                'duration' => 'required|string',
+                'exam_date' => 'required|string', 
+                'no_of_qst' => 'required|integer',  
+                'course' => 'required|string',    
+            ]);                        
+
+            // Check if the exam type already exists
+        $existingQuestion = QuestionSetting::where('exam_type', $validatedData['exam_type'])
+                                            ->where('exam_category', $validatedData['exam_category'])
+                                            ->where('exam_mode', 'OBJECTIVES')
+                                            ->where('department', $validatedData['department'])
+                                            ->where('session1', $validatedData['session1'])
+                                            ->where('no_of_qst', $validatedData['no_of_qst'])
+                                            ->first();
+        
+        if ($existingQuestion) {
+            // If the question already exists, redirect back with an error message
+            return redirect()->route('question')->with('error', 'Question already exists, you can only edit.');
+        }
+            //---Create a record for the question in the questionsetting table----
+            $questionSetting = QuestionSetting::create([
+                'session1' => $validatedData['session1'],
+                'department' => $validatedData['department'],
+                'level' => $validatedData['level'],
+                'exam_category' => $validatedData['exam_category'],
+                'exam_type' => $validatedData['exam_type'],
+                'exam_mode' => 'OBJECTIVE',
+                'exam_status' => 'Inactive',
+                'no_of_qst' => $validatedData['no_of_qst'],
+                'duration' => $validatedData['duration'],
+                'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
+                'course' => $validatedData['course'],                                          
+            ]);
+
+            //--Create a dummy question for the said no of question selected in the question table
+            $num_questions = $validatedData['no_of_qst'];
+            if (($handle = fopen($fileName, "r")) !== FALSE) {
+                $headers = fgetcsv($handle, 10000, ","); // Read headers
+                $question_no = 1;
+                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE && $question_no <= $num_questions) {
+                    $data = array_combine($headers, $column); // Combine headers with data
+            
+                    // Insert data into database
+                    DB::table('student_admissions')->insert([
+                        'question_no' => $question_no,
+                        'question' => $data['question'],                    
+                        'answer' => $data['answer'],                        
+                        'session1' => $validatedData['session1'],
+                        'department' => $validatedData['department'],
+                        'level' => $validatedData['level'],
+                        'exam_category' => $validatedData['exam_category'],
+                        'exam_type' => $validatedData['exam_type'],
+                        'exam_mode' => 'OBJECTIVE',
+                        'course' => $validatedData['course'],
+                        'no_of_qst' => $validatedData['no_of_qst'],
+                        'upload_no_of_qst' => $validatedData['no_of_qst'],
+                        'question_type' => 'text',
+                        'graphic' => 'blank.jpg',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                    
+                    $question_no++; 
+                }
+                fclose($handle); 
+            }
+              
+            
+            $questionId = $questionSetting->id;
+        
+            return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
+            
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during question Upload: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred during question Upload. Please try again.');
+        }        
+        
+    }
+
 }

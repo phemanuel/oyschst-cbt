@@ -351,10 +351,12 @@ class StudentController extends Controller
 
     public function studentImportAction(Request $request)
     {
-         // Validate the uploaded file
+         //Validate the uploaded file
         //  $validatedData = $request->validate([
         //     'session1' => 'required|string',
-        //     'file' => 'required|mimes:csv|max:10240', // Max 10MB, only Excel files allowed
+        //     'file' => 'required|mimetypes:text/csv,application/vnd.ms-excel,
+        //     application/octet-stream|max:10240',
+
         // ]);
 
         // Process the uploaded Excel file
