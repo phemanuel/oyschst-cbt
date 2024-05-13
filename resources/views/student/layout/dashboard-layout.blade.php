@@ -159,12 +159,16 @@
                         </tr>												
 											</li>                      
                     </table>
-										</ul>                    
-												<div class="form-check">
+										</ul> 
+                    <form action="{{route('cbt-check', ['id' => $studentData->id])}}" method="post">
+                      @csrf
+                      <div class="form-check">
 													<label class="form-check-label">
-                          <a href="" class="btn btn-success btn-block">Start Computer Based Test</a>                            
+                          <button type="submit" href="" class="btn btn-success btn-block">Start Computer Based Test</button>                            
 													</label>
-												</div>                       											
+												</div> 
+                    </form>                   
+												                      											
 											
 
 									</div>

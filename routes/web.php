@@ -6,7 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
-
+use App\Http\Controllers\ExamController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,8 +49,8 @@ Route::get('/', function () {
     ->name('dashboard');
     // ->middleware(StudentAuth::class);  
     //----Computer Based Test--------
-    Route::get('cbt', [DashboardController::class, 'cbtStart'])
-    ->name('cbt');
+    Route::get('cbt/{id}', [ExamController::class, 'cbtCheck'])
+    ->name('cbt-check');
 
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
