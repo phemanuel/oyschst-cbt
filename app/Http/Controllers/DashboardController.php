@@ -21,23 +21,25 @@ use App\Models\CbtClass;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     //
-    public function index()
+    public function index($admission_no)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-
-        $admission_no  = session::get('admission_no');
-        $department = session::get('department');
+        $examSetting = ExamSetting::first();
+        $admission_no  = $admission_no;
+        //$department = session::get('department');
 
         $studentData = StudentAdmission::where('admission_no', $admission_no)
-                        ->where('department', $department)
+                        //->where('department', $department)
                         ->first();
 
-        return view('student.pages.dashboard', compact('softwareVersion', 'collegeSetup', 'studentData'));
+        return view('student.pages.dashboard', compact('softwareVersion', 'collegeSetup', 'studentData',
+    'examSetting'));
     }
 
     public function indexAdmin()

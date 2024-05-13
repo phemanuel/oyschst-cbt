@@ -142,7 +142,7 @@
           </a>
         </li>
         <li class="active">
-          <a href="{{route('student')}}">
+          <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -225,7 +225,7 @@
           <div class="box box-primary">
             <div class="box-header with-border">
             <h3 class="box-title">Edit a  user.</h3>
-            <p align="right"><a href="{{route('student')}}" class="btn btn-success">Back to Student List</a></p>
+            <p align="right"><a href="{{route('student-list')}}" class="btn btn-success">Back to Student List</a></p>
               
             </div>
             @if(session('success'))

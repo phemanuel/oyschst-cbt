@@ -139,7 +139,7 @@
           </a>
         </li>
         <li>
-          <a href="{{route('student')}}">
+          <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -243,7 +243,7 @@
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="{{route('student')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{{route('student-list')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->

@@ -156,7 +156,7 @@
           </a>
         </li>
         <li class="active">
-          <a href="{{route('student')}}">
+          <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>

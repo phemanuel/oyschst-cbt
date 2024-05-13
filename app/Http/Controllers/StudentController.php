@@ -253,7 +253,7 @@ class StudentController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $class = CbtClass::orderBy('class')->get();
+        $class = CbtClass::orderBy('level')->get();
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();      
         $studentData = StudentAdmission::where('id', $id)->get();

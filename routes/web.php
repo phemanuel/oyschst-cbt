@@ -45,9 +45,12 @@ Route::get('/', function () {
     Route::get('admin', [AuthController::class, 'adminLogin'])->name('admin-login');
     Route::post('admin', [AuthController::class, 'adminLoginAction'])->name('admin-login.action');
     //-----Dashboard routes-----
-    Route::get('user-dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard')
-    ->middleware(StudentAuth::class);    
+    Route::get('user-dashboard/{admission_no}', [DashboardController::class, 'index'])
+    ->name('dashboard');
+    // ->middleware(StudentAuth::class);  
+    //----Computer Based Test--------
+    Route::get('cbt', [DashboardController::class, 'cbtStart'])
+    ->name('cbt');
 
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
@@ -74,9 +77,9 @@ Route::get('/', function () {
         ->name('exam-type');
         Route::post('exam-type', [DashboardController::class, 'examTypeAction'])
         ->name('exam-type.action');
-        //--student list
-        Route::get('student', [StudentController::class, 'student'])
-        ->name('student');
+        //--student list        
+        Route::get('student-list', [StudentController::class, 'student'])
+        ->name('student-list');
         Route::get('student-create', [StudentController::class, 'studentCreate'])
         ->name('student-create');
         Route::post('student-create', [StudentController::class, 'studentCreateAction'])

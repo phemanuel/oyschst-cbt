@@ -19440,14 +19440,15 @@ input:focus {
 }
 
 .navbar.horizontal-layout-navbar {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: stretch;
-  align-items: stretch;
-  padding: 0 2rem;
-  background: linear-gradient(85deg, #392c70, #6a005b);
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-align-items: stretch;
+	align-items: stretch;
+	padding: 0 2rem;
+	background-color: #009900;
+	background-position: 85;
 }
 
 .navbar.horizontal-layout-navbar .navbar-brand-wrapper .navbar-brand img {

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use App\Models\CollegeSetup;
+use App\Models\SoftwareVersion;
 
 class AuthController extends Controller
 {
@@ -50,8 +52,10 @@ class AuthController extends Controller
                 'department' => 'required|string',
             ]);
 
-            $admission_no = session::put('admission_no');
-            $department = session::put('department');
+            $admission_no = $request->get('admission_no');
+
+            // $admission_no = session::put('admission_no');
+            // $department = session::put('department');
         
             // Attempt to authenticate the student
             $student = StudentAdmission::where('admission_no', $credentials['admission_no'])
@@ -60,7 +64,7 @@ class AuthController extends Controller
         
             if ($student) {
                 // Authentication successful, redirect to student dashboard
-                return redirect()->route('dashboard');
+                return redirect()->route('dashboard',['admission_no' => $admission_no]);
             } else {
                 // Authentication failed, redirect back with error message
                 return redirect()->back()->with('error', 'Invalid admission number or department');
@@ -136,7 +140,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/admin');
+        return redirect('/');
 
 
     }

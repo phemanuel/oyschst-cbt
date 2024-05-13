@@ -142,7 +142,7 @@
           </a>
         </li>
         <li class="active">
-          <a href="{{route('student')}}">
+          <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -226,7 +226,7 @@
               <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a>
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('student')}}" class="btn btn-info">Student List</a>
+                <a href="{{route('student-list')}}" class="btn btn-info">Student List</a>
                 </div>
               </div>
               
