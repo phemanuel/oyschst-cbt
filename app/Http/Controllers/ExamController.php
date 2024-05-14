@@ -30,18 +30,37 @@ class ExamController extends Controller
     {
         $examSetting = ExamSetting::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        // Check if the exam type already exists
-        $existingQuestion = QuestionSetting::where('exam_type', $validatedData['exam_type'])
-                                            ->where('exam_category', $validatedData['exam_category'])
-                                            ->where('exam_mode', 'OBJECTIVES')
-                                            ->where('department', $validatedData['department'])
-                                            ->where('session1', $validatedData['session1'])
-                                            ->where('no_of_qst', $validatedData['no_of_qst'])
+        $examSetting = ExamSetting::first();
+        // Check if the question for current exam setting is available
+        $existingQuestion = Question::where('exam_type', $examSetting->exam_type)
+                                            ->where('exam_category', $examSetting->exam_category)
+                                            ->where('exam_mode', $examSetting->exam_mode)
+                                            ->where('department', $examSetting->department)
+                                            ->where('level', $examSetting->level)
+                                            ->where('session1', $examSetting->session1)
+                                            ->where('no_of_qst', $examSetting->no_of_qst)
                                             ->first();
-                                            
+
+        if(!$existingQuestion){
+            return redirect()->back()->with('error', 'Question is unavailable.');
+        }
+        //----Check if student can access the current exam setting--- 
+        $studentDept = $studentData->department;
+        $studentLevel = $studentData->level;
+        $examDept = $examSetting->department;
+        $examLevel = $examSetting->level;
+
+        if($studentDept !== $examDept || $studentLevel !== $examLevel){
+            return redirect()->back()->with('error', 'You cannot access this exam.');
+        }
+                                         
 
         return response()->json([
-
+            'status' => 'success',
+            'Student Dept' => $studentDept,
+            'Exam Dept' => $examDept,
+            'Student Level' => $studentLevel,
+            'Exam Level' => $examLevel,
         ]);
 
     }

@@ -108,6 +108,17 @@
               </ol>
             </nav>
           </div>
+          <div>
+          @if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+          </div>
           <div class="row">
             <div class="col-md-7 grid-margin stretch-card">
               <div class="card">
@@ -164,7 +175,7 @@
                       @csrf
                       <div class="form-check">
 													<label class="form-check-label">
-                          <button type="submit" href="" class="btn btn-success btn-block">Start Computer Based Test</button>                            
+                          <button type="submit" class="btn btn-success btn-block">Start Computer Based Test</button>                            
 													</label>
 												</div> 
                     </form>                   
@@ -188,46 +199,66 @@
                      <tr>
                       <td><p class="bold-text-font">Academic Session</p></td>
                       <td><p class="bold-text-font">{{$examSetting->session1}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      <tr>
                       <td><p class="bold-text-font">Programme</p></td>
                       <td><p class="bold-text-font">{{$examSetting->department}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      <tr>
                       <td><p class="bold-text-font">Level</p></td>
                       <td><p class="bold-text-font">{{$examSetting->level}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      @if($examSetting->exam_category == 'GENERAL')
                       <!-- <tr>
                       <td><p class="bold-text-font">Subject/Course</p></td>
                       <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr> -->
                      @elseif($examSetting->exam_category == 'SEMESTER')
                      <tr>
                       <td><p class="bold-text-font">Subject/Course</p></td>
                       <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      @endif
                      <tr>
                       <td><p class="bold-text-font">Exam Mode</p></td>
                       <td><p class="bold-text-font">{{$examSetting->exam_mode}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      <tr>
                       <td><p class="bold-text-font">Exam Category</p></td>
                       <td><p class="bold-text-font">{{$examSetting->exam_category}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      <tr>
                       <td><p class="bold-text-font">Exam Type</p></td>
                       <td><p class="bold-text-font">{{$examSetting->exam_type}}</p></td>
+                      <td></td>
+                      <td></td>
                      </tr>
                      <tr>
                       <td><p class="bold-text-font">Total no of Question</p></td>
                       <td><p class="bold-text-font">{{$examSetting->no_of_qst}}</p></td>
-                     </tr>                     
-                     <tr>
                       <td><p class="bold-text-font">Duration</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->duration}}</p></td>
-                     </tr>
+                      <td><p class="bold-text-font">{{$examSetting->duration}}mins</p></td>
+                     </tr>                     
+                     <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                     </tr> -->
                     </table>
                   </div>
                 </div>

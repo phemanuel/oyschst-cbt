@@ -81,6 +81,7 @@ class QuestionController extends Controller
                                             ->where('exam_category', $validatedData['exam_category'])
                                             ->where('exam_mode', 'OBJECTIVES')
                                             ->where('department', $validatedData['department'])
+                                            ->where('level', $validatedData['level'])
                                             ->where('session1', $validatedData['session1'])
                                             ->where('no_of_qst', $validatedData['no_of_qst'])
                                             ->first();
@@ -156,11 +157,13 @@ class QuestionController extends Controller
         $department = $questionSetting->department;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
+        $level = $questionSetting->level;
 
         $question = Question::where('exam_type', $exam_type)
         ->where('exam_category', $exam_category)
         ->where('exam_mode', $exam_mode)
         ->where('department', $department)
+        ->where('level', $level)
         ->where('session1', $session1)
         ->where('no_of_qst', $no_of_qst)
         ->where('question_no', 1)
@@ -213,6 +216,7 @@ class QuestionController extends Controller
         $department = $questionSetting->department;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
+        $level = $questionSetting->level;
         $question = Session::get('question');
         $answer = Session::get('answer');
         $currentQuestionNo = Session::get('currentQuestionNo');
@@ -225,6 +229,7 @@ class QuestionController extends Controller
             ->where('exam_category', $exam_category)
             ->where('exam_mode', $exam_mode)
             ->where('department', $department)
+            ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
             ->where('question_no', $currentQuestionNo)
@@ -243,6 +248,7 @@ class QuestionController extends Controller
                 ->where('exam_category', $exam_category)
                 ->where('exam_mode', $exam_mode)
                 ->where('department', $department)
+                ->where('level', $level)
                 ->where('session1', $session1)
                 ->where('no_of_qst', $no_of_qst)
                 ->where('question_no', $nextQuestionNo)
@@ -260,6 +266,7 @@ class QuestionController extends Controller
             ->where('exam_category', $exam_category)
             ->where('exam_mode', $exam_mode)
             ->where('department', $department)
+            ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
             ->where('question_no', $currentQuestionNo)
@@ -284,6 +291,7 @@ class QuestionController extends Controller
         $exam_category = $questionSetting->exam_category;
         $exam_mode = $questionSetting->exam_mode;
         $department = $questionSetting->department;
+        $level = $questionSetting->level;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
         $question = Session::get('question');
@@ -298,6 +306,7 @@ class QuestionController extends Controller
             ->where('exam_category', $exam_category)
             ->where('exam_mode', $exam_mode)
             ->where('department', $department)
+            ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
             ->where('question_no', $currentQuestionNo)
@@ -316,6 +325,7 @@ class QuestionController extends Controller
                 ->where('exam_category', $exam_category)
                 ->where('exam_mode', $exam_mode)
                 ->where('department', $department)
+                ->where('level', $level)
                 ->where('session1', $session1)
                 ->where('no_of_qst', $no_of_qst)
                 ->where('question_no', $previousQuestionNo)
@@ -333,6 +343,7 @@ class QuestionController extends Controller
             ->where('exam_category', $exam_category)
             ->where('exam_mode', $exam_mode)
             ->where('department', $department)
+            ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
             ->where('question_no', $currentQuestionNo)
@@ -361,6 +372,7 @@ class QuestionController extends Controller
         $exam_category = $questionSetting->exam_category;
         $exam_mode = $questionSetting->exam_mode;
         $department = $questionSetting->department;
+        $level = $questionSetting->level;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
         $currentQuestionNo = $validatedData['qst_search'];
@@ -370,6 +382,7 @@ class QuestionController extends Controller
         ->where('exam_category', $exam_category)
         ->where('exam_mode', $exam_mode)
         ->where('department', $department)
+        ->where('level', $level)
         ->where('session1', $session1)
         ->where('no_of_qst', $no_of_qst)
         ->where('question_no', $currentQuestionNo)
@@ -475,6 +488,7 @@ class QuestionController extends Controller
                                             ->where('exam_category', $validatedData['exam_category'])
                                             ->where('exam_mode', 'OBJECTIVES')
                                             ->where('department', $validatedData['department'])
+                                            ->where('level', $validatedData['level'])
                                             ->where('session1', $validatedData['session1'])
                                             ->where('no_of_qst', $validatedData['no_of_qst'])
                                             ->first();

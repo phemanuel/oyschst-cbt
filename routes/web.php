@@ -49,7 +49,7 @@ Route::get('/', function () {
     ->name('dashboard');
     // ->middleware(StudentAuth::class);  
     //----Computer Based Test--------
-    Route::get('cbt/{id}', [ExamController::class, 'cbtCheck'])
+    Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
     ->name('cbt-check');
 
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
