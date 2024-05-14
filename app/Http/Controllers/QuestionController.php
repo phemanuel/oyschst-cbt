@@ -83,6 +83,7 @@ class QuestionController extends Controller
                                             ->where('department', $validatedData['department'])
                                             ->where('level', $validatedData['level'])
                                             ->where('session1', $validatedData['session1'])
+                                            ->where('course', $validatedData['course'])
                                             ->where('no_of_qst', $validatedData['no_of_qst'])
                                             ->first();
         
@@ -158,6 +159,7 @@ class QuestionController extends Controller
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
         $level = $questionSetting->level;
+        $course = $questionSetting->course;
 
         $question = Question::where('exam_type', $exam_type)
         ->where('exam_category', $exam_category)
@@ -165,6 +167,7 @@ class QuestionController extends Controller
         ->where('department', $department)
         ->where('level', $level)
         ->where('session1', $session1)
+        ->where('course', $course)
         ->where('no_of_qst', $no_of_qst)
         ->where('question_no', 1)
         ->first();
@@ -220,6 +223,7 @@ class QuestionController extends Controller
         $question = Session::get('question');
         $answer = Session::get('answer');
         $currentQuestionNo = Session::get('currentQuestionNo');
+        $course = $questionSetting->course;
 
         // Check if current question number is less than total questions
         if ($currentQuestionNo < $no_of_qst) { 
@@ -231,6 +235,7 @@ class QuestionController extends Controller
             ->where('department', $department)
             ->where('level', $level)
             ->where('session1', $session1)
+            ->where('course', $course)
             ->where('no_of_qst', $no_of_qst)
             ->where('question_no', $currentQuestionNo)
             ->first();
@@ -251,6 +256,7 @@ class QuestionController extends Controller
                 ->where('level', $level)
                 ->where('session1', $session1)
                 ->where('no_of_qst', $no_of_qst)
+                ->where('course', $course)
                 ->where('question_no', $nextQuestionNo)
                 ->first();
 
@@ -269,6 +275,7 @@ class QuestionController extends Controller
             ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
+            ->where('course', $course)
             ->where('question_no', $currentQuestionNo)
             ->first();
 
@@ -297,6 +304,7 @@ class QuestionController extends Controller
         $question = Session::get('question');
         $answer = Session::get('answer');
         $currentQuestionNo = Session::get('currentQuestionNo');
+        $course = $questionSetting->course;
 
         // Check if current question number is greater than 1
         if ($currentQuestionNo > 1) {  
@@ -309,6 +317,7 @@ class QuestionController extends Controller
             ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
+            ->where('course', $course)
             ->where('question_no', $currentQuestionNo)
             ->first();
 
@@ -328,6 +337,7 @@ class QuestionController extends Controller
                 ->where('level', $level)
                 ->where('session1', $session1)
                 ->where('no_of_qst', $no_of_qst)
+                ->where('course', $course)
                 ->where('question_no', $previousQuestionNo)
                 ->first();
 
@@ -346,6 +356,7 @@ class QuestionController extends Controller
             ->where('level', $level)
             ->where('session1', $session1)
             ->where('no_of_qst', $no_of_qst)
+            ->where('course', $course)
             ->where('question_no', $currentQuestionNo)
             ->first();
 
@@ -376,6 +387,7 @@ class QuestionController extends Controller
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
         $currentQuestionNo = $validatedData['qst_search'];
+        $course = $questionSetting->course;
 
         // Retrieve search question
         $question = Question::where('exam_type', $exam_type)
@@ -385,6 +397,7 @@ class QuestionController extends Controller
         ->where('level', $level)
         ->where('session1', $session1)
         ->where('no_of_qst', $no_of_qst)
+        ->where('course', $course)
         ->where('question_no', $currentQuestionNo)
         ->first();
 
@@ -490,6 +503,7 @@ class QuestionController extends Controller
                                             ->where('department', $validatedData['department'])
                                             ->where('level', $validatedData['level'])
                                             ->where('session1', $validatedData['session1'])
+                                            ->where('course', $validatedData['course'])
                                             ->where('no_of_qst', $validatedData['no_of_qst'])
                                             ->first();
         

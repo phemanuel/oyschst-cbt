@@ -37,4 +37,18 @@ class Question extends Model
         'graphic',
         'course',
     ];
+
+    public function scopeCommonConditionsQst($query, $cbtEvaluation, $examSetting, $studentData)
+    {
+        return $query->where('session1', $examSetting->session1)
+                     ->where('department', $studentData->department)
+                     ->where('level', $studentData->level)
+                     ->where('course', $examSetting->course)
+                     ->where('exam_mode', $examSetting->exam_mode)
+                     ->where('exam_type', $examSetting->exam_type)
+                     ->where('exam_category', $examSetting->exam_category)
+                     ->where('no_of_qst', $examSetting->no_of_qst)
+                     ->where('question_no', $cbtEvaluation);
+    }
+    
 }

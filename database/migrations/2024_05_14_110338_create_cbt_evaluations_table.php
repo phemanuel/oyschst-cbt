@@ -12,21 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cbt_evaluations', function (Blueprint $table) {
-            $table->id();
-            $table->integer('examid');
-            $table->text('examstatus')->nullable();
-            $table->text('studentname')->nullable();
-            $table->text('correct')->nullable();
-            $table->text('noofquestion')->nullable();
-            $table->text('wrong')->nullable();
-            $table->text('studentno')->nullable();
-            $table->text('score')->nullable();
-            $table->text('level')->nullable();
-            $table->text('session1')->nullable();
-            $table->text('semester')->nullable();
-            $table->text('hour')->nullable();
-            $table->text('minute')->nullable();
-            $table->text('qstno')->nullable();
+            $table->id();            
+            $table->string('examstatus')->nullable();
+            $table->string('studentname')->nullable();
+            $table->string('correct')->nullable();
+            $table->string('noofquestion')->nullable();
+            $table->string('wrong')->nullable();
+            $table->string('studentno')->nullable();
+            $table->string('score')->nullable();
+            $table->string('level')->nullable();
+            $table->string('session1')->nullable();
+            $table->string('semester')->nullable();
+            $table->integer('hour')->nullable();
+            $table->integer('minute')->nullable();
+            $table->string('qstno')->nullable();
             $table->integer('A1')->nullable();
             $table->integer('A2')->nullable();
             $table->integer('A3')->nullable();
@@ -127,14 +126,14 @@ return new class extends Migration
             $table->integer('A98')->nullable();
             $table->integer('A99')->nullable();
             $table->integer('A100')->nullable();
-            $table->text('department')->nullable();
+            $table->string('department')->nullable();
             $table->string('exam_mode')->nullable();
             $table->string('exam_category')->nullable();
             $table->string('course')->nullable();
-            $table->text('pageno')->nullable();
-            $table->text('examdate')->nullable();
-            $table->text('exam_type')->nullable();
-            $table->text('msgstatus')->nullable();
+            $table->string('pageno')->nullable();
+            $table->dateTime('examdate')->nullable();
+            $table->string('exam_type')->nullable();
+            $table->string('msgstatus')->nullable();
             $table->dateTime('starttime');
             $table->dateTime('endtime');
             $table->timestamps();

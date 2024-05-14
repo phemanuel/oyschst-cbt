@@ -36,6 +36,12 @@
     font-size: 16px;
     font-weight: bold;
 }
+
+.bold-font-ans {
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
+}
   </style>
   	<style>
     /* Success Alert */
@@ -157,45 +163,316 @@
           
 
           <div class="row">
-            <div class="col-12 grid-margin">
+          <!-- begin card -->
+            <div class="col-12 grid-margin">            
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">
-                    <!-- <i class="fas fa-envelope"></i> -->
-                   <strong>(1)</strong> 
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q1'] }} </strong>
                   </h4>
                   <div class="table-responsive">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input">
-                              </label>
-                            </div>
-                          </td>
-                          <td class="py-1">
-                            <img src="../../images/faces/face13.jpg" alt="profile" class="img-sm rounded-circle"/>
-                          </td>
-                          <td class="font-weight-bold">
-                            Andrew Bowen
-                          </td>
-                          <td>
-                            <label class="badge badge-light badge-pill">Development</label>
-                          </td>
-                          <td>
-                            The required fields are added in the database
-                          </td>
-                          <td>
-                            <i class="fas fa-ellipsis-v"></i>
-                          </td>
-                        </tr>                        
-                      </tbody>
-                    </table>
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!! $question1->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td width="82%"><input type="submit" name="option1A" id="option1A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option1B" id="option1B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option1C" id="option1C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option1D" id="option1D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK1}}
+                        </td>
+                        <td></td>
+                        <td></p></td>
+                    </table>                    
                   </div>
-                </div>
+                </div>                
               </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q2'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question2->question!!} </p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option2A" id="option2A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option2B" id="option2B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option2C" id="option2C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option2D" id="option2D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK2}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q3'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question3->question!!} </p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td width="82%"><input type="submit" name="option3A" id="option3A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option3B" id="option3B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option3C" id="option3C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option3D" id="option3D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK3}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <form action="" method="post">
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q4'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question4->question!!} </p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option4A" id="option4A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option4B" id="option4B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option4C" id="option4C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option4D" id="option4D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK4}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q5'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question5->question!!} </p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option5A" id="option5A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option5B" id="option5B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option5C" id="option5C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option5D" id="option5D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK5}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q6'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question6->question!!} </p></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option6A" id="option6A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option6B" id="option6B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option6C" id="option6C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option6D" id="option6D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK6}}
+                        </td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q7'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question7->question!!} </p></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option7A" id="option7A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option7B" id="option7B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option7C" id="option7C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option7D" id="option7D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK7}}
+                        </td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q8'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question8->question!!} </p></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option8A" id="option8A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option8B" id="option8B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option8C" id="option8C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option8D" id="option8D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK8}}
+                        </td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q9'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question9->question!!} </p></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option9A" id="option9A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option9B" id="option9B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option9C" id="option9C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option9D" id="option9D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK9}}
+                        </td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+           <!-- begin card -->
+           <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title"> 
+                    <strong>Question {{ $questionNo['q10'] }} </strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table" width="100%">
+                      <tr>                        
+                        <td><p class="bold-font">{!!$question10->question!!} </p></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                      <td><input type="submit" name="option10A" id="option10A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option10B" id="option10B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option10C" id="option10C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option10D" id="option10D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <p class="bold-font-ans">{{$studentAnswer->OK10}}
+                        </td>
+                        <td></td>
+                      </tr>
+                    </table>                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+           <!-- end card -->
+  </form>
+            <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  @if($examSetting->no_of_qst == 10)
+                    <a href="" class="btn btn-success">1-10</a>
+                  
+                  @elseif($examSetting->no_of_qst == 20)
+                    <a href="" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="" class="btn btn-success">11-20</a>
+                  
+                  @elseif($examSetting->no_of_qst == 30)
+                    <a href="" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="" class="btn btn-success">21-30</a>
+                  
+                  @endif
+           
+                </div>
+            </div>
             </div>
           </div>
 </div>

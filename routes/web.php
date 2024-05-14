@@ -51,8 +51,28 @@ Route::get('/', function () {
     //----Computer Based Test--------
     Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
     ->name('cbt-check');
-    Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
-    ->name('cbt-page');
+    Route::get('cbt-page/{id}', [ExamController::class, 'cbtProcess'])
+    ->name('cbt-process');
+    Route::get('cbt/{id}/page1', [ExamController::class, 'cbtPage1'])
+    ->name('cbt-page1');
+    Route::get('cbt/{id}/page2', [ExamController::class, 'cbtPage2'])
+    ->name('cbt-page2');
+    Route::get('cbt/{id}/page3', [ExamController::class, 'cbtPage3'])
+    ->name('cbt-page3');
+    Route::get('cbt/{id}/page4', [ExamController::class, 'cbtPage4'])
+    ->name('cbt-page4');
+    Route::get('cbt/{id}/page5', [ExamController::class, 'cbtPage5'])
+    ->name('cbt-page5');
+    Route::get('cbt/{id}/page6', [ExamController::class, 'cbtPage6'])
+    ->name('cbt-page6');
+    Route::get('cbt/{id}/page7', [ExamController::class, 'cbtPage7'])
+    ->name('cbt-page7');
+    Route::get('cbt/{id}/page8', [ExamController::class, 'cbtPage8'])
+    ->name('cbt-page8');
+    Route::get('cbt/{id}/page9', [ExamController::class, 'cbtPage9'])
+    ->name('cbt-page9');
+    Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
+    ->name('cbt-page10');
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
      
