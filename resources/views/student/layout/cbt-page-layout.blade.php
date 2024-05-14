@@ -27,8 +27,9 @@
 }
 
     .bold-text-font {
-    font-size: 14px;
-    font-weight: bold;    
+    font-size: 13px;
+    font-weight: bold;  
+    color: white;  
 }
 
     .bold-font {
@@ -65,11 +66,30 @@
         <ul class="navbar-nav navbar-nav-left collapse navbar-collapse" id="horizontal-top-example">
           
           <li class="nav-item dropdown">            
-            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">
-            <!-- <img src="{{asset($collegeSetup->avatar)}}" alt="" width="50" height="50"> -->
+            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
             <strong><p class="bold-text">Oyo State College of Health Science and Technology</p></strong>
             </a>            
-          </li>        
+          </li> 
+          <li class="nav-item dropdown">            
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
+            <strong><p class="bold-text-font">{{$studentData->admission_no}}</p></strong>
+            </a>            
+          </li>   
+          <li class="nav-item dropdown">            
+            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
+            <strong><p class="bold-text-font">{{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}</p></strong>
+            </a>            
+          </li>   
+          <li class="nav-item dropdown">            
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
+            <strong><p class="bold-text-font">{{$studentData->department}} | {{$studentData->level}}</p></strong>            
+            </a>             
+          </li> 
+          <li class="nav-item dropdown">            
+            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
+            <strong><p class="bold-text-font">{{$examSetting->no_of_qst}}qst | {{$examSetting->duration}}mins</p></strong>            
+            </a>             
+          </li>    
           
         </ul>
         <ul class="navbar-nav navbar-nav-right">
@@ -115,11 +135,10 @@
         <div class="content-wrapper">
           <div class="page-header">
             <h3 class="page-title">
-              Computer Based Test - Check all information carefully before you proceed.
+              Computer Based Test - Read questions carefully and select the answer appropriately.
             </h3>
             <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('login')}}">Home</a></li>
+              <ol class="breadcrumb">                
                 <li class="breadcrumb-item active" aria-current="page">Computer Based Test</li>
               </ol>
             </nav>
@@ -135,153 +154,50 @@
 						</div>
 						@endif	
           </div>
+          
+
           <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
+            <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">
-                    <i class="fas fa-thumbtack"></i>
-                    User Information
-                  </h4>
-                  <div class="border-bottom text-center pb-4">
-                        <img src="{{asset('uploads/'. $studentData->picture_name)}}" alt="profile" class="img-lg rounded-circle mb-3"/>
-                        
-                        
-                      </div>
-									<div class="list-wrapper">
-                  <ul class="d-flex flex-column-reverse todo-list">
-                    <table class="table">   
-                    <li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-                              <td><strong><p class="bold-font">Name:</p></strong></td>
-                              <td><strong><p class="bold-font">{{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }} </p></strong></td>
-                           
-													</label>
-												</div>	
-                        </tr>											
-											</li> 
-											<li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">	
-                              <td><p class="bold-font">Programme:</p></td>
-                              <td><p class="bold-font">{{$studentData->department}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>
-											</li>                      
-											<li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-														
-                              <td><p class="bold-font">Level</p></td>
-                              <td><p class="bold-font">{{$studentData->level}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>												
-											</li>                      
-                    </table>
-										</ul> 
-                    <form action="{{route('cbt-check', ['id' => $studentData->id])}}" method="post">
-                      @csrf
-                      <div class="form-check">
-													<label class="form-check-label">
-                          <button type="submit" class="btn btn-success btn-block">Start Computer Based Test</button>                            
-													</label>
-												</div> 
-                    </form>                   
-												                      											
-											
-
-									</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-5 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    <i class="fas fa-rocket"></i>
-                    Exam Information
+                    <!-- <i class="fas fa-envelope"></i> -->
+                   <strong>(1)</strong> 
                   </h4>
                   <div class="table-responsive">
                     <table class="table">
-                     <tr>
-                      <td><p class="bold-text-font">Academic Session</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->session1}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Programme</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->department}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Level</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->level}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     @if($examSetting->exam_category == 'GENERAL')
-                      <!-- <tr>
-                      <td><p class="bold-text-font">Subject/Course</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr> -->
-                     @elseif($examSetting->exam_category == 'SEMESTER')
-                     <tr>
-                      <td><p class="bold-text-font">Subject/Course</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     @endif
-                     <tr>
-                      <td><p class="bold-text-font">Exam Mode</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_mode}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Exam Category</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_category}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Exam Type</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_type}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Total no of Question</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->no_of_qst}}</p></td>
-                      <td><p class="bold-text-font">Duration</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->duration}}mins</p></td>
-                     </tr>                     
-                     <!-- <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                     </tr> -->
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input">
+                              </label>
+                            </div>
+                          </td>
+                          <td class="py-1">
+                            <img src="../../images/faces/face13.jpg" alt="profile" class="img-sm rounded-circle"/>
+                          </td>
+                          <td class="font-weight-bold">
+                            Andrew Bowen
+                          </td>
+                          <td>
+                            <label class="badge badge-light badge-pill">Development</label>
+                          </td>
+                          <td>
+                            The required fields are added in the database
+                          </td>
+                          <td>
+                            <i class="fas fa-ellipsis-v"></i>
+                          </td>
+                        </tr>                        
+                      </tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
 </div>
         </div>
 

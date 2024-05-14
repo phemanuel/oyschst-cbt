@@ -323,9 +323,10 @@
                 <hr>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Result Check: </label>
-                  <label for="exampleInputEmail1">1(Display Result) 2(Do not display result) </label>
+                  <label for="exampleInputEmail1">0(Do not display result) | 1(Display Result)</label>
                   <select name="check_result" id="" class="form-control">
-                    <option value="1" selected>1</option>
+                    <option value="{{$examSetting->check_result}}">{{$examSetting->check_result}}</option>
+                    <option value="1">1</option>
                     <option value="0">0</option>
                   </select>
                 </div>  

@@ -51,7 +51,8 @@ Route::get('/', function () {
     //----Computer Based Test--------
     Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
     ->name('cbt-check');
-
+    Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
+    ->name('cbt-page');
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
      

@@ -148,7 +148,8 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li> 
+        <li class="active">
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -156,8 +157,8 @@
             </span>
           </a>
         </li>
-        <li class="active">
-          <a href="{{route('student')}}">
+        <li>
+          <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -270,7 +271,7 @@
               <div class="form-group">
                   <label for="exampleInputEmail1">Academic Session</label>
                   <select name="session1" id="" class="form-control">
-                  <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                  
+                  <!-- <option value="{{old('session1')}}">{{old('session1')}}</option>                   -->
                   @foreach($acad_sessions as $rd)
 				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
 				@endforeach
@@ -282,7 +283,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
                   <select name="department" class="form-control">
-                  <option value="{{old('department')}}" selected>{{old('department')}}</option>                  
+                  <!-- <option value="{{old('department')}}" selected>{{old('department')}}</option>                   -->
                   @foreach($dept as $rd)
 				<option value="{{$rd->department}}">{{$rd->department}}</option>
 				@endforeach
@@ -295,7 +296,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
                   <select name="level" id="" class="form-control">
-                  <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
+                  <!-- <option value="{{old('level')}}" selected>{{old('level')}}</option>                   -->
                   @foreach($level as $rd)
 				<option value="{{$rd->level}}">{{$rd->level}}</option>
 				@endforeach
@@ -318,7 +319,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <select name="exam_type" id="" class="form-control">
-                  <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                  
+                  <!-- <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                   -->
                   @foreach($examType as $rd)
 				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
 				@endforeach
@@ -422,7 +423,7 @@
               <div class="form-group">
                   <label for="exampleInputEmail1">Academic Session</label>
                   <select name="session1" id="" class="form-control">
-                  <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                  
+                  <!-- <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                   -->
                   @foreach($acad_sessions as $rd)
 				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
 				@endforeach
@@ -434,7 +435,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
                   <select name="department" class="form-control">
-                  <option value="{{old('department')}}" selected>{{old('department')}}</option>                  
+                  <!-- <option value="{{old('department')}}" selected>{{old('department')}}</option>                   -->
                   @foreach($dept as $rd)
 				<option value="{{$rd->department}}">{{$rd->department}}</option>
 				@endforeach
@@ -447,7 +448,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
                   <select name="level" id="" class="form-control">
-                  <option value="{{old('level')}}" selected>{{old('level')}}</option>                  
+                  <!-- <option value="{{old('level')}}" selected>{{old('level')}}</option>                   -->
                   @foreach($level as $rd)
 				<option value="{{$rd->level}}">{{$rd->level}}</option>
 				@endforeach
@@ -470,7 +471,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <select name="exam_type" id="" class="form-control">
-                  <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                  
+                  <!-- <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                   -->
                   @foreach($examType as $rd)
 				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
 				@endforeach
