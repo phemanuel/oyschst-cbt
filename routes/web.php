@@ -73,6 +73,13 @@ Route::get('/', function () {
     ->name('cbt-page9');
     Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
     ->name('cbt-page10');
+    Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
+    ->name('cbt-submit');
+    //----Update Answers---
+    Route::post('update-answer/{id}', [ExamController::class, 'updateAnswer'])
+    ->name('update-answer');
+    Route::post('check-page/{id}', [ExamController::class, 'checkPage'])
+    ->name('check-page');
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
      
