@@ -94,12 +94,13 @@ class ExamController extends Controller
                         ->where('noofquestion' , $examSetting->no_of_qst)
                         ->first();
         $examStatus = $cbtEvaluation->examstatus;
+        $pageNo = $cbtEvaluation->pageno;
         If($examStatus == 2){
             return redirect()->back()->with('error', 'You have completed the computer based test.');
         }      
 
         return view('student.pages.cbt-continue', compact('softwareVersion', 'collegeSetup', 'studentData',
-        'examSetting'));
+        'examSetting','pageNo'));
     }
 
     public function cbtProcess($id)
@@ -276,6 +277,7 @@ class ExamController extends Controller
             return redirect()->to(route('cbt-page1', ['id' => $studentData->id]));
     }
 
+    //--Page 1
     public function cbtPage1($id)
     {
         $noOfQst = 10;
@@ -345,6 +347,7 @@ class ExamController extends Controller
     
     }
 
+    //--Page 2
     public function cbtPage2($id)
     {
         $noOfQst = 10;
@@ -353,7 +356,7 @@ class ExamController extends Controller
         $studentData = StudentAdmission::where('id', $id)->first();
         $examSetting = ExamSetting::first();
 
-        if($examSetting->no_of_qst < 10){
+        if($examSetting->no_of_qst < 20){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
             Please submit.');
         }
@@ -412,283 +415,286 @@ class ExamController extends Controller
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
-    }
+    }    
 
-    public function updateAnswerNow(Request $request, $id)
+    //---Page3
+    public function cbtPage3($id)
     {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
         $examSetting = ExamSetting::first();
-        // Retrieve the question number and selected answer from the request
-        $questionNumber = $request->input('questionNumber');
-        $selectedAnswer = $request->input('answer');
 
-        // Update the corresponding attribute in the CbtEvaluation2 model
-        $cbtEvaluation = CbtEvaluation2::where('studentno', $id)
-                         ->where('session1', $examSetting->session1)
-                        ->where('department', $examSetting->department)
-                        ->where('level', $examSetting->level)
+        if($examSetting->no_of_qst < 30){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
                         ->where('exam_category', $examSetting->exam_category)
                         ->where('noofquestion' , $examSetting->no_of_qst)
                         ->first();
-
-        $cbtEvaluation->{"OK" . $questionNumber} = $selectedAnswer;
-        $cbtEvaluation->save();
-
-        // Return a response indicating success
-        return response()->json(['message' => 'Answer updated successfully']);
-    }
-
-    public function processAnswer($optionName, $questionNo)
-    {
-        $option = "Nill"; // Default value if none of the options are selected
-
-        // Check which option is selected
-        if (request()->has($optionName . 'A')) {
-            $option = 'A';
-        } elseif (request()->has($optionName . 'B')) {
-            $option = 'B';
-        } elseif (request()->has($optionName . 'C')) {
-            $option = 'C';
-        } elseif (request()->has($optionName . 'D')) {
-            $option = 'D';
-        }
-
-        return [
-            'option' => $option,
-            'questionNo' => request()->get($questionNo),
-        ];
-    }
-
-    public function checkPage(Request $request , $id)
-    {
-        $pageNo = $request->get('pageNo');
-        $q1 = $request->get('q1');
-        session::put('q1', $q1);
-
-        if ($pageNo == 1) {
-            return $this->page1Answer($request, $id); // Pass the $request object to page1Answer
-        } elseif ($pageNo == 2) {
-            return $this->page2Answer($request, $id);
-        } elseif ($pageNo == 3) {
-            return $this->page3Answer($request, $id);
-        } elseif ($pageNo == 4) {
-            return $this->page4Answer($request, $id);
-        } elseif ($pageNo == 5) {
-            return $this->page5Answer($request, $id);
-        } elseif ($pageNo == 6) {
-            return $this->page2Answer($request, $id); // This should probably be page6Answer
-        } elseif ($pageNo == 7) {
-            return $this->page7Answer($request, $id);
-        } elseif ($pageNo == 8) {
-            return $this->page8Answer($request, $id);
-        } elseif ($pageNo == 9) {
-            return $this->page9Answer($request, $id);
-        } elseif ($pageNo == 10) {
-            return $this->page10Answer($request, $id);
-        }
-    }
-
-    public function page1Answer(Request $request,$id)
-    {
-        $q1 = session::get('q1');
-        $examSetting = ExamSetting::first(); 
-        $studentData = StudentAdmission::where('id',$id)->first();
-
-        //----get default answers        
         $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
-        ->where('session1', $examSetting->session1)->where('department', $examSetting->department)
-        ->where('level', $examSetting->level)->where('course', $examSetting->course)
-        ->where('exam_mode', $examSetting->exam_mode)->where('exam_type', $examSetting->exam_type)
-        ->where('exam_category', $examSetting->exam_category)->where('noofquestion' , $examSetting->no_of_qst)
-        ->first();
-        $a1FieldName = "OK" . $q1;
-                // $a1 = $studentAnswer->{$a1FieldName};
-        //----Current Answers(1-10)------
-        $a1 = $studentAnswer->OK1;$a2 = $studentAnswer->OK2;$a3 = $studentAnswer->OK3;$a4 = $studentAnswer->OK4;
-        $a5 = $studentAnswer->OK5;$a6 = $studentAnswer->OK6;$a7 = $studentAnswer->OK7;$a8 = $studentAnswer->OK8;
-        $a9 = $studentAnswer->OK9;$a10 = $studentAnswer->OK10;
-        // 
-        //-1
-        if (request()->has('option1A')) {
-            $option1 = 'A';            
-        } elseif (request()->has('option1B')) {
-            $option1 = 'B';
-        } elseif (request()->has('option1C')) {
-            $option1 = 'C';
-        } elseif (request()->has('option1D')) {
-            $option1 = 'D';
-        } else {
-            $option1 = $a1;
-        }
-        //-2
-        if (request()->has('option2A')) {
-            $option2 = 'A';            
-        } elseif (request()->has('option2B')) {
-            $option2 = 'B';
-        } elseif (request()->has('option2C')) {
-            $option2 = 'C';
-        } elseif (request()->has('option2D')) {
-            $option2 = 'D';
-        } else {
-            $option2 = $a2;
-        }
-        //-3
-        if (request()->has('option3A')) {
-            $option3 = 'A';            
-        } elseif (request()->has('option3B')) {
-            $option3 = 'B';
-        } elseif (request()->has('option3C')) {
-            $option3 = 'C';
-        } elseif (request()->has('option3D')) {
-            $option3 = 'D';
-        } else {
-            $option3 = $a3;
-        }
-        //-4
-        if (request()->has('option4A')) {
-            $option4 = 'A';            
-        } elseif (request()->has('option4B')) {
-            $option4 = 'B';
-        } elseif (request()->has('option4C')) {
-            $option4 = 'C';
-        } elseif (request()->has('option4D')) {
-            $option4 = 'D';
-        } else {
-            $option4 = $a4;
-        }
-        //-5
-        if (request()->has('option5A')) {
-            $option5 = 'A';            
-        } elseif (request()->has('option5B')) {
-            $option5 = 'B';
-        } elseif (request()->has('option5C')) {
-            $option5 = 'C';
-        } elseif (request()->has('option5D')) {
-            $option5 = 'D';
-        } else {
-            $option5 = $a5;
-        }
-        //-6
-        if (request()->has('option6A')) {
-            $option6 = 'A';            
-        } elseif (request()->has('option6B')) {
-            $option6 = 'B';
-        } elseif (request()->has('option6C')) {
-            $option6 = 'C';
-        } elseif (request()->has('option6D')) {
-            $option6 = 'D';
-        } else {
-            $option6 = $a6;
-        }
-        //-7
-        if (request()->has('option7A')) {
-            $option7 = 'A';            
-        } elseif (request()->has('option7B')) {
-            $option7 = 'B';
-        } elseif (request()->has('option7C')) {
-            $option7 = 'C';
-        } elseif (request()->has('option7D')) {
-            $option7 = 'D';
-        } else {
-            $option7 = $a7;
-        }
-        //-8
-        if (request()->has('option8A')) {
-            $option8 = 'A';            
-        } elseif (request()->has('option8B')) {
-            $option8 = 'B';
-        } elseif (request()->has('option8C')) {
-            $option8 = 'C';
-        } elseif (request()->has('option8D')) {
-            $option8 = 'D';
-        } else {
-            $option8 = $a8;
-        }
-        //-9
-        if (request()->has('option9A')) {
-            $option9 = 'A';            
-        } elseif (request()->has('option9B')) {
-            $option9 = 'B';
-        } elseif (request()->has('option9C')) {
-            $option9 = 'C';
-        } elseif (request()->has('option9D')) {
-            $option9 = 'D';
-        } else {
-            $option9 = $a9;
-        }
-        //-10
-        if (request()->has('option10A')) {
-            $option10 = 'A';            
-        } elseif (request()->has('option10B')) {
-            $option10 = 'B';
-        } elseif (request()->has('option10C')) {
-            $option10 = 'C';
-        } elseif (request()->has('option10D')) {
-            $option10 = 'D';
-        } else {
-            $option10 = $a10;
-        }
-       
-        //--update option 
-        $studentAnswer->update([
-            'OK1' => $option1,
-            'OK2' => $option2,
-            'OK3' => $option3,
-            'OK4' => $option4,
-            'OK5' => $option5,
-            'OK6' => $option6,
-            'OK7' => $option7,
-            'OK8' => $option8,
-            'OK9' => $option9,
-            'OK10' => $option10,
-        ]);  
-        // $a1FieldName = "OK" . $q1;     
-        // $studentAnswer->{$a1FieldName} = $option1;
-        // $studentAnswer->save();
-            
-
-        return $this->cbtPage1($id);
-    }
-
-    public function page2Answer(Request $request,$id)
-    {
-        $q2 = session::get('q2');
-        $examSetting = ExamSetting::first(); 
-        $studentData = StudentAdmission::where('id',$id)->first();
-
-        //----get default answers        
-        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
-        ->where('session1', $examSetting->session1)->where('department', $examSetting->department)
-        ->where('level', $examSetting->level)->where('course', $examSetting->course)
-        ->where('exam_mode', $examSetting->exam_mode)->where('exam_type', $examSetting->exam_type)
-        ->where('exam_category', $examSetting->exam_category)->where('noofquestion' , $examSetting->no_of_qst)
-        ->first();
-
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A21, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A22, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A23, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A24, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A25, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A26, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A27, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A28, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A29, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A30, $examSetting, $studentData)->first();
         
-        $a1FieldName = "OK" . $q2;
-        $a2 = $studentAnswer->{$a1FieldName};
-       
-        //  //-1
-        if (request()->has('option2A')) {
-            $option2 = 'A';            
-        } elseif (request()->has('option2B')) {
-            $option2 = 'B';
-        } elseif (request()->has('option2C')) {
-            $option2 = 'C';
-        } elseif (request()->has('option2D')) {
-            $option2 = 'D';
-        } else {
-            $option2 = $a2;
+        $questionNo = [
+            'q1' => 21, 'q2' => 22, 'q3' => 23, 'q4' => 24, 'q5' => 25, 'q6' => 26, 'q7' => 27, 'q8' => 28,
+            'q9' => 29, 'q10' => 30,
+            'a1' => 21, 'a2' => 22, 'a3' => 23, 'a4' => 24, 'a5' => 25, 'a6' => 26, 'a7' => 27, 'a8' => 28,
+            'a9' => 29, 'a10' => 30
+        ];
+        $pageNo = 2;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }    
+
+    //---Page 4
+    public function cbtPage4($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 40){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
         }
 
-        //--update option   
-        $a1FieldName = "OK" . $q2;     
-        $studentAnswer->{$a1FieldName} = $option1;
-        $studentAnswer->save();
-            
-
-        return $this->cbtPage1($id);
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A31, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A32, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A33, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A34, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A35, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A36, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A37, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A38, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A39, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A40, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 31, 'q2' => 32, 'q3' => 33, 'q4' => 34, 'q5' => 35, 'q6' => 36, 'q7' => 37, 'q8' => 38,
+            'q9' => 39, 'q10' => 40,
+            'a1' => 41, 'a2' => 42, 'a3' => 43, 'a4' => 44, 'a5' => 45, 'a6' => 46, 'a7' => 47, 'a8' => 48,
+            'a9' => 49, 'a10' => 50
+        ];
+        $pageNo = 1;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
     }
+    //----Page5-----
+    public function cbtPage5($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 50){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A41, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A42, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A43, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A44, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A45, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A46, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A47, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A48, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A49, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A50, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 41, 'q2' => 42, 'q3' => 43, 'q4' => 44, 'q5' => 45, 'q6' => 46, 'q7' => 47, 'q8' => 48,
+            'q9' => 49, 'q10' => 50,
+            'a1' => 41, 'a2' => 42, 'a3' => 43, 'a4' => 44, 'a5' => 45, 'a6' => 46, 'a7' => 47, 'a8' => 48,
+            'a9' => 49, 'a10' => 50
+        ];
+        $pageNo = 1;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }
+
+    // public function checkPage(Request $request , $id)
+    // {
+    //     $pageNo = $request->get('pageNo');
+    //     //$q1 = $request->get('q1'); session::put('q1', $q1);        
+
+    //     if ($pageNo == 1) {
+    //         return $this->page1Answer($request, $id); // Pass the $request object to page1Answer
+    //     } elseif ($pageNo == 2) {
+    //         return $this->page2Answer($request, $id);
+    //     } elseif ($pageNo == 3) {
+    //         return $this->page3Answer($request, $id);
+    //     } elseif ($pageNo == 4) {
+    //         return $this->page4Answer($request, $id);
+    //     } elseif ($pageNo == 5) {
+    //         return $this->page5Answer($request, $id);
+    //     } elseif ($pageNo == 6) {
+    //         return $this->page2Answer($request, $id); // This should probably be page6Answer
+    //     } elseif ($pageNo == 7) {
+    //         return $this->page7Answer($request, $id);
+    //     } elseif ($pageNo == 8) {
+    //         return $this->page8Answer($request, $id);
+    //     } elseif ($pageNo == 9) {
+    //         return $this->page9Answer($request, $id);
+    //     } elseif ($pageNo == 10) {
+    //         return $this->page10Answer($request, $id);
+    //     }
+    // }    
+
+    public function updateAnswersForPage(Request $request, $id, $pageNo)
+    {
+        $examSetting = ExamSetting::first();
+        $studentData = StudentAdmission::find($id);
+
+        // Calculate the start and end index based on the page number
+        $startIndex = ($pageNo - 1) * 10 + 1;
+        $endIndex = $startIndex + 9;
+
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        // Update answers based on the form inputs
+        $options = [];
+        for ($i = $startIndex; $i <= $endIndex; $i++) {
+            $option = null;
+            $optionLetters = ['A', 'B', 'C', 'D'];
+            foreach ($optionLetters as $letter) {
+                $optionKey = "option{$i}{$letter}";
+                if ($request->has($optionKey)) {
+                    $option = $letter;
+                    break;
+                }
+            }
+            $optionFieldName = "OK{$i}";
+            $options[$optionFieldName] = $option ?? $studentAnswer->{$optionFieldName};
+        }
+
+        $studentAnswer->update($options);
+
+        // Redirect back to the corresponding page
+        return call_user_func_array([$this, "cbtPage{$pageNo}"], ['id' => $id]);
+
+    }
+
 }

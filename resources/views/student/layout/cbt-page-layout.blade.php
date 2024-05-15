@@ -33,14 +33,25 @@
 }
 
     .bold-font {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
+}
+
+.bold-font-qst {
+    font-size: 24px;
+    /* font-weight: bold; */
 }
 
 .bold-font-ans {
     font-size: 16px;
     font-weight: bold;
     color: red;
+}
+
+.bold-font-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
 }
   </style>
   	<style>
@@ -163,10 +174,10 @@
           
 
           <div class="row">
-            <form action="{{route('check-page', ['id' =>$studentData->id])}}" method="post" id="answerForm">
+          <form action="{{ route('updateAnswers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}" method="POST">
               @csrf
           <!-- begin card -->
-            <div class="col-12 grid-margin">            
+            <div class="col-12 grid-margin" id="question1">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
@@ -175,19 +186,21 @@
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!! $question1->question !!}</p></td>
+                        <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
                       <td width="82%">
-                      <input type="submit" name="option1A" id="option1A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option1B" id="option1B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option1C" id="option1C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option1D" id="option1D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</p>
-                        <input type="hidden" name="q1" id="q1" value="{{ $questionNo['q1'] }}">
-                        
+                      <input type="submit" name="option{{ $questionNo['q1'] }}A" id="option{{ $questionNo['q1'] }}B" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q1'] }}B" id="option{{ $questionNo['q1'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q1'] }}C" id="option{{ $questionNo['q1'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q1'] }}D" id="option{{ $questionNo['q1'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</span>
+                        </p>
+                        <input type="hidden" name="q1" id="questionNumber" value="{{ $questionNo['q1'] }}">
                         </td>
                         <td></td>
                         <td></p></td>
@@ -198,7 +211,7 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question2">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
@@ -207,17 +220,20 @@
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question2->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question2->question!!} </p></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option2A" id="option2A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option2B" id="option2B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option2C" id="option2C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option2D" id="option2D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a2']} }}</p>
-                        <input type="hidden" name="q2" value="{{ $questionNo['q2'] }}">
+                      <td><input type="submit" name="option{{ $questionNo['q2'] }}A" id="option{{ $questionNo['q2'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q2'] }}B" id="option{{ $questionNo['q2'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q2'] }}C" id="option{{ $questionNo['q2'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q2'] }}D" id="option{{ $questionNo['q2'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a2']} }}</span>
+                        </p>
+                        <input type="hidden" name="q2" id="questionNumber" value="{{ $questionNo['q2'] }}">
                         </td>
                         <td></td>
                         <td></td>
@@ -229,7 +245,7 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question3">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
@@ -238,17 +254,20 @@
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question3->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question3->question!!} </p></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td width="82%"><input type="submit" name="option3A" id="option3A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option3B" id="option3B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option3C" id="option3C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option3D" id="option3D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a3']} }}</p>
-                        <input type="hidden" name="q3" id="questionNumber" value="{{ $questionNo['q3'] }}">
+                      <td width="82%"><input type="submit" name="option{{ $questionNo['q3'] }}A" id="option{{ $questionNo['q3'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q3'] }}B" id="option{{ $questionNo['q3'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q3'] }}C" id="option{{ $questionNo['q3'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q3'] }}D" id="option{{ $questionNo['q3'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a3']} }}</span>
+                        </p>
+                        <input type="hidden" name="q3" id="questionNumber" value="{{ $questionNo['q3'] }}">                        
                         </td>
                         <td></td>
                         <td></td>
@@ -258,10 +277,9 @@
                 </div>                
               </div>
             </div>
-           <!-- end card -->
-           <form action="" method="post">
+           <!-- end card -->          
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question4">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
@@ -270,17 +288,21 @@
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question4->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question4->question!!} </p></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option4A" id="option4A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option4B" id="option4B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option4C" id="option4C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option4D" id="option4D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a4']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q4'] }}A" id="option{{ $questionNo['q4'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q4'] }}B" id="option{{ $questionNo['q4'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q4'] }}C" id="option{{ $questionNo['q4'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q4'] }}D" id="option{{ $questionNo['q4'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a4']} }}</span>
+                        </p>
                         <input type="hidden" name="q4" id="questionNumber" value="{{ $questionNo['q4'] }}">
+
                         </td>
                         <td></td>
                         <td></td>
@@ -292,7 +314,7 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question5">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
@@ -301,16 +323,19 @@
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question5->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question5->question!!} </p></td>
                         <td></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option5A" id="option5A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option5B" id="option5B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option5C" id="option5C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option5D" id="option5D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a5']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q5'] }}A" id="option{{ $questionNo['q5'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q5'] }}B" id="option{{ $questionNo['q5'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q5'] }}C" id="option{{ $questionNo['q5'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q5'] }}D" id="option{{ $questionNo['q5'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a5']} }}</span>
+                        </p>
                         <input type="hidden" name="q5" id="questionNumber" value="{{ $questionNo['q5'] }}">
                         </td>
                         <td></td>
@@ -323,24 +348,27 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question6">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q6'] }} </strong>
+                    <strong>Question {!! $questionNo['q6'] !!} </strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question6->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question6->question!!} </p></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option6A" id="option6A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option6B" id="option6B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option6C" id="option6C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option6D" id="option6D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a6']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q6'] }}A" id="option{{ $questionNo['q6'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q6'] }}B" id="option{{ $questionNo['q6'] }}B" value="B"  class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q6'] }}C" id="option{{ $questionNo['q6'] }}C" value="C"  class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q6'] }}D" id="option{{ $questionNo['q6'] }}D" value="A"  class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a6']} }}</span>
+                        </p>
                         <input type="hidden" name="q6" id="questionNumber" value="{{ $questionNo['q6'] }}">
                         </td>
                         <td></td>
@@ -352,24 +380,27 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question7">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q7'] }} </strong>
+                    <strong>Question {!! $questionNo['q7'] !!} </strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question7->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question7->question!!} </p></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option7A" id="option7A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option7B" id="option7B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option7C" id="option7C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option7D" id="option7D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a7']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q7'] }}A" id="option{{ $questionNo['q7'] }}A" value="A"  class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q7'] }}B" id="option{{ $questionNo['q7'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q7'] }}C" id="option{{ $questionNo['q7'] }}C" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q7'] }}D" id="option{{ $questionNo['q7'] }}D" value="A" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a7']} }}</span>
+                        </p>
                         <input type="hidden" name="q7" id="questionNumber" value="{{ $questionNo['q7'] }}">
                         </td>
                         <td></td>
@@ -381,24 +412,27 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question8">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q8'] }} </strong>
+                    <strong>Question {!! $questionNo['q8'] !!} </strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question8->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question8->question!!} </p></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option8A" id="option8A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option8B" id="option8B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option8C" id="option8C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option8D" id="option8D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a8']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q8'] }}A" id="option{{ $questionNo['q8'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q8'] }}B" id="option{{ $questionNo['q8'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q8'] }}C" id="option{{ $questionNo['q8'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q8'] }}D" id="option{{ $questionNo['q8'] }}D" value="D"class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a8']} }}</span>
+                        </p>
                         <input type="hidden"  name="q8" id="questionNumber" value="{{ $questionNo['q8'] }}">
                         </td>
                         <td></td>
@@ -410,24 +444,27 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question9">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q9'] }} </strong>
+                    <strong>Question {!! $questionNo['q9'] !!} </strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question9->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question9->question!!} </p></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option9A" id="option9A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option9B" id="option9B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option9C" id="option9C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option9D" id="option9D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a9']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q9'] }}A" id="option{{ $questionNo['q9'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q9'] }}B" id="option{{ $questionNo['q9'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q9'] }}C" id="option{{ $questionNo['q9'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q9'] }}D" id="option{{ $questionNo['q9'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a9']} }}</span>
+                        </p>
                         <input type="hidden" name="q9" id="questionNumber" value="{{ $questionNo['q9'] }}">
                         </td>
                         <td></td>
@@ -439,24 +476,27 @@
             </div>
            <!-- end card -->
            <!-- begin card -->
-           <div class="col-12 grid-margin">            
+           <div class="col-12 grid-margin" id="question10">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q10'] }} </strong>
+                    <strong>Question {!! $questionNo['q10'] !!} </strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
                       <tr>                        
-                        <td><p class="bold-font">{!!$question10->question!!} </p></td>
+                        <td><p class="bold-font-qst">{!!$question10->question!!} </p></td>
                         <td></td>
                       </tr>
                       <tr>
-                      <td><input type="submit" name="option10A" id="option10A" value="       A        " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option10B" id="option10B" value="      B         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option10C" id="option10C" value="      C         " class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option10D" id="option10D" value="       D        " class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <p class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a10']} }}</p>
+                      <td><input type="submit" name="option{{ $questionNo['q10'] }}A" id="option{{ $questionNo['q10'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q10'] }}B" id="option{{ $questionNo['q10'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q10'] }}C" id="option{{ $questionNo['q10'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q10'] }}D" id="option{{ $questionNo['q10'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <hr>
+                        <p><span class="bold-font-text">Selected Answer:</span> 
+                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a10']} }}</span>
+                        </p>
                         <input type="hidden" name="q10" id="questionNumber" value="{{ $questionNo['q10'] }}">
                         </td>
                         <td></td>
@@ -466,7 +506,8 @@
                 </div>                
               </div>
             </div>
-           <!-- end card -->
+           <!-- end card -->     
+           <input type="hidden" name="btn_action" id="btn_action" />    
            <input type="hidden" name="pageNo" value ="{{$pageNo}}">
   </form>
             <div class="col-12 grid-margin">            
@@ -570,7 +611,27 @@
 </div>
         </div>
 
-        
+        <!-- <script>
+$(document).on('submit', '#answerForm', function(event){
+		event.preventDefault();
+		$('#action').attr('disabled','disabled');
+		var form_data = $(this).serialize();
+		$.ajax({
+			url:"{{route('check-page', ['id' =>$studentData->id])}}",
+			method:"POST",
+			data:form_data,
+			success:function(data)
+			{
+				$('#answerForm')[0].reset();
+				$('#userModal').modal('hide');
+				$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
+				$('#action').attr('disabled', false);
+				userdataTable.ajax.reload();
+			}
+		})
+	});
+</script> -->
+
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
@@ -584,81 +645,7 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
-
-  <!-- <script>
-    // Attach event listeners to the buttons
-    //--A
-    document.getElementById('option1A').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Get the value of the selected answer
-        var selectedAnswer = 'A';
-        var questionNumber = document.getElementById('questionNumber').value;
-
-        // Send AJAX request to update the answer
-        updateAnswer(questionNumber, selectedAnswer);
-    });
-
-    //--B
-    document.getElementById('option1B').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Get the value of the selected answer
-        var selectedAnswer = 'B';
-        var questionNumber = document.getElementById('questionNumber').value;
-
-        // Send AJAX request to update the answer
-        updateAnswer(questionNumber, selectedAnswer);
-    });
-
-    //--C
-    document.getElementById('option1C').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Get the value of the selected answer
-        var selectedAnswer = 'C';
-        var questionNumber = document.getElementById('questionNumber').value;
-
-        // Send AJAX request to update the answer
-        updateAnswer(questionNumber, selectedAnswer);
-    });
-
-    //--D
-    document.getElementById('option1D').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Get the value of the selected answer
-        var selectedAnswer = 'D';
-        var questionNumber = document.getElementById('questionNumber').value;
-
-        // Send AJAX request to update the answer
-        updateAnswer(questionNumber, selectedAnswer);
-    });
-
-    // Repeat for options B, C, and D
-
-    function updateAnswer(questionNumber, selectedAnswer) {
-        // Send AJAX request to update the answer
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "{{ route('update-answer', ['id' => $studentData->id]) }}", true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // Handle success response
-                    console.log(xhr.responseText);
-                } else {
-                    // Handle error response
-                    console.error('Request failed:', xhr.statusText);
-                }
-            }
-        };
-        
-        var data = JSON.stringify({ questionNumber: questionNumber, answer: selectedAnswer });
-        xhr.send(data);
-    }
-</script> -->
+  <!-- container-scroller --> 
 
 
   <!-- plugins:js -->

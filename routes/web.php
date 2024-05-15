@@ -77,6 +77,8 @@ Route::get('/', function () {
     ->name('cbt-continue');
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');
+    Route::post('/update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
+    ->name('updateAnswers');
     //----Update Answers---
     Route::post('update-answer/{id}', [ExamController::class, 'updateAnswer'])
     ->name('update-answer');
