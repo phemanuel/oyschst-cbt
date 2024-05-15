@@ -73,6 +73,35 @@ class ExamController extends Controller
 
     }
 
+    public function cbtContinue($admission_no)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $examSetting = ExamSetting::first(); 
+
+        $studentData = StudentAdmission::where('admission_no', $admission_no)
+                        //->where('department', $department)
+                        ->first();
+
+        $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $examSetting->department)
+                        ->where('level', $examSetting->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $examStatus = $cbtEvaluation->examstatus;
+        If($examStatus == 2){
+            return redirect()->back()->with('error', 'You have completed the computer based test.');
+        }      
+
+        return view('student.pages.cbt-continue', compact('softwareVersion', 'collegeSetup', 'studentData',
+        'examSetting'));
+    }
+
     public function cbtProcess($id)
     {
         $collegeSetup = CollegeSetup::first();
@@ -109,7 +138,7 @@ class ExamController extends Controller
             ->where('noofquestion', $noOfQuestions)
             ->first();
             if($studentDataExist){
-                return redirect()->back();
+                return redirect()->route('cbt-continue', ['admission_no' => $studentData->admission_no]);
             }
             // Create or update the student record
             $student = CbtEvaluation::firstOrCreate([
@@ -432,39 +461,55 @@ class ExamController extends Controller
         ];
     }
 
-
-    public function updateAnswer(Request $request, $id)
+    public function checkPage(Request $request , $id)
     {
-        //---get the question nos
+        $pageNo = $request->get('pageNo');
         $q1 = $request->get('q1');
-        $q2 = $request->get('q2');
-        $q3 = $request->get('q3');
-        $q4 = $request->get('q4');
-        $q5 = $request->get('q5');
-        $q6 = $request->get('q6');
-        $q7 = $request->get('q7');
-        $q8 = $request->get('q8');
-        $q9 = $request->get('q9');
-        $q10 = $request->get('q10');
-        
-        //----get default answers
-        $studentAnswer = CbtEvaluation2::where('studentno', $id)
+        session::put('q1', $q1);
+
+        if ($pageNo == 1) {
+            return $this->page1Answer($request, $id); // Pass the $request object to page1Answer
+        } elseif ($pageNo == 2) {
+            return $this->page2Answer($request, $id);
+        } elseif ($pageNo == 3) {
+            return $this->page3Answer($request, $id);
+        } elseif ($pageNo == 4) {
+            return $this->page4Answer($request, $id);
+        } elseif ($pageNo == 5) {
+            return $this->page5Answer($request, $id);
+        } elseif ($pageNo == 6) {
+            return $this->page2Answer($request, $id); // This should probably be page6Answer
+        } elseif ($pageNo == 7) {
+            return $this->page7Answer($request, $id);
+        } elseif ($pageNo == 8) {
+            return $this->page8Answer($request, $id);
+        } elseif ($pageNo == 9) {
+            return $this->page9Answer($request, $id);
+        } elseif ($pageNo == 10) {
+            return $this->page10Answer($request, $id);
+        }
+    }
+
+    public function page1Answer(Request $request,$id)
+    {
+        $q1 = session::get('q1');
+        $examSetting = ExamSetting::first(); 
+        $studentData = StudentAdmission::where('id',$id)->first();
+
+        //----get default answers        
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
         ->where('session1', $examSetting->session1)->where('department', $examSetting->department)
         ->where('level', $examSetting->level)->where('course', $examSetting->course)
         ->where('exam_mode', $examSetting->exam_mode)->where('exam_type', $examSetting->exam_type)
         ->where('exam_category', $examSetting->exam_category)->where('noofquestion' , $examSetting->no_of_qst)
         ->first();
-
-        $a1 = $studentAnswer->OK . $q1;
-        $a2 = $studentAnswer->OK . $q2;
-        $a3 = $studentAnswer->OK . $q3;
-        $a4 = $studentAnswer->OK . $q4;
-        $a5 = $studentAnswer->OK . $q5;
-        $a6 = $studentAnswer->OK . $q6;
-        $a7 = $studentAnswer->OK . $q7;
-        $a8 = $studentAnswer->OK . $q8;
-        $a9 = $studentAnswer->OK . $q9;
-        $a10 = $studentAnswer->OK . $q10;
+        $a1FieldName = "OK" . $q1;
+                // $a1 = $studentAnswer->{$a1FieldName};
+        //----Current Answers(1-10)------
+        $a1 = $studentAnswer->OK1;$a2 = $studentAnswer->OK2;$a3 = $studentAnswer->OK3;$a4 = $studentAnswer->OK4;
+        $a5 = $studentAnswer->OK5;$a6 = $studentAnswer->OK6;$a7 = $studentAnswer->OK7;$a8 = $studentAnswer->OK8;
+        $a9 = $studentAnswer->OK9;$a10 = $studentAnswer->OK10;
+        // 
         //-1
         if (request()->has('option1A')) {
             $option1 = 'A';            
@@ -585,73 +630,23 @@ class ExamController extends Controller
         } else {
             $option10 = $a10;
         }
-
-    }
-
-    public function checkPage(Request $request , $id)
-    {
-        $pageNo = $request->get('pageNo');
-        $q1 = $request->get('q1');
-        session::put('q1', $q1);
-
-        if ($pageNo == 1) {
-            return $this->page1Answer($request, $id); // Pass the $request object to page1Answer
-        } elseif ($pageNo == 2) {
-            return $this->page2Answer($request, $id);
-        } elseif ($pageNo == 3) {
-            return $this->page3Answer($request, $id);
-        } elseif ($pageNo == 4) {
-            return $this->page4Answer($request, $id);
-        } elseif ($pageNo == 5) {
-            return $this->page5Answer($request, $id);
-        } elseif ($pageNo == 6) {
-            return $this->page2Answer($request, $id); // This should probably be page6Answer
-        } elseif ($pageNo == 7) {
-            return $this->page7Answer($request, $id);
-        } elseif ($pageNo == 8) {
-            return $this->page8Answer($request, $id);
-        } elseif ($pageNo == 9) {
-            return $this->page9Answer($request, $id);
-        } elseif ($pageNo == 10) {
-            return $this->page10Answer($request, $id);
-        }
-    }
-
-    public function page1Answer(Request $request,$id)
-    {
-        $q1 = session::get('q1');
-        $examSetting = ExamSetting::first(); 
-        $studentData = StudentAdmission::where('id',$id)->first();
-
-        //----get default answers        
-        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
-        ->where('session1', $examSetting->session1)->where('department', $examSetting->department)
-        ->where('level', $examSetting->level)->where('course', $examSetting->course)
-        ->where('exam_mode', $examSetting->exam_mode)->where('exam_type', $examSetting->exam_type)
-        ->where('exam_category', $examSetting->exam_category)->where('noofquestion' , $examSetting->no_of_qst)
-        ->first();
-
-        
-        $a1FieldName = "OK" . $q1;
-        $a1 = $studentAnswer->{$a1FieldName};
        
-        //  //-1
-        if (request()->has('option1A')) {
-            $option1 = 'A';            
-        } elseif (request()->has('option1B')) {
-            $option1 = 'B';
-        } elseif (request()->has('option1C')) {
-            $option1 = 'C';
-        } elseif (request()->has('option1D')) {
-            $option1 = 'D';
-        } else {
-            $option1 = $a1;
-        }
-
-        //--update option   
-        $a1FieldName = "OK" . $q1;     
-        $studentAnswer->{$a1FieldName} = $option1;
-        $studentAnswer->save();
+        //--update option 
+        $studentAnswer->update([
+            'OK1' => $option1,
+            'OK2' => $option2,
+            'OK3' => $option3,
+            'OK4' => $option4,
+            'OK5' => $option5,
+            'OK6' => $option6,
+            'OK7' => $option7,
+            'OK8' => $option8,
+            'OK9' => $option9,
+            'OK10' => $option10,
+        ]);  
+        // $a1FieldName = "OK" . $q1;     
+        // $studentAnswer->{$a1FieldName} = $option1;
+        // $studentAnswer->save();
             
 
         return $this->cbtPage1($id);

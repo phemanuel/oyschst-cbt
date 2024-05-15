@@ -30,9 +30,7 @@ class DashboardController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $examSetting = ExamSetting::first();
-        $admission_no  = $admission_no;
-        //$department = session::get('department');
+        $examSetting = ExamSetting::first();       
 
         $studentData = StudentAdmission::where('admission_no', $admission_no)
                         //->where('department', $department)

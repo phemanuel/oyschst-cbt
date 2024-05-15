@@ -73,6 +73,8 @@ Route::get('/', function () {
     ->name('cbt-page9');
     Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
     ->name('cbt-page10');
+    Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
+    ->name('cbt-continue');
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');
     //----Update Answers---
