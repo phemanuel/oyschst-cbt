@@ -126,7 +126,7 @@
               </ol>
             </nav>
           </div>
-          <div>
+          <!-- <div>
           @if(session('success'))
 						<div class="alert alert-success">
 							{{ session('success') }}
@@ -136,10 +136,10 @@
 							{{ session('error') }}
 						</div>
 						@endif	
-          </div>
-          <!-- <div class="alert alert-success">
-							<p>You have not completed the test, <strong>Click Continue Computer based test</strong>.</p>
-						</div> -->
+          </div> -->
+          <div class="alert alert-success">
+							<p>You have successfully completed the Computer based test.</strong>.</p>
+						</div>
           <div class="row">
             <div class="col-md-7 grid-margin stretch-card">
               <div class="card">

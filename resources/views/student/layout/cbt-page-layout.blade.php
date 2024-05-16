@@ -617,7 +617,7 @@ $(document).on('submit', '#answerForm', function(event){
 		$('#action').attr('disabled','disabled');
 		var form_data = $(this).serialize();
 		$.ajax({
-			url:"{{route('check-page', ['id' =>$studentData->id])}}",
+			url:"",
 			method:"POST",
 			data:form_data,
 			success:function(data)

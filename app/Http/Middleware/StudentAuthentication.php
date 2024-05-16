@@ -18,7 +18,7 @@ class StudentAuthentication
                 time() - $request->session()->get('lastActivity') > config('session.lifetime')) {
                 // If the session has expired, log out the user and redirect to login page
                 Auth::logout();
-                return redirect()->route('login')->with('error', 'Your session has expired. Please login again.');
+                return redirect()->route('/')->with('error', 'Your session has expired. Please login again.');
             }
 
             // Update last activity time to refresh session timeout
