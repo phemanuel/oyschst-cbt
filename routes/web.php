@@ -44,7 +44,9 @@ Route::get('/', function () {
     Route::post('user-locked', [AuthController::class, 'userLocked'])->name('user-locked');
     Route::get('admin', [AuthController::class, 'adminLogin'])->name('admin-login');
     Route::post('admin', [AuthController::class, 'adminLoginAction'])->name('admin-login.action');
-    //-----Dashboard routes-----
+
+    Route::group(['middleware' => ['student.auth']], function () {
+       //-----Dashboard routes-----
     Route::get('user-dashboard/{admission_no}', [DashboardController::class, 'index'])
     ->name('dashboard');
     // ->middleware(StudentAuth::class);  
@@ -86,6 +88,8 @@ Route::get('/', function () {
     ->name('check-page');
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
+    });
+    
      
 
     //----Auth routes--
@@ -215,16 +219,8 @@ Route::get('/', function () {
         Route::get('add-user', [DashboardController::class, 'addUser'])
         ->name('add-user'); 
         Route::post('add-user', [DashboardController::class, 'addUserAction'])
-        ->name('add-user.action');                
-
-        //--Send mail routes
-        // Route::get('send-mail-fail/{transaction_id}', [MailController::class, 'mailFailed'])
-        // ->name('send-mail-fail');
-        // Route::get('send-mail-success/{transaction_id}', [MailController::class, 'mailSuccess'])
-        // ->name('send-mail-success');
-        // //---User change password --------------------------------
-        // Route::get('change-password', [AuthController::class, 'changePassword'])
-        //     ->name('change-password');  
+        ->name('add-user.action');               
+  
     });
      
       

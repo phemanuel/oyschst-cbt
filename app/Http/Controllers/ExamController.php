@@ -480,7 +480,7 @@ class ExamController extends Controller
             'a1' => 21, 'a2' => 22, 'a3' => 23, 'a4' => 24, 'a5' => 25, 'a6' => 26, 'a7' => 27, 'a8' => 28,
             'a9' => 29, 'a10' => 30
         ];
-        $pageNo = 2;
+        $pageNo = 3;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
@@ -550,7 +550,7 @@ class ExamController extends Controller
             'a1' => 41, 'a2' => 42, 'a3' => 43, 'a4' => 44, 'a5' => 45, 'a6' => 46, 'a7' => 47, 'a8' => 48,
             'a9' => 49, 'a10' => 50
         ];
-        $pageNo = 1;
+        $pageNo = 4;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
@@ -619,7 +619,355 @@ class ExamController extends Controller
             'a1' => 41, 'a2' => 42, 'a3' => 43, 'a4' => 44, 'a5' => 45, 'a6' => 46, 'a7' => 47, 'a8' => 48,
             'a9' => 49, 'a10' => 50
         ];
-        $pageNo = 1;
+        $pageNo = 5;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }
+    //--Page 6
+    public function cbtPage6($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 60){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A51, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A52, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A53, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A54, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A55, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A56, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A57, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A58, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A59, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A60, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 51, 'q2' => 52, 'q3' => 53, 'q4' => 54, 'q5' => 55, 'q6' => 56, 'q7' => 57, 'q8' => 58,
+            'q9' => 59, 'q10' => 60,
+            'a1' => 51, 'a2' => 52, 'a3' => 53, 'a4' => 54, 'a5' => 55, 'a6' => 56, 'a7' => 57, 'a8' => 58,
+            'a9' => 59, 'a10' => 60
+        ];
+        $pageNo = 6;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }
+    //--Page 7
+    public function cbtPage7($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 70){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A61, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A62, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A63, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A64, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A65, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A66, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A67, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A68, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A69, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A70, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 61, 'q2' => 62, 'q3' => 63, 'q4' => 64, 'q5' => 65, 'q6' => 66, 'q7' => 67, 'q8' => 68,
+            'q9' => 69, 'q10' => 70,
+            'a1' => 61, 'a2' => 62, 'a3' => 63, 'a4' => 64, 'a5' => 65, 'a6' => 66, 'a7' => 67, 'a8' => 68,
+            'a9' => 69, 'a10' => 70
+        ];
+        $pageNo = 7;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }
+    
+    //--Page 8
+    public function cbtPage8($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 80){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A71, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A72, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A73, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A74, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A75, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A76, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A77, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A78, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A79, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A80, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 71, 'q2' => 72, 'q3' => 73, 'q4' => 74, 'q5' => 75, 'q6' => 76, 'q7' => 77, 'q8' => 78,
+            'q9' => 79, 'q10' => 80,
+            'a1' => 71, 'a2' => 72, 'a3' => 73, 'a4' => 74, 'a5' => 75, 'a6' => 76, 'a7' => 77, 'a8' => 78,
+            'a9' => 79, 'a10' => 80
+        ];
+        $pageNo = 8;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }
+
+    //---Page 9
+    public function cbtPage9($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 90){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A81, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A82, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A83, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A84, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A85, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A86, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A87, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A88, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A89, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A90, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 81, 'q2' => 82, 'q3' => 83, 'q4' => 84, 'q5' => 85, 'q6' => 86, 'q7' => 87, 'q8' => 88,
+            'q9' => 89, 'q10' => 90,
+            'a1' => 81, 'a2' => 82, 'a3' => 83, 'a4' => 84, 'a5' => 85, 'a6' => 86, 'a7' => 87, 'a8' => 88,
+            'a9' => 89, 'a10' => 90
+        ];
+        $pageNo = 9;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','question1','question2','question3','question4','question5','question6','question7',
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+    
+    }
+
+    //---Page 10
+    public function cbtPage10($id)
+    {
+        $noOfQst = 10;
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        if($examSetting->no_of_qst < 100){
+            return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
+            Please submit.');
+        }
+
+        // Retrieve shuffled question numbers from CbtEvaluation model
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+                        
+        //---Qst1
+        $question1 = Question::commonConditionsQst($cbtEvaluation->A91, $examSetting, $studentData)->first();        
+        //---Qst2
+        $question2 = Question::commonConditionsQst($cbtEvaluation->A92, $examSetting, $studentData)->first();
+        //---Qst3
+        $question3 = Question::commonConditionsQst($cbtEvaluation->A93, $examSetting, $studentData)->first();
+        //---Qst4
+        $question4 = Question::commonConditionsQst($cbtEvaluation->A94, $examSetting, $studentData)->first();
+        //---Qst5
+        $question5 = Question::commonConditionsQst($cbtEvaluation->A95, $examSetting, $studentData)->first();
+        //---Qst6
+        $question6 = Question::commonConditionsQst($cbtEvaluation->A96, $examSetting, $studentData)->first();
+        //---Qst7
+        $question7 = Question::commonConditionsQst($cbtEvaluation->A97, $examSetting, $studentData)->first();
+        //---Qst8
+        $question8 = Question::commonConditionsQst($cbtEvaluation->A98, $examSetting, $studentData)->first();
+        //---Qst9
+        $question9 = Question::commonConditionsQst($cbtEvaluation->A99, $examSetting, $studentData)->first();
+        //---Qst10
+        $question10 = Question::commonConditionsQst($cbtEvaluation->A100, $examSetting, $studentData)->first();
+        
+        $questionNo = [
+            'q1' => 91, 'q2' => 92, 'q3' => 93, 'q4' => 94, 'q5' => 95, 'q6' => 96, 'q7' => 97, 'q8' => 98,
+            'q9' => 99, 'q10' => 100,
+            'a1' => 91, 'a2' => 92, 'a3' => 93, 'a4' => 94, 'a5' => 95, 'a6' => 96, 'a7' => 97, 'a8' => 98,
+            'a9' => 99, 'a10' => 100
+        ];
+        $pageNo = 10;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
