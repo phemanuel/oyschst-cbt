@@ -539,10 +539,13 @@ class QuestionController extends Controller
                             $data = array_combine($headers, $column); // Combine headers with data                            
                             $data['question'] = mb_convert_encoding($data['question'], 'UTF-8', 'UTF-8');
                             // Insert data into database
+                            $questionText = '<p style="font-size: 24px; font-family: Arial;">' . $data['question'] . '</p>';
+
+                            // Now insert into the database with modified question text
                             DB::table('questions')->insert([
                                 'question_no' => $question_no,
-                                'question' => $data['question'],                    
-                                'answer' => $data['answer'],                        
+                                'question' => $questionText,
+                                'answer' => $data['answer'],                    
                                 'session1' => $validatedData['session1'],
                                 'department' => $validatedData['department'],
                                 'level' => $validatedData['level'],
@@ -554,8 +557,8 @@ class QuestionController extends Controller
                                 'upload_no_of_qst' => $validatedData['no_of_qst'],
                                 'question_type' => 'text',
                                 'graphic' => 'blank.jpg',
-                                'created_at' => date('Y-m-d H:i:s'),
-                                'updated_at' => date('Y-m-d H:i:s'),
+                                'created_at' => now(),
+                                'updated_at' => now(),
                             ]);
                             
                             $question_no++; 

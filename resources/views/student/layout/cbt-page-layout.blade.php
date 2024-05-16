@@ -611,26 +611,7 @@
 </div>
         </div>
 
-        <!-- <script>
-$(document).on('submit', '#answerForm', function(event){
-		event.preventDefault();
-		$('#action').attr('disabled','disabled');
-		var form_data = $(this).serialize();
-		$.ajax({
-			url:"",
-			method:"POST",
-			data:form_data,
-			success:function(data)
-			{
-				$('#answerForm')[0].reset();
-				$('#userModal').modal('hide');
-				$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
-				$('#action').attr('disabled', false);
-				userdataTable.ajax.reload();
-			}
-		})
-	});
-</script> -->
+       
 
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
