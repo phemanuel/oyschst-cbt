@@ -972,35 +972,7 @@ class ExamController extends Controller
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
-    }
-
-    // public function checkPage(Request $request , $id)
-    // {
-    //     $pageNo = $request->get('pageNo');
-    //     //$q1 = $request->get('q1'); session::put('q1', $q1);        
-
-    //     if ($pageNo == 1) {
-    //         return $this->page1Answer($request, $id); // Pass the $request object to page1Answer
-    //     } elseif ($pageNo == 2) {
-    //         return $this->page2Answer($request, $id);
-    //     } elseif ($pageNo == 3) {
-    //         return $this->page3Answer($request, $id);
-    //     } elseif ($pageNo == 4) {
-    //         return $this->page4Answer($request, $id);
-    //     } elseif ($pageNo == 5) {
-    //         return $this->page5Answer($request, $id);
-    //     } elseif ($pageNo == 6) {
-    //         return $this->page2Answer($request, $id); // This should probably be page6Answer
-    //     } elseif ($pageNo == 7) {
-    //         return $this->page7Answer($request, $id);
-    //     } elseif ($pageNo == 8) {
-    //         return $this->page8Answer($request, $id);
-    //     } elseif ($pageNo == 9) {
-    //         return $this->page9Answer($request, $id);
-    //     } elseif ($pageNo == 10) {
-    //         return $this->page10Answer($request, $id);
-    //     }
-    // }    
+    }    
 
     public function updateAnswersForPage(Request $request, $id, $pageNo)
     {
@@ -1042,6 +1014,238 @@ class ExamController extends Controller
 
         // Redirect back to the corresponding page
         return call_user_func_array([$this, "cbtPage{$pageNo}"], ['id' => $id]);
+
+    }
+
+    public function cbtSubmit($id)
+    {
+        $studentData = StudentAdmission::where('id' , $id)->first();
+        $examSetting = ExamSetting::first();
+
+        //----Retrieve student answers ----------------
+        $studentQstData = CbtEvaluation::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        //----Retrieve student answers ----------------
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+        //---Retrieve Correct Answers -------------------
+        $correctAnswer = CbtEvaluation1::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+            //----Total no of questions
+            $noOfQuestions = $examSetting->no_of_qst;
+
+            //Calculate score
+            If ($noOfQuestions == 10){
+                return $this->calculateAnswer10($id);
+                //--Save results
+                $studentQstData->update([
+                    'examstatus' => 2,
+                    'score' => $correctAnswer,
+                ]);
+            }
+            elseif ($noOfQuestions == 20){
+                return $this->calculateAnswer20($id);
+                //--Save results
+                $studentQstData->update([
+                    'examstatus' => 2,
+                    'score' => $correctAnswer,
+                ]);
+            }
+
+    }
+
+    public function calculateAnswer10($id)
+    {
+        $studentData = StudentAdmission::where('id' , $id)->first();
+        $examSetting = ExamSetting::first();
+
+        //----Retrieve student answers ----------------
+        $studentQstData = CbtEvaluation::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        //----Retrieve student answers ----------------
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+        //---Retrieve Correct Answers -------------------
+        $correctAnswer = CbtEvaluation1::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        $correctCount = 0;
+        //Calculate score
+        if($studentAnswer->OK1 == correctAnswer->OK1) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK2 == correctAnswer->OK2) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK3 == correctAnswer->OK3) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK4 == correctAnswer->OK4) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK5 == correctAnswer->OK5) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK6 == correctAnswer->OK6) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK7 == correctAnswer->OK7) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK8 == correctAnswer->OK8) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK9 == correctAnswer->OK9) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK10 == correctAnswer->OK10) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+    }
+
+    public function calculateAnswer20($id)
+    {
+
+        $studentData = StudentAdmission::where('id' , $id)->first();
+        $examSetting = ExamSetting::first();
+
+        //----Retrieve student answers ----------------
+        $studentQstData = CbtEvaluation::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        //----Retrieve student answers ----------------
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+        //---Retrieve Correct Answers -------------------
+        $correctAnswer = CbtEvaluation1::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        $correctCount = 0;
+        //Calculate score
+        if($studentAnswer->OK1 == $correctAnswer->OK1) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK2 == $correctAnswer->OK2) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK3 == $correctAnswer->OK3) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK4 == $correctAnswer->OK4) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK5 == $correctAnswer->OK5) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK6 == $correctAnswer->OK6) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK7 == $correctAnswer->OK7) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK8 == $correctAnswer->OK8) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK9 == $correctAnswer->OK9) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK10 == $correctAnswer->OK10) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK11 == $correctAnswer->OK11) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK12 == $correctAnswer->OK12) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK13 == $correctAnswer->OK13) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK14 == $correctAnswer->OK14) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK15 == $correctAnswer->OK15) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK16 == $correctAnswer->OK16) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK17 == $correctAnswer->OK17) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK18 == $correctAnswer->OK18) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK19 == $correctAnswer->OK19) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+        if($studentAnswer->OK20 == $correctAnswer->OK20) {$correctCount = $correctCount + 1;}else{$correctCount = $correctCount;}
+
+        //--Save results
+        $studentQstData->update([
+            'examstatus' => 2,
+            'correct' => $correctCount,
+            'wrong' => $examSetting->no_of_qst - $correctCount,
+        ]);
+
+        return redirect()->route('cbt-result', ['admission_no' => $studentData->admission_no]);
+        
+    }
+
+    public function cbtResult($admission_no)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $examSetting = ExamSetting::first(); 
+
+        $studentData = StudentAdmission::where('admission_no', $admission_no)
+                        //->where('department', $department)
+                        ->first();
+
+        $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $examSetting->department)
+                        ->where('level', $examSetting->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+
+        $examStatus = $cbtEvaluation->examstatus;
+        $pageNo = $cbtEvaluation->pageno;
+        $score = $cbtEvaluation->correct;              
+
+        return view('student.pages.cbt-result', compact('softwareVersion', 'collegeSetup', 'studentData',
+        'examSetting','pageNo','score'))->with('success', 'You have successfully completed the test.');
+    }
+
+    public function studentLogout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+
 
     }
 

@@ -45,6 +45,7 @@ Route::get('/', function () {
     Route::get('admin', [AuthController::class, 'adminLogin'])->name('admin-login');
     Route::post('admin', [AuthController::class, 'adminLoginAction'])->name('admin-login.action');
 
+    //--Student routes
     Route::group(['middleware' => ['student.auth']], function () {
        //-----Dashboard routes-----
     Route::get('user-dashboard/{admission_no}', [DashboardController::class, 'index'])
@@ -77,28 +78,25 @@ Route::get('/', function () {
     ->name('cbt-page10');
     Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
     ->name('cbt-continue');
-    Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
-    ->name('cbt-submit');
+    //----Update Answers---
     Route::post('/update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
     ->name('updateAnswers');
-    //----Update Answers---
-    Route::post('update-answer/{id}', [ExamController::class, 'updateAnswer'])
-    ->name('update-answer');
-    Route::post('check-page/{id}', [ExamController::class, 'checkPage'])
-    ->name('check-page');
+    //--Submit Test
+    Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
+    ->name('cbt-submit');
+    //---Display result
+    Route::get('cbt/{admission_no}/result', [ExamController::class, 'cbtResult'])
+    ->name('cbt-result');   
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
-    Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');
+    Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');    
+    // Logout route
+    Route::get('student-logout', [AuthController::class, 'studentLogout'])->name('student-logout'); 
     });
-    
-     
 
-    //----Auth routes--
-
-    Route::middleware('auth')->group(function () {
-    
+    //----Admin routes--
+    Route::middleware('auth')->group(function () {    
         // Logout route
-        Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-
+        Route::get('logout', [AuthController::class, 'logout'])->name('logout');  
         //Admin Dashboard----
         Route::get('admin-dashboard', [DashboardController::class, 'indexAdmin'])
         ->name('admin-dashboard');   

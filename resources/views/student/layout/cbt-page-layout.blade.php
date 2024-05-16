@@ -364,7 +364,7 @@
                       <td><input type="submit" name="option{{ $questionNo['q6'] }}A" id="option{{ $questionNo['q6'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q6'] }}B" id="option{{ $questionNo['q6'] }}B" value="B"  class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q6'] }}C" id="option{{ $questionNo['q6'] }}C" value="C"  class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q6'] }}D" id="option{{ $questionNo['q6'] }}D" value="A"  class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q6'] }}D" id="option{{ $questionNo['q6'] }}D" value="D"  class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
                         <p><span class="bold-font-text">Selected Answer:</span> 
                         <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a6']} }}</span>
@@ -395,8 +395,8 @@
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q7'] }}A" id="option{{ $questionNo['q7'] }}A" value="A"  class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q7'] }}B" id="option{{ $questionNo['q7'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q7'] }}C" id="option{{ $questionNo['q7'] }}C" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q7'] }}D" id="option{{ $questionNo['q7'] }}D" value="A" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q7'] }}C" id="option{{ $questionNo['q7'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                        <input type="submit" name="option{{ $questionNo['q7'] }}D" id="option{{ $questionNo['q7'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
                         <p><span class="bold-font-text">Selected Answer:</span> 
                         <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a7']} }}</span>
