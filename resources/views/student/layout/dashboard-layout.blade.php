@@ -86,16 +86,7 @@
           <li class="nav-item nav-search">
             <div class="nav-link">
               <div class="search-field d-none d-md-block">
-                <form class="d-flex align-items-stretch h-100" action="#">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="fas fa-search"></i>                                          
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Search your projects ...">
-                  </div>
-                </form>
+                
               </div>
             </div>
           </li>

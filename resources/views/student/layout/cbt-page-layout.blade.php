@@ -26,6 +26,12 @@
     color: white;
 }
 
+.bold-text-min {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
     .bold-text-font {
     font-size: 13px;
     font-weight: bold;  
@@ -106,6 +112,11 @@
             <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
             <strong><p class="bold-text-font">{{$examSetting->no_of_qst}}qst | {{$examSetting->duration}}mins</p></strong>            
             </a>             
+          </li>  
+          <li class="nav-item dropdown">            
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
+            <strong><div id="timer"><p class="bold-text-min">Time Left: </p><span class="bold-text-min" id="countdown"></span></div></strong>            
+            </a>             
           </li>    
           
         </ul>
@@ -120,21 +131,8 @@
               </div>
             </a>
           </li>
-          <li class="nav-item nav-search">
-            <div class="nav-link">
-              <div class="search-field d-none d-md-block">
-                <form class="d-flex align-items-stretch h-100" action="#">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="fas fa-search"></i>                                          
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Search your projects ...">
-                  </div>
-                </form>
-              </div>
-            </div>
+          <li>                    
+             
           </li>
           <li class="nav-item">
             <!-- <a class="nav-link">
@@ -627,7 +625,37 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller --> 
+  <script>
+        // Retrieve the duration set by the admin from the server-side
+        const duration = {{$studentMin}}; // Duration in minutes
 
+        // Calculate the end time of the test
+        const endTime = new Date().getTime() + duration * 60 * 1000;
+
+        // Update the timer every second
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        function updateTimer() {
+            const currentTime = new Date().getTime();
+            const timeRemaining = endTime - currentTime;
+
+            // Check if the timer has expired
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                // Handle timer expiry (e.g., submit the test)
+                // You can call a function to submit the test here
+                alert('Time is up! Submit your test.');
+                return;
+            }
+
+            // Calculate minutes and seconds remaining
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            // Display the remaining time
+            document.getElementById('countdown').innerText = `${minutes}m ${seconds}s`;
+        }
+    </script>
 
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>

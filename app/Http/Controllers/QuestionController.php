@@ -185,6 +185,8 @@ class QuestionController extends Controller
         $question = $request->input('question');
         $answer = $request->input('answer');
         $currentQuestionNo = $request->input('currentQuestionNo');
+
+        $question = strip_tags($question);
         
         //---Keep Question and Answer data
         Session::put('question', $question);
@@ -241,7 +243,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => $question,
+                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
                 'answer' => $answer,
             ]);
 
@@ -280,7 +282,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => $question,
+                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
                 'answer' => $answer,
             ]);
             return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
@@ -322,7 +324,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => $question,
+                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
                 'answer' => $answer,
             ]);
 
@@ -361,7 +363,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => $question,
+                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
                 'answer' => $answer,
             ]);
             return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You are already at the first question.');

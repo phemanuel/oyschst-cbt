@@ -35,6 +35,12 @@
     font-size: 16px;
     font-weight: bold;
 }
+
+.bold-font-score {
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+}
   </style>
   	<style>
     /* Success Alert */
@@ -88,16 +94,7 @@
           <li class="nav-item nav-search">
             <div class="nav-link">
               <div class="search-field d-none d-md-block">
-                <form class="d-flex align-items-stretch h-100" action="#">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="fas fa-search"></i>                                          
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Search your projects ...">
-                  </div>
-                </form>
+                
               </div>
             </div>
           </li>
@@ -197,7 +194,7 @@
 													<label class="form-check-label">
 														
                               <td><p class="bold-font">Score</p></td>
-                              <td><p class="bold-font">{{$score}}</p></td>
+                              <td><p class="bold-font-score">{{$score}} out of {{$examSetting->no_of_qst}}</p></td>
                             
 													</label>
 												</div>
