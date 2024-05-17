@@ -185,13 +185,14 @@ class QuestionController extends Controller
         $question = $request->input('question');
         $answer = $request->input('answer');
         $currentQuestionNo = $request->input('currentQuestionNo');
+        $file = $request->input('file');
 
         $question = strip_tags($question);
         
         //---Keep Question and Answer data
         Session::put('question', $question);
         Session::put('answer', $answer);
-        Session::put('currentQuestionNo', $currentQuestionNo);
+        Session::put('currentQuestionNo', $currentQuestionNo);        
     
         if ($action == 'previous') {
             // Call the function to handle previous action
@@ -199,13 +200,61 @@ class QuestionController extends Controller
         } elseif ($action == 'next') {
             // Call the function to handle next action
             return $this->questionNext($id);
+        } elseif ($action == 'upload') {
+            //---Upload question image
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageName = now() . "_" . $currentQuestionNo . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('questions'), $imageName);  
+                Session::put('imageName', $imageName);                           
+            }
+            // Call the function to handle next action
+            return $this->uploadQuestionImage($id);
         } else {
             // Handle other actions or default behavior
             // For example, return a response indicating an invalid action
             return response()->json(['error' => 'Invalid action'], 400);
         }
     }
-    
+
+    public function uploadQuestionImage($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $questionSetting = QuestionSetting::where('id', $id)->first();       
+        
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $session1 = $questionSetting->session1;
+        $no_of_qst = $questionSetting->no_of_qst;
+        $level = $questionSetting->level;        
+        $currentQuestionNo = Session::get('currentQuestionNo');  
+        $imageName = Session::get('imageName');      
+        $course = $questionSetting->course;
+
+        //----Update Current Question --------------------------------
+        $questionUpdate = Question::where('exam_type', $exam_type)
+        ->where('exam_category', $exam_category)
+        ->where('exam_mode', $exam_mode)
+        ->where('department', $department)
+        ->where('level', $level)
+        ->where('session1', $session1)
+        ->where('course', $course)
+        ->where('no_of_qst', $no_of_qst)
+        ->where('question_no', $currentQuestionNo)
+        ->first();         
+
+        $questionUpdate->update([
+            'question_type' => "text-image",
+            'graphic' => $imageName,
+        ]);
+        
+        return redirect()->route('question-view', ['questionId' => $id])
+        ->with('success', 'Image added successfully.');
+    }  
 
 
     public function questionNext($id)

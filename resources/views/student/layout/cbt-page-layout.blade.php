@@ -87,7 +87,16 @@
       </div>
       <div class="navbar-menu-wrapper d-flex flex-grow">
         <ul class="navbar-nav navbar-nav-left collapse navbar-collapse" id="horizontal-top-example">
-          
+        <li class="nav-item nav-profile">
+            <a class="nav-link">
+              <div class="nav-profile-text">              
+              </div>
+              <div class="nav-profile-img">
+                <img src="{{asset($collegeSetup->avatar)}}" alt="image" class="img-xs rounded-circle ml-3">
+                <span class="availability-status online"></span>             
+              </div>
+            </a>
+          </li>
           <li class="nav-item dropdown">            
             <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
             <strong><p class="bold-text">Oyo State College of Health Science and Technology</p></strong>
@@ -115,36 +124,21 @@
           </li>  
           <li class="nav-item dropdown">            
             <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
-            <strong><div id="timer"><p class="bold-text-min">Time Left: </p><span class="bold-text-min" id="countdown"></span></div></strong>            
+            <!-- <strong><div id="timer"><p class="bold-text-min">Time Left: </p><span class="bold-text-min" id="countdown"></span></div></strong>             -->
             </a>             
           </li>    
           
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item nav-profile">
-            <a class="nav-link">
-              <div class="nav-profile-text">              
-              </div>
-              <div class="nav-profile-img">
-                <img src="{{asset($collegeSetup->avatar)}}" alt="image" class="img-xs rounded-circle ml-3">
-                <span class="availability-status online"></span>             
-              </div>
-            </a>
-          </li>
-          <li>                    
-             
-          </li>
-          <li class="nav-item">
-            <!-- <a class="nav-link">
-              <i class="fas fa-power-off font-weight-bold icon-sm"></i>
-            </a> -->
-          </li>
+          
+          
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center ml-auto" type="button" data-toggle="collapse" data-target="#horizontal-top-example">
           <span class="fa fa-bars"></span>
         </button>
       </div>
     </nav>
+    <br><br>
     <div class="container-fluid page-body-wrapper">
       <div class="main-panel">
         <div class="content-wrapper">
@@ -625,9 +619,9 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller --> 
-  <script>
+  <!-- <script>
         // Retrieve the duration set by the admin from the server-side
-        const duration = {{$studentMin}}; // Duration in minutes
+        const duration = 20; // Duration in minutes
 
         // Calculate the end time of the test
         const endTime = new Date().getTime() + duration * 60 * 1000;
@@ -655,7 +649,7 @@
             // Display the remaining time
             document.getElementById('countdown').innerText = `${minutes}m ${seconds}s`;
         }
-    </script>
+    </script> -->
 
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>

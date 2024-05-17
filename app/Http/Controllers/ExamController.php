@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\CbtEvaluation;
 use App\Models\CbtEvaluation1;
 use App\Models\CbtEvaluation2;
+use Carbon\Carbon;
 
 
 
@@ -347,16 +348,11 @@ class ExamController extends Controller
             'a1' => 1, 'a2' => 2, 'a3' => 3, 'a4' => 4, 'a5' => 5, 'a6' => 6, 'a7' => 7, 'a8' => 8,
             'a9' => 9, 'a10' => 10
         ];
-        $pageNo = 1;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        $pageNo = 1;      
+    
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
 
@@ -424,15 +420,10 @@ class ExamController extends Controller
             'a9' => 19, 'a10' => 20
         ];
         $pageNo = 2;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }    
 
@@ -500,15 +491,10 @@ class ExamController extends Controller
             'a9' => 29, 'a10' => 30
         ];
         $pageNo = 3;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }    
 
@@ -576,15 +562,10 @@ class ExamController extends Controller
             'a9' => 49, 'a10' => 50
         ];
         $pageNo = 4;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
     //----Page5-----
@@ -651,15 +632,10 @@ class ExamController extends Controller
             'a9' => 49, 'a10' => 50
         ];
         $pageNo = 5;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
     //--Page 6
@@ -726,15 +702,10 @@ class ExamController extends Controller
             'a9' => 59, 'a10' => 60
         ];
         $pageNo = 6;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
     //--Page 7
@@ -801,15 +772,10 @@ class ExamController extends Controller
             'a9' => 69, 'a10' => 70
         ];
         $pageNo = 7;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
     
@@ -877,15 +843,10 @@ class ExamController extends Controller
             'a9' => 79, 'a10' => 80
         ];
         $pageNo = 8;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
 
@@ -953,15 +914,10 @@ class ExamController extends Controller
             'a9' => 89, 'a10' => 90
         ];
         $pageNo = 9;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }
 
@@ -1029,15 +985,10 @@ class ExamController extends Controller
             'a9' => 99, 'a10' => 100
         ];
         $pageNo = 10;
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
+        
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
     
     }    
 
