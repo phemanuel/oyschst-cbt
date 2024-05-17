@@ -179,45 +179,40 @@ class QuestionController extends Controller
         ,'question','questionSetting'));
     }
 
-    public function questionSave(Request $request , $id)
+    public function questionSave(Request $request, $id)
     {
-        $action = $request->input('action');
+        $request->validate([
+            'action' => 'required|string|in:previous,next,upload',
+            'question' => 'nullable|string',
+            'answer' => 'nullable|string',
+            'currentQuestionNo' => 'required|integer',                
+        ]);       
+
+        $action = $request->input('action');     
         $question = $request->input('question');
         $answer = $request->input('answer');
         $currentQuestionNo = $request->input('currentQuestionNo');
-        $file = $request->input('file');
-
+        // Strip HTML tags from the question input
         $question = strip_tags($question);
-        
-        //---Keep Question and Answer data
+
+        // Store question and answer data in the session
         Session::put('question', $question);
         Session::put('answer', $answer);
         Session::put('currentQuestionNo', $currentQuestionNo);        
-    
-        if ($action == 'previous') {
-            // Call the function to handle previous action
+
+        if ($action === 'previous') {            
+            // Handle the previous action
             return $this->questionPrevious($id);
-        } elseif ($action == 'next') {
-            // Call the function to handle next action
+        } elseif ($action === 'next') {            
+            // Handle the next action
             return $this->questionNext($id);
-        } elseif ($action == 'upload') {
-            //---Upload question image
-            if ($request->hasFile('file')) {
-                $image = $request->file('file');
-                $imageName = now() . "_" . $currentQuestionNo . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('questions'), $imageName);  
-                Session::put('imageName', $imageName);                           
-            }
-            // Call the function to handle next action
-            return $this->uploadQuestionImage($id);
-        } else {
-            // Handle other actions or default behavior
-            // For example, return a response indicating an invalid action
+        }else {
+            // Handle invalid action
             return response()->json(['error' => 'Invalid action'], 400);
         }
     }
 
-    public function uploadQuestionImage($id)
+    public function uploadQuestionImage(Request $request, $id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
@@ -230,10 +225,9 @@ class QuestionController extends Controller
         $department = $questionSetting->department;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
-        $level = $questionSetting->level;        
-        $currentQuestionNo = Session::get('currentQuestionNo');  
-        $imageName = Session::get('imageName');      
+        $level = $questionSetting->level;
         $course = $questionSetting->course;
+        $currentQuestionNo = $request->input('currentQuestionNo');
 
         //----Update Current Question --------------------------------
         $questionUpdate = Question::where('exam_type', $exam_type)
@@ -245,15 +239,27 @@ class QuestionController extends Controller
         ->where('course', $course)
         ->where('no_of_qst', $no_of_qst)
         ->where('question_no', $currentQuestionNo)
-        ->first();         
+        ->first();
 
-        $questionUpdate->update([
-            'question_type' => "text-image",
-            'graphic' => $imageName,
-        ]);
         
-        return redirect()->route('question-view', ['questionId' => $id])
-        ->with('success', 'Image added successfully.');
+        //Handle file upload
+        if ($request->hasFile('file')) {
+            $image = $request->file('file');
+            $imageName = now()->timestamp . "_" . $currentQuestionNo . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('questions'), $imageName);            
+
+            $questionUpdate->update([
+                'question_type' => "text-image",
+                'graphic' => $imageName,
+            ]);
+            
+            return redirect()->route('question-view', ['questionId' => $id])
+            ->with('success', 'Image added successfully.');
+        } else {
+            return redirect()->route('question-view', ['questionId' => $id])
+            ->with('error', 'please select a file to upload.');
+        }
+
     }  
 
 

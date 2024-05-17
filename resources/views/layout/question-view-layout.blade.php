@@ -261,13 +261,12 @@
             <!-- /.box-header -->
             <hr>
             <div class="box-body pad">
-              <form action="{{ route('question-save', ['id' => $questionSetting->id]) }}"
-              method="post">
+              <form action="{{ route('question-save', ['id' => $questionSetting->id]) }}" method="post">
               @csrf
 
               @if($question->question_type == 'text-image')
               <strong><p>Image:</p></strong>
-              <img src="{{asset('questions/' . $question->graphic)}}" alt="questionImage" width="200" height="150">
+              <img src="{{asset('questions/' . $question->graphic)}}" alt="questionImage" width="1200" height="250">
               @else
 
               @endif
@@ -288,32 +287,8 @@
                     Add Image</button></td>
   </tr>
                                            </table>
-</body>
-</html>
+                  
 
-                    <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel-2">Add question Image</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <label for="file">Image File (jpeg,jpg) format</label>
-                          <input type="file" name="file" class="form-control">
-                        </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-success" name="action"  value="upload">Upload</button>
-                          <button type="button" class="btn btn-light" data-dismiss="modal" value="Cancel">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Modal Ends -->
-</body>
-</html>
                   <input type="hidden" name="currentQuestionNo" value="{{$question->question_no}}">
               </form>
             </div>
@@ -328,6 +303,31 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+  <form action="{{route('question-image-upload', ['id' => $questionSetting->id])}}" method="post" enctype="multipart/form-data">
+    @csrf
+  <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel-2">Add question Image</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <label for="file">Image File (jpeg,jpg) format</label>
+                          <input type="file" name="file" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-success"  value="upload">Upload</button>
+                          <button type="button" class="btn btn-light" data-dismiss="modal" value="Cancel">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Modal Ends -->
+                  <input type="hidden" name="currentQuestionNo" value="{{$question->question_no}}">
+  </form>
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> {{$softwareVersion->version}}

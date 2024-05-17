@@ -177,11 +177,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question1->question_type == 'text-image')
+                      <tr>                        
+                      <img src="{{asset('questions/' . $question1->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @else
                       <tr>                        
                         <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
                         <td></td>
                         <td></td>
                       </tr>
+                      @endif
                       <tr>
                       <td width="82%">
                       <input type="submit" name="option{{ $questionNo['q1'] }}A" id="option{{ $questionNo['q1'] }}B" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -211,11 +222,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question2->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question2->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question2->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question2->question !!}</p></td>
                         <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question2->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q2'] }}A" id="option{{ $questionNo['q2'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q2'] }}B" id="option{{ $questionNo['q2'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -245,11 +267,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question3->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question3->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question3->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question3->question !!}</p></td>
                         <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question3->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td width="82%"><input type="submit" name="option{{ $questionNo['q3'] }}A" id="option{{ $questionNo['q3'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q3'] }}B" id="option{{ $questionNo['q3'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -279,11 +312,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question4->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question4->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question4->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question4->question !!}</p></td>
                         <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question4->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q4'] }}A" id="option{{ $questionNo['q4'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q4'] }}B" id="option{{ $questionNo['q4'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -314,11 +358,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question5->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question5->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question5->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question5->question !!}</p></td>
                         <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question5->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q5'] }}A" id="option{{ $questionNo['q5'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q5'] }}B" id="option{{ $questionNo['q5'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -348,10 +403,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question6->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question6->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question6->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question6->question !!}</p></td>
+                        <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question6->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q6'] }}A" id="option{{ $questionNo['q6'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q6'] }}B" id="option{{ $questionNo['q6'] }}B" value="B"  class="btn btn-dark"/> &nbsp; &nbsp;
@@ -380,10 +447,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question7->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question7->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question7->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question7->question !!}</p></td>
+                        <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question7->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q7'] }}A" id="option{{ $questionNo['q7'] }}A" value="A"  class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q7'] }}B" id="option{{ $questionNo['q7'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -412,10 +491,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question8->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question8->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question8->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question8->question !!}</p></td>
+                        <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question8->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q8'] }}A" id="option{{ $questionNo['q8'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q8'] }}B" id="option{{ $questionNo['q8'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -444,10 +535,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question9->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question9->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question9->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question9->question !!}</p></td>
+                        <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question9->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q9'] }}A" id="option{{ $questionNo['q9'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q9'] }}B" id="option{{ $questionNo['q9'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
@@ -476,10 +579,22 @@
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
+                    @if($question10->question_type == 'text-image')
                       <tr>                        
-                        <td><p class="bold-font-qst">{!!$question10->question!!} </p></td>
+                      <img src="{{asset('questions/' . $question10->graphic)}}" alt="questionImage" width="1200" height="250">                        
+                      </tr>
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $question10->question !!}</p></td>
+                        <td></td>
                         <td></td>
                       </tr>
+                      @else
+                      <tr>                        
+                        <td><p class="bold-font-qst">{!! $question10->question !!}</p></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      @endif
                       <tr>
                       <td><input type="submit" name="option{{ $questionNo['q10'] }}A" id="option{{ $questionNo['q10'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q10'] }}B" id="option{{ $questionNo['q10'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;

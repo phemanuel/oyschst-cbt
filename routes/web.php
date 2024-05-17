@@ -197,6 +197,8 @@ Route::get('/', function () {
         ->name('question-save');
         Route::post('question-setting-search', [QuestionController::class, 'questionSettingSearch'])
         ->name('question-setting-search');
+        Route::post('question-image-upload/{id}', [QuestionController::class, 'uploadQuestionImage'])
+        ->name('question-image-upload');
 
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
