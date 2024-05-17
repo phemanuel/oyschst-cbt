@@ -24,6 +24,7 @@ use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use App\Models\CbtEvaluation;
 
 class StudentController extends Controller
 {
@@ -110,12 +111,18 @@ class StudentController extends Controller
         $softwareVersion = SoftwareVersion::first();
         $collegeSetup = CollegeSetup::first();
         $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->get();
+        $checkExamData = CbtEvaluation::where('studentno', $admission_no)->get();
+        //---Check if student is found.
         if(!$checkAdmission){
             return redirect()->route('login-status')->with('error', 'Invalid Reg No/Matric No.');
         }
+        //---Check if student has exam record
+        if(!$checkExamData){
+            return redirect()->route('login-status')->with('error', 'Exam record not found.');
+        }
 
         return view('dashboard.student-login-status-view', compact('softwareVersion','checkAdmission', 
-        'dept', 'collegeSetup'));
+        'dept', 'collegeSetup','checkExamData'));
         
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -134,19 +141,35 @@ class StudentController extends Controller
         try {
             // Validate the request data as needed
             $validatedData = $request->validate([                
-                'login_status' => 'required|integer',                
+                'login_status' => 'required|integer',  
+                'exam_status' => 'required|integer',              
             ]);
 
             // Retrieve the user skill based on the $id
             $changeStatus = StudentAdmission::findOrFail($id);
+            $examSetting = ExamSetting::first();
+            $admission_no = $changeStatus->admission_no;
+            $examStatus = $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion' , $examSetting->no_of_qst)
+            ->first();
 
             // Update the user skill attributes based on the request data
             $changeStatus->update([
                 'login_status' => $validatedData['login_status'],                
             ]);
+            $examStatus->update([
+                'examstatus' => $validatedData['exam_status'],                
+            ]);
 
             // Redirect to the user's skill list or another appropriate page
-            return redirect()->route('login-status')->with('success', 'Login Status updated successfully.');
+            return redirect()->route('login-status')->with('success', 'Login/Exam Status updated successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-update course: ' . $e->getMessage();
             Log::error($errorMessage);

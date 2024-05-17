@@ -27,7 +27,7 @@
 }
 
 .bold-text-min {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
 }
@@ -123,8 +123,10 @@
             </a>             
           </li>  
           <li class="nav-item dropdown">            
-            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
-            <!-- <strong><div id="timer"><p class="bold-text-min">Time Left: </p><span class="bold-text-min" id="countdown"></span></div></strong>             -->
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="true">           
+            <strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong>
+</div>
+</strong>            
             </a>             
           </li>    
           
@@ -734,37 +736,52 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller --> 
-  <!-- <script>
-        // Retrieve the duration set by the admin from the server-side
-        const duration = 20; // Duration in minutes
+    <!-- Include your JavaScript here -->
+    <script>
+        let duration = {{ $studentMin }}; // Duration in seconds
+        let remainingTime = duration;
 
-        // Calculate the end time of the test
-        const endTime = new Date().getTime() + duration * 60 * 1000;
-
-        // Update the timer every second
-        const timerInterval = setInterval(updateTimer, 1000);
-
-        function updateTimer() {
-            const currentTime = new Date().getTime();
-            const timeRemaining = endTime - currentTime;
-
-            // Check if the timer has expired
-            if (timeRemaining <= 0) {
-                clearInterval(timerInterval);
-                // Handle timer expiry (e.g., submit the test)
-                // You can call a function to submit the test here
-                alert('Time is up! Submit your test.');
-                return;
-            }
-
-            // Calculate minutes and seconds remaining
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-            // Display the remaining time
-            document.getElementById('countdown').innerText = `${minutes}m ${seconds}s`;
+        function startTimer() {
+            const interval = setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    if (remainingTime % 60 === 0) {
+                        saveRemainingTime(Math.floor(remainingTime / 60));
+                    }
+                    updateTimerDisplay(remainingTime);
+                } else {
+                    clearInterval(interval);
+                    alert("Time is up!");
+                    // Redirect the user after the alert is dismissed
+                    window.location.href = "{{ route('cbt-submit', ['id' => $studentData->id]) }}";
+                }
+            }, 1000);
         }
-    </script> -->
+
+        function saveRemainingTime(remainingMinutes) {
+            fetch('/update-remaining-time/{{ $studentData->id }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ remaining_time: remainingMinutes })
+            }).then(response => response.json())
+              .then(data => {
+                  if (!data.success) {
+                      console.error('Failed to save remaining time');
+                  }
+              });
+        }
+
+        function updateTimerDisplay(remainingTime) {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }
+
+        startTimer();
+    </script>
 
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>

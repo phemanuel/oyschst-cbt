@@ -325,9 +325,13 @@
                   <label for="exampleInputEmail1">Result Check: </label>
                   <label for="exampleInputEmail1">0(Do not display result) | 1(Display Result)</label>
                   <select name="check_result" id="" class="form-control">
-                    <option value="{{$examSetting->check_result}}">{{$examSetting->check_result}}</option>
-                    <option value="1">1</option>
-                    <option value="0">0</option>
+                    @if($examSetting->check_result == 1)
+                    <option value="{{$examSetting->check_result}}">YES</option>
+                    @else
+                    <option value="{{$examSetting->check_result}}">NO</option>
+                    @endif
+                    <option value="1">YES</option>
+                    <option value="0">NO</option>
                   </select>
                 </div>  
                 

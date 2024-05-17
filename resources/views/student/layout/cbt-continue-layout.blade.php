@@ -180,7 +180,19 @@
 													</label>
 												</div>
                         </tr>												
-											</li>                      
+											</li>      
+                      <li>
+                      <tr>
+												<div class="form-check">
+													<label class="form-check-label">
+														
+                              <td><p class="bold-font">Time Left</p></td>
+                              <td><p class="bold-font">{{$studentMin}} Mins</p></td>
+                            
+													</label>
+												</div>
+                        </tr>												
+											</li>                     
                     </table>
 										</ul> 
                     <form action="" method="post">

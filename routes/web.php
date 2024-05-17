@@ -86,7 +86,9 @@ Route::get('/', function () {
     ->name('cbt-submit');
     //---Display result
     Route::get('cbt/{admission_no}/result', [ExamController::class, 'cbtResult'])
-    ->name('cbt-result');   
+    ->name('cbt-result'); 
+    Route::post('/update-remaining-time/{id}', [ExamController::class, 'updateRemainingTime'])
+    ->name('exam.updateRemainingTime');  
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');    
     // Logout route
@@ -198,6 +200,8 @@ Route::get('/', function () {
         Route::post('question-setting-search', [QuestionController::class, 'questionSettingSearch'])
         ->name('question-setting-search');
         Route::post('question-image-upload/{id}', [QuestionController::class, 'uploadQuestionImage'])
+        ->name('question-image-upload');
+        Route::get('question-image-upload/{id}', [QuestionController::class, 'uploadQuestionImage'])
         ->name('question-image-upload');
 
         //---Questions Fill in the Gaps

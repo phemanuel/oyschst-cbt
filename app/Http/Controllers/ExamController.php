@@ -96,17 +96,11 @@ class ExamController extends Controller
                         ->first();
         $examStatus = $cbtEvaluation->examstatus;
         $pageNo = $cbtEvaluation->pageno;
+        $studentMin = $cbtEvaluation->minute / 60;
         If($examStatus == 2){
             return redirect()->back()->with('error', 'You have completed the computer based test.');
         } 
-
-        // When resuming the test, retrieve the start time from the database
-        $startTime = $cbtEvaluation->starttime;
-        // Calculate the elapsed time since the test started
-        $elapsedTime = now()->diffInSeconds($startTime);
-        // Calculate the remaining time based on the total duration and the elapsed time
-        $studentMin = $examSetting->duration * 60 - $elapsedTime;
-
+        
         return view('student.pages.cbt-continue', compact('softwareVersion', 'collegeSetup', 'studentData',
         'examSetting','pageNo','studentMin'));
     }
@@ -277,7 +271,7 @@ class ExamController extends Controller
 
             foreach ($randomizedQuestions as $index => $questionNumber) {
                 $field = 'OK' . ($index + 1); // Generate field name like A1, A2, A3, etc.
-                $student2->{$field} = "Nill";
+                $student2->{$field} = "";
             }
             // Save the changes in CbtEvaluation1 model
             $student2->save();
@@ -349,10 +343,10 @@ class ExamController extends Controller
             'a9' => 9, 'a10' => 10
         ];
         $pageNo = 1;      
-    
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
 
@@ -420,10 +414,10 @@ class ExamController extends Controller
             'a9' => 19, 'a10' => 20
         ];
         $pageNo = 2;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }    
 
@@ -491,10 +485,10 @@ class ExamController extends Controller
             'a9' => 29, 'a10' => 30
         ];
         $pageNo = 3;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }    
 
@@ -562,10 +556,10 @@ class ExamController extends Controller
             'a9' => 49, 'a10' => 50
         ];
         $pageNo = 4;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
     //----Page5-----
@@ -632,10 +626,10 @@ class ExamController extends Controller
             'a9' => 49, 'a10' => 50
         ];
         $pageNo = 5;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
     //--Page 6
@@ -702,10 +696,10 @@ class ExamController extends Controller
             'a9' => 59, 'a10' => 60
         ];
         $pageNo = 6;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
     //--Page 7
@@ -772,10 +766,10 @@ class ExamController extends Controller
             'a9' => 69, 'a10' => 70
         ];
         $pageNo = 7;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
     
@@ -843,10 +837,10 @@ class ExamController extends Controller
             'a9' => 79, 'a10' => 80
         ];
         $pageNo = 8;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
 
@@ -914,10 +908,10 @@ class ExamController extends Controller
             'a9' => 89, 'a10' => 90
         ];
         $pageNo = 9;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }
 
@@ -985,10 +979,10 @@ class ExamController extends Controller
             'a9' => 99, 'a10' => 100
         ];
         $pageNo = 10;
-        
+        $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo'));
+        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
     }    
 
@@ -1169,6 +1163,34 @@ class ExamController extends Controller
         return view('student.pages.cbt-result', compact('softwareVersion', 'collegeSetup', 'studentData',
         'examSetting','pageNo','score'))->with('success', 'You have successfully completed the test.');
     }
+
+    public function updateRemainingTime(Request $request, $id)
+    {
+        $remainingTime = $request->input('remaining_time');
+
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        $studentQstData = CbtEvaluation::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        if ($studentQstData) {            
+            $studentQstData->hour = ($remainingTime / 60);
+            $studentQstData->minute = $remainingTime;
+            $studentQstData->save();
+        }
+
+        return response()->json(['success' => true]);
+    }
+
 
     public function studentLogout(Request $request)
     {

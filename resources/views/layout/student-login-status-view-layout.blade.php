@@ -266,7 +266,16 @@
                 @error('login_status')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
-                
+                @endforeach
+                @foreach($checkExamData as $rs)
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Status</label>
+                  <input type="text" name="exam_status" class="form-control" value="{{$rs->examstatus}}">
+                </div>             
+                @error('exam_status')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                @endforeach
               </div>
              
               <!-- /.box-body -->
@@ -275,7 +284,7 @@
                 <button type="submit" class="btn btn-primary">Update</button>
               </div>
             </form>
-            @endforeach
+           
           </div>
           <!-- /.box -->
 

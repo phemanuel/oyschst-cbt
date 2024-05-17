@@ -208,11 +208,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Login Status        
+        Login/Exam Status        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Login Status</li>
+        <li class="active">Login/Exam Status</li>
       </ol>
     </section>
 
@@ -224,7 +224,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Change the login status of a student.</h3>           
+            <h3 class="box-title">Change the login/exam status of a student.</h3>           
               
             </div>
             @if(session('success'))
@@ -257,10 +257,11 @@
               </div>
             </form>
           </div>
-          <!-- /.box -->
+          <!-- /.box -->        
 
         </div>
         <!--/.col (left) -->
+        
         <!-- right column -->
         <div class="col-md-6">
           
