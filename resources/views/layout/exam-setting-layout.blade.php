@@ -279,6 +279,15 @@
                   </select>
                 </div>
                 <div class="form-group">
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <select name="course" id="" class="form-control">
+                  <option value="{{$examSetting->course}}" selected>{{$examSetting->course}}</option>
+                  @foreach($courseData as $rd)
+				<option value="{{$rd->course}}">{{$rd->course}}</option>
+				@endforeach
+                  </select>
+                </div>
+                <div class="form-group">
                   <label for="exampleInputEmail1">Semester</label>
                   <select name="semester" id="" class="form-control"> 
                   <option value="{{$examSetting->semester}}" selected>{{$examSetting->semester}}</option>                 
@@ -323,7 +332,7 @@
                 <hr>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Result Check: </label>
-                  <label for="exampleInputEmail1">0(Do not display result) | 1(Display Result)</label>
+                  <label for="exampleInputEmail1">No(Do not display result) | Yes(Display Result)</label>
                   <select name="check_result" id="" class="form-control">
                     @if($examSetting->check_result == 1)
                     <option value="{{$examSetting->check_result}}">YES</option>

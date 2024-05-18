@@ -7,6 +7,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('pageTitle')</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="{{asset('student/vendors/iconfonts/font-awesome/css/all.min.css')}}">
@@ -168,7 +169,7 @@
           
 
           <div class="row">
-          <form action="{{ route('updateAnswers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}" method="POST">
+          <form action="" method="POST">
               @csrf
           <!-- begin card -->
             <div class="col-12 grid-margin" id="question1">            
@@ -203,7 +204,8 @@
                         <input type="submit" name="option{{ $questionNo['q1'] }}D" id="option{{ $questionNo['q1'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
                         <p><span class="bold-font-text">Selected Answer:</span> 
-                        <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</span>
+                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</span> -->
+                        <span id="selectedOption" class="bold-font-ans"></span>
                         </p>
                         <input type="hidden" name="q1" id="questionNumber" value="{{ $questionNo['q1'] }}">
                         </td>
@@ -293,6 +295,7 @@
                         <hr>
                         <p><span class="bold-font-text">Selected Answer:</span> 
                         <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a3']} }}</span>
+                        
                         </p>
                         <input type="hidden" name="q3" id="questionNumber" value="{{ $questionNo['q3'] }}">                        
                         </td>
@@ -746,7 +749,7 @@
                 if (remainingTime > 0) {
                     remainingTime--;
                     if (remainingTime % 60 === 0) {
-                        saveRemainingTime(Math.floor(remainingTime / 60));
+                        saveRemainingTime(Math.floor(remainingTime));
                     }
                     updateTimerDisplay(remainingTime);
                 } else {
@@ -782,6 +785,56 @@
 
         startTimer();
     </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+  // Function to update the selected option
+  function updateSelectedOption(option) {
+        // Find the HTML element to display the selected option
+        var selectedOptionElement = document.getElementById('selectedOption');
+        
+        // Update the content of the HTML element with the selected option
+        selectedOptionElement.textContent = option;
+    }
+    // Assuming jQuery is included in your project
+    $(document).ready(function() {
+
+        $('input[type="submit"]').click(function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var optionName = $(this).attr('name');
+            var selectedOption = $(this).val(); 
+            console.log("OptionName:", optionName);
+            console.log("SelectedOption:", selectedOption);       
+
+            // Extract the question number from optionName
+            var number = optionName.match(/\d+/)[0];
+            console.log("Question number:", number);
+
+            // Send AJAX request
+            $.ajax({
+                url: "{{ route('update-answers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: {
+                    optionName: optionName,
+                    selectedOption: selectedOption,
+                    number: number
+                },
+                success: function(response) {
+                    // Update UI if needed
+                    console.log('Answer updated successfully');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating answer:', error);
+                }
+            });
+        });
+    });
+</script>
+
 
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>

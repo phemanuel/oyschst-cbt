@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\Courses;
 
 class QuestionController extends Controller
 {
@@ -55,8 +56,9 @@ class QuestionController extends Controller
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examType = ExamType::Paginate(10);
+        $courseData = Courses::orderBy('course')->get();
         return view('questions.question-upload-obj', compact('softwareVersion','collegeSetup','level',
-    'dept','acad_sessions', 'examType'));
+    'dept','acad_sessions', 'examType','courseData'));
 
     }
 

@@ -330,9 +330,14 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Course/Subject</label>
-                  <input type="text" name="course" class="form-control" value="{{old('course')}}">
-                </div>             
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <select name="course" id="" class="form-control">                  
+                  @foreach($courseData as $rd)
+                  <option value="{{$rd->course}}">{{$rd->course}}</option>
+                  @endforeach
+                  </select>
+                </div>   
+                <p><a href="{{route('college-setup')}}"><u> Create Subject/Course</u> </a></p>         
                 @error('course')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -482,9 +487,14 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Course/Subject</label>
-                  <input type="text" name="course" class="form-control" value="{{old('course')}}">
-                </div>             
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <select name="course" id="" class="form-control">                  
+                  @foreach($courseData as $rd)
+                  <option value="{{$rd->course}}">{{$rd->course}}</option>
+                  @endforeach
+                  </select>
+                </div>   
+                <p><a href="{{route('college-setup')}}"><u> Create Subject/Course</u> </a></p>         
                 @error('course')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror

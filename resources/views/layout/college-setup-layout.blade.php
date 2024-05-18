@@ -329,7 +329,7 @@
                 <!-- Display the available departments   -->
                 <table class="table table-striped">
                       <tr>           
-                      <th></th> 
+                      <th>Sn</th> 
                         <th>Class/Level</th>                        
                         <th>Created On</th> 
                         <th>Actions</th>                      
@@ -396,7 +396,7 @@
                 <!-- Display the available departments   -->
                 <table class="table table-striped">
                       <tr>           
-                      <th></th> 
+                      <th>Sn</th> 
                         <th>Programme</th>                        
                         <th>Created On</th>  
                         <th>Actions</th>                     
@@ -425,9 +425,70 @@
             </form>
           </div>
           <!-- /.box -->
+          <div class="box box-success">
+            <div class="box-header with-border">
+            <h3 class="box-title">Add Subject/Course.</h3>           
+              
+            </div>
+            @if(session('success-subject'))
+						<div class="alert alert-success">
+							{{ session('success-subject') }}
+						</div>
+          @elseif(session('error-subject'))
+						<div class="alert alert-danger">
+							{{ session('error-subject') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('add-subject.action')}}" method="post">
+              @csrf              
+              <div class="box-body">              
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <input type="text" name="subject" class="form-control" value="{{old('subject')}}">
+                </div>             
+                @error('subject')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
+                <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>                     
+                <!-- Display the available departments   -->
+                <table class="table table-striped">
+                      <tr>           
+                      <th>Sn</th> 
+                        <th>Subject/Course</th>                        
+                        <th>Created On</th> 
+                        <th>Actions</th>                      
+                      </tr>
 
+                      @if ($courseData->count() > 0)
+			@foreach ($courseData as $key => $rt)
+                      <tr> 
+                        <td>{{$key +1}}</td>                         
+                        <td>{{$rt->course}}</td>                        
+                        <td>{{$rt->created_at}}</td>
+                        <td><a class="label label-danger" href="{{route('delete-subject.action', ['id' => $rt->id])}}">Delete</a> </td>                        
+                      </tr>  
+                      @endforeach
+		@else
+		<tr>
+			<td colspan="8">Subject/Course not available.</td>
+		</tr>
+		@endif                                   
+                    </table>
+                    {{ $courseData->links() }}
+              </div>
+              <!-- /.box-body -->
+
+              
+            </form>
+          </div>
+          <!-- /.box -->
         </div>
         <!--/.col (left) -->
+        
         <!-- right column -->
         <div class="col-md-6">
           

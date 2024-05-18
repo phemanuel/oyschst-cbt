@@ -290,7 +290,11 @@
                     <td>{{ $rs->exam_date }}</td>
                     <td>{{ $rs->no_of_qst }}</td>
                     <td>{{ $rs->duration }}</td>
-                    <td>{{ $rs->check_result}}</td>
+                    @if($rs->check_result == 1)
+                    <td>YES</td>
+                    @else
+                    <td>NO</td>
+                    @endif
                     <td>{{ $rs->exam_status }}
                     @if ($rs->exam_status == 'Inactive')  
                     <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>

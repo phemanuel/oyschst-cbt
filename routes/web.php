@@ -79,8 +79,8 @@ Route::get('/', function () {
     Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
     ->name('cbt-continue');
     //----Update Answers---
-    Route::post('/update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
-    ->name('updateAnswers');
+    Route::post('update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
+    ->name('update-answers');
     //--Submit Test
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');
@@ -162,6 +162,11 @@ Route::get('/', function () {
         ->name('add-class.action'); 
         Route::get('class/{id}', [DashboardController::class, 'deleteClassAction'])
         ->name('delete-class.action'); 
+        //--Add subject/course--        
+        Route::post('add-subject', [DashboardController::class, 'addSubjectAction'])
+        ->name('add-subject.action'); 
+        Route::get('subject/{id}', [DashboardController::class, 'deleteSubjectAction'])
+        ->name('delete-subject.action'); 
         //--college update
         Route::get('college-setup', [DashboardController::class, 'collegeSetup'])
         ->name('college-setup');

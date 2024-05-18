@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
 use Illuminate\Support\Facades\Session;
+use App\Models\Courses;
 
 class DashboardController extends Controller
 {
@@ -62,8 +63,9 @@ class DashboardController extends Controller
         $examtype = ExamType::orderBy('exam_type')->get();
         $examSetting = ExamSetting::first();
         $level = CbtClass::orderBy('level')->get();
+        $courseData = COurses::orderBy('course')->get();
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
-        'examtype','examSetting', 'collegeSetup', 'level'));
+        'examtype','examSetting', 'collegeSetup', 'level','courseData'));
     }
 
     public function examType()
@@ -120,6 +122,7 @@ class DashboardController extends Controller
                 'time_limit' => 'required',
                 'duration' => 'required',
                 'check_result' => 'required',
+                'course' => 'required',
             ]);
 
             // Find the exam setting to update
@@ -242,10 +245,11 @@ class DashboardController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $courses = Department::paginate(15);
+        $courses = Department::paginate(9);
         $classes = CbtClass::paginate(10);
+        $courseData = Courses::paginate(10);
         return view('dashboard.college-setup', compact('courses', 'softwareVersion','collegeSetup',
-    'classes'));
+    'classes', 'courseData'));
         
     }    
 
@@ -254,7 +258,13 @@ class DashboardController extends Controller
         try {
             $validatedData = $request->validate([
                 'level' => 'required|string',
-            ]);       
+            ]);    
+            
+            //----Check for duplicates
+            $checkClass = CbtClass::where('level', $validatedData['level'])->first();
+            if($checkClass){
+                return redirect()->back()->with('error-class', 'Class/Level has already been created.');
+            }
 
             $level = CbtClass::create([
                 'level' => $validatedData['level'],                     
@@ -283,6 +293,49 @@ class DashboardController extends Controller
             $errorMessage = 'Error-delete class: ' . $e->getMessage();
             Log::error($errorMessage);
             return redirect()->route('college-setup')->with('error-class', 'There was a problem deleting class.');
+        }
+    }
+
+    public function addSubjectAction(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'subject' => 'required|string',
+            ]);    
+            
+            //---Check for duplicates
+            $checkSubject = Courses::where('course', $validatedData['subject'])->first();
+            if($checkSubject){
+                return redirect()->back()->with('error-subject', 'Subject/Course has already been created.');
+            }
+
+            $subject = Courses::create([
+                'course' => $validatedData['subject'],                     
+            ]);
+
+            return redirect()->route('college-setup')->with('success-subject', 'Subject/Course has been created successfully.');
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during subject registration: ' . $e->getMessage());
+
+            return redirect()->back()->with('error-subject', 'An error occurred during subject/course creation. Please try again.');
+        }
+    }
+
+    public function deleteSubjectAction($id)
+    {
+        try {
+            $subject = Courses::findOrFail($id);
+            $subject->delete();
+
+            return redirect()->route('college-setup')->with('success-subject', 'Subject/Course deleted successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = 'Error-delete subject: ' . $e->getMessage();
+            Log::error($errorMessage);
+            return redirect()->route('college-setup')->with('error-subject', 'There was a problem deleting subject/course.');
         }
     }
 
