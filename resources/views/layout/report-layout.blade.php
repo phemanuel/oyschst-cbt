@@ -149,7 +149,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('login-status')}}">
             <i class="fa fa-user"></i> <span>Student Login Status</span>
             <span class="pull-right-container">
@@ -173,7 +173,7 @@
             </span>
           </a>          
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('college-setup')}}">
             <i class="fa fa-table"></i> <span>College Setup</span>
             <span class="pull-right-container">
@@ -208,11 +208,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Login/Exam Status        
+        Report        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Login/Exam Status</li>
+        <li class="active">Report</li>
       </ol>
     </section>
 
@@ -224,43 +224,185 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Change the login/exam status of a student.</h3>           
-              
+            <h3 class="box-title">Print Student Result.</h3>
+            
             </div>
-            @if(session('success'))
+            @if(session('success-college'))
 						<div class="alert alert-success">
-							{{ session('success') }}
+							{{ session('success-college') }}
 						</div>
-          @elseif(session('error'))
+          @elseif(session('error-college'))
 						<div class="alert alert-danger">
-							{{ session('error') }}
+							{{ session('error-college') }}
 						</div>
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('login-status-view')}}" method="post">
-              @csrf              
+            <form role="form" action="{{route('college-setup.action')}}" method="post" enctype="multipart/form-data">
+              @csrf    
+              @method('PUT')          
               <div class="box-body">              
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Reg/Matric No</label>
-                  <input type="text" name="admission_no" class="form-control" value="{{old('admission_no')}}">
-                </div>             
-                @error('name')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Category</label>
+                  <select name="exam_category" id="" class="form-control">
+                  <option value="{{$examSetting->exam_category}}" selected>{{$examSetting->exam_category}}</option>
+                    <option value="GENERAL">GENERAL</option>
+                    <option value="SEMESTER">SEMESTER</option>
+                  </select>
+                </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Type</label>
+                  <select name="exam_type" id="" class="form-control">
+                  <option value="{{$examSetting->exam_type}}" selected>{{$examSetting->exam_type}}</option>
+                  @foreach($examtype as $rt)
+				<option value="{{$rt->exam_type}}">{{$rt->exam_type}}</option>
+				@endforeach
+                  </select>
+                </div>
                 
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Programme</label>
+                  <select name="department" id="" class="form-control">
+                  <option value="{{$examSetting->department}}" selected>{{$examSetting->department}}</option>
+                  @foreach($dept as $rs)
+				<option value="{{$rs->department}}">{{$rs->department}}</option>
+				@endforeach
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Academic Session</label>
+                  <select name="session1" id="" class="form-control">
+                  <option value="{{$examSetting->session1}}" selected>{{$examSetting->session1}}</option>
+                  @foreach($acad_sessions as $rd)
+				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
+				@endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <select name="course" id="" class="form-control">
+                  <option value="{{$examSetting->course}}" selected>{{$examSetting->course}}</option>
+                  @foreach($courseData as $rd)
+				<option value="{{$rd->course}}">{{$rd->course}}</option>
+				@endforeach
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Semester</label>
+                  <select name="semester" id="" class="form-control"> 
+                  <option value="{{$examSetting->semester}}" selected>{{$examSetting->semester}}</option>                 
+				<option value="First">First</option>
+				<option value="Second">Second</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Level</label>
+                  <select name="level" id="" class="form-control">
+                  <option value="{{$examSetting->level}}" selected>{{$examSetting->level}}</option>                  
+                  @foreach($level as $rd)
+				<option value="{{$rd->level}}">{{$rd->level}}</option>
+				@endforeach
+                  </select>
+                </div>
+                <p><a href="{{route('college-setup')}}">Create Class/Level</a></p>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">No of Question</label>
+                  <select name="no_of_qst" id="" class="form-control"> 
+                  <option value="{{$examSetting->no_of_qst}}" selected>{{$examSetting->no_of_qst}}</option>                 
+				<option value="10">10</option>
+				<option value="20">20</option>
+                <option value="30">30</option>
+				<option value="40">40</option>
+                <option value="50">50</option>
+				<option value="60">60</option>
+                <option value="70">70</option>
+				<option value="80">80</option>
+                <option value="90">90</option>
+				<option value="100">100</option>                
+                  </select>
+                </div>  
+              
+
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Proceed</button>
+                <button type="submit" class="btn btn-primary">Update</button>
               </div>
             </form>
           </div>
-          <!-- /.box -->        
+          <!-- /.box -->
+
+          
 
         </div>
         <!--/.col (left) -->
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+            <h3 class="box-title">Print Student Exam Sheet.</h3>           
+              
+            </div>
+            @if(session('success-dept'))
+						<div class="alert alert-success">
+							{{ session('success-dept') }}
+						</div>
+          @elseif(session('error-dept'))
+						<div class="alert alert-danger">
+							{{ session('error-dept') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('add-course-college.action')}}" method="post">
+              @csrf              
+              <div class="box-body">              
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Programme Name</label>
+                  <input type="text" name="department" class="form-control" value="{{old('department')}}">
+                </div>             
+                @error('name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+                <!-- Display the available departments   -->
+                <table class="table table-striped">
+                      <tr>           
+                      <th>Sn</th> 
+                        <th>Programme</th>                        
+                        <th>Created On</th>  
+                        <th>Actions</th>                     
+                      </tr>
+
+                      @if ($courses->count() > 0)
+			@foreach ($courses as $key => $rd)
+                      <tr> 
+                        <td>{{$key +1}}</td>                         
+                        <td>{{$rd->department}}</td>                        
+                        <td>{{$rd->created_at}}</td> 
+                        <td><a class="label label-danger" href="{{route('delete-dept.action', ['id' => $rd->id])}}">Delete</a> </td>                       
+                      </tr>  
+                      @endforeach
+		@else
+		<tr>
+			<td colspan="8">Departments not available.</td>
+		</tr>
+		@endif                                   
+                    </table>
+                    {{ $courses->links() }}
+              </div>
+              <!-- /.box-body -->
+
+              
+            </form>
+          </div>
+          
         
         <!-- right column -->
         <div class="col-md-6">

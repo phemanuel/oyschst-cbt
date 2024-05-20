@@ -28,21 +28,15 @@
 }
 
 .bold-text-min {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
 }
 
     .bold-text-font {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;  
     color: white;  
-}
-
-.bold-text-font-menu {
-    font-size: 14px;
-    font-weight: bold;  
-    color: black;  
 }
 
     .bold-font {
@@ -85,458 +79,82 @@
     }
 </style>
 </head>
-<body class="sidebar-fixed">
+<body class="horizontal-menu">
   <div class="container-scroller">
-    <!-- partial:../../partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo"/></a>
+    <nav class="navbar horizontal-layout-navbar fixed-top navbar-expand-lg">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+        <!-- <a class="navbar-brand brand-logo" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" /></a>                     -->
       </div>
-      <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        
-        <ul class="navbar-nav">
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Student No: {{$studentData->admission_no}}</p></strong>
+      <div class="navbar-menu-wrapper d-flex flex-grow">
+        <ul class="navbar-nav navbar-nav-left collapse navbar-collapse" id="horizontal-top-example">
+        <li class="nav-item nav-profile">
+            <a class="nav-link">
+              <div class="nav-profile-text">              
+              </div>
+              <div class="nav-profile-img">
+                <img src="{{asset($collegeSetup->avatar)}}" alt="image" class="img-xs rounded-circle ml-3">
+                <span class="availability-status online"></span>             
+              </div>
+            </a>
           </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Student Name: {{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}</p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Programme: {{ $studentData->department}} </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Level: {{ $studentData->level}} </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">{{ $examSetting->no_of_qst}} Questions </p></strong>
-          </li>
+          <li class="nav-item dropdown">            
+            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
+            <strong><p class="bold-text">Oyo State College of Health Science and Technology</p></strong>
+            </a>            
+          </li> 
+          <li class="nav-item dropdown">            
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
+            <strong><p class="bold-text-font">{{$studentData->admission_no}}</p></strong>
+            </a>            
+          </li>   
+          <li class="nav-item dropdown">            
+            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">            
+            <strong><p class="bold-text-font">{{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}</p></strong>
+            </a>            
+          </li>   
+          <li class="nav-item dropdown">            
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
+            <strong><p class="bold-text-font">{{$studentData->department}} | {{$studentData->level}}</p></strong>            
+            </a>             
+          </li> 
+          <li class="nav-item dropdown">            
+            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">           
+            <strong><p class="bold-text-font">{{$examSetting->no_of_qst}}qst | {{$examSetting->duration}}mins</p></strong>            
+            </a>             
+          </li>  
+          <li class="nav-item dropdown">            
+            <a class="nav-link" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="true">           
+            <strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong>
+</div>
+</strong>            
+            </a>             
+          </li>    
+          
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item d-none d-lg-flex">
-            <a class="nav-link" href="#">            
-              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
-            </a>
-          </li>
+          
+          
         </ul>
-        
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center ml-auto" type="button" data-toggle="collapse" data-target="#horizontal-top-example">
+          <span class="fa fa-bars"></span>
+        </button>
       </div>
     </nav>
-    <!-- partial -->
+    <br><br>
     <div class="container-fluid page-body-wrapper">
-      <!-- partial:../../partials/_settings-panel.html -->
-      
-      <div id="right-sidebar" class="settings-panel">
-        <i class="settings-close fa fa-times"></i>
-        <ul class="nav nav-tabs" id="setting-panel" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
-          </li>
-        </ul>
-        <div class="tab-content" id="setting-content">
-          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
-            <div class="add-items d-flex px-3 mb-0">
-              <form class="form w-100">
-                <div class="form-group d-flex">
-                  <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
-                  <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task-todo">Add</button>
-                </div>
-              </form>
-            </div>
-            <div class="list-wrapper px-3">
-              <ul class="d-flex flex-column-reverse todo-list">
-                <li>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox">
-                      Team review meeting at 3.00 PM
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox">
-                      Prepare for presentation
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox">
-                      Resolve all the low priority tickets due today
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li class="completed">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox" checked>
-                      Schedule meeting for next week
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li class="completed">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox" checked>
-                      Project review
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-              </ul>
-            </div>
-            <div class="events py-4 border-bottom px-3">
-              <div class="wrapper d-flex mb-2">
-                <i class="fa fa-times-circle text-primary mr-2"></i>
-                <span>Feb 11 2018</span>
-              </div>
-              <p class="mb-0 font-weight-thin text-gray">Creating component page</p>
-              <p class="text-gray mb-0">build a js based app</p>
-            </div>
-            <div class="events pt-4 px-3">
-              <div class="wrapper d-flex mb-2">
-                <i class="fa fa-times-circle text-primary mr-2"></i>
-                <span>Feb 7 2018</span>
-              </div>
-              <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
-              <p class="text-gray mb-0 ">Call Sarah Graves</p>
-            </div>
-          </div>
-          <!-- To do section tab ends -->
-          <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
-            <div class="d-flex align-items-center justify-content-between border-bottom">
-              <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
-              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See All</small>
-            </div>
-            <ul class="chat-list">
-              <li class="list active">
-                <div class="profile"><img src="../../images/faces/face1.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Thomas Douglas</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">19 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
-                <div class="info">
-                  <div class="wrapper d-flex">
-                    <p>Catherine</p>
-                  </div>
-                  <p>Away</p>
-                </div>
-                <div class="badge badge-success badge-pill my-auto mx-2">4</div>
-                <small class="text-muted my-auto">23 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face3.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Daniel Russell</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">14 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
-                <div class="info">
-                  <p>James Richardson</p>
-                  <p>Away</p>
-                </div>
-                <small class="text-muted my-auto">2 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face5.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Madeline Kennedy</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">5 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face6.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Sarah Graves</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">47 min</small>
-              </li>
-            </ul>
-          </div>
-          <!-- chat tab ends -->
-        </div>
-      </div>
-      <!-- partial -->
-      <!-- partial:../../partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item nav-profile">
-           
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="fa fa-home menu-icon"></i>
-              <span class="bold-text-font-menu">Question Menu</span>
-            </a>
-          </li>
-          <hr>
-          @if($examSetting->no_of_qst == 10)
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>           
-          </li>
-          @elseif($examSetting->no_of_qst == 20)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 30)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 40)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 50)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 60)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 70)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 80)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">Question 71-80</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 90)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">Question 71-80</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">Question 81-90</a>
-          </li>
-          @elseif($examSetting->no_of_qst == 100)
-          <li class="nav-item">            
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
-            </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">Question 71-80</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">Question 81-90</a>
-          </li>
-          <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page10', ['id' => $studentData->id])}}" class="btn btn-success">Question 91-100</a>
-          </li>
-          @endif
-          <hr>
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">
-                    Submit Test</button>
-        </ul>
-      </nav>
-      <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="page-header">
-           
-            <table class="table">
-                <tr>
-                    <td> <h3 class="page-title">Computer Based Test - Read questions carefully and select the answer appropriately.</h3></td>
-                    <td> <button id = "{{$pageNo}}" type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td>
-                </tr>
-            </table>            
-          </div>          
+            <h3 class="page-title">
+              Computer Based Test - Read questions carefully and select the answer appropriately.
+            </h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">                
+                <li class="breadcrumb-item active" aria-current="page">Computer Based Test</li>
+              </ol>
+            </nav>
+          </div>
           <div>
           @if(session('success'))
 						<div class="alert alert-success">
@@ -548,6 +166,8 @@
 						</div>
 						@endif	
           </div>
+          
+
           <div class="row">
           <form action="" method="POST">
               @csrf
@@ -583,7 +203,7 @@
                         <input type="submit" name="option{{ $questionNo['q1'] }}C" id="option{{ $questionNo['q1'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q1'] }}D" id="option{{ $questionNo['q1'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</span> -->
                         <span id="answer1" class="bold-font-ans"></span>
                         
@@ -629,7 +249,7 @@
                         <input type="submit" name="option{{ $questionNo['q2'] }}C" id="option{{ $questionNo['q2'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q2'] }}D" id="option{{ $questionNo['q2'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a2']} }}</span> -->
                         <span id="answer2" class="bold-font-ans"></span>
                         </p>
@@ -675,7 +295,7 @@
                         <input type="submit" name="option{{ $questionNo['q3'] }}C" id="option{{ $questionNo['q3'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q3'] }}D" id="option{{ $questionNo['q3'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a3']} }}</span> -->
                         <span id="answer3" class="bold-font-ans"></span>                        
                         </p>
@@ -721,7 +341,7 @@
                         <input type="submit" name="option{{ $questionNo['q4'] }}C" id="option{{ $questionNo['q4'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q4'] }}D" id="option{{ $questionNo['q4'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a4']} }}</span> -->
                         <span id="answer4" class="bold-font-ans"></span>
                         </p>
@@ -768,7 +388,7 @@
                         <input type="submit" name="option{{ $questionNo['q5'] }}C" id="option{{ $questionNo['q5'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q5'] }}D" id="option{{ $questionNo['q5'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a5']} }}</span> -->
                         <span id="answer5" class="bold-font-ans"></span>
                         </p>
@@ -814,7 +434,7 @@
                         <input type="submit" name="option{{ $questionNo['q6'] }}C" id="option{{ $questionNo['q6'] }}C" value="C"  class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q6'] }}D" id="option{{ $questionNo['q6'] }}D" value="D"  class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a6']} }}</span> -->
                         <span id="answer6" class="bold-font-ans"></span>
                         </p>
@@ -859,7 +479,7 @@
                         <input type="submit" name="option{{ $questionNo['q7'] }}C" id="option{{ $questionNo['q7'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q7'] }}D" id="option{{ $questionNo['q7'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a7']} }}</span> -->
                         <span id="answer7" class="bold-font-ans"></span>
                         </p>
@@ -904,7 +524,7 @@
                         <input type="submit" name="option{{ $questionNo['q8'] }}C" id="option{{ $questionNo['q8'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q8'] }}D" id="option{{ $questionNo['q8'] }}D" value="D"class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a8']} }}</span> -->
                         <span id="answer8" class="bold-font-ans"></span>
                         </p>
@@ -949,7 +569,7 @@
                         <input type="submit" name="option{{ $questionNo['q9'] }}C" id="option{{ $questionNo['q9'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q9'] }}D" id="option{{ $questionNo['q9'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a9']} }}</span> -->
                         <span id="answer9" class="bold-font-ans"></span>
                         </p>
@@ -994,7 +614,7 @@
                         <input type="submit" name="option{{ $questionNo['q10'] }}C" id="option{{ $questionNo['q10'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
                         <input type="submit" name="option{{ $questionNo['q10'] }}D" id="option{{ $questionNo['q10'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
                         <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
+                        <p><span class="bold-font-text">Selected Answer:</span> 
                         <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a10']} }}</span> -->
                         <span id="answer10" class="bold-font-ans"></span>
                         </p>
@@ -1011,10 +631,80 @@
            <input type="hidden" name="btn_action" id="btn_action" />    
            <input type="hidden" name="pageNo" value ="{{$pageNo}}">
   </form>
-
-          </div>         
-          
-          <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+            <div class="col-12 grid-margin">            
+              <div class="card">
+                <div class="card-body">
+                  @if($examSetting->no_of_qst == 10)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>                  
+                  @elseif($examSetting->no_of_qst == 20)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>                  
+                  @elseif($examSetting->no_of_qst == 30)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>  
+                  @elseif($examSetting->no_of_qst == 40)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>   
+                  @elseif($examSetting->no_of_qst == 50)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">41-50</a>  
+                  @elseif($examSetting->no_of_qst == 60)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">51-60</a>  
+                  @elseif($examSetting->no_of_qst == 70)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">61-70</a>   
+                  @elseif($examSetting->no_of_qst == 80)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
+                    <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">71-80</a> 
+                  @elseif($examSetting->no_of_qst == 90)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
+                    <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;  
+                    <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">81-90</a>   
+                  @elseif($examSetting->no_of_qst == 100)
+                    <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
+                    <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;
+                    <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">81-90</a>&nbsp; &nbsp;  
+                    <a href="{{route('cbt-page10', ['id' => $studentData->id])}}" class="btn btn-success">91-100</a> 
+                       
+                  @endif
+                  &nbsp; &nbsp;
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">
+                    Submit Test</button>
+                    <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -1034,10 +724,16 @@
                     </div>
                   </div>
                   <!-- Modal Ends -->
+                  <!-- <a href="" class="btn btn-success">Submit</a> -->
+                </div>
+            </div>
+            </div>
+          </div>
+</div>
+        </div>
 
-                  </div>
-    
-        <!-- content-wrapper ends -->
+       
+
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
@@ -1051,8 +747,9 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
-  <script>
+  <!-- container-scroller --> 
+    <!-- Include your JavaScript here -->
+    <script>
         let duration = {{ $studentMin }}; // Duration in seconds
         let remainingTime = duration;
 
@@ -1099,7 +796,7 @@
     </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript"> 
+<!-- <script type="text/javascript"> 
     // Assuming jQuery is included in your project
     $(document).ready(function() {
 
@@ -1150,16 +847,16 @@
                         $('#updatedOptionDisplay').text(updatedOption);
 
                         // Update individual answers
-                        $('#answer1').text('Selected Answer: ' + (answerData['a1'] || ''));
-                        $('#answer2').text('Selected Answer: ' + (answerData['a2'] || ''));
-                        $('#answer3').text('Selected Answer: ' + (answerData['a3'] || ''));
-                        $('#answer4').text('Selected Answer: ' + (answerData['a4'] || ''));
-                        $('#answer5').text('Selected Answer: ' + (answerData['a5'] || ''));
-                        $('#answer6').text('Selected Answer: ' + (answerData['a6'] || ''));
-                        $('#answer7').text('Selected Answer: ' + (answerData['a7'] || ''));
-                        $('#answer8').text('Selected Answer: ' + (answerData['a8'] || ''));
-                        $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
-                        $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
+                        $('#answer1').text(answerData['a1'] || '');
+                        $('#answer2').text(answerData['a2'] || '');
+                        $('#answer3').text(answerData['a3'] || '');
+                        $('#answer4').text(answerData['a4'] || '');
+                        $('#answer5').text(answerData['a5'] || '');
+                        $('#answer6').text(answerData['a6'] || '');
+                        $('#answer7').text(answerData['a7'] || '');
+                        $('#answer8').text(answerData['a8'] || '');
+                        $('#answer9').text(answerData['a9'] || '');
+                        $('#answer10').text(answerData['a10'] || '');
                     } else {
                         console.error('answerData is not defined in the response');
                     }
@@ -1171,47 +868,120 @@
             });
         });
     });
-</script>
-<script>
-    $(document).ready(function() {
-    // Function to handle click event for loading answers
-    $('button.btn.btn-info').click(function(event) {
-        event.preventDefault(); // Prevent the default button behavior
+</script> -->
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.btn-success').click(function(event) {
+        event.preventDefault(); // Prevent the default link behavior
 
-        // Send AJAX request to fetch answers
-        var pageNo = $(this).attr('id');
+        var url = $(this).attr('href');
         
+        // Send AJAX request
         $.ajax({
-            url: "{{ route('fetch-answers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
+            url: url,
             method: 'GET',
             success: function(response) {
-                console.log('Answers for page', pageNo, ':', response);
+                // Clear the existing questions
+                $('#questions-container').empty();
+                
+                // Iterate through the response and append each question to the container
+                $.each(response, function(index, question) {
+                    var questionHtml = `
+                        <div class="question">
+                            <p>${question.question_text}</p>
+                            <input type="submit" name="option${question.question_number}A" value="A" class="btn btn-dark"/>
+                            <input type="submit" name="option${question.question_number}B" value="B" class="btn btn-dark"/>
+                            <input type="submit" name="option${question.question_number}C" value="C" class="btn btn-dark"/>
+                            <input type="submit" name="option${question.question_number}D" value="D" class="btn btn-dark"/>
+                        </div>
+                    `;
+                    $('#questions-container').append(questionHtml);
+                });
 
-                // Update the UI with the retrieved answers
-                updateAnswersUI(response.answerData);
+                // Re-bind the click event for the new buttons
+                bindOptionClickEvent();
             },
             error: function(xhr, status, error) {
-                console.error('Error fetching answers:', error);
+                console.error('Error fetching questions:', error);
             }
         });
     });
 
-    // Function to update UI with answers
-    function updateAnswersUI(answerData) {
-        $('#answer1').text('Selected Answer: ' + (answerData['a1'] || ''));
-        $('#answer2').text('Selected Answer: ' + (answerData['a2'] || ''));
-        $('#answer3').text('Selected Answer: ' + (answerData['a3'] || ''));
-        $('#answer4').text('Selected Answer: ' + (answerData['a4'] || ''));
-        $('#answer5').text('Selected Answer: ' + (answerData['a5'] || ''));
-        $('#answer6').text('Selected Answer: ' + (answerData['a6'] || ''));
-        $('#answer7').text('Selected Answer: ' + (answerData['a7'] || ''));
-        $('#answer8').text('Selected Answer: ' + (answerData['a8'] || ''));
-        $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
-        $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
-    }
-});
+    function bindOptionClickEvent() {
+        $('input[type="submit"]').click(function(event) {
+            event.preventDefault(); // Prevent the default form submission
 
+            var optionName = $(this).attr('name');
+            var selectedOption = $(this).val(); 
+            console.log("OptionName:", optionName);
+            console.log("selectedOption:", selectedOption);       
+
+            // Extract the question number from optionName
+            var number = optionName.match(/\d+/)[0];
+            console.log("Question number:", number);
+
+            // Send AJAX request to update the answer
+            $.ajax({
+                url: "{{ route('update-answers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: JSON.stringify({
+                    optionName: optionName,
+                    selectedOption: selectedOption,
+                    number: number
+                }),
+                success: function(response) {
+                    // Update UI if needed
+                    // Log the response
+                    console.log('Response:', response);
+
+                  // Extract data from the response
+                  var questionNumber = response.questionNumber;
+                  var updatedOption = response.selectedOption;
+                  var answerData = response.answerData;
+
+                  // Log extracted data to verify
+                  console.log("questionNumber:", questionNumber);
+                  console.log("updatedOption:", updatedOption);
+                  console.log("answerData:", answerData);
+
+                  // Ensure answerData is defined before attempting to access it
+                  if (answerData) {
+                      // Update the <span> elements with the received data
+                      $('#questionNoDisplay').text(questionNumber);
+                      $('#updatedOptionDisplay').text(updatedOption);
+
+                      // Update individual answers
+                      $('#answer1').text(answerData['a1'] || '');
+                      $('#answer2').text(answerData['a2'] || '');
+                      $('#answer3').text(answerData['a3'] || '');
+                      $('#answer4').text(answerData['a4'] || '');
+                      $('#answer5').text(answerData['a5'] || '');
+                      $('#answer6').text(answerData['a6'] || '');
+                      $('#answer7').text(answerData['a7'] || '');
+                      $('#answer8').text(answerData['a8'] || '');
+                      $('#answer9').text(answerData['a9'] || '');
+                      $('#answer10').text(answerData['a10'] || '');
+                  } else {
+                      console.error('answerData is not defined in the response');
+                  }
+                    console.log('Answer updated successfully');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating answer:', error);
+                }
+            });
+        });
+    }
+
+    // Initial binding of click event for options
+    bindOptionClickEvent();
+});
 </script>
+
 
 
   <!-- plugins:js -->
@@ -1234,5 +1004,5 @@
 </body>
 
 
-<!-- Mirrored from www.urbanui.com/melody/template/pages/layout/sidebar-fixed.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:05:56 GMT -->
+<!-- Mirrored from www.urbanui.com/melody/template/pages/layout/horizontal-menu.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:05:55 GMT -->
 </html>

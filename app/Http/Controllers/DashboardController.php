@@ -63,7 +63,7 @@ class DashboardController extends Controller
         $examtype = ExamType::orderBy('exam_type')->get();
         $examSetting = ExamSetting::first();
         $level = CbtClass::orderBy('level')->get();
-        $courseData = COurses::orderBy('course')->get();
+        $courseData = Courses::orderBy('course')->get();
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
         'examtype','examSetting', 'collegeSetup', 'level','courseData'));
     }

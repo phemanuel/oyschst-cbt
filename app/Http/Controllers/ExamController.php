@@ -344,7 +344,7 @@ class ExamController extends Controller
         ];
         $pageNo = 1;      
         $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-test', compact('collegeSetup', 'softwareVersion', 'studentData',
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
@@ -415,7 +415,7 @@ class ExamController extends Controller
         ];
         $pageNo = 2;
         $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-test', compact('collegeSetup', 'softwareVersion', 'studentData',
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     

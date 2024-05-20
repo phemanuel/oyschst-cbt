@@ -182,8 +182,8 @@
           </a>
         </li>
         <li>
-          <a href="{{route('result')}}">
-            <i class="fa fa-folder"></i> <span>Result</span>
+          <a href="{{route('report')}}">
+            <i class="fa fa-folder"></i> <span>Report</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -225,8 +225,6 @@
           <div class="box box-primary">
             <div class="box-header with-border">
             <h3 class="box-title">Update the current exam settings.</h3>
-            <p align="right"><a href="{{route('exam-type')}}" class="btn btn-success">Add exam type</a></p>
-              
             </div>
             @if(session('success'))
 						<div class="alert alert-success">
@@ -260,6 +258,7 @@
 				@endforeach
                   </select>
                 </div>
+                <p><a href="{{route('exam-type')}}">Create Exam Type</a></p>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
                   <select name="department" id="" class="form-control">
@@ -269,6 +268,7 @@
 				@endforeach
                   </select>
                 </div>
+                <p><a href="{{route('college-setup')}}">Create Programme</a></p>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Academic Session</label>
                   <select name="session1" id="" class="form-control">
@@ -287,6 +287,7 @@
 				@endforeach
                   </select>
                 </div>
+                <p><a href="{{route('college-setup')}}">Create Subject/Course</a></p>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Semester</label>
                   <select name="semester" id="" class="form-control"> 
@@ -304,6 +305,7 @@
 				@endforeach
                   </select>
                 </div>
+                <p><a href="{{route('college-setup')}}">Create Class/Level</a></p>
                 <div class="form-group">
                   <label for="exampleInputPassword1">No of Question</label>
                   <select name="no_of_qst" id="" class="form-control"> 

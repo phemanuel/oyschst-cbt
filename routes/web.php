@@ -222,8 +222,8 @@ Route::get('/', function () {
         Route::post('question-upload-theory', [QuestionController::class, 'questionUploadTheoryAction'])
         ->name('question-upload-theory.action');
         //--report
-        Route::get('result', [ReportController::class, 'result'])
-        ->name('result');
+        Route::get('report', [ReportController::class, 'index'])
+        ->name('report');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 
