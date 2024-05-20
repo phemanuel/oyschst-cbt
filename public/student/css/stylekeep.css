@@ -11007,18 +11007,15 @@ fieldset:disabled a {
 }
 
 .btn-primary, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .btn-primary, .wizard > .actions a {
-	color: #fff;
-	background-color: #663300;
-	border-color: #392C70;
+  color: #fff;
+  background-color: #392C70;
+  border-color: #392C70;
 }
 
 .btn-primary:hover, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .btn-primary:hover, .wizard > .actions a:hover {
-	color: #fff;
-	background-color: #663300;
-	border-top-color: #663300;
-	border-right-color: #663300;
-	border-bottom-color: #663300;
-	border-left-color: #663300;
+  color: #fff;
+  background-color: #2b2155;
+  border-color: #261e4b;
 }
 
 .btn-primary:focus, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .btn-primary:focus, .wizard > .actions a:focus, .btn-primary.focus, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .focus.btn-primary, .wizard > .actions a.focus {
@@ -11026,12 +11023,9 @@ fieldset:disabled a {
 }
 
 .btn-primary.disabled, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .disabled.btn-primary, .wizard > .actions a.disabled, .btn-primary:disabled, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .btn-primary:disabled, .wizard > .actions a:disabled {
-	color: #fff;
-	background-color: #663300;
-	border-top-color: #663300;
-	border-right-color: #663300;
-	border-bottom-color: #663300;
-	border-left-color: #663300;
+  color: #fff;
+  background-color: #392C70;
+  border-color: #392C70;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .btn-primary:not(:disabled):not(.disabled):active, .wizard > .actions a:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .navbar.default-layout-navbar.navbar-primary .navbar-menu-wrapper .navbar-nav .nav-item .nav-link .btn-primary:not(:disabled):not(.disabled).active, .wizard > .actions a:not(:disabled):not(.disabled).active,
@@ -18934,15 +18928,15 @@ input:focus {
 }
 
 .navbar.default-layout-navbar .navbar-menu-wrapper {
-	transition: width 0.25s ease, background 0.25s ease;
-	-webkit-transition: width 0.25s ease, background 0.25s ease;
-	-moz-transition: width 0.25s ease, background 0.25s ease;
-	-ms-transition: width 0.25s ease, background 0.25s ease;
-	padding-left: 15px;
-	padding-right: 15px;
-	width: calc(100% - 255px);
-	height: 70px;
-	background-color: #009900;
+  background: #ffffff;
+  transition: width 0.25s ease, background 0.25s ease;
+  -webkit-transition: width 0.25s ease, background 0.25s ease;
+  -moz-transition: width 0.25s ease, background 0.25s ease;
+  -ms-transition: width 0.25s ease, background 0.25s ease;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: calc(100% - 255px);
+  height: 70px;
 }
 
 @media (max-width: 991px) {

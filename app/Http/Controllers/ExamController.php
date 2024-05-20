@@ -344,7 +344,7 @@ class ExamController extends Controller
         ];
         $pageNo = 1;      
         $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        return view('student.pages.cbt-test', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
@@ -415,7 +415,7 @@ class ExamController extends Controller
         ];
         $pageNo = 2;
         $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        return view('student.pages.cbt-test', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','question1','question2','question3','question4','question5','question6','question7',
         'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
     
@@ -1041,34 +1041,123 @@ class ExamController extends Controller
     {
         // Fetch the student data
         $studentData = StudentAdmission::find($id);
-    
+        $examSetting = ExamSetting::first();
+
         // Log incoming request data for debugging
-        // Log::info('Request Data:', $request->all());
-    
+        Log::info('Request Data:', $request->all());
+
         // Extract data from the request
         $optionName = $request->input('optionName');
         $selectedOption = $request->input('selectedOption');
         $number = $request->input('number');  
-    
+
         // Find the corresponding field name in the database based on the number
         $optionFieldName = "OK{$number}";
-    
+
         // Fetch the student's answer record
         $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
             ->first();
-    
+
         // Update the selected option for the corresponding question
         $studentAnswer->$optionFieldName = $selectedOption;
         $studentAnswer->save();
-    
-        // Log the updated answer for debugging
-        // Log::info('Answer updated:', [$optionFieldName => $selectedOption]);
-    
-        // Return a JSON response indicating success
-        return response()->json(['message' => 'Answer updated successfully']);
-    }
-    
 
+        // Log the updated answer for debugging
+        Log::info('Answer updated:', [$optionFieldName => $selectedOption]);
+
+        // Prepare the answer data based on the page number
+        if ($pageNo == 1) {           
+            //--answers
+            $a1 = $studentAnswer->OK1; $a2 = $studentAnswer->OK2; $a3 = $studentAnswer->OK3; 
+            $a4 = $studentAnswer->OK4;$a5 = $studentAnswer->OK5; $a6 = $studentAnswer->OK6; 
+            $a7 = $studentAnswer->OK7; $a8 = $studentAnswer->OK8; $a9 = $studentAnswer->OK9; 
+            $a10 = $studentAnswer->OK10;
+        } elseif ($pageNo == 2) {            
+            //--answers
+            $a1 = $studentAnswer->OK11; $a2 = $studentAnswer->OK12; $a3 = $studentAnswer->OK13; 
+            $a4 = $studentAnswer->OK14;$a5 = $studentAnswer->OK15; $a6 = $studentAnswer->OK16; 
+            $a7 = $studentAnswer->OK17;$a8 = $studentAnswer->OK18; $a9 = $studentAnswer->OK19; 
+            $a10 = $studentAnswer->OK20;
+        }
+        elseif ($pageNo == 3) {            
+            //--answers
+            $a1 = $studentAnswer->OK21; $a2 = $studentAnswer->OK22; $a3 = $studentAnswer->OK23; 
+            $a4 = $studentAnswer->OK24;$a5 = $studentAnswer->OK25; $a6 = $studentAnswer->OK26; 
+            $a7 = $studentAnswer->OK27;$a8 = $studentAnswer->OK28; $a9 = $studentAnswer->OK29; 
+            $a10 = $studentAnswer->OK30;
+        }
+        elseif ($pageNo == 4) {           
+            //--answers
+            $a1 = $studentAnswer->OK31; $a2 = $studentAnswer->OK32; $a3 = $studentAnswer->OK33; 
+            $a4 = $studentAnswer->OK34;$a5 = $studentAnswer->OK35; $a6 = $studentAnswer->OK36; 
+            $a7 = $studentAnswer->OK37; $a8 = $studentAnswer->OK38; $a9 = $studentAnswer->OK39; 
+            $a10 = $studentAnswer->OK40;
+        }
+        elseif ($pageNo == 5) {           
+            //--answers
+            $a1 = $studentAnswer->OK41; $a2 = $studentAnswer->OK42; $a3 = $studentAnswer->OK43; 
+            $a4 = $studentAnswer->OK44;$a5 = $studentAnswer->OK45; $a6 = $studentAnswer->OK46; 
+            $a7 = $studentAnswer->OK47; $a8 = $studentAnswer->OK48; $a9 = $studentAnswer->OK49; 
+            $a10 = $studentAnswer->OK50;
+        }
+        elseif ($pageNo == 6) {           
+            //--answers
+            $a1 = $studentAnswer->OK51; $a2 = $studentAnswer->OK52; $a3 = $studentAnswer->OK53; 
+            $a4 = $studentAnswer->OK54;$a5 = $studentAnswer->OK55; $a6 = $studentAnswer->OK56; 
+            $a7 = $studentAnswer->OK57; $a8 = $studentAnswer->OK58; $a9 = $studentAnswer->OK59; 
+            $a10 = $studentAnswer->OK60;
+        }
+        elseif ($pageNo == 7) {           
+            //--answers
+            $a1 = $studentAnswer->OK61; $a2 = $studentAnswer->OK62; $a3 = $studentAnswer->OK63; 
+            $a4 = $studentAnswer->OK64;$a5 = $studentAnswer->OK65; $a6 = $studentAnswer->OK66; 
+            $a7 = $studentAnswer->OK67; $a8 = $studentAnswer->OK68; $a9 = $studentAnswer->OK69; 
+            $a10 = $studentAnswer->OK70;
+        }
+        elseif ($pageNo == 8) {           
+            //--answers
+            $a1 = $studentAnswer->OK71; $a2 = $studentAnswer->OK72; $a3 = $studentAnswer->OK73; 
+            $a4 = $studentAnswer->OK74;$a5 = $studentAnswer->OK75; $a6 = $studentAnswer->OK76; 
+            $a7 = $studentAnswer->OK77; $a8 = $studentAnswer->OK78; $a9 = $studentAnswer->OK79; 
+            $a10 = $studentAnswer->OK80;
+        }
+        elseif ($pageNo == 9) {           
+            //--answers
+            $a1 = $studentAnswer->OK81; $a2 = $studentAnswer->OK82; $a3 = $studentAnswer->OK83; 
+            $a4 = $studentAnswer->OK84;$a5 = $studentAnswer->OK85; $a6 = $studentAnswer->OK86; 
+            $a7 = $studentAnswer->OK87; $a8 = $studentAnswer->OK88; $a9 = $studentAnswer->OK89; 
+            $a10 = $studentAnswer->OK90;
+        }
+        elseif ($pageNo == 10) {           
+            //--answers
+            $a1 = $studentAnswer->OK91; $a2 = $studentAnswer->OK92; $a3 = $studentAnswer->OK93; 
+            $a4 = $studentAnswer->OK94;$a5 = $studentAnswer->OK95; $a6 = $studentAnswer->OK96; 
+            $a7 = $studentAnswer->OK97; $a8 = $studentAnswer->OK98; $a9 = $studentAnswer->OK99; 
+            $a10 = $studentAnswer->OK100;
+        }
+
+        // Prepare the answer data array
+        $answerData = [
+            'a1' => $a1, 'a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5, 
+            'a6' => $a6, 'a7' => $a7, 'a8' => $a8, 'a9' => $a9, 'a10' => $a10
+        ];
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'message' => 'Answer updated successfully',
+            'selectedOption' => $selectedOption,
+            'questionNumber' => $number,
+            'answerData' => $answerData
+        ]);
+    }  
 
     public function cbtSubmit($id)
     {
@@ -1232,6 +1321,111 @@ class ExamController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function fetchAnswers($id, $pageNo)
+    {
+        // Fetch the student data
+        $studentData = StudentAdmission::find($id);
+        $examSetting = ExamSetting::first();
+
+        // Fetch the student's answer record
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();    
+
+        // Prepare the answer data based on the page number
+        if ($pageNo == 1) {           
+            //--answers
+            $a1 = $studentAnswer->OK1; $a2 = $studentAnswer->OK2; $a3 = $studentAnswer->OK3; 
+            $a4 = $studentAnswer->OK4;$a5 = $studentAnswer->OK5; $a6 = $studentAnswer->OK6; 
+            $a7 = $studentAnswer->OK7; $a8 = $studentAnswer->OK8; $a9 = $studentAnswer->OK9; 
+            $a10 = $studentAnswer->OK10;
+        } elseif ($pageNo == 2) {            
+            //--answers
+            $a1 = $studentAnswer->OK11; $a2 = $studentAnswer->OK12; $a3 = $studentAnswer->OK13; 
+            $a4 = $studentAnswer->OK14;$a5 = $studentAnswer->OK15; $a6 = $studentAnswer->OK16; 
+            $a7 = $studentAnswer->OK17;$a8 = $studentAnswer->OK18; $a9 = $studentAnswer->OK19; 
+            $a10 = $studentAnswer->OK20;
+        }
+        elseif ($pageNo == 3) {            
+            //--answers
+            $a1 = $studentAnswer->OK21; $a2 = $studentAnswer->OK22; $a3 = $studentAnswer->OK23; 
+            $a4 = $studentAnswer->OK24;$a5 = $studentAnswer->OK25; $a6 = $studentAnswer->OK26; 
+            $a7 = $studentAnswer->OK27;$a8 = $studentAnswer->OK28; $a9 = $studentAnswer->OK29; 
+            $a10 = $studentAnswer->OK30;
+        }
+        elseif ($pageNo == 4) {           
+            //--answers
+            $a1 = $studentAnswer->OK31; $a2 = $studentAnswer->OK32; $a3 = $studentAnswer->OK33; 
+            $a4 = $studentAnswer->OK34;$a5 = $studentAnswer->OK35; $a6 = $studentAnswer->OK36; 
+            $a7 = $studentAnswer->OK37; $a8 = $studentAnswer->OK38; $a9 = $studentAnswer->OK39; 
+            $a10 = $studentAnswer->OK40;
+        }
+        elseif ($pageNo == 5) {           
+            //--answers
+            $a1 = $studentAnswer->OK41; $a2 = $studentAnswer->OK42; $a3 = $studentAnswer->OK43; 
+            $a4 = $studentAnswer->OK44;$a5 = $studentAnswer->OK45; $a6 = $studentAnswer->OK46; 
+            $a7 = $studentAnswer->OK47; $a8 = $studentAnswer->OK48; $a9 = $studentAnswer->OK49; 
+            $a10 = $studentAnswer->OK50;
+        }
+        elseif ($pageNo == 6) {           
+            //--answers
+            $a1 = $studentAnswer->OK51; $a2 = $studentAnswer->OK52; $a3 = $studentAnswer->OK53; 
+            $a4 = $studentAnswer->OK54;$a5 = $studentAnswer->OK55; $a6 = $studentAnswer->OK56; 
+            $a7 = $studentAnswer->OK57; $a8 = $studentAnswer->OK58; $a9 = $studentAnswer->OK59; 
+            $a10 = $studentAnswer->OK60;
+        }
+        elseif ($pageNo == 7) {           
+            //--answers
+            $a1 = $studentAnswer->OK61; $a2 = $studentAnswer->OK62; $a3 = $studentAnswer->OK63; 
+            $a4 = $studentAnswer->OK64;$a5 = $studentAnswer->OK65; $a6 = $studentAnswer->OK66; 
+            $a7 = $studentAnswer->OK67; $a8 = $studentAnswer->OK68; $a9 = $studentAnswer->OK69; 
+            $a10 = $studentAnswer->OK70;
+        }
+        elseif ($pageNo == 8) {           
+            //--answers
+            $a1 = $studentAnswer->OK71; $a2 = $studentAnswer->OK72; $a3 = $studentAnswer->OK73; 
+            $a4 = $studentAnswer->OK74;$a5 = $studentAnswer->OK75; $a6 = $studentAnswer->OK76; 
+            $a7 = $studentAnswer->OK77; $a8 = $studentAnswer->OK78; $a9 = $studentAnswer->OK79; 
+            $a10 = $studentAnswer->OK80;
+        }
+        elseif ($pageNo == 9) {           
+            //--answers
+            $a1 = $studentAnswer->OK81; $a2 = $studentAnswer->OK82; $a3 = $studentAnswer->OK83; 
+            $a4 = $studentAnswer->OK84;$a5 = $studentAnswer->OK85; $a6 = $studentAnswer->OK86; 
+            $a7 = $studentAnswer->OK87; $a8 = $studentAnswer->OK88; $a9 = $studentAnswer->OK89; 
+            $a10 = $studentAnswer->OK90;
+        }
+        elseif ($pageNo == 10) {           
+            //--answers
+            $a1 = $studentAnswer->OK91; $a2 = $studentAnswer->OK92; $a3 = $studentAnswer->OK93; 
+            $a4 = $studentAnswer->OK94;$a5 = $studentAnswer->OK95; $a6 = $studentAnswer->OK96; 
+            $a7 = $studentAnswer->OK97; $a8 = $studentAnswer->OK98; $a9 = $studentAnswer->OK99; 
+            $a10 = $studentAnswer->OK100;
+        }
+
+        // Prepare the answer data array
+        $answerData = [
+            'a1' => $a1, 'a2' => $a2, 'a3' => $a3, 'a4' => $a4, 'a5' => $a5, 
+            'a6' => $a6, 'a7' => $a7, 'a8' => $a8, 'a9' => $a9, 'a10' => $a10
+        ];      
+        // Log the updated answer for debugging
+        Log::info('Answer data:', [$answerData]);  
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'message' => 'Answer updated successfully',            
+            'answerData' => $answerData,
+            'pageNo' => $pageNo
+        ]);
+
+    }   
 
     public function studentLogout(Request $request)
     {

@@ -55,7 +55,7 @@ Route::get('/', function () {
     Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
     ->name('cbt-check');
     Route::get('cbt-page/{id}', [ExamController::class, 'cbtProcess'])
-    ->name('cbt-process');
+    ->name('cbt-process');    
     Route::get('cbt/{id}/page1', [ExamController::class, 'cbtPage1'])
     ->name('cbt-page1');
     Route::get('cbt/{id}/page2', [ExamController::class, 'cbtPage2'])
@@ -79,6 +79,8 @@ Route::get('/', function () {
     Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
     ->name('cbt-continue');
     //----Update Answers---
+    Route::get('fetch-answers/{id}/{pageNo}', [ExamController::class, 'fetchAnswers'])
+    ->name('fetch-answers');
     Route::post('update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
     ->name('update-answers');
     //--Submit Test

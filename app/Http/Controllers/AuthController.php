@@ -61,10 +61,19 @@ class AuthController extends Controller
             $student = StudentAdmission::where('admission_no', $credentials['admission_no'])
                 ->where('department', $credentials['department'])
                 ->first();
-        
+            $loginStatus = $student->login_status;
             if ($student) {
-                // Authentication successful, redirect to student dashboard
-                return redirect()->route('dashboard',['admission_no' => $admission_no]);
+                //---check login status ---
+                if($loginStatus == 1){
+                    return redirect()->back()->with('error', 'You are logged in already.');
+                }
+                else{
+                    //---Update Login status ---
+                    $student->login_status = 1;
+                    $student->save();
+                    // Authentication successful, redirect to student dashboard
+                    return redirect()->route('dashboard',['admission_no' => $admission_no]);
+                }                
             } else {
                 // Authentication failed, redirect back with error message
                 return redirect()->back()->with('error', 'Invalid admission number or department');
