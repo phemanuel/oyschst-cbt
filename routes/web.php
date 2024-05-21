@@ -81,6 +81,8 @@ Route::get('/', function () {
     //----Update Answers---
     Route::get('fetch-answers/{id}/{pageNo}', [ExamController::class, 'fetchAnswers'])
     ->name('fetch-answers');
+    Route::get('fetch-questions/{id}/{pageNo}', [ExamController::class, 'fetchQuestions'])
+    ->name('fetch-questions');
     Route::post('update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
     ->name('update-answers');
     //--Submit Test

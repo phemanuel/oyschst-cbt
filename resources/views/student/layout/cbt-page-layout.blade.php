@@ -292,12 +292,14 @@
           @if($examSetting->no_of_qst == 10)
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>           
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10 Test</button>
+              <!-- <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>            -->
           </li>
           @elseif($examSetting->no_of_qst == 20)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10 Test</button>
+              <!-- <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a> -->
             </li>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
@@ -533,7 +535,7 @@
             <table class="table">
                 <tr>
                     <td> <h3 class="page-title">Computer Based Test - Read questions carefully and select the answer appropriately.</h3></td>
-                    <td> <button id = "{{$pageNo}}" type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td>
+                    <td> <button type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td>
                 </tr>
             </table>            
           </div>          
@@ -1209,6 +1211,46 @@
         $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
         $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
     }
+});
+
+</script>
+<script>
+    $(document).ready(function() {
+    // Function to handle click event for loading answers
+    $('button.btn.btn-success').click(function(event) {
+        event.preventDefault(); // Prevent the default button behavior
+
+        // Send AJAX request to fetch answers
+        var pageNo = $(this).attr('id');
+        
+        $.ajax({
+            url: "{{ route('fetch-questions', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
+            method: 'GET',
+            success: function(response) {
+                console.log('Questions for page', pageNo, ':', response);
+
+                // Update the UI with the retrieved answers
+                // updateAnswersUI(response.answerData);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching questions:', error);
+            }
+        });
+    });
+
+    // Function to update UI with answers
+    // function updateAnswersUI(answerData) {
+    //     $('#answer1').text('Selected Answer: ' + (answerData['a1'] || ''));
+    //     $('#answer2').text('Selected Answer: ' + (answerData['a2'] || ''));
+    //     $('#answer3').text('Selected Answer: ' + (answerData['a3'] || ''));
+    //     $('#answer4').text('Selected Answer: ' + (answerData['a4'] || ''));
+    //     $('#answer5').text('Selected Answer: ' + (answerData['a5'] || ''));
+    //     $('#answer6').text('Selected Answer: ' + (answerData['a6'] || ''));
+    //     $('#answer7').text('Selected Answer: ' + (answerData['a7'] || ''));
+    //     $('#answer8').text('Selected Answer: ' + (answerData['a8'] || ''));
+    //     $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
+    //     $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
+    // }
 });
 
 </script>

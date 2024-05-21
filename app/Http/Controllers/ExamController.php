@@ -170,7 +170,7 @@ class ExamController extends Controller
                 'endtime' => now(),
                 'noofquestion' => $noOfQuestions,
                 'examstatus' => 1,
-                'semester' => $semester,
+               
             ]);
             // Save the shuffled question numbers along with the student record
             foreach ($randomizedQuestions as $index => $questionNumber) {
@@ -215,7 +215,7 @@ class ExamController extends Controller
                 'starttime' => now(),
                 'endtime' => now(),
                 'noofquestion' => $noOfQuestions,
-                'semester' => $semester,
+                
             ]);
             //----Save answers for all the questions ----                   
             foreach ($randomizedQuestions as $index => $questionNumber) {
@@ -276,7 +276,7 @@ class ExamController extends Controller
                 'starttime' => now(),
                 'endtime' => now(),
                 'noofquestion' => $noOfQuestions,
-                'semester' => $semester,
+                
             ]);
 
             foreach ($randomizedQuestions as $index => $questionNumber) {
@@ -1462,7 +1462,25 @@ class ExamController extends Controller
             'pageNo' => $pageNo
         ]);
 
-    }   
+    }  
+    
+    public function fetchQuestions($id, $pageNo)
+    {
+        if($pageNo == 1){
+            return $this->cbtPage($id, $pageNo);
+        }
+        elseif($pageNo == 2){
+            return $this->cbtPage2($id);
+        }
+    }
+    
+    public function cbtPage($id, $pageNo)
+    {
+        // Log the updated answer for debugging
+        Log::info('Student ID:', [$id]);  
+        // Log the updated answer for debugging
+        Log::info('PageNo:', [$pageNo]);  
+    }
 
     public function studentLogout(Request $request)
     {
