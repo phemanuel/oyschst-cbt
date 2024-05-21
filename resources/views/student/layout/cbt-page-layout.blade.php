@@ -111,6 +111,9 @@
           <li class="nav-item nav-search d-none d-md-flex">
           <strong><p class="bold-text-font">{{ $examSetting->no_of_qst}} Questions </p></strong>
           </li>
+          <li class="nav-item nav-search d-none d-md-flex">
+          <strong><p class="bold-text-font">{{ $examSetting->duration}} Mins </p></strong>
+          </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item d-none d-lg-flex">
@@ -121,161 +124,11 @@
         </ul>
         
       </div>
+      
     </nav>
     <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-      <!-- partial:../../partials/_settings-panel.html -->
-      
-      <div id="right-sidebar" class="settings-panel">
-        <i class="settings-close fa fa-times"></i>
-        <ul class="nav nav-tabs" id="setting-panel" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
-          </li>
-        </ul>
-        <div class="tab-content" id="setting-content">
-          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
-            <div class="add-items d-flex px-3 mb-0">
-              <form class="form w-100">
-                <div class="form-group d-flex">
-                  <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
-                  <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task-todo">Add</button>
-                </div>
-              </form>
-            </div>
-            <div class="list-wrapper px-3">
-              <ul class="d-flex flex-column-reverse todo-list">
-                <li>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox">
-                      Team review meeting at 3.00 PM
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox">
-                      Prepare for presentation
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox">
-                      Resolve all the low priority tickets due today
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li class="completed">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox" checked>
-                      Schedule meeting for next week
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-                <li class="completed">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="checkbox" type="checkbox" checked>
-                      Project review
-                    </label>
-                  </div>
-                  <i class="remove fa fa-times-circle"></i>
-                </li>
-              </ul>
-            </div>
-            <div class="events py-4 border-bottom px-3">
-              <div class="wrapper d-flex mb-2">
-                <i class="fa fa-times-circle text-primary mr-2"></i>
-                <span>Feb 11 2018</span>
-              </div>
-              <p class="mb-0 font-weight-thin text-gray">Creating component page</p>
-              <p class="text-gray mb-0">build a js based app</p>
-            </div>
-            <div class="events pt-4 px-3">
-              <div class="wrapper d-flex mb-2">
-                <i class="fa fa-times-circle text-primary mr-2"></i>
-                <span>Feb 7 2018</span>
-              </div>
-              <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
-              <p class="text-gray mb-0 ">Call Sarah Graves</p>
-            </div>
-          </div>
-          <!-- To do section tab ends -->
-          <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
-            <div class="d-flex align-items-center justify-content-between border-bottom">
-              <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
-              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See All</small>
-            </div>
-            <ul class="chat-list">
-              <li class="list active">
-                <div class="profile"><img src="../../images/faces/face1.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Thomas Douglas</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">19 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
-                <div class="info">
-                  <div class="wrapper d-flex">
-                    <p>Catherine</p>
-                  </div>
-                  <p>Away</p>
-                </div>
-                <div class="badge badge-success badge-pill my-auto mx-2">4</div>
-                <small class="text-muted my-auto">23 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face3.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Daniel Russell</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">14 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
-                <div class="info">
-                  <p>James Richardson</p>
-                  <p>Away</p>
-                </div>
-                <small class="text-muted my-auto">2 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face5.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Madeline Kennedy</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">5 min</small>
-              </li>
-              <li class="list">
-                <div class="profile"><img src="../../images/faces/face6.jpg" alt="image"><span class="online"></span></div>
-                <div class="info">
-                  <p>Sarah Graves</p>
-                  <p>Available</p>
-                </div>
-                <small class="text-muted my-auto">47 min</small>
-              </li>
-            </ul>
-          </div>
-          <!-- chat tab ends -->
-        </div>
-      </div>
-      <!-- partial -->
+    
+    <div class="container-fluid page-body-wrapper">      
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
@@ -292,8 +145,7 @@
           @if($examSetting->no_of_qst == 10)
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>
-              <!-- <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>            -->
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
           </li>
           @elseif($examSetting->no_of_qst == 20)
           <li class="nav-item">            
@@ -307,222 +159,222 @@
           @elseif($examSetting->no_of_qst == 30)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           @elseif($examSetting->no_of_qst == 40)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           @elseif($examSetting->no_of_qst == 50)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
           </li>
           @elseif($examSetting->no_of_qst == 60)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
           </li>
           @elseif($examSetting->no_of_qst == 70)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
           </li>
           @elseif($examSetting->no_of_qst == 80)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">Question 71-80</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="8" id="8"  class="btn btn-success">Question 71-80</button>
           </li>
           @elseif($examSetting->no_of_qst == 90)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">Question 71-80</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="8" id="8"  class="btn btn-success">Question 71-80</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">Question 81-90</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="9" id="9"  class="btn btn-success">Question 81-90</button>
           </li>
           @elseif($examSetting->no_of_qst == 100)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page3', ['id' => $studentData->id])}}" class="btn btn-success">Question 21-30</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page4', ['id' => $studentData->id])}}" class="btn btn-success">Question 31-40</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page5', ['id' => $studentData->id])}}" class="btn btn-success">Question 41-50</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page6', ['id' => $studentData->id])}}" class="btn btn-success">Question 51-60</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page7', ['id' => $studentData->id])}}" class="btn btn-success">Question 61-70</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page8', ['id' => $studentData->id])}}" class="btn btn-success">Question 71-80</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="8" id="8"  class="btn btn-success">Question 71-80</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">Question 81-90</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="9" id="9"  class="btn btn-success">Question 81-90</button>
           </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page10', ['id' => $studentData->id])}}" class="btn btn-success">Question 91-100</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="10" id="10"  class="btn btn-success">Question 91-100</button>
           </li>
           @endif
           <hr>
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
                     Submit Test</button>
         </ul>
       </nav>
@@ -534,7 +386,7 @@
             <table class="table">
                 <tr>
                     <td> <h3 class="page-title">Computer Based Test - Read questions carefully and select the answer appropriately.</h3></td>
-                    <td> <button type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td>
+                    <!-- <td> <button type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td> -->
                 </tr>
             </table>            
           </div>          
@@ -674,52 +526,59 @@
             }
 
             // Function to render questions on the page
-            function renderQuestions(response) {
-                $('#questions-container').empty(); // Clear previous questions
+            // Function to render questions on the page
+              function renderQuestions(response) {
+                  $('#questions-container').empty(); // Clear previous questions
 
-                // Iterate through fetched questions and render them
-                $.each(response.qstData, function(key, question) {
-                    var questionNumber = key.replace('qst', '');
-                    var graphic = response.graphicData['g' + questionNumber];
-                    var questionType = response.qstType['qt' + questionNumber];
-                    var answer = response.answerData['a' + questionNumber];
+                  // Determine the starting question number based on the page number
+                  var startingQuestionNumber = (response.pageNo - 1) * 10 + 1;
 
-                    var questionHtml = `
-                        <form class="answer-form" data-page-no="${response.pageNo}" data-question-number="${questionNumber}">
-                            @csrf
-                            <div class="col-12 grid-margin">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card
-                                        <h4 class="card-title">
-                                            <strong>Question ${questionNumber} </strong>
-                                        </h4>
-                                        <div class="table-responsive">
-                                            <table class="table" width="100%">
-                                                ${questionType === 'text-image' && graphic ? `<tr><td colspan="3"><img src="${graphic}" alt="questionImage" width="1200" height="250"></td></tr>` : ''}
-                                                <tr>
-                                                    <td colspan="3"><p class="bold-font-qst">${question}</p></td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="82%">
-                                                        <input type="submit" name="option${questionNumber}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                                                        <input type="submit" name="option${questionNumber}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                                                        <input type="submit" name="option${questionNumber}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                                                        <input type="submit" name="option${questionNumber}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                                                        <hr>                        
-                                                        <span id="answer${questionNumber}" class="bold-font-ans">${answer}</span>
-                                                    </td>
-                                                </tr>
-                                            </table>                    
-                                        </div>
-                                    </div>                
-                                </div>
-                            </div>
-                        </form>
-                    `;
-                    $('#questions-container').append(questionHtml);
-                });
-            }
+                  // Iterate through fetched questions and render them
+                  $.each(response.qstData, function(key, question) {
+                      var questionIndex = key.replace('qst', '');
+                      var questionNumber = startingQuestionNumber + parseInt(questionIndex) - 1;
+                      var graphic = response.graphicData['g' + questionIndex];
+                      var questionType = response.qstType['qt' + questionIndex];
+                      var answer = "Selected Answer: " + (response.answerData['a' + questionIndex] || ''); // Prepend "Selected Answer:"
+
+                      // Construct the path to the image
+                      var imagePath = graphic ? `/questions/${graphic}` : '';
+
+                      var questionHtml = `
+                          <form class="answer-form" data-page-no="${response.pageNo}" data-question-number="${questionNumber}">
+                              @csrf
+                              <div class="col-12 grid-margin">
+                                  <div class="card">
+                                      <div class="card-body">
+                                          <h4 class="card-title">
+                                              <strong>Question ${questionNumber}</strong>
+                                          </h4>
+                                          <div class="table-responsive">
+                                              <table class="table" width="100%">
+                                                  ${questionType === 'text-image' && graphic ? `<img src="${imagePath}" alt="questionImage" width="1200" height="300">` : ''}
+                                                  <tr>
+                                                      <td colspan="3"><p class="bold-font-qst">${question}</p></td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td width="82%">
+                                                          <input type="submit" name="option${questionNumber}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                                                          <input type="submit" name="option${questionNumber}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                                                          <input type="submit" name="option${questionNumber}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                                                          <input type="submit" name="option${questionNumber}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                                                          <hr>                        
+                                                          <span id="answer${questionNumber}" class="bold-font-ans">${answer}</span>
+                                                      </td>
+                                                  </tr>
+                                              </table>                    
+                                          </div>
+                                      </div>                
+                                  </div>
+                              </div>
+                          </form>
+                      `;
+                      $('#questions-container').append(questionHtml);
+                  });
+              }
 
             // Function to update answer
             function updateAnswer(studentId, pageNo, questionNumber, optionName, selectedOption) {
