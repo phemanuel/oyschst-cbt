@@ -199,7 +199,7 @@
                       @csrf
                       <div class="form-check">
 													<label class="form-check-label">
-                          <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success btn-block">Continue Computer Based Test</a>                            
+                          <a href="{{route('cbt-page', ['id' => $studentData->id])}}" class="btn btn-success btn-block">Continue Computer Based Test</a>                            
 													</label>
 												</div> 
                     </form>                   

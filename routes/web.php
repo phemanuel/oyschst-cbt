@@ -55,7 +55,9 @@ Route::get('/', function () {
     Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
     ->name('cbt-check');
     Route::get('cbt-page/{id}', [ExamController::class, 'cbtProcess'])
-    ->name('cbt-process');    
+    ->name('cbt-process');   
+    Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
+    ->name('cbt-page');  
     Route::get('cbt/{id}/page1', [ExamController::class, 'cbtPage1'])
     ->name('cbt-page1');
     Route::get('cbt/{id}/page2', [ExamController::class, 'cbtPage2'])

@@ -292,18 +292,17 @@
           @if($examSetting->no_of_qst == 10)
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10 Test</button>
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>
               <!-- <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a>            -->
           </li>
           @elseif($examSetting->no_of_qst == 20)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10 Test</button>
-              <!-- <a href="{{route('cbt-page1', ['id' => $studentData->id])}}" class="btn btn-success">Question 1-10</a> -->
+              <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
             </li>
           <li class="nav-item">           
-              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-              <a href="{{route('cbt-page2', ['id' => $studentData->id])}}" class="btn btn-success">Question 11-20</a>
+              <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
+              <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
           </li>
           @elseif($examSetting->no_of_qst == 30)
           <li class="nav-item">            
@@ -550,469 +549,16 @@
 						</div>
 						@endif	
           </div>
-          <div class="row">
-          <form action="" method="POST">
-              @csrf
-          <!-- begin card -->
-            <div class="col-12 grid-margin" id="question1">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q1'] }} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question1->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question1->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">
-                      <input type="submit" name="option{{ $questionNo['q1'] }}A" id="option{{ $questionNo['q1'] }}B" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q1'] }}B" id="option{{ $questionNo['q1'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q1'] }}C" id="option{{ $questionNo['q1'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q1'] }}D" id="option{{ $questionNo['q1'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</span> -->
-                        <span id="answer1" class="bold-font-ans"></span>
-                        
-                        </p>
-                        <input type="hidden" name="q1" id="questionNumber" value="{{ $questionNo['q1'] }}">
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>                    
-                  </div>
-                </div>                
+          <div class="row">         
+              
+              <!-- Questions will be dynamically loaded here -->
+              <div id="questions-container">
+    
               </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question2">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q2'] }} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question2->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question2->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question2->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question2->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q2'] }}A" id="option{{ $questionNo['q2'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q2'] }}B" id="option{{ $questionNo['q2'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q2'] }}C" id="option{{ $questionNo['q2'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q2'] }}D" id="option{{ $questionNo['q2'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a2']} }}</span> -->
-                        <span id="answer2" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q2" id="questionNumber" value="{{ $questionNo['q2'] }}">
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question3">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q3'] }} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question3->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question3->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question3->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question3->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%"><input type="submit" name="option{{ $questionNo['q3'] }}A" id="option{{ $questionNo['q3'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q3'] }}B" id="option{{ $questionNo['q3'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q3'] }}C" id="option{{ $questionNo['q3'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q3'] }}D" id="option{{ $questionNo['q3'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a3']} }}</span> -->
-                        <span id="answer3" class="bold-font-ans"></span>                        
-                        </p>
-                        <input type="hidden" name="q3" id="questionNumber" value="{{ $questionNo['q3'] }}">                        
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->          
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question4">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q4'] }} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question4->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question4->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question4->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question4->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q4'] }}A" id="option{{ $questionNo['q4'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q4'] }}B" id="option{{ $questionNo['q4'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q4'] }}C" id="option{{ $questionNo['q4'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q4'] }}D" id="option{{ $questionNo['q4'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a4']} }}</span> -->
-                        <span id="answer4" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q4" id="questionNumber" value="{{ $questionNo['q4'] }}">
-
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question5">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q5'] }} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question5->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question5->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question5->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question5->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q5'] }}A" id="option{{ $questionNo['q5'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q5'] }}B" id="option{{ $questionNo['q5'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q5'] }}C" id="option{{ $questionNo['q5'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q5'] }}D" id="option{{ $questionNo['q5'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a5']} }}</span> -->
-                        <span id="answer5" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q5" id="questionNumber" value="{{ $questionNo['q5'] }}">
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question6">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {!! $questionNo['q6'] !!} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question6->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question6->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question6->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question6->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q6'] }}A" id="option{{ $questionNo['q6'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q6'] }}B" id="option{{ $questionNo['q6'] }}B" value="B"  class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q6'] }}C" id="option{{ $questionNo['q6'] }}C" value="C"  class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q6'] }}D" id="option{{ $questionNo['q6'] }}D" value="D"  class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a6']} }}</span> -->
-                        <span id="answer6" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q6" id="questionNumber" value="{{ $questionNo['q6'] }}">
-                        </td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question7">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {!! $questionNo['q7'] !!} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question7->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question7->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question7->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question7->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q7'] }}A" id="option{{ $questionNo['q7'] }}A" value="A"  class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q7'] }}B" id="option{{ $questionNo['q7'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q7'] }}C" id="option{{ $questionNo['q7'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q7'] }}D" id="option{{ $questionNo['q7'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a7']} }}</span> -->
-                        <span id="answer7" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q7" id="questionNumber" value="{{ $questionNo['q7'] }}">
-                        </td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question8">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {!! $questionNo['q8'] !!} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question8->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question8->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question8->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question8->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q8'] }}A" id="option{{ $questionNo['q8'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q8'] }}B" id="option{{ $questionNo['q8'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q8'] }}C" id="option{{ $questionNo['q8'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q8'] }}D" id="option{{ $questionNo['q8'] }}D" value="D"class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a8']} }}</span> -->
-                        <span id="answer8" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden"  name="q8" id="questionNumber" value="{{ $questionNo['q8'] }}">
-                        </td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question9">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {!! $questionNo['q9'] !!} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question9->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question9->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question9->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question9->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q9'] }}A" id="option{{ $questionNo['q9'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q9'] }}B" id="option{{ $questionNo['q9'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q9'] }}C" id="option{{ $questionNo['q9'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q9'] }}D" id="option{{ $questionNo['q9'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a9']} }}</span> -->
-                        <span id="answer9" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q9" id="questionNumber" value="{{ $questionNo['q9'] }}">
-                        </td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->
-           <!-- begin card -->
-           <div class="col-12 grid-margin" id="question10">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {!! $questionNo['q10'] !!} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question10->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question10->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question10->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question10->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td><input type="submit" name="option{{ $questionNo['q10'] }}A" id="option{{ $questionNo['q10'] }}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q10'] }}B" id="option{{ $questionNo['q10'] }}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q10'] }}C" id="option{{ $questionNo['q10'] }}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
-                        <input type="submit" name="option{{ $questionNo['q10'] }}D" id="option{{ $questionNo['q10'] }}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <hr>
-                        <!-- <p><span class="bold-font-text">Selected Answer:</span>  -->
-                        <!-- <span class="bold-font-ans">{{ $studentAnswer->{"OK" . $questionNo['a10']} }}</span> -->
-                        <span id="answer10" class="bold-font-ans"></span>
-                        </p>
-                        <input type="hidden" name="q10" id="questionNumber" value="{{ $questionNo['q10'] }}">
-                        </td>
-                        <td></td>
-                      </tr>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
            <!-- end card -->     
-           <input type="hidden" name="btn_action" id="btn_action" />    
-           <input type="hidden" name="pageNo" value ="{{$pageNo}}">
-  </form>
+           <!-- <input type="hidden" name="btn_action" id="btn_action" />    
+           <input type="hidden" name="pageNo" value ="{{$pageNo}}"> -->
+  
 
           </div>         
           
@@ -1054,6 +600,8 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+
+  <!-- Time counter -->
   <script>
         let duration = {{ $studentMin }}; // Duration in seconds
         let remainingTime = duration;
@@ -1100,161 +648,131 @@
         startTimer();
     </script>
 
+<!-- Fetch questions and update Answers -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript"> 
-    // Assuming jQuery is included in your project
-    $(document).ready(function() {
+<script>
+        $(document).ready(function() {
+            // Function to fetch questions and render them
+            function fetchQuestions(id, pageNo) {
+                var url = "{{ route('fetch-questions', ['id' => '__ID__', 'pageNo' => '__PAGE_NO__']) }}"
+                    .replace('__ID__', id)
+                    .replace('__PAGE_NO__', pageNo);
 
-        $('input[type="submit"]').click(function(event) {
-            event.preventDefault(); // Prevent the default form submission
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(response) {
+                        console.log('Response from fetchQuestions:', response);
 
-            var optionName = $(this).attr('name');
-            var selectedOption = $(this).val(); 
-            console.log("OptionName:", optionName);
-            console.log("SelectedOption:", selectedOption);       
-
-            // Extract the question number from optionName
-            var number = optionName.match(/\d+/)[0];
-            var pageNumber = {{$pageNo}};
-            console.log("Question number:", number);
-            console.log("Page Number:", pageNumber);
-
-            // Send AJAX request
-            $.ajax({
-                url: "{{ route('update-answers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data: {
-                    optionName: optionName,
-                    selectedOption: selectedOption,
-                    number: number
-                },
-                success: function(response) {
-                     // Log the response
-                     console.log('Response:', response);
-
-                    // Extract data from the response
-                    var questionNumber = response.questionNumber;
-                    var updatedOption = response.selectedOption;
-                    var answerData = response.answerData;
-
-                    // Log extracted data to verify
-                    console.log("questionNumber:", questionNumber);
-                    console.log("updatedOption:", updatedOption);
-                    console.log("answerData:", answerData);
-
-                    // Ensure answerData is defined before attempting to access it
-                    if (answerData) {
-                        // Update the <span> elements with the received data
-                        $('#questionNoDisplay').text(questionNumber);
-                        $('#updatedOptionDisplay').text(updatedOption);
-
-                        // Update individual answers
-                        $('#answer1').text('Selected Answer: ' + (answerData['a1'] || ''));
-                        $('#answer2').text('Selected Answer: ' + (answerData['a2'] || ''));
-                        $('#answer3').text('Selected Answer: ' + (answerData['a3'] || ''));
-                        $('#answer4').text('Selected Answer: ' + (answerData['a4'] || ''));
-                        $('#answer5').text('Selected Answer: ' + (answerData['a5'] || ''));
-                        $('#answer6').text('Selected Answer: ' + (answerData['a6'] || ''));
-                        $('#answer7').text('Selected Answer: ' + (answerData['a7'] || ''));
-                        $('#answer8').text('Selected Answer: ' + (answerData['a8'] || ''));
-                        $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
-                        $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
-                    } else {
-                        console.error('answerData is not defined in the response');
+                        // Render the fetched questions
+                        renderQuestions(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching questions:', error);
                     }
-                    console.log('Answer updated successfully');
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error updating answer:', error);
-                }
+                });
+            }
+
+            // Function to render questions on the page
+            function renderQuestions(response) {
+                $('#questions-container').empty(); // Clear previous questions
+
+                // Iterate through fetched questions and render them
+                $.each(response.qstData, function(key, question) {
+                    var questionNumber = key.replace('qst', '');
+                    var graphic = response.graphicData['g' + questionNumber];
+                    var questionType = response.qstType['qt' + questionNumber];
+                    var answer = response.answerData['a' + questionNumber];
+
+                    var questionHtml = `
+                        <form class="answer-form" data-page-no="${response.pageNo}" data-question-number="${questionNumber}">
+                            @csrf
+                            <div class="col-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card
+                                        <h4 class="card-title">
+                                            <strong>Question ${questionNumber} </strong>
+                                        </h4>
+                                        <div class="table-responsive">
+                                            <table class="table" width="100%">
+                                                ${questionType === 'text-image' && graphic ? `<tr><td colspan="3"><img src="${graphic}" alt="questionImage" width="1200" height="250"></td></tr>` : ''}
+                                                <tr>
+                                                    <td colspan="3"><p class="bold-font-qst">${question}</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="82%">
+                                                        <input type="submit" name="option${questionNumber}A" value="A" class="btn btn-dark"/> &nbsp; &nbsp;
+                                                        <input type="submit" name="option${questionNumber}B" value="B" class="btn btn-dark"/> &nbsp; &nbsp;
+                                                        <input type="submit" name="option${questionNumber}C" value="C" class="btn btn-dark"/> &nbsp; &nbsp;
+                                                        <input type="submit" name="option${questionNumber}D" value="D" class="btn btn-dark"/>&nbsp; &nbsp;&nbsp; &nbsp;
+                                                        <hr>                        
+                                                        <span id="answer${questionNumber}" class="bold-font-ans">${answer}</span>
+                                                    </td>
+                                                </tr>
+                                            </table>                    
+                                        </div>
+                                    </div>                
+                                </div>
+                            </div>
+                        </form>
+                    `;
+                    $('#questions-container').append(questionHtml);
+                });
+            }
+
+            // Function to update answer
+            function updateAnswer(studentId, pageNo, questionNumber, optionName, selectedOption) {
+                var url = "{{ route('update-answers', ['id' => '__ID__', 'pageNo' => '__PAGE_NO__']) }}"
+                    .replace('__ID__', studentId)
+                    .replace('__PAGE_NO__', pageNo);
+
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: {
+                        optionName: optionName,
+                        selectedOption: selectedOption,
+                        number: questionNumber
+                    },
+                    success: function(response) {
+                        console.log('Response from updateAnswer:', response);
+
+                        // Update the answer display
+                        $('#answer' + questionNumber).text('Selected Answer: ' + selectedOption);
+                        console.log('Answer updated successfully');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating answer:', error);
+                    }
+                });
+            }
+
+            // Event listener for question buttons
+            $('button.btn-success').click(function() {
+                var pageNo = $(this).attr('name');
+                var studentId = '{{ $studentData->id }}'; // Use the actual student ID from your backend
+                fetchQuestions(studentId, pageNo);
+            });
+
+            // Event listener for answer form submission
+            $(document).on('submit', 'form.answer-form', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var form = $(this);
+                var optionName = form.find('input[type="submit"]:focus').attr('name');
+                var selectedOption = form.find('input[type="submit"]:focus').val();
+                var questionNumber = form.data('question-number');
+                var pageNo = form.data('page-no');
+                var studentId = '{{ $studentData->id }}'; // Use the actual student ID from your backend
+
+                updateAnswer(studentId, pageNo, questionNumber, optionName, selectedOption);
             });
         });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-    // Function to handle click event for loading answers
-    $('button.btn.btn-info').click(function(event) {
-        event.preventDefault(); // Prevent the default button behavior
-
-        // Send AJAX request to fetch answers
-        var pageNo = $(this).attr('id');
-        
-        $.ajax({
-            url: "{{ route('fetch-answers', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
-            method: 'GET',
-            success: function(response) {
-                console.log('Answers for page', pageNo, ':', response);
-
-                // Update the UI with the retrieved answers
-                updateAnswersUI(response.answerData);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching answers:', error);
-            }
-        });
-    });
-
-    // Function to update UI with answers
-    function updateAnswersUI(answerData) {
-        $('#answer1').text('Selected Answer: ' + (answerData['a1'] || ''));
-        $('#answer2').text('Selected Answer: ' + (answerData['a2'] || ''));
-        $('#answer3').text('Selected Answer: ' + (answerData['a3'] || ''));
-        $('#answer4').text('Selected Answer: ' + (answerData['a4'] || ''));
-        $('#answer5').text('Selected Answer: ' + (answerData['a5'] || ''));
-        $('#answer6').text('Selected Answer: ' + (answerData['a6'] || ''));
-        $('#answer7').text('Selected Answer: ' + (answerData['a7'] || ''));
-        $('#answer8').text('Selected Answer: ' + (answerData['a8'] || ''));
-        $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
-        $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
-    }
-});
-
-</script>
-<script>
-    $(document).ready(function() {
-    // Function to handle click event for loading answers
-    $('button.btn.btn-success').click(function(event) {
-        event.preventDefault(); // Prevent the default button behavior
-
-        // Send AJAX request to fetch answers
-        var pageNo = $(this).attr('id');
-        
-        $.ajax({
-            url: "{{ route('fetch-questions', ['id' => $studentData->id, 'pageNo' => $pageNo]) }}",
-            method: 'GET',
-            success: function(response) {
-                console.log('Questions for page', pageNo, ':', response);
-
-                // Update the UI with the retrieved answers
-                // updateAnswersUI(response.answerData);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching questions:', error);
-            }
-        });
-    });
-
-    // Function to update UI with answers
-    // function updateAnswersUI(answerData) {
-    //     $('#answer1').text('Selected Answer: ' + (answerData['a1'] || ''));
-    //     $('#answer2').text('Selected Answer: ' + (answerData['a2'] || ''));
-    //     $('#answer3').text('Selected Answer: ' + (answerData['a3'] || ''));
-    //     $('#answer4').text('Selected Answer: ' + (answerData['a4'] || ''));
-    //     $('#answer5').text('Selected Answer: ' + (answerData['a5'] || ''));
-    //     $('#answer6').text('Selected Answer: ' + (answerData['a6'] || ''));
-    //     $('#answer7').text('Selected Answer: ' + (answerData['a7'] || ''));
-    //     $('#answer8').text('Selected Answer: ' + (answerData['a8'] || ''));
-    //     $('#answer9').text('Selected Answer: ' + (answerData['a9'] || ''));
-    //     $('#answer10').text('Selected Answer: ' + (answerData['a10'] || ''));
-    // }
-});
-
-</script>
-
+    </script>
 
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>
@@ -1276,5 +794,5 @@
 </body>
 
 
-<!-- Mirrored from www.urbanui.com/melody/template/pages/layout/sidebar-fixed.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:05:56 GMT -->
+
 </html>

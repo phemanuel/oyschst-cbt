@@ -286,7 +286,7 @@ class ExamController extends Controller
             // Save the changes in CbtEvaluation1 model
             $student2->save();
             $pageNo = 1;            
-            return redirect()->to(route('cbt-page1', ['id' => $studentData->id]));
+            return redirect()->to(route('cbt-page', ['id' => $studentData->id]));
     }
 
     //--Page 1
@@ -348,17 +348,47 @@ class ExamController extends Controller
         //---Qst10
         $question10 = Question::commonConditionsQst($cbtEvaluation->A10, $examSetting, $studentData)->first();
         
-        $questionNo = [
-            'q1' => 1, 'q2' => 2, 'q3' => 3, 'q4' => 4, 'q5' => 5, 'q6' => 6, 'q7' => 7, 'q8' => 8,
-            'q9' => 9, 'q10' => 10,
-            'a1' => 1, 'a2' => 2, 'a3' => 3, 'a4' => 4, 'a5' => 5, 'a6' => 6, 'a7' => 7, 'a8' => 8,
-            'a9' => 9, 'a10' => 10
-        ];
         $pageNo = 1;      
         $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        $questionNo = [
+            'q1' => 1, 'q2' => 2, 'q3' => 3, 'q4' => 4, 'q5' => 5, 'q6' => 6, 'q7' => 7, 'q8' => 8,
+            'q9' => 9, 'q10' => 10
+        ];        
+        $qstData = [
+            'qst1' => $question1->question, 'qst2' => $question2->question, 'qst3' => $question3->question,
+            'qst4' => $question4->question, 'qst5' => $question5->question, 'qst6' => $question6->question,
+            'qst7' => $question7->question, 'qst8' => $question8->question, 'qst9' => $question9->question, 
+            'qst10' => $question10->question
+        ];
+        $answerData = [
+            'a1' => $studentAnswer->OK1, 'a2' => $studentAnswer->OK2, 'a3' => $studentAnswer->OK3,
+            'a4' => $studentAnswer->OK4, 'a5' => $studentAnswer->OK5, 'a6' => $studentAnswer->OK6,
+            'a7' => $studentAnswer->OK7, 'a8' => $studentAnswer->OK8, 'a9' => $studentAnswer->OK9,
+            'a10' => $studentAnswer->OK10
+        ];
+        $graphicData = [
+            'g1' => $question1->graphic, 'g2' => $question2->graphic, 'g3' => $question3->graphic, 
+            'g4' => $question4->graphic, 'g5' => $question5->graphic, 'g6' => $question6->graphic,
+            'g7' => $question7->graphic, 'g8' => $question8->graphic, 'g9' => $question9->graphic,
+            'g10' => $question10->graphic
+        ];
+        $qstType = [
+            'qt1' => $question1->question_type, 'qt2' => $question2->question_type, 
+            'qt3' => $question3->question_type, 'qt4' => $question4->question_type,
+            'qt5' => $question5->question_type, 'qt6' => $question6->question_type,
+            'qt7' => $question7->question_type, 'qt8' => $question8->question_type,
+            'qt9' => $question9->question_type, 'qt10' => $question10->question_type
+        ];   
+
+        return response()->json([
+            'message' => 'success',
+            'questionNo' => $questionNo,
+            'qstData' => $qstData,
+            'answerData' => $answerData,
+            'graphicData' => $graphicData,
+            'qstType' => $qstType,
+            'pageNo' => $pageNo,
+        ]);               
     
     }
 
@@ -423,15 +453,45 @@ class ExamController extends Controller
         
         $questionNo = [
             'q1' => 11, 'q2' => 12, 'q3' => 13, 'q4' => 14, 'q5' => 15, 'q6' => 16, 'q7' => 17, 'q8' => 18,
-            'q9' => 19, 'q10' => 20,
-            'a1' => 11, 'a2' => 12, 'a3' => 13, 'a4' => 14, 'a5' => 15, 'a6' => 16, 'a7' => 17, 'a8' => 18,
-            'a9' => 19, 'a10' => 20
+            'q9' => 19, 'q10' => 20
         ];
-        $pageNo = 2;
-        $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','question1','question2','question3','question4','question5','question6','question7',
-        'question8','question9','question10', 'questionNo','studentAnswer','pageNo','studentMin'));
+        $pageNo = 2;      
+        $studentMin = $cbtEvaluation->minute;               
+        $qstData = [
+            'qst1' => $question1->question, 'qst2' => $question2->question, 'qst3' => $question3->question,
+            'qst4' => $question4->question, 'qst5' => $question5->question, 'qst6' => $question6->question,
+            'qst7' => $question7->question, 'qst8' => $question8->question, 'qst9' => $question9->question, 
+            'qst10' => $question10->question
+        ];
+        $answerData = [
+            'a1' => $studentAnswer->OK11, 'a2' => $studentAnswer->OK12, 'a3' => $studentAnswer->OK13,
+            'a4' => $studentAnswer->OK14, 'a5' => $studentAnswer->OK15, 'a6' => $studentAnswer->OK16,
+            'a7' => $studentAnswer->OK17, 'a8' => $studentAnswer->OK18, 'a9' => $studentAnswer->OK19,
+            'a10' => $studentAnswer->OK20
+        ];
+        $graphicData = [
+            'g1' => $question1->graphic, 'g2' => $question2->graphic, 'g3' => $question3->graphic, 
+            'g4' => $question4->graphic, 'g5' => $question5->graphic, 'g6' => $question6->graphic,
+            'g7' => $question7->graphic, 'g8' => $question8->graphic, 'g9' => $question9->graphic,
+            'g10' => $question10->graphic
+        ];
+        $qstType = [
+            'qt1' => $question1->question_type, 'qt2' => $question2->question_type, 
+            'qt3' => $question3->question_type, 'qt4' => $question4->question_type,
+            'qt5' => $question5->question_type, 'qt6' => $question6->question_type,
+            'qt7' => $question7->question_type, 'qt8' => $question8->question_type,
+            'qt9' => $question9->question_type, 'qt10' => $question10->question_type
+        ];   
+
+        return response()->json([
+            'message' => 'success',
+            'questionNo' => $questionNo,
+            'qstData' => $qstData,
+            'answerData' => $answerData,
+            'graphicData' => $graphicData,
+            'qstType' => $qstType,
+            'pageNo' => $pageNo,
+        ]);        
     
     }    
 
@@ -1466,20 +1526,43 @@ class ExamController extends Controller
     
     public function fetchQuestions($id, $pageNo)
     {
+        // Log the updated answer for debugging
+        Log::info('Student ID:', [$id]);       
+        Log::info('PageNo:', [$pageNo]); 
+
         if($pageNo == 1){
-            return $this->cbtPage($id, $pageNo);
+            return $this->cbtPage1($id);
+            //Log::info('QuestionNo' , $questionNo);            
         }
         elseif($pageNo == 2){
             return $this->cbtPage2($id);
         }
     }
     
-    public function cbtPage($id, $pageNo)
+    public function cbtPage($id)
     {
-        // Log the updated answer for debugging
-        Log::info('Student ID:', [$id]);  
-        // Log the updated answer for debugging
-        Log::info('PageNo:', [$pageNo]);  
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        $pageNo = 1;
+        $studentMin = $cbtEvaluation->minute;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','pageNo','studentMin'));
+
     }
 
     public function studentLogout(Request $request)
