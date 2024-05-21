@@ -27,6 +27,7 @@ return new class extends Migration
             $table->text('question');
             $table->string('graphic');
             $table->string('course');
+            $table->string('semester');
             $table->timestamps();
         });
     }

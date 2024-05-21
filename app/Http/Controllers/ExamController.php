@@ -44,6 +44,7 @@ class ExamController extends Controller
                                                 ->where('exam_mode', $examSetting->exam_mode)
                                                 ->where('department', $examSetting->department)
                                                 ->where('level', $examSetting->level)
+                                                ->where('semester', $examSetting->semester)
                                                 ->where('session1', $examSetting->session1)
                                                 ->where('no_of_qst', $examSetting->no_of_qst)
                                                 ->first();
@@ -88,6 +89,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $examSetting->department)
                         ->where('level', $examSetting->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -124,6 +126,7 @@ class ExamController extends Controller
             $examType = $examSetting->exam_type;
             $semester = $examSetting->semester;
             $session1 = $examSetting->session1;  
+            $semester = $examSetting->semester;
             $noOfQuestions  = $examSetting->no_of_qst;          
 
             // Generate a random set of numbers representing the questions
@@ -137,6 +140,7 @@ class ExamController extends Controller
             ->where('exam_category', $examCategory)
             ->where('department', $department)
             ->where('level', $level)
+            ->where('semester', $semester)
             ->where('course', $course)
             ->where('noofquestion', $noOfQuestions)
             ->first();
@@ -166,6 +170,7 @@ class ExamController extends Controller
                 'endtime' => now(),
                 'noofquestion' => $noOfQuestions,
                 'examstatus' => 1,
+                'semester' => $semester,
             ]);
             // Save the shuffled question numbers along with the student record
             foreach ($randomizedQuestions as $index => $questionNumber) {
@@ -181,6 +186,7 @@ class ExamController extends Controller
             ->where('exam_category', $examCategory)
             ->where('department', $department)
             ->where('level', $level)
+            ->where('semester', $semester)
             ->where('course', $course)
             ->where('noofquestion', $noOfQuestions)
             ->first();
@@ -209,6 +215,7 @@ class ExamController extends Controller
                 'starttime' => now(),
                 'endtime' => now(),
                 'noofquestion' => $noOfQuestions,
+                'semester' => $semester,
             ]);
             //----Save answers for all the questions ----                   
             foreach ($randomizedQuestions as $index => $questionNumber) {
@@ -219,6 +226,7 @@ class ExamController extends Controller
                     ->where('exam_category', $examCategory)
                     ->where('department', $department)
                     ->where('level', $level)
+                    ->where('semester', $semester)
                     ->where('course', $course)
                     ->where('no_of_qst', $noOfQuestions)
                     ->value('answer');
@@ -239,6 +247,7 @@ class ExamController extends Controller
             ->where('exam_category', $examCategory)
             ->where('department', $department)
             ->where('level', $level)
+            ->where('semester', $semester)
             ->where('course', $course)
             ->where('noofquestion', $noOfQuestions)
             ->first();
@@ -267,6 +276,7 @@ class ExamController extends Controller
                 'starttime' => now(),
                 'endtime' => now(),
                 'noofquestion' => $noOfQuestions,
+                'semester' => $semester,
             ]);
 
             foreach ($randomizedQuestions as $index => $questionNumber) {
@@ -298,6 +308,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -308,6 +319,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -369,6 +381,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -379,6 +392,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -440,6 +454,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -450,6 +465,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -511,6 +527,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -521,6 +538,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -581,6 +599,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -591,6 +610,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -651,6 +671,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -661,6 +682,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -721,6 +743,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -731,6 +754,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -792,6 +816,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -802,6 +827,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -863,6 +889,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -873,6 +900,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -934,6 +962,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -944,6 +973,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $studentData->department)
                         ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -1059,6 +1089,7 @@ class ExamController extends Controller
             ->where('session1', $examSetting->session1)
             ->where('department', $examSetting->department)
             ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
             ->where('course', $examSetting->course)
             ->where('exam_mode', $examSetting->exam_mode)
             ->where('exam_type', $examSetting->exam_type)
@@ -1215,6 +1246,7 @@ class ExamController extends Controller
             ->where('session1', $examSetting->session1)
             ->where('department', $examSetting->department)
             ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
             ->where('course', $examSetting->course)
             ->where('exam_mode', $examSetting->exam_mode)
             ->where('exam_type', $examSetting->exam_type)
@@ -1227,6 +1259,7 @@ class ExamController extends Controller
             ->where('session1', $examSetting->session1)
             ->where('department', $examSetting->department)
             ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
             ->where('course', $examSetting->course)
             ->where('exam_mode', $examSetting->exam_mode)
             ->where('exam_type', $examSetting->exam_type)
@@ -1248,6 +1281,7 @@ class ExamController extends Controller
             ->where('session1', $examSetting->session1)
             ->where('department', $examSetting->department)
             ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
             ->where('course', $examSetting->course)
             ->where('exam_mode', $examSetting->exam_mode)
             ->where('exam_type', $examSetting->exam_type)
@@ -1279,6 +1313,7 @@ class ExamController extends Controller
                         ->where('session1', $examSetting->session1)
                         ->where('department', $examSetting->department)
                         ->where('level', $examSetting->level)
+                        ->where('semester', $examSetting->semester)
                         ->where('course', $examSetting->course)
                         ->where('exam_mode', $examSetting->exam_mode)
                         ->where('exam_type', $examSetting->exam_type)
@@ -1305,6 +1340,7 @@ class ExamController extends Controller
             ->where('session1', $examSetting->session1)
             ->where('department', $examSetting->department)
             ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
             ->where('course', $examSetting->course)
             ->where('exam_mode', $examSetting->exam_mode)
             ->where('exam_type', $examSetting->exam_type)
@@ -1332,6 +1368,7 @@ class ExamController extends Controller
             ->where('session1', $examSetting->session1)
             ->where('department', $examSetting->department)
             ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
             ->where('course', $examSetting->course)
             ->where('exam_mode', $examSetting->exam_mode)
             ->where('exam_type', $examSetting->exam_type)

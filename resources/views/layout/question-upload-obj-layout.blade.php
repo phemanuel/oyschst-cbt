@@ -305,7 +305,14 @@
                 <p><a href="{{route('college-setup')}}"><u> Create Class/Level</u> </a></p>            
                 @error('level')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror                
+                @enderror      
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Semester</label>
+                  <select name="semester" id="" class="form-control">                   
+				<option value="First">First</option>
+				<option value="Second">Second</option>
+                  </select>
+                </div>          
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
@@ -459,7 +466,14 @@
 				@endforeach
                   </select>
                 </div> 
-                <p><a href="{{route('college-setup')}}"><u> Create Class/Level</u> </a></p>            
+                <p><a href="{{route('college-setup')}}"><u> Create Class/Level</u> </a></p>  
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Semester</label>
+                  <select name="semester" id="" class="form-control"> 
+                				<option value="First">First</option>
+				<option value="Second">Second</option>
+                  </select>
+                </div>          
                 @error('level')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror                

@@ -266,6 +266,7 @@
                   <th>Academic Session</th>
                   <th>Programme</th>
                   <th>Level</th>
+                  <th>Semester</th>
                   <th>Exam Mode</th>
                   <th>Exam Category</th>
                   <th>Exam Type</th>
@@ -284,6 +285,7 @@
                     <td>{{$rs->session1}}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->semester }}</td>
                     <td>{{ $rs->exam_mode }}</td>
                     <td>{{ $rs->exam_category}}</td>
                     <td>{{ $rs->exam_type }}</td>

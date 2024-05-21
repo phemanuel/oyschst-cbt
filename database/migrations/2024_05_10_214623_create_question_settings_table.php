@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('exam_mode');
             $table->date('exam_date');
             $table->string('course');
+            $table->string('semester');
             $table->timestamps();
         });
     }

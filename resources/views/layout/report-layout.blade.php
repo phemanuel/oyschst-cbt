@@ -372,30 +372,7 @@
                 <button type="submit" class="btn btn-primary">Add</button>
               </div>
                 <!-- Display the available departments   -->
-                <table class="table table-striped">
-                      <tr>           
-                      <th>Sn</th> 
-                        <th>Programme</th>                        
-                        <th>Created On</th>  
-                        <th>Actions</th>                     
-                      </tr>
-
-                      @if ($courses->count() > 0)
-			@foreach ($courses as $key => $rd)
-                      <tr> 
-                        <td>{{$key +1}}</td>                         
-                        <td>{{$rd->department}}</td>                        
-                        <td>{{$rd->created_at}}</td> 
-                        <td><a class="label label-danger" href="{{route('delete-dept.action', ['id' => $rd->id])}}">Delete</a> </td>                       
-                      </tr>  
-                      @endforeach
-		@else
-		<tr>
-			<td colspan="8">Departments not available.</td>
-		</tr>
-		@endif                                   
-                    </table>
-                    {{ $courses->links() }}
+                
               </div>
               <!-- /.box-body -->
 
