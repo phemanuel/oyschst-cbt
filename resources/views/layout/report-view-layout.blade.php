@@ -281,7 +281,7 @@
                     <td>{{ $rs->noofquestion }}</td>                    
                     <td>{{ $rs->correct }}</td>                    
                     <td> <a class="label label-primary" href="{{route('exam-sheet', ['id' => $rs->id])}}">Exam Sheet</a>  
-                    <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}">Print Result</a>                   
+                    <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}" target="_blank">Print Result</a>                   
                 </td>
                 </tr>
                 @endforeach

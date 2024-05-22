@@ -52,6 +52,23 @@
       background: transparent !important;
     }
   </style>
+  <style>
+    .bold-text {
+    font-size: 18px;
+    font-weight: bold;
+    /* color: black; */
+}
+
+    .bold-font-text {
+    font-size: 16px;
+    font-weight: bold;    
+}
+
+    .bold-font {
+    font-size: 16px;
+    /* font-weight: bold; */
+}
+  </style>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -222,12 +239,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Student Result 
-       <small><h4>(Note: You can search for a student by Surname or Admission No)</h4></small>        
+        Student Result Slip
+       <small><h4></h4></small>        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Student Result</li>
+        <li class="active">Student Result Slip</li>
       </ol>
     </section>
 
@@ -241,81 +258,103 @@
               <h3 class="box-title"></h3>
               
               <div class="box-tools">
-              <form action="{{ route('search') }}" method="post" class="form-inline">
-                @csrf
                 <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
-
-                    <div class="input-group-btn">
-                    <button type="submit" class="btn btn-success">Search</button>
-                    </div>
+                <a href="#" onclick="window.print();" class="btn btn-info" >Print Slip</a>
                 </div>
-            </form>
               </div>
               <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               
-              <table width="501" border="0" align="center" cellpadding="3" cellspacing="3" class="table table-hover">
-            <tr>
+            <table width="60%" border="0" align="center" cellpadding="4" cellspacing="5" >
+<tr>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-                <td width="124"><img src="{{asset($collegeSetup->avatar)}}" alt="College logo"></td>
-                <td width="367"><h1><div align="center">{{$collegeSetup->name}}</div></h1> </td>
+                <td width="93"><img src="{{asset($collegeSetup->avatar)}}" alt="College logo"></td>
+              <td width="465"><h1><div align="center"><strong>{{$collegeSetup->name}}</strong> </div></h1> </td>
+  </tr>
+  <tr>
+                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             </tr>
+            
             <tr>
-                <td colspan="2">{{$studentResult->session1}} {{$studentResult->exam_type}} confirmation slip</td>
+                <td colspan="2" align="center"><p class="bold-text">{{$studentResult->session1}} {{$studentResult->exam_type}} RESULT CONFIRMATION SLIP</p> </td>
             </tr>
-            <tr>
-                <td colspan="2"><table width="485" border="0" align="center" cellpadding="3" cellspacing="3">
-                <tr>
-                    <td width="348">&nbsp;</td>
-                    <td width="116"><img name="" src="{{asset('uploads/'. $studentResult->studentno . '.jpg')}}" width="119" height="93" alt="" /></td>
-                </tr>
-                </table></td>
+             <tr>
+                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
                 <tr>
-                    <td width="173">Examination Date:</td>
-                    <td width="301">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Student Name:</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Student No</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Programme:</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Academic Session:</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Total No of Questions:</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>Score:</td>
-                    <td>&nbsp;</td>
+                    <td width="348">&nbsp;</td>
+                    <td width="116"><img name="" src="{{asset('uploads/'. $studentResult->studentno . '.jpg')}}" width="94" height="102" alt="" /></td>
                 </tr>
                 </table></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
+                <tr>
+                    <td width="173"><span class="style8"><p class="bold-font-text">Examination Date:</p></span></td>
+                  <td width="301"><p class="bold-font">{{ \Carbon\Carbon::parse($studentResult->examdate)->format('F j, Y') }}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Student Name:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->studentname}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Student No</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->studentno}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Programme:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->department}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Level:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->level}}</p></td>
+                </tr>
+                @if($studentResult->exam_category == 'SEMESTER')
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Semester:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->semester}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Course:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->course}}</p></td>
+                </tr>
+                @else
+
+                @endif
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Academic Session:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->session1}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Total No of Questions:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->noofquestion}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Score:</p></span></td>
+                  <td><p class="bold-font">{{$studentResult->correct}}</p></td>
+                </tr>
+              </table></td>
             </tr>
             <tr>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-                <td colspan="2">Note: Check your Portal to know the Cut off mark and the interview date.</td>
-            </tr>
+                <td colspan="2"><span class="style10"><p class="bold-font-text"><i>Note: Check your Portal to know the Cut off mark and the interview date.</i> </p></span></td>
+  </tr>
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center"><img src="{{asset('college/signature.jpg')}}" alt="" width="210" height="81"></td>
             </tr>
             </table>
               

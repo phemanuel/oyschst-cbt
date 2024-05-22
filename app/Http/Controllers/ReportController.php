@@ -90,6 +90,10 @@ class ReportController extends Controller
 
         $studentResult = CbtEvaluation::where('id',$id)->first();
 
+        if (!$studentResult){
+            return redirect()->back()->with('error', 'Result not found.');
+        }
+
         return view('dashboard.student-result', compact('softwareVersion','collegeSetup','studentResult'));
     }
 }
