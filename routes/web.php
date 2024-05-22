@@ -37,7 +37,7 @@ Route::get('/', function () {
     //     ->name('password.update');
 
     // Home route
-    Route::get('/', [AuthController::class, 'home'])->name('home');
+    Route::get('/', [AuthController::class, 'login'])->name('home');
     // Login and signup routes
     Route::get('user-login', [AuthController::class, 'login'])->name('login');
     Route::post('user-login', [AuthController::class, 'loginAction'])->name('login.action');
@@ -230,10 +230,30 @@ Route::get('/', function () {
         ->name('report');
         Route::post('report', [ReportController::class, 'reportView'])
         ->name('report-view');
-        Route::get('exam-sheet/{id}', [ReportController::class, 'examSheet'])
-        ->name('exam-sheet');
+        Route::get('exam-sheet/{id}/Page1', [ReportController::class, 'examSheetPage1'])
+        ->name('exam-sheet-page1');
+        Route::get('exam-sheet/{id}/Page2', [ReportController::class, 'examSheetPage2'])
+        ->name('exam-sheet-page2');
+        Route::get('exam-sheet/{id}/Page3', [ReportController::class, 'examSheetPage3'])
+        ->name('exam-sheet-page3');
+        Route::get('exam-sheet/{id}/Page4', [ReportController::class, 'examSheetPage4'])
+        ->name('exam-sheet-page4');
+        Route::get('exam-sheet/{id}/Page5', [ReportController::class, 'examSheetPage5'])
+        ->name('exam-sheet-page5');
+        Route::get('exam-sheet/{id}/Page6', [ReportController::class, 'examSheetPage6'])
+        ->name('exam-sheet-page6');
+        Route::get('exam-sheet/{id}/Page7', [ReportController::class, 'examSheetPage7'])
+        ->name('exam-sheet-page7');
+        Route::get('exam-sheet/{id}/Page8', [ReportController::class, 'examSheetPage8'])
+        ->name('exam-sheet-page8');
+        Route::get('exam-sheet/{id}/Page9', [ReportController::class, 'examSheetPage9'])
+        ->name('exam-sheet-page9');
+        Route::get('exam-sheet/{id}/Page10', [ReportController::class, 'examSheetPage10'])
+        ->name('exam-sheet-page10');
         Route::get('student-result/{id}', [ReportController::class, 'studentResult'])
         ->name('student-result');
+        Route::post('search', [ReportController::class, 'resultSearch'])
+        ->name('result-search'); 
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 

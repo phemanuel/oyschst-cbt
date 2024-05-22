@@ -39,6 +39,21 @@ class Question extends Model
         'semester',
     ];
 
+    public function scopeCommonConditions($query, $cbtEvaluation, $qstData)
+    {
+        return $query->where('session1', $qstData->session1)
+                        ->where('department', $qstData->department)
+                        ->where('level', $qstData->level)
+                        ->where('course', $qstData->course)
+                        ->where('exam_mode', $qstData->exam_mode)
+                        ->where('exam_type', $qstData->exam_type)
+                        ->where('exam_category', $qstData->exam_category)
+                        ->where('no_of_qst', $qstData->no_of_qst)
+                        ->where('semester', $qstData->semester);
+                        // ->where('question_no', $qstData);
+    
+    }
+
     public function scopeCommonConditionsQst($query, $cbtEvaluation, $examSetting, $studentData)
     {
         return $query->where('session1', $examSetting->session1)

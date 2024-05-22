@@ -700,31 +700,7 @@
                     <a href="{{route('cbt-page9', ['id' => $studentData->id])}}" class="btn btn-success">81-90</a>&nbsp; &nbsp;  
                     <a href="{{route('cbt-page10', ['id' => $studentData->id])}}" class="btn btn-success">91-100</a> 
                        
-                  @endif
-                  &nbsp; &nbsp;
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">
-                    Submit Test</button>
-                    <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel-2">Submit Computer Based Test</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Are you sure you want to submit.</p>
-                        </div>
-                        <div class="modal-footer">
-                          <a href="{{route('cbt-submit', ['id' => $studentData->id])}}"  class="btn btn-success">Yes</a>
-                          <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Modal Ends -->
-                  <!-- <a href="" class="btn btn-success">Submit</a> -->
+                  @endif                  
                 </div>
             </div>
             </div>

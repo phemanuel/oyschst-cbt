@@ -346,9 +346,13 @@
             <tr>
                 <td colspan="2">&nbsp;</td>
             </tr>
+            @if($studentResult->exam_type == 'ENTRANCE')
             <tr>
                 <td colspan="2"><span class="style10"><p class="bold-font-text"><i>Note: Check your Portal to know the Cut off mark and the interview date.</i> </p></span></td>
-  </tr>
+            </tr>
+            @else
+            
+            @endif
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
