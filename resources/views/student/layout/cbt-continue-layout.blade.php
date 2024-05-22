@@ -32,7 +32,7 @@
 }
 
     .bold-font {
-    font-size: 16px;
+    font-size: 24px;
     font-weight: bold;
 }
   </style>
@@ -128,16 +128,14 @@
 						</div>
 						@endif	
           </div>
-          <div class="alert alert-success">
-							<p>You have not completed the test, <strong>Click Continue Computer based test</strong>.</p>
-						</div>
+          
           <div class="row">
             <div class="col-md-7 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">
                     <i class="fas fa-thumbtack"></i>
-                    User Information
+                    Computer Based Test
                   </h4>
                   <div class="border-bottom text-center pb-4">
                         <img src="{{asset('uploads/'. $studentData->picture_name)}}" alt="profile" class="img-lg rounded-circle mb-3"/>
@@ -151,43 +149,19 @@
                       <tr>
 												<div class="form-check">
 													<label class="form-check-label">
-                              <td><strong><p class="bold-font">Name:</p></strong></td>
-                              <td><strong><p class="bold-font">{{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }} </p></strong></td>
-                           
-													</label>
+                              <td><p class="bold-font">You have not completed the test, <strong>Click Continue Computer based test</strong>.</p></td>
+                          </label>
 												</div>	
                         </tr>											
 											</li> 
-											<li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">	
-                              <td><p class="bold-font">Programme:</p></td>
-                              <td><p class="bold-font">{{$studentData->department}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>
-											</li>                      
-											<li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-														
-                              <td><p class="bold-font">Level</p></td>
-                              <td><p class="bold-font">{{$studentData->level}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>												
-											</li>      
+											
                       <li>
                       <tr>
 												<div class="form-check">
 													<label class="form-check-label">
 														
-                              <td><p class="bold-font">Time Left</p></td>
-                              <td><p class="bold-font">{{$studentMin}} Mins</p></td>
+                              <td><p class="bold-font">Time Left: {{$studentMin}} Mins</p></td>
+                              <td><p class="bold-font"></p></td>
                             
 													</label>
 												</div>

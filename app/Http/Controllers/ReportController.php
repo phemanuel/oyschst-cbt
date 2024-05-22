@@ -46,4 +46,50 @@ class ReportController extends Controller
         return view('dashboard.report', compact('softwareVersion', 'dept', 'acad_sessions', 
         'examtype','examSetting', 'collegeSetup', 'level','courseData'));
     }
+
+    public function reportView(Request $request)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();        
+
+        $validatedData = $request->validate([
+            'session1' => 'required|string',
+            'department' => 'required|string',
+            'level' => 'required|string',
+            'exam_category' => 'required|string',
+            'exam_type' => 'required|string',
+            'no_of_qst' => 'required|integer',  
+            'course' => 'required|string',   
+            'semester' => 'required|string',
+            'exam_mode' => 'required|string',
+        ]);  
+
+        $student = CbtEvaluation::where('session1', $validatedData['session1'])
+        ->where('department', $validatedData['department'])
+        ->where('level', $validatedData['level'])
+        ->where('semester', $validatedData['semester'])
+        ->where('course', $validatedData['course'])
+        ->where('exam_mode', $validatedData['exam_mode'])
+        ->where('exam_type', $validatedData['exam_type'])
+        ->where('exam_category', $validatedData['exam_category'])
+        ->where('noofquestion', $validatedData['no_of_qst'])
+        ->paginate(20);
+
+        return view('dashboard.report-view', compact('softwareVersion','collegeSetup','student'));
+    }
+
+    public function examSheet($id)
+    {
+
+    }
+
+    public function studentResult($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first(); 
+
+        $studentResult = CbtEvaluation::where('id',$id)->first();
+
+        return view('dashboard.student-result', compact('softwareVersion','collegeSetup','studentResult'));
+    }
 }

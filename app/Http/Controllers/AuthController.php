@@ -67,7 +67,10 @@ class AuthController extends Controller
                 if($loginStatus == 1){
                     return redirect()->back()->with('error', 'You are logged in already.');
                 }
-                else{
+                elseif($loginStatus == 2){
+                    return redirect()->back()->with('error', 'You have completed the test.');
+                }
+                elseif($loginStatus == 0){
                     //---Update Login status ---
                     $student->login_status = 1;
                     $student->save();

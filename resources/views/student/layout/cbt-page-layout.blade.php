@@ -34,15 +34,16 @@
 }
 
     .bold-text-font {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;  
     color: white;  
 }
 
 .bold-text-font-menu {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;  
     color: black;  
+    /* background-color: #663300; */
 }
 
     .bold-font {
@@ -135,11 +136,10 @@
           <li class="nav-item nav-profile">
            
           </li>
+          <hr>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="fa fa-home menu-icon"></i>
-              <span class="bold-text-font-menu">Question Menu</span>
-            </a>
+              <span class="bold-text-font-menu">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                Question Menu&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>            
           </li>
           <hr>
           @if($examSetting->no_of_qst == 10)
@@ -151,7 +151,7 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
@@ -160,11 +160,11 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
@@ -173,15 +173,15 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
@@ -190,19 +190,19 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
@@ -211,23 +211,23 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
@@ -236,27 +236,27 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
@@ -265,68 +265,68 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="8" id="8"  class="btn btn-success">Question 71-80</button>
-          </li>
+          </li><br>
           @elseif($examSetting->no_of_qst == 90)
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="8" id="8"  class="btn btn-success">Question 71-80</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="9" id="9"  class="btn btn-success">Question 81-90</button>
@@ -335,39 +335,39 @@
           <li class="nav-item">            
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
               <button type="button" name="1" id="1"  class="btn btn-success">Question 1-10</button>              
-            </li>
+            </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="2" id="2"  class="btn btn-success">Question 11-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="4" id="4"  class="btn btn-success">Question 31-40</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="5" id="5"  class="btn btn-success">Question 41-50</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="6" id="6"  class="btn btn-success">Question 51-60</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="7" id="7"  class="btn btn-success">Question 61-70</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="8" id="8"  class="btn btn-success">Question 71-80</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="9" id="9"  class="btn btn-success">Question 81-90</button>
-          </li>
+          </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="10" id="10"  class="btn btn-success">Question 91-100</button>
@@ -376,6 +376,35 @@
           <hr>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
                     Submit Test</button>
+        <hr>
+        <li class="nav-item">
+              <span class="bold-text-font-menu">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                Exam Details&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>           
+          </li>
+          <hr>
+          <table class="table">
+            <tr>
+                <td><p class="bold-text-font-menu">Academic Session:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
+            </tr>
+            <tr>
+            <td><p class="bold-text-font-menu">Exam Type:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
+            </tr>
+            @if($examSetting->exam_category == 'SEMESTER')
+            <tr>
+                <td><p class="bold-text-font-menu">Semester:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
+            </tr>
+            <tr>
+                <td><p class="bold-text-font-menu">Course:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
+            </tr>
+            @else
+
+            @endif
+            
+          </table>
         </ul>
       </nav>
       <!-- partial -->
@@ -524,8 +553,7 @@
                     }
                 });
             }
-
-            // Function to render questions on the page
+            
             // Function to render questions on the page
               function renderQuestions(response) {
                   $('#questions-container').empty(); // Clear previous questions

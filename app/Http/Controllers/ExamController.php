@@ -1588,7 +1588,10 @@ class ExamController extends Controller
             ->where('exam_category', $examSetting->exam_category)
             ->where('noofquestion', $noOfQuestions)
             ->first();
-
+        //----Update student login status
+        $studentData->login_status = 2;
+        $studentData->save();
+        //----Update student exam status
         $studentQstData->update([
             'examstatus' => 2,
             'correct' => $correctCount,
@@ -1767,15 +1770,38 @@ class ExamController extends Controller
     public function fetchQuestions($id, $pageNo)
     {
         // Log the updated answer for debugging
-        Log::info('Student ID:', [$id]);       
-        Log::info('PageNo:', [$pageNo]); 
+        // Log::info('Student ID:', [$id]);       
+        // Log::info('PageNo:', [$pageNo]); 
 
         if($pageNo == 1){
-            return $this->cbtPage1($id);
-            //Log::info('QuestionNo' , $questionNo);            
+            return $this->cbtPage1($id);                       
         }
         elseif($pageNo == 2){
             return $this->cbtPage2($id);
+        }
+        elseif($pageNo == 3){
+            return $this->cbtPage3($id);
+        }
+        elseif($pageNo == 4){
+            return $this->cbtPage4($id);
+        }
+        elseif($pageNo == 5){
+            return $this->cbtPage5($id);
+        }
+        elseif($pageNo == 6){
+            return $this->cbtPage6($id);
+        }
+        elseif($pageNo == 7){
+            return $this->cbtPage7($id);
+        }
+        elseif($pageNo == 8){
+            return $this->cbtPage8($id);
+        }
+        elseif($pageNo == 9){
+            return $this->cbtPage9($id);
+        }
+        elseif($pageNo == 10){
+            return $this->cbtPage10($id);
         }
     }
     

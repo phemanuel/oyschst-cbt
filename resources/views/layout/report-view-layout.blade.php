@@ -37,7 +37,21 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
 
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -141,7 +155,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -173,7 +187,7 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('college-setup')}}">
             <i class="fa fa-table"></i> <span>College Setup</span>
             <span class="pull-right-container">
@@ -208,162 +222,116 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Report        
+        Student Result 
+       <small><h4>(Note: You can search for a student by Surname or Admission No)</h4></small>        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Report</li>
+        <li class="active">Student Result</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-            <h3 class="box-title">Print Student Result.</h3>
-            
-            </div>
-            @if(session('success-college'))
-						<div class="alert alert-success">
-							{{ session('success-college') }}
-						</div>
-          @elseif(session('error-college'))
-						<div class="alert alert-danger">
-							{{ session('error-college') }}
-						</div>
-						@endif	
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" action="{{route('report-view')}}" method="post" enctype="multipart/form-data">
-              @csrf    
-                      
-              <div class="box-body">              
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Category</label>
-                  <select name="exam_category" id="" class="form-control">
-                  <option value="{{$examSetting->exam_category}}" selected>{{$examSetting->exam_category}}</option>
-                    <option value="GENERAL">GENERAL</option>
-                    <option value="SEMESTER">SEMESTER</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Exam MODE</label>
-                  <select name="exam_mode" id="" class="form-control">
-                  <option value="{{$examSetting->exam_mode}}" selected>{{$examSetting->exam_mode}}</option>
-                    <option value="OBJECTIVE">OBJECTIVE</option>
-                    <option value="FILL IN GAP">FILL IN GAP</option>
-                    <option value="THEORY">THEORY</option>
-                  </select>
-                </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Type</label>
-                  <select name="exam_type" id="" class="form-control">
-                  <option value="{{$examSetting->exam_type}}" selected>{{$examSetting->exam_type}}</option>
-                  @foreach($examtype as $rt)
-				<option value="{{$rt->exam_type}}">{{$rt->exam_type}}</option>
-				@endforeach
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Programme</label>
-                  <select name="department" id="" class="form-control">
-                  <option value="{{$examSetting->department}}" selected>{{$examSetting->department}}</option>
-                  @foreach($dept as $rs)
-				<option value="{{$rs->department}}">{{$rs->department}}</option>
-				@endforeach
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="session1" id="" class="form-control">
-                  <option value="{{$examSetting->session1}}" selected>{{$examSetting->session1}}</option>
-                  @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Subject/Course</label>
-                  <select name="course" id="" class="form-control">
-                  <option value="{{$examSetting->course}}" selected>{{$examSetting->course}}</option>
-                  @foreach($courseData as $rd)
-				<option value="{{$rd->course}}">{{$rd->course}}</option>
-				@endforeach
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Semester</label>
-                  <select name="semester" id="" class="form-control"> 
-                  <option value="{{$examSetting->semester}}" selected>{{$examSetting->semester}}</option>                 
-				<option value="First">First</option>
-				<option value="Second">Second</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Level</label>
-                  <select name="level" id="" class="form-control">
-                  <option value="{{$examSetting->level}}" selected>{{$examSetting->level}}</option>                  
-                  @foreach($level as $rd)
-				<option value="{{$rd->level}}">{{$rd->level}}</option>
-				@endforeach
-                  </select>
-                </div>
-                <p><a href="{{route('college-setup')}}">Create Class/Level</a></p>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">No of Question</label>
-                  <select name="no_of_qst" id="" class="form-control"> 
-                  <option value="{{$examSetting->no_of_qst}}" selected>{{$examSetting->no_of_qst}}</option>                 
-				<option value="10">10</option>
-				<option value="20">20</option>
-                <option value="30">30</option>
-				<option value="40">40</option>
-                <option value="50">50</option>
-				<option value="60">60</option>
-                <option value="70">70</option>
-				<option value="80">80</option>
-                <option value="90">90</option>
-				<option value="100">100</option>                
-                  </select>
-                </div>  
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="box-header">
+              <h3 class="box-title"></h3>
               
+              <div class="box-tools">
+              <form action="{{ route('search') }}" method="post" class="form-inline">
+                @csrf
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
 
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Proceed</button>
-              </div>
+                    <div class="input-group-btn">
+                    <button type="submit" class="btn btn-success">Search</button>
+                    </div>
+                </div>
             </form>
+              </div>
+              <hr>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>Avatar</th>
+                  <th>Reg/Matric No</th>
+                  <th>Name</th>
+                  <th>Programme</th>
+                  <th>Level</th>
+                  <th>Exam Type</th>
+                  <th>No of Qst</th>
+                  <th>Score</th>
+                  <th>Actions</th>
+                </tr>
+                @if ($student->count() > 0)
+                @foreach ($student as $key => $rs)
+                <tr>
+                    <td>{{ $key + 1 }}</td>
+                    <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <td>{{$rs->studentno}}</td>
+                    <td>{{ $rs->studentname }}</td>
+                    <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->exam_type }}</td>
+                    <td>{{ $rs->noofquestion }}</td>                    
+                    <td>{{ $rs->correct }}</td>                    
+                    <td> <a class="label label-primary" href="{{route('exam-sheet', ['id' => $rs->id])}}">Exam Sheet</a>  
+                    <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}">Print Result</a>                   
+                </td>
+                </tr>
+                @endforeach
+                @else
+		<tr>
+			<td colspan="8">Scores not available.</td>
+		</tr>
+        @endif
+              </table>
+              {{ $student->links() }}
+            </div>
+            <!-- /.box-body -->
           </div>
           <!-- /.box -->
-
-          
-
         </div>
-        <!--/.col (left) -->
-        <!-- left column -->
-       
-
-          
-        
-        <!-- right column -->
-        <div class="col-md-6">
-          
-          
-        </div>
-        <!--/.col (right) -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>
+
+  <div class="modal modal-info fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import Student List.</h4>
+              </div>
+              <div class="modal-body">
+                <p>Importing students from a CSV (Comma Separated Values) file is a convenient way to bulk upload questions into a system. 
+                Here's how the process typically works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-student-csv')}}">You can download a sample template here.</a></li>
+                    <li> Click on import.</li>
+                    <li> This will upload all students for the specified criteria.</li>
+                    <li> You can edit each student as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <a href="{{route('student-import')}}" class="btn btn-outline">Proceed</a>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">

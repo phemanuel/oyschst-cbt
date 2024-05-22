@@ -54,7 +54,7 @@ Route::get('/', function () {
     //----Computer Based Test--------
     Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
     ->name('cbt-check');
-    Route::get('cbt-page/{id}', [ExamController::class, 'cbtProcess'])
+    Route::get('cbt-process/{id}', [ExamController::class, 'cbtProcess'])
     ->name('cbt-process');   
     Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
     ->name('cbt-page');  
@@ -228,6 +228,12 @@ Route::get('/', function () {
         //--report
         Route::get('report', [ReportController::class, 'index'])
         ->name('report');
+        Route::post('report', [ReportController::class, 'reportView'])
+        ->name('report-view');
+        Route::get('exam-sheet/{id}', [ReportController::class, 'examSheet'])
+        ->name('exam-sheet');
+        Route::get('student-result/{id}', [ReportController::class, 'studentResult'])
+        ->name('student-result');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 
