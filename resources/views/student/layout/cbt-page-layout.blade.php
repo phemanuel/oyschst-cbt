@@ -91,8 +91,8 @@
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo"/></a>
+        <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a>
+        <!-- <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a> -->
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
         
@@ -167,7 +167,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li>
           @elseif($examSetting->no_of_qst == 40)
           <li class="nav-item">            
@@ -180,7 +180,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -197,7 +197,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -218,7 +218,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -243,7 +243,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -272,7 +272,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -305,7 +305,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -342,7 +342,7 @@
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
-              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-20</button>
+              <button type="button" name="3" id="3"  class="btn btn-success">Question 21-30</button>
           </li><br>
           <li class="nav-item">           
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
@@ -530,7 +530,8 @@
     </script>
 
 <!-- Fetch questions and update Answers -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script src="{{ asset('student/js/jquery-3.5.1.min.js') }}"></script>
 <script>
         $(document).ready(function() {
             // Function to fetch questions and render them

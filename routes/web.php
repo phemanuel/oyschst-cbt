@@ -252,7 +252,7 @@ Route::get('/', function () {
         ->name('exam-sheet-page10');
         Route::get('student-result/{id}', [ReportController::class, 'studentResult'])
         ->name('student-result');
-        Route::post('search', [ReportController::class, 'resultSearch'])
+        Route::post('result-search', [ReportController::class, 'resultSearch'])
         ->name('result-search'); 
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])

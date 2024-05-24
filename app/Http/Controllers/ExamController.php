@@ -114,6 +114,25 @@ class ExamController extends Controller
         $studentData = StudentAdmission::where('id', $id)->first();
         $examSetting = ExamSetting::first();
 
+        $examMode = $examSetting->exam_mode;
+        if($examMode == "OBJECTIVE"){
+            return $this->cbtObjective($id);
+        }
+        elseif($examMode == "FILL-IN-GAP"){
+            // return $this->cbtFillInGap($id);
+        }
+        elseif($examMode == "THEORY"){
+            // return $this->cbtTheory($id);
+        }
+    }
+
+    public function cbtObjective($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
         //--setup student cbt data
             $noOfQuestions = $examSetting->no_of_qst;
             $studentName = $studentData->surname . " " . $studentData->first_name . " " . $studentData->other_name;
@@ -287,6 +306,7 @@ class ExamController extends Controller
             $student2->save();
             $pageNo = 1;            
             return redirect()->to(route('cbt-page', ['id' => $studentData->id]));
+
     }
 
     //--Page 1
@@ -1514,10 +1534,7 @@ class ExamController extends Controller
                 break;
             case 50:
                 return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
-                break;
-            case 30:
-                return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
-                break;
+                break;            
             case 60:
                 return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
                 break;
@@ -1629,7 +1646,7 @@ class ExamController extends Controller
         $score = $cbtEvaluation->correct;              
 
         return view('student.pages.cbt-result', compact('softwareVersion', 'collegeSetup', 'studentData',
-        'examSetting','pageNo','score'))->with('success', 'You have successfully completed the test.');
+        'examSetting','pageNo','score','cbtEvaluation'))->with('success', 'You have successfully completed the test.');
     }
 
     public function updateRemainingTime(Request $request, $id)

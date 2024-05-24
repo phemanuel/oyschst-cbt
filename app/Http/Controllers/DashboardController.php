@@ -112,6 +112,7 @@ class DashboardController extends Controller
         try {
             // Validate form input
             $validatedData = $request->validate([
+                'exam_mode' => 'required',
                 'exam_category' => 'required',
                 'exam_type' => 'required',
                 'department' => 'required',

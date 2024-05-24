@@ -31,9 +31,14 @@
     font-weight: bold;    
 }
 
-    .bold-font {
+    .bold-font-text {
     font-size: 16px;
     font-weight: bold;
+}
+
+.bold-font {
+    font-size: 16px;
+    /* font-weight: bold; */
 }
 
 .bold-font-score {
@@ -42,6 +47,7 @@
     color: green;
 }
   </style>
+  
   	<style>
     /* Success Alert */
     .alert.alert-success {
@@ -95,7 +101,7 @@
             <div class="nav-link">
               <div class="search-field d-none d-md-block">
                 
-              </div>
+              </div> 
             </div>
           </li>
           <li class="nav-item">
@@ -137,172 +143,134 @@
           <div class="alert alert-success">
 							<p>You have successfully completed the Computer based test.</strong>.</p>
 						</div>
-          <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    <i class="fas fa-thumbtack"></i>
-                    User Information
-                  </h4>
-                  <div class="border-bottom text-center pb-4">
-                        <img src="{{asset('uploads/'. $studentData->picture_name)}}" alt="profile" class="img-lg rounded-circle mb-3"/>
-                        
-                        
-                      </div>
-									<div class="list-wrapper">
-                  <ul class="d-flex flex-column-reverse todo-list">
-                    <table class="table">   
-                    <li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-                              <td><strong><p class="bold-font">Name:</p></strong></td>
-                              <td><strong><p class="bold-font">{{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }} </p></strong></td>
-                           
-													</label>
-												</div>	
-                        </tr>											
-											</li> 
-											<li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">	
-                              <td><p class="bold-font">Programme:</p></td>
-                              <td><p class="bold-font">{{$studentData->department}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>
-											</li>                      
-											<li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-														
-                              <td><p class="bold-font">Level</p></td>
-                              <td><p class="bold-font">{{$studentData->level}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>												
-											</li>    
-                                            @if($examSetting->check_result == 1)
-                                                <li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-														
-                              <td><p class="bold-font">Score</p></td>
-                              <td><p class="bold-font-score">{{$score}} out of {{$examSetting->no_of_qst}}</p></td>
-                            
-													</label>
-												</div>
-                        </tr>												
-											</li>    
-                                            @else    
-                                            
-                                            @endif
-                    </table>
-										</ul> 
-                    <form action="" method="post">
+            <div class="row"> 
+           @if($examSetting->check_result == 1)
+           <table width="60%" border="0" align="center" cellpadding="4" cellspacing="5">
+<tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="93"><img src="{{asset($collegeSetup->avatar)}}" alt="College logo"></td>
+              <td width="465"><h1><div align="center"><strong>{{$collegeSetup->name}}</strong> </div></h1> </td>
+  </tr>
+  <tr>
+                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            </tr>
+            
+            <tr>
+                <td colspan="2" align="center"><p class="bold-font-text">{{$cbtEvaluation->session1}} {{$cbtEvaluation->exam_type}} RESULT CONFIRMATION SLIP</p> </td>
+            </tr>
+             <tr>
+                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
+                <tr>
+                    <td width="348">&nbsp;</td>
+                    <td width="116"><img name="" src="{{asset('uploads/'. $cbtEvaluation->studentno . '.jpg')}}" width="94" height="102" alt="" /></td>
+                </tr>
+                </table></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
+                <tr>
+                    <td width="173"><span class="style8"><p class="bold-font-text">Examination Date:</p></span></td>
+                  <td width="301"><p class="bold-font">{{ \Carbon\Carbon::parse($cbtEvaluation->examdate)->format('F j, Y') }}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Student Name:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->studentname}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Student No</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->studentno}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Programme:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->department}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Level:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->level}}</p></td>
+                </tr>
+                @if($cbtEvaluation->exam_category == 'SEMESTER')
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Semester:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->semester}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Course:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->course}}</p></td>
+                </tr>
+                @else
+
+                @endif
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Academic Session:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->session1}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Total No of Questions:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->noofquestion}}</p></td>
+                </tr>
+                <tr>
+                    <td><span class="style8"><p class="bold-font-text">Score:</p></span></td>
+                  <td><p class="bold-font">{{$cbtEvaluation->correct}}</p></td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            @if($cbtEvaluation->exam_type == 'ENTRANCE')
+            <tr>
+                <td colspan="2"><span class="style10"><p class="bold-font-text"><i>Note: Check your Portal to know the Cut off mark and the interview date.</i> </p></span></td>
+            </tr>
+            @else
+            
+            @endif
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            @if($cbtEvaluation->exam_type == 'ENTRANCE')
+            <tr>
+              <td colspan="2" align="center"><img src="{{asset('college/signature.jpg')}}" alt="" width="210" height="81"></td>
+            </tr>
+            @elseif($cbtEvaluation->exam_type == 'WEEDING-OUT')
+            <tr>
+              <td colspan="2" align="center"><img src="{{asset('college/signature.jpg')}}" alt="" width="210" height="81"></td>
+            </tr>
+            @else
+
+            @endif
+            </table>
+           @else
+
+           @endif
+<hr>
+            
+          </div>   
+<div>
+
+<table width="100%">
+  <tr>
+    <td></td>
+    <td><p><form action="" method="post">
                       @csrf
                       <div class="form-check">
 													<label class="form-check-label">
-                          <a href="{{route('logout')}}" class="btn btn-success btn-block">Exit</a>                            
+                          <a href="{{route('student-logout')}}" class="btn btn-success btn-block">Exit Computer Based Test</a>                            
 													</label>
 												</div> 
-                    </form>                   
-												                      											
-											
-
-									</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-5 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    <i class="fas fa-rocket"></i>
-                    Exam Information
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table">
-                     <tr>
-                      <td><p class="bold-text-font">Academic Session</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->session1}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Programme</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->department}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Level</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->level}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     @if($examSetting->exam_category == 'GENERAL')
-                      <!-- <tr>
-                      <td><p class="bold-text-font">Subject/Course</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr> -->
-                     @elseif($examSetting->exam_category == 'SEMESTER')
-                     <tr>
-                      <td><p class="bold-text-font">Subject/Course</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     @endif
-                     <tr>
-                      <td><p class="bold-text-font">Exam Mode</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_mode}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Exam Category</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_category}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Exam Type</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_type}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Total no of Question</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->no_of_qst}}</p></td>
-                      <td><p class="bold-text-font">Duration</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->duration}}mins</p></td>
-                     </tr>                     
-                     <!-- <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                     </tr> -->
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+                    </form></p></td>
+    <td></td>
+  </tr>
+</table>
 </div>
-        </div>
-
         
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">

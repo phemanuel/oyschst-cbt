@@ -242,6 +242,15 @@
               @method('PUT')
               <div class="box-body">
               <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Mode</label>
+                  <select name="exam_mode" id="" class="form-control">
+                  <option value="{{$examSetting->exam_mode}}" selected>{{$examSetting->exam_mode}}</option>
+                    <option value="OBJECTIVE">OBJECTIVE</option>
+                    <option value="FILL-IN-GAP">FILL-IN-GAP</option>
+                  <option value="THEORY">THEORY</option>
+                  </select>
+                </div>
+                <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
                   <option value="{{$examSetting->exam_category}}" selected>{{$examSetting->exam_category}}</option>
