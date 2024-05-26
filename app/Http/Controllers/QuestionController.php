@@ -34,8 +34,7 @@ class QuestionController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $questionSetting = QuestionSetting::orderBy('created_at', 'desc')->Paginate(20)
-        ;
+        $questionSetting = QuestionSetting::orderBy('created_at', 'desc')->Paginate(20);
 
         return view('questions.question', compact('softwareVersion','collegeSetup','questionSetting'));
     }

@@ -106,7 +106,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+          <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{auth()->user()->name}}</p>
@@ -133,7 +133,8 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li> 
+        <li>
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -173,7 +174,7 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('college-setup')}}">
             <i class="fa fa-table"></i> <span>College Setup</span>
             <span class="pull-right-container">
@@ -181,7 +182,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('report')}}">
             <i class="fa fa-folder"></i> <span>Report</span>
             <span class="pull-right-container">
@@ -208,159 +209,111 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Report        
+        Report       
+       <small><h4>(Note: You can search by Programme)</h4></small> 
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
         <li class="active">Report</li>
       </ol>
     </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-            <h3 class="box-title">Print Student Result.</h3>
-            
-            </div>
-            @if(session('success-college'))
+<div>
+@if(session('success'))
 						<div class="alert alert-success">
-							{{ session('success-college') }}
+							{{ session('success') }}
 						</div>
-          @elseif(session('error-college'))
+          @elseif(session('error'))
 						<div class="alert alert-danger">
-							{{ session('error-college') }}
+							{{ session('error') }}
 						</div>
 						@endif	
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" action="{{route('report-view')}}" method="post" enctype="multipart/form-data">
-              @csrf    
-                      
-              <div class="box-body">              
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Category</label>
-                  <select name="exam_category" id="" class="form-control">
-                  <option value="{{$examSetting->exam_category}}" selected>{{$examSetting->exam_category}}</option>
-                    <option value="GENERAL">GENERAL</option>
-                    <option value="SEMESTER">SEMESTER</option>
-                  </select>
+</div>
+    <!-- Main content -->
+    <section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title"></h3>
+              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                <!-- <a href="#" class="btn btn-info">Upload Question</a> -->
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Exam MODE</label>
-                  <select name="exam_mode" id="" class="form-control">
-                  <option value="{{$examSetting->exam_mode}}" selected>{{$examSetting->exam_mode}}</option>
-                    <option value="OBJECTIVE">OBJECTIVE</option>
-                    <option value="FILL IN GAP">FILL IN GAP</option>
-                    <option value="THEORY">THEORY</option>
-                  </select>
-                </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Type</label>
-                  <select name="exam_type" id="" class="form-control">
-                  <option value="{{$examSetting->exam_type}}" selected>{{$examSetting->exam_type}}</option>
-                  @foreach($examtype as $rt)
-				<option value="{{$rt->exam_type}}">{{$rt->exam_type}}</option>
-				@endforeach
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Programme</label>
-                  <select name="department" id="" class="form-control">
-                  <option value="{{$examSetting->department}}" selected>{{$examSetting->department}}</option>
-                  @foreach($dept as $rs)
-				<option value="{{$rs->department}}">{{$rs->department}}</option>
-				@endforeach
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="session1" id="" class="form-control">
-                  <option value="{{$examSetting->session1}}" selected>{{$examSetting->session1}}</option>
-                  @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Subject/Course</label>
-                  <select name="course" id="" class="form-control">
-                  <option value="{{$examSetting->course}}" selected>{{$examSetting->course}}</option>
-                  @foreach($courseData as $rd)
-				<option value="{{$rd->course}}">{{$rd->course}}</option>
-				@endforeach
-                  </select>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Semester</label>
-                  <select name="semester" id="" class="form-control"> 
-                  <option value="{{$examSetting->semester}}" selected>{{$examSetting->semester}}</option>                 
-				<option value="First">First</option>
-				<option value="Second">Second</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Level</label>
-                  <select name="level" id="" class="form-control">
-                  <option value="{{$examSetting->level}}" selected>{{$examSetting->level}}</option>                  
-                  @foreach($level as $rd)
-				<option value="{{$rd->level}}">{{$rd->level}}</option>
-				@endforeach
-                  </select>
-                </div>
-                <p><a href="{{route('college-setup')}}">Create Class/Level</a></p>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">No of Question</label>
-                  <select name="no_of_qst" id="" class="form-control"> 
-                  <option value="{{$examSetting->no_of_qst}}" selected>{{$examSetting->no_of_qst}}</option>                 
-				<option value="10">10</option>
-				<option value="20">20</option>
-                <option value="30">30</option>
-				<option value="40">40</option>
-                <option value="50">50</option>
-				<option value="60">60</option>
-                <option value="70">70</option>
-				<option value="80">80</option>
-                <option value="90">90</option>
-				<option value="100">100</option>                
-                  </select>
-                </div>  
-              
-
               </div>
-              <!-- /.box-body -->
+              <hr>
+              <div class="box-header">
+              <h3 class="box-title"></h3>
+              <div class="box-tools">
+              <form action="{{ route('report-search') }}" method="post" class="form-inline">
+                @csrf
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Proceed</button>
-              </div>
+                    <div class="input-group-btn">
+                    <button type="submit" class="btn btn-success">Search</button>
+                    </div>
+                </div>
             </form>
+              </div>
+  </div>
+             
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>Academic Session</th>
+                  <th>Programme</th>
+                  <th>Level</th>
+                  <th>Semester</th>
+                  <th>Exam Mode</th>
+                  <th>Exam Category</th>
+                  <th>Exam Type</th>
+                  <th>Exam Date</th>
+                  <th>No of Questions</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th>Created On</th>
+                  <th>Actions</th>
+                </tr>
+                @if ($questionSetting->count() > 0)
+                @foreach ($questionSetting as $key => $rs)
+                <tr>
+                    <td>{{ $key + 1 }}</td>                    
+                    <td>{{$rs->session1}}</td>
+                    <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->semester }}</td>
+                    <td>{{ $rs->exam_mode }}</td>
+                    <td>{{ $rs->exam_category}}</td>
+                    <td>{{ $rs->exam_type }}</td>
+                    <td>{{ $rs->exam_date }}</td>
+                    <td>{{ $rs->no_of_qst }}</td>
+                    <td>{{ $rs->duration }}</td>                    
+                    <td>{{ $rs->exam_status }}                    
+                    </td>                                       
+                    <td>{{$rs->created_at}}</td>
+                    <td> 
+                      
+                      <a class="label label-success" href="{{route('report-view', ['id' => $rs->id])}}">Check Result</a>
+                     
+                    </td>
+                </tr>
+                @endforeach
+                @else
+		<tr>
+			<td colspan="8">Questions not available.</td>
+		</tr>
+        @endif
+              </table>
+              {{ $questionSetting->links() }}
+            </div>
+            <!-- /.box-body -->
           </div>
           <!-- /.box -->
-
-          
-
         </div>
-        <!--/.col (left) -->
-        <!-- left column -->
-       
-
-          
-        
-        <!-- right column -->
-        <div class="col-md-6">
-          
-          
-        </div>
-        <!--/.col (right) -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>

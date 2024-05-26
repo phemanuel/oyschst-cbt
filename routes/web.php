@@ -228,8 +228,10 @@ Route::get('/', function () {
         //--report
         Route::get('report', [ReportController::class, 'index'])
         ->name('report');
-        Route::post('report', [ReportController::class, 'reportView'])
+        Route::get('report-view/{id}', [ReportController::class, 'reportView'])
         ->name('report-view');
+        Route::post('report-search', [ReportController::class, 'reportSearch'])
+        ->name('report-search');
         Route::get('exam-sheet/{id}/Page1', [ReportController::class, 'examSheetPage1'])
         ->name('exam-sheet-page1');
         Route::get('exam-sheet/{id}/Page2', [ReportController::class, 'examSheetPage2'])
@@ -254,6 +256,8 @@ Route::get('/', function () {
         ->name('student-result');
         Route::post('result-search', [ReportController::class, 'resultSearch'])
         ->name('result-search'); 
+        Route::get('/exam-dates', [ExamController::class, 'getExamDates'])
+        ->name('exam-dates');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 

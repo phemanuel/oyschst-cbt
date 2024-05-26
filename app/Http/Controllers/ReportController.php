@@ -34,46 +34,34 @@ class ReportController extends Controller
     public function index()
     {
         $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();
-        $dept = Department::orderBy('department')->get();
-        $acad_sessions = AcademicSession::orderBy('session1')->get();
-        $examtype = ExamType::orderBy('exam_type')->get();
-        $examSetting = ExamSetting::first();
-        $level = CbtClass::orderBy('level')->get();
-        $courseData = Courses::orderBy('course')->get();
+        $softwareVersion = SoftwareVersion::first();        
+        $questionSetting = QuestionSetting::orderBy('created_at', 'desc')->Paginate(20);
 
 
-        return view('dashboard.report', compact('softwareVersion', 'dept', 'acad_sessions', 
-        'examtype','examSetting', 'collegeSetup', 'level','courseData'));
+        return view('dashboard.report', compact('softwareVersion','collegeSetup', 'questionSetting'));
     }
 
-    public function reportView(Request $request)
+    public function reportView($id)
     {
         $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();        
+        $softwareVersion = SoftwareVersion::first(); 
 
-        $validatedData = $request->validate([
-            'session1' => 'required|string',
-            'department' => 'required|string',
-            'level' => 'required|string',
-            'exam_category' => 'required|string',
-            'exam_type' => 'required|string',
-            'no_of_qst' => 'required|integer',  
-            'course' => 'required|string',   
-            'semester' => 'required|string',
-            'exam_mode' => 'required|string',
-        ]);  
+        $questionSetting = QuestionSetting::where('id', $id)->first();
 
-        $student = CbtEvaluation::where('session1', $validatedData['session1'])
-        ->where('department', $validatedData['department'])
-        ->where('level', $validatedData['level'])
-        ->where('semester', $validatedData['semester'])
-        ->where('course', $validatedData['course'])
-        ->where('exam_mode', $validatedData['exam_mode'])
-        ->where('exam_type', $validatedData['exam_type'])
-        ->where('exam_category', $validatedData['exam_category'])
-        ->where('noofquestion', $validatedData['no_of_qst'])
+        $student = CbtEvaluation::where('session1', $questionSetting->session1)
+        ->where('department', $questionSetting->department)
+        ->where('level', $questionSetting->level)
+        ->where('semester', $questionSetting->semester)
+        ->where('course', $questionSetting->course)
+        ->where('exam_mode', $questionSetting->exam_mode)
+        ->where('exam_type', $questionSetting->exam_type)
+        ->where('exam_category', $questionSetting->exam_category)
+        ->where('noofquestion', $questionSetting->no_of_qst)
         ->paginate(20);
+
+        if(!$student){
+            return redirect()->back()->with('error', 'Result is not available for exam you selected.');
+        }
 
         return view('dashboard.report-view', compact('softwareVersion','collegeSetup','student'));
     }

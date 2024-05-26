@@ -120,7 +120,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+          <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{auth()->user()->name}}</p>
@@ -226,7 +226,8 @@
        <small><h4>(Note: You can search for a student by Surname or Admission No)</h4></small>        
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>   
+        <li><a href="{{route('report')}}">Report</a> </li>     
         <li class="active">Student Result</li>
       </ol>
     </section>
@@ -287,7 +288,7 @@
                 @endforeach
                 @else
 		<tr>
-			<td colspan="8">Scores not available.</td>
+			<td colspan="8">Results not available.</td>
 		</tr>
         @endif
               </table>

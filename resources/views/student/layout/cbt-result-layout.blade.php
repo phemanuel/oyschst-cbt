@@ -143,6 +143,12 @@
           <div class="alert alert-success">
 							<p>You have successfully completed the Computer based test.</strong>.</p>
 						</div>
+            <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                <a href="#" onclick="window.print();" class="btn btn-info" >Print Slip</a>
+                </div>
+              </div>
+              <hr>
             <div class="row"> 
            @if($examSetting->check_result == 1)
            <table width="60%" border="0" align="center" cellpadding="4" cellspacing="5">
@@ -168,7 +174,7 @@
                 <tr>
                     <td width="348">&nbsp;</td>
                     <td width="116"><img name="" src="{{asset('uploads/'. $cbtEvaluation->studentno . '.jpg')}}" width="94" height="102" alt="" /></td>
-                </tr>
+                </tr> 
                 </table></td>
             </tr>
             <tr>

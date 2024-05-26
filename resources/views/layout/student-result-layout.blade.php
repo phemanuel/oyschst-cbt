@@ -172,7 +172,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -212,7 +212,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('report')}}">
             <i class="fa fa-folder"></i> <span>Report</span>
             <span class="pull-right-container">
