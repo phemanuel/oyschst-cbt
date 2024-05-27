@@ -1334,58 +1334,7 @@ class ExamController extends Controller
             'pageNo' => $pageNo,
         ]);             
     
-    }    
-
-    // public function updateAnswersForPage(Request $request, $id, $pageNo)
-    // {
-    //     // $optionName = $request->get('optionName');
-    //     // return response()->json([
-    //     //     'Option' => $optionName,
-    //     // ]);
-    //     $examSetting = ExamSetting::first();
-    //     $studentData = StudentAdmission::find($id);
-
-    //     // Log incoming request data for debugging
-    //     Log::info('Request Data:', $request->all());
-
-    //     // Calculate the start and end index based on the page number
-    //     $startIndex = ($pageNo - 1) * 10 + 1;
-    //     $endIndex = $startIndex + 9;
-
-    //     $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
-    //         ->where('session1', $examSetting->session1)
-    //         ->where('department', $examSetting->department)
-    //         ->where('level', $examSetting->level)
-    //         ->where('course', $examSetting->course)
-    //         ->where('exam_mode', $examSetting->exam_mode)
-    //         ->where('exam_type', $examSetting->exam_type)
-    //         ->where('exam_category', $examSetting->exam_category)
-    //         ->where('noofquestion', $examSetting->no_of_qst)
-    //         ->first();
-
-    //     // Update answers based on the form inputs
-    //     $options = [];
-    //     for ($i = $startIndex; $i <= $endIndex; $i++) {
-    //         $option = null;
-    //         $optionLetters = ['A', 'B', 'C', 'D'];
-    //         foreach ($optionLetters as $letter) {
-    //             $optionKey = "option{$i}{$letter}";
-    //             if ($request->has("options.{$optionKey}")) {
-    //                 $option = $letter;
-    //                 break;
-    //             }
-    //         }
-    //         $optionFieldName = "OK{$i}";
-    //         $options[$optionFieldName] = $option ?? $studentAnswer->{$optionFieldName};
-    //     }
-
-    //     // Log options being updated for debugging
-    //     Log::info('Options being updated:', $options);
-
-    //     $studentAnswer->update($options);
-
-    //     return response()->json(['message' => 'Update successful']);
-    // }
+    }        
 
     public function updateAnswersForPage(Request $request, $id, $pageNo)
     {
@@ -1847,29 +1796,6 @@ class ExamController extends Controller
         'examSetting','pageNo','studentMin'));
 
     }
-
-    public function getExamDates()
-    {
-        // Fetch exam dates from the QuestionSetting model
-        $examDates = QuestionSetting::select('department', 'course', 'exam_date')
-            ->get()
-            ->map(function($exam) {
-                // Format the exam date using Carbon
-                $formattedDate = Carbon::parse($exam->exam_date)->format('F j, Y');
-
-                return [
-                    'title' => "{$exam->department} - {$exam->course}",
-                    'start' => $exam->exam_date,
-                    'backgroundColor' => '#3c8dbc', // You can customize the color as needed
-                    'borderColor' => '#3c8dbc', // You can customize the color as needed
-                    'description' => "Date: {$formattedDate}<br>Time: 8:00am <br>Venue: ICT <br>Department: {$exam->department}<br>Course: {$exam->course}"
-                ];
-            });
-
-        return response()->json($examDates);
-    }
-
-
 
     public function studentLogout(Request $request)
     {

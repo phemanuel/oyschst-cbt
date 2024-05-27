@@ -424,6 +424,25 @@ class DashboardController extends Controller
             }
     }
 
-     
+    public function getExamDates()
+    {
+        // Fetch exam dates from the QuestionSetting model
+        $examDates = QuestionSetting::select('department', 'course', 'exam_date')
+            ->get()
+            ->map(function($exam) {
+                // Format the exam date using Carbon
+                $formattedDate = Carbon::parse($exam->exam_date)->format('F j, Y');
+
+                return [
+                    'title' => "{$exam->department} - {$exam->course}",
+                    'start' => $exam->exam_date,
+                    'backgroundColor' => '#3c8dbc', // You can customize the color as needed
+                    'borderColor' => '#3c8dbc', // You can customize the color as needed
+                    'description' => "Date: {$formattedDate}<br>Time: 8:00am <br>Venue: ICT <br>Department: {$exam->department}<br>Course: {$exam->course}"
+                ];
+            });
+
+        return response()->json($examDates);
+    }
 
 }

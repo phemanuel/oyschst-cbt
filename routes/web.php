@@ -256,7 +256,7 @@ Route::get('/', function () {
         ->name('student-result');
         Route::post('result-search', [ReportController::class, 'resultSearch'])
         ->name('result-search'); 
-        Route::get('/exam-dates', [ExamController::class, 'getExamDates'])
+        Route::get('/exam-dates', [DashboardController::class, 'getExamDates'])
         ->name('exam-dates');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])

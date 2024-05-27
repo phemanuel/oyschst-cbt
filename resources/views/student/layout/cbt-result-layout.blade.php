@@ -254,8 +254,19 @@
 
             @endif
             </table>
-           @else
-
+           @else<table class="table">   
+                    <li>
+                      <tr>
+												<div class="form-check">
+													<label class="form-check-label">
+                              <td><p class="bold-font">You have successfully completed the test, <strong>Exit the Computer based test</strong>.</p></td>
+                          </label>
+												</div>	
+                        </tr>											
+											</li> 										
+                                      
+                    </table>
+            
            @endif
 <hr>
             
