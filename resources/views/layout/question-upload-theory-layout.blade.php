@@ -314,7 +314,7 @@
 				<option value="Second">Second</option>
                   </select>
                 </div>          
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
                   <option value="GENERAL" selected>GENERAL</option> 
@@ -323,7 +323,7 @@
                 </div>             
                 @error('exam_category')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+                @enderror -->
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <select name="exam_type" id="" class="form-control">
@@ -350,18 +350,36 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">No of questions to upload</label>
+                  <label for="exampleInputEmail1">Total No of questions to upload</label>
+                  <select name="upload_no_of_qst" class="form-control">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+                </div>             
+                @error('upload_no_of_qst')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">No of questions for student</label>
                   <select name="no_of_qst" class="form-control">
-                  <option value="10" selected>10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
-                  <option value="50">50</option>
-                  <option value="60">60</option>
-                  <option value="70">70</option>
-                  <option value="80">80</option>
-                  <option value="90">90</option>
-                  <option value="100">100</option>
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
                 </select>
                 </div>             
                 @error('no_of_qst')
@@ -478,13 +496,13 @@
                 @error('level')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror                
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
                   <option value="GENERAL" selected>GENERAL</option> 
                   <option value="SEMESTER">SEMESTER</option> 
                   </select>
-                </div>             
+                </div>              -->
                 @error('exam_category')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -514,18 +532,36 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">No of questions to upload</label>
+                  <label for="exampleInputEmail1">Total No of questions to upload</label>
+                  <select name="upload_no_of_qst" class="form-control">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+                </div>             
+                @error('upload_no_of_qst')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">No of questions for student</label>
                   <select name="no_of_qst" class="form-control">
-                  <option value="10" selected>10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
-                  <option value="50">50</option>
-                  <option value="60">60</option>
-                  <option value="70">70</option>
-                  <option value="80">80</option>
-                  <option value="90">90</option>
-                  <option value="100">100</option>
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
                 </select>
                 </div>             
                 @error('no_of_qst')

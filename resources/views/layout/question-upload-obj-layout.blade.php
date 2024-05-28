@@ -314,7 +314,7 @@
 				<option value="Second">Second</option>
                   </select>
                 </div>          
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
                   <option value="GENERAL" selected>GENERAL</option> 
@@ -323,7 +323,7 @@
                 </div>             
                 @error('exam_category')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+                @enderror -->
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <select name="exam_type" id="" class="form-control">
@@ -478,7 +478,7 @@
                 @error('level')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror                
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
                   <option value="GENERAL" selected>GENERAL</option> 
@@ -487,7 +487,7 @@
                 </div>             
                 @error('exam_category')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+                @enderror -->
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <select name="exam_type" id="" class="form-control">

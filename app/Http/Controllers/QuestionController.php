@@ -69,7 +69,7 @@ class QuestionController extends Controller
                 'session1' => 'required|string',
                 'department' => 'required|string',
                 'level' => 'required|string',
-                'exam_category' => 'required|string',
+                // 'exam_category' => 'required|string',
                 'exam_type' => 'required|string',   
                 'duration' => 'required|string',
                 'exam_date' => 'required|string', 
@@ -80,7 +80,7 @@ class QuestionController extends Controller
 
             // Check if the exam type already exists
         $existingQuestion = QuestionSetting::where('exam_type', $validatedData['exam_type'])
-                                            ->where('exam_category', $validatedData['exam_category'])
+                                            ->where('exam_category', 'GENERAL')
                                             ->where('exam_mode', 'OBJECTIVES')
                                             ->where('department', $validatedData['department'])
                                             ->where('level', $validatedData['level'])
@@ -100,7 +100,7 @@ class QuestionController extends Controller
                 'department' => $validatedData['department'],
                 'level' => $validatedData['level'],
                 'semester' => $validatedData['semester'],
-                'exam_category' => $validatedData['exam_category'],
+                'exam_category' => 'GENERAL',
                 'exam_type' => $validatedData['exam_type'],
                 'exam_mode' => 'OBJECTIVE',
                 'exam_status' => 'Inactive',
@@ -119,7 +119,7 @@ class QuestionController extends Controller
                     'question' => "Question".$i,
                     'exam_mode' => 'OBJECTIVE',
                     'exam_type' => $validatedData['exam_type'],
-                    'exam_category' => $validatedData['exam_category'],
+                    'exam_category' => 'GENERAL',
                     'session1' => $validatedData['session1'],
                     'department' => $validatedData['department'],
                     'level' => $validatedData['level'],
@@ -567,7 +567,7 @@ class QuestionController extends Controller
                 'session1' => 'required|string',
                 'department' => 'required|string',
                 'level' => 'required|string',
-                'exam_category' => 'required|string',
+                // 'exam_category' => 'required|string',
                 'exam_type' => 'required|string',   
                 'duration' => 'required|string',
                 'exam_date' => 'required', 
@@ -578,7 +578,7 @@ class QuestionController extends Controller
 
             // Check if the exam type already exists
         $existingQuestion = QuestionSetting::where('exam_type', $validatedData['exam_type'])
-                                            ->where('exam_category', $validatedData['exam_category'])
+                                            ->where('exam_category', 'GENERAL')
                                             ->where('exam_mode', 'OBJECTIVES')
                                             ->where('department', $validatedData['department'])
                                             ->where('level', $validatedData['level'])
@@ -598,7 +598,7 @@ class QuestionController extends Controller
                 'department' => $validatedData['department'],
                 'level' => $validatedData['level'],
                 'semester' => $validatedData['semester'],
-                'exam_category' => $validatedData['exam_category'],
+                'exam_category' => 'GENERAL',
                 'exam_type' => $validatedData['exam_type'],
                 'exam_mode' => 'OBJECTIVE',
                 'exam_status' => 'Inactive',
@@ -632,7 +632,7 @@ class QuestionController extends Controller
                                 'department' => $validatedData['department'],
                                 'level' => $validatedData['level'],
                                 'semester' => $validatedData['semester'],
-                                'exam_category' => $validatedData['exam_category'],
+                                'exam_category' => 'GENERAL',
                                 'exam_type' => $validatedData['exam_type'],
                                 'exam_mode' => 'OBJECTIVE',
                                 'course' => $validatedData['course'],
@@ -673,5 +673,109 @@ class QuestionController extends Controller
         }        
         
     }
+
+    public function questionUploadTheory()
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $level = CbtClass::orderBy('level')->get();
+        $dept = Department::orderBy('department')->get();
+        $acad_sessions = AcademicSession::orderBy('session1')->get();
+        $examType = ExamType::Paginate(10);
+        $courseData = Courses::orderBy('course')->get();
+        return view('questions.question-upload-theory', compact('softwareVersion','collegeSetup','level',
+    'dept','acad_sessions', 'examType','courseData'));
+
+    }
+
+    public function questionUploadTheoryAction(Request $request)
+    {
+        
+        try {
+            $validatedData = $request->validate([
+                'session1' => 'required|string',
+                'department' => 'required|string',
+                'level' => 'required|string',
+                // 'exam_category' => 'required|string',
+                'exam_type' => 'required|string',   
+                'duration' => 'required|string',
+                'exam_date' => 'required|string', 
+                'upload_no_of_qst' => 'required|integer',  
+                'no_of_qst' => 'required|integer', 
+                'course' => 'required|string',   
+                'semester' => 'required|string',
+            ]);                        
+
+            // Check if the exam type already exists
+        $existingQuestion = QuestionSetting::where('exam_type', $validatedData['exam_type'])
+                                            ->where('exam_category', 'GENERAL')
+                                            ->where('exam_mode', 'THEORY')
+                                            ->where('department', $validatedData['department'])
+                                            ->where('level', $validatedData['level'])
+                                            ->where('semester', $validatedData['semester'])
+                                            ->where('session1', $validatedData['session1'])
+                                            ->where('course', $validatedData['course'])
+                                            ->where('no_of_qst', $validatedData['no_of_qst'])
+                                            ->where('upload_no_of_qst', $validatedData['upload_no_of_qst'])
+                                            ->first();
+        
+        if ($existingQuestion) {
+            // If the question already exists, redirect back with an error message
+            return redirect()->route('question')->with('error', 'Question already exists, you can only edit.');
+        }
+            //---Create a record for the question in the questionsetting table----
+            $questionSetting = QuestionSetting::create([
+                'session1' => $validatedData['session1'],
+                'department' => $validatedData['department'],
+                'level' => $validatedData['level'],
+                'semester' => $validatedData['semester'],
+                'exam_category' => 'GENERAL',
+                'exam_type' => $validatedData['exam_type'],
+                'exam_mode' => 'THEORY',
+                'exam_status' => 'Inactive',
+                'no_of_qst' => $validatedData['upload_no_of_qst'],
+                'duration' => $validatedData['duration'],
+                'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
+                'course' => $validatedData['course'],  
+                'check_result' => 1,                                         
+            ]);
+
+            //--Create a dummy question for the said no of question selected in the question table
+            $num_questions = $validatedData['upload_no_of_qst'];
+            for ($i = 1; $i <= $num_questions; $i++) {
+                TheoryQuestion::create([
+                    'question_no' => $i,
+                    'question' => "Question".$i,
+                    'exam_mode' => 'THEORY',
+                    'exam_type' => $validatedData['exam_type'],
+                    'exam_category' => 'GENERAL',
+                    'session1' => $validatedData['session1'],
+                    'department' => $validatedData['department'],
+                    'level' => $validatedData['level'],
+                    'semester' => $validatedData['semester'],
+                    'course' => $validatedData['course'],
+                    'no_of_qst' => $validatedData['no_of_qst'],
+                    'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
+                    'question_type' => 'text',
+                    'graphic' => 'blank.jpg',
+                ]);
+            }            
+            
+            $questionId = $questionSetting->id;
+        
+            return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
+            
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during question Upload: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred during question Upload. Please try again.');
+        }        
+        
+    }
+
 
 }
