@@ -495,6 +495,8 @@ class QuestionController extends Controller
         // Perform search query
         $questionSetting = QuestionSetting::where('session1', 'LIKE', "%{$searchTerm}%")
             ->orWhere('department', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('exam_mode', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('exam_type', 'LIKE', "%{$searchTerm}%")
             ->paginate(20);
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
@@ -552,9 +554,9 @@ class QuestionController extends Controller
 
     public function downloadQuestionCsv()
     {
-        $filePath = public_path('sample/question.csv');
+        $filePath = public_path('sample/question_objective.csv');
 
-        return Response::download($filePath, 'question_sample.csv', ['Content-Type' => 'text/csv']);
+        return Response::download($filePath, 'question_objective_sample.csv', ['Content-Type' => 'text/csv']);
     }    
     
     public function questionUploadObjImportAction(Request $request)

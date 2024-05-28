@@ -34,14 +34,22 @@ class ReportController extends Controller
     public function index()
     {
         $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first(); 
+
+        return view('dashboard.report', compact('softwareVersion','collegeSetup'));
+    }
+
+    public function reportObjective()
+    {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
         $questionSetting = QuestionSetting::orderBy('created_at', 'desc')->Paginate(20);
 
 
-        return view('dashboard.report', compact('softwareVersion','collegeSetup', 'questionSetting'));
+        return view('dashboard.report-objective', compact('softwareVersion','collegeSetup', 'questionSetting'));
     }
 
-    public function reportView($id)
+    public function reportObjectiveView($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first(); 
@@ -97,6 +105,26 @@ class ReportController extends Controller
         }
 
         return view('dashboard.result-search', compact('softwareVersion','collegeSetup','student'));
+    }
+
+    public function reportSearch(Request $request)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first(); 
+
+        $searchTerm = $request->input('search');
+
+        // Perform search query
+        $reportData = QuestionSetting::where('session1', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('department', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('exam_type', 'LIKE', "%{$searchTerm}%")
+            ->paginate(20);
+
+        if (!$reportData){
+            return redirect()->back()->with('error', 'Exam not found.');
+        }
+
+        return view('dashboard.report-search', compact('softwareVersion','collegeSetup','reportData'));
     }
 
     public function examSheetPage1($id)

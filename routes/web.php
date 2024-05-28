@@ -187,6 +187,8 @@ Route::get('/', function () {
         ->name('download-question-csv');        
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
         ->name('question-edit.action');
+        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
+        ->name('question-enable');
         //-----Questions Objectives
         Route::get('question-upload-obj', [QuestionController::class, 'questionUploadObj'])
         ->name('question-upload-obj');
@@ -197,9 +199,7 @@ Route::get('/', function () {
         Route::get('question-view/{questionId}', [QuestionController::class, 'questionView'])
         ->name('question-view');
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
-        ->name('question-edit');
-        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
-        ->name('question-enable');
+        ->name('question-edit');        
         Route::get('question-next/{id}', [QuestionController::class, 'questionNext'])
         ->name('question-next');
         Route::get('question-previous/{id}', [QuestionController::class, 'questionPrevious'])
@@ -214,7 +214,6 @@ Route::get('/', function () {
         ->name('question-image-upload');
         Route::get('question-image-upload/{id}', [QuestionController::class, 'uploadQuestionImage'])
         ->name('question-image-upload');
-
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
         ->name('question-upload-fill-gap');
@@ -224,12 +223,28 @@ Route::get('/', function () {
         Route::get('question-upload-theory', [QuestionController::class, 'questionUploadTheory'])
         ->name('question-upload-theory');
         Route::post('question-upload-theory', [QuestionController::class, 'questionUploadTheoryAction'])
-        ->name('question-upload-theory.action');
+        ->name('question-upload-theory.action');        
+        Route::post('question-upload-theory-import', [QuestionController::class, 'questionUploadObjImportAction'])
+        ->name('question-upload-theory-import.action');        
         //--report
         Route::get('report', [ReportController::class, 'index'])
         ->name('report');
-        Route::get('report-view/{id}', [ReportController::class, 'reportView'])
-        ->name('report-view');
+        //----Objective
+        Route::get('report-objective', [ReportController::class, 'reportObjective'])
+        ->name('report-objective');
+        Route::get('report-objective-view/{id}', [ReportController::class, 'reportObjectiveView'])
+        ->name('report-objective-view');
+        //-----Theory
+        Route::get('report-theory', [ReportController::class, 'reportTheory'])
+        ->name('report-theory');
+        Route::get('report-theory-view/{id}', [ReportController::class, 'reportTheoryView'])
+        ->name('report-theory-view');
+        //-----Fill in Gap
+        Route::get('report-fill-gap', [ReportController::class, 'reportFillGap'])
+        ->name('report-fill-gap');
+        Route::get('report-fill-gap-view/{id}', [ReportController::class, 'reportFillGapView'])
+        ->name('report-fill-gap-view');
+        //------
         Route::post('report-search', [ReportController::class, 'reportSearch'])
         ->name('report-search');
         Route::get('exam-sheet/{id}/Page1', [ReportController::class, 'examSheetPage1'])

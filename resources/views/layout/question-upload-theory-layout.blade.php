@@ -224,12 +224,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Upload(Objectives)        
+        Question Upload(Theory)        
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{route('question')}}">Question Bank</a></li>        
-        <li class="active">Question Upload(Objectives)</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li> 
+        <li><a href="{{route('question')}}">Question Bank</a></li>
+        <li class="active">Question Upload(Theory)</li>
       </ol>
     </section>
 
@@ -266,7 +266,7 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('question-upload-obj.action')}}" method="post" enctype="multipart/form-data">
+            <form role="form" action="{{route('question-upload-theory.action')}}" method="post" enctype="multipart/form-data">
               @csrf              
               <div class="box-body">  
               <div class="form-group">
@@ -430,7 +430,7 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('question-upload-obj-import.action')}}" method="post" enctype="multipart/form-data">
+            <form role="form" action="{{route('question-upload-theory-import.action')}}" method="post" enctype="multipart/form-data">
               @csrf              
               <div class="box-body">  
               <div class="form-group">

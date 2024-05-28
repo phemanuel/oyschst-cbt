@@ -21,7 +21,7 @@ class CbtEvaluation extends Model
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable = [ 
         'examid', 'examstatus', 'studentname', 'correct', 'noofquestion', 'wrong', 'studentno', 'course', 
         'date1', 'level', 'session1', 'semester', 'hour', 'minute', 'qstno',
         'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8','A9','A10','A11','A12','A13','A14','A15','A16','A17',

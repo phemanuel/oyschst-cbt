@@ -23,6 +23,7 @@ use App\Imports\StudentsImport;
 use App\Models\QuestionSetting;
 use Illuminate\Support\Facades\Session;
 use App\Models\Courses;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -427,7 +428,7 @@ class DashboardController extends Controller
     public function getExamDates()
     {
         // Fetch exam dates from the QuestionSetting model
-        $examDates = QuestionSetting::select('department', 'course', 'exam_date')
+        $examDates = QuestionSetting::select('department', 'course', 'exam_date','exam_mode')
             ->get()
             ->map(function($exam) {
                 // Format the exam date using Carbon
@@ -438,7 +439,8 @@ class DashboardController extends Controller
                     'start' => $exam->exam_date,
                     'backgroundColor' => '#3c8dbc', // You can customize the color as needed
                     'borderColor' => '#3c8dbc', // You can customize the color as needed
-                    'description' => "Date: {$formattedDate}<br>Time: 8:00am <br>Venue: ICT <br>Department: {$exam->department}<br>Course: {$exam->course}"
+                    'description' => "Date: {$formattedDate}<br>Time: 8:00am <br>Venue: ICT 
+                    <br>Department: {$exam->department}<br>Course: {$exam->course}<br>Exam Mode: {$exam->exam_mode}"
                 ];
             });
 

@@ -244,30 +244,7 @@
           <!-- /.widget-user -->
         </div>
         <!-- /.col -->
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-purple">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/uploadicon.png')}}" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Fill in the Gaps Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Fill in the gap questions require you to complete a sentence or phrase with the missing word or words. 
-                  They assess your understanding of specific concepts by prompting you to recall and apply knowledge. </a></li>
-                <li><a href="{{route('question-upload-fill-gap')}}" class="btn bg-purple margin">Upload Questions</a></li>
-                
-              </ul>
-            </div>
-          </div>
-          <!-- /.widget-user -->
-        </div>
-        <!-- /.col -->
+        
         <div class="col-md-4">
           <!-- Widget: user widget style 1 -->
           <div class="box box-widget widget-user-2">
@@ -285,6 +262,30 @@
                 <li><a href="#">Theory questions are open-ended and require you to explain concepts, principles, or theories in your own words. 
                   They assess your depth of understanding and ability to articulate complex ideas.</a></li>
                 <li><a href="{{route('question-upload-theory')}}" class="btn bg-navy margin">Upload Questions</a></li>
+                
+              </ul>
+            </div>
+          </div>
+          <!-- /.widget-user -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-4">
+          <!-- Widget: user widget style 1 -->
+          <div class="box box-widget widget-user-2">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header bg-purple">
+              <div class="widget-user-image">
+                <img class="img-circle" src="{{asset('dashboard/dist/img/uploadicon.png')}}" alt="User Avatar">
+              </div>
+              <!-- /.widget-user-image -->
+              <h3 class="widget-user-username">Fill in the Gaps Questions</h3>
+              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
+            </div>
+            <div class="box-footer no-padding">
+              <ul class="nav nav-stacked">
+                <li><a href="#">Fill in the gap questions require you to complete a sentence or phrase with the missing word or words. 
+                  They assess your understanding of specific concepts by prompting you to recall and apply knowledge. </a></li>
+                <li><a href="{{route('question-upload-fill-gap')}}" class="btn bg-purple margin">Upload Questions</a></li>
                 
               </ul>
             </div>

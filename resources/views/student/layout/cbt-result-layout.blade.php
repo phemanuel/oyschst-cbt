@@ -144,9 +144,13 @@
 							<p>You have successfully completed the Computer based test.</strong>.</p>
 						</div>
             <div class="box-tools">
+                @if($examSetting->check_result === 1)
                 <div class="input-group input-group-sm" style="width: 150px;">
                 <a href="#" onclick="window.print();" class="btn btn-info" >Print Slip</a>
                 </div>
+                @else
+
+                @endif
               </div>
               <hr>
             <div class="row"> 
@@ -254,17 +258,15 @@
 
             @endif
             </table>
-           @else<table class="table">   
-                    <li>
+           @else
+           <table class="table">                       
                       <tr>
 												<div class="form-check">
 													<label class="form-check-label">
-                              <td><p class="bold-font">You have successfully completed the test, <strong>Exit the Computer based test</strong>.</p></td>
+                              <td><h2>You have successfully completed the test, <strong>Exit the Computer based test</strong>.</h2></td>
                           </label>
 												</div>	
-                        </tr>											
-											</li> 										
-                                      
+                        </tr>        
                     </table>
             
            @endif

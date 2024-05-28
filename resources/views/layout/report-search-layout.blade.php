@@ -106,7 +106,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+          <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{auth()->user()->name}}</p>
@@ -209,92 +209,118 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Report      
+        Report Objective     
+       <small><h4>(Note: You can search by Programme, Academic Session and Exam Type)</h4></small> 
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Report</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li> 
+        <li><a href="{{route('report')}}">Report</a></li>
+        <li class="active">Report Objective</li>
       </ol>
     </section>
-
+<div>
+@if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+</div>
     <!-- Main content -->
     <section class="content">
     <div class="row">
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-green">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar" width="30" height="30">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title"></h3>
+              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                <!-- <a href="#" class="btn btn-info">Upload Question</a> -->
+                </div>
               </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Objective Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Objective questions are multiple-choice questions where you select the correct answer from provided options. 
-                  They help test your knowledge by presenting clear choices.</li>
-                <li><a href="{{route('report-objective')}}" class="btn bg-olive margin">Check Result</a></li>
-                
-              </ul>
-            </div>
-          </div>
-          <!-- /.widget-user -->
-        </div>
-        <!-- /.col -->
-        
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-black">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar">
+              <hr>
+              <div class="box-header">
+              <h3 class="box-title"></h3>
+              <div class="box-tools">
+              <form action="{{ route('report-search') }}" method="post" class="form-inline">
+                @csrf
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
+
+                    <div class="input-group-btn">
+                    <button type="submit" class="btn btn-success">Search</button>
+                    </div>
+                </div>
+            </form>
               </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Theory Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
+  </div>
+             
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>Academic Session</th>
+                  <th>Programme</th>
+                  <th>Level</th>
+                  <th>Semester</th>
+                  <th>Exam Mode</th>
+                  <th>Exam Category</th>
+                  <th>Exam Type</th>
+                  <th>Exam Date</th>
+                  <th>No of Questions</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th>Created On</th>
+                  <th>Actions</th>
+                </tr>
+                @if ($reportData->count() > 0)
+                @foreach ($reportData as $key => $rs)
+                <tr>
+                    <td>{{ $key + 1 }}</td>                    
+                    <td>{{$rs->session1}}</td>
+                    <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->semester }}</td>
+                    <td>{{ $rs->exam_mode }}</td>
+                    <td>{{ $rs->exam_category}}</td>
+                    <td>{{ $rs->exam_type }}</td>
+                    <td>{{ $rs->exam_date }}</td>
+                    <td>{{ $rs->no_of_qst }}</td>
+                    <td>{{ $rs->duration }}</td>                    
+                    <td>{{ $rs->exam_status }}                    
+                    </td>                                       
+                    <td>{{$rs->created_at}}</td>
+                    <td> 
+                      
+                     @if($rs->exam_mode == 'OBJECTIVE')
+                     <a class="label label-success" href="{{route('report-objective-view', ['id' => $rs->id])}}">Check Result</a>
+                     @elseif($rs->exam_mode == 'THEORY')
+                     <a class="label label-success" href="{{route('report-theory-view', ['id' => $rs->id])}}">Check Result</a>
+                     @elseif($rs->exam_mode == 'FILL-IN-GAP')
+                     <a class="label label-success" href="{{route('report-fill-gap-view', ['id' => $rs->id])}}">Check Result</a>
+                     @endif
+                     
+                    </td>
+                </tr>
+                @endforeach
+                @else
+		<tr>
+			<td colspan="8">Questions not available.</td>
+		</tr>
+        @endif
+              </table>
+              {{ $reportData->links() }}
             </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Theory questions are open-ended and require you to explain concepts, principles, or theories in your own words. 
-                  They assess your depth of understanding and ability to articulate complex ideas.</a></li>
-                <li><a href="{{route('report-theory')}}" class="btn bg-navy margin">Check Result/Grading</a></li>
-                
-              </ul>
-            </div>
+            <!-- /.box-body -->
           </div>
-          <!-- /.widget-user -->
+          <!-- /.box -->
         </div>
-        <!-- /.col -->
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-purple">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Fill in the Gaps Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Fill in the gap questions require you to complete a sentence or phrase with the missing word or words. 
-                  They assess your understanding of specific concepts by prompting you to recall and apply knowledge. </a></li>
-                <li><a href="{{route('report-fill-gap')}}" class="btn bg-purple margin">Check Result/Grading</a></li>
-                
-              </ul>
-            </div>
-          </div>
-          <!-- /.widget-user -->
-        </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>

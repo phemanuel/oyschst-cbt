@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();            
             $table->string('examstatus')->nullable();
             $table->string('studentname')->nullable();
-            $table->string('correct')->nullable();
+            $table->string('correct')->nullable(); 
             $table->string('noofquestion')->nullable();
             $table->string('wrong')->nullable();
             $table->string('studentno')->nullable();

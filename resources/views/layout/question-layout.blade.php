@@ -210,7 +210,7 @@
     <section class="content-header">
       <h1>
         Question Bank       
-       <small><h4>(Note: You can search by Academic Session or Programme)</h4></small> 
+       <small><h4>(Note: You can search by Academic Session,Programme,Exam Type or Exam Mode)</h4></small> 
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
