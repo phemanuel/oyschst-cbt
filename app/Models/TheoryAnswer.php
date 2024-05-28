@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TheoryAnswer extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
         'examstatus', 'studentname', 'studentno','date1', 'hour', 'minute',
         'question_no', 

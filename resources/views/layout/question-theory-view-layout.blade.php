@@ -200,12 +200,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Upload (Objective)    
+        Question Upload(Theory)   
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>  
         <li><a href="{{route('question')}}">Question Bank</a></li>       
-        <li class="active">Question Upload(Objective)</li>
+        <li class="active">Question Upload(Theory)</li>
       </ol>
     </section>
 <div>
@@ -244,11 +244,11 @@
               </tr>
               
             </table>
-            <form action="{{route('question-search', ['id' => $questionSetting->id])}}" method="post">
+            <form action="{{route('question-theory-search', ['id' => $questionSetting->id])}}" method="post">
               @csrf
             <table width="100%">
             <tr>
-                              <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->no_of_qst}}</strong> </h3></td>
+                              <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->upload_no_of_qst}}</strong> </h3></td>
                 <td width="9%">Question No: </td>
                 <td width="15%"><input type="text" name="qst_search" class="form-control"> </td>
                 <td width="8%"><button type="submit" class="btn btn-success">Search</button></td>
@@ -261,7 +261,7 @@
             <!-- /.box-header -->
             <hr>
             <div class="box-body pad">
-              <form action="{{ route('question-save', ['id' => $questionSetting->id]) }}" method="post">
+              <form action="{{ route('question-theory-save', ['id' => $questionSetting->id]) }}" method="post">
               @csrf
 
               @if($question->question_type == 'text-image')
@@ -274,9 +274,7 @@
                     <textarea id="editor1" name="question" rows="10" cols="80">
                                             {{$question->question}}
                     </textarea>
-                    <hr>
-                    <p><strong>Answer :</strong> 
-                    <input type="text" class="form-control" name="answer" value="{{$question->answer}}"></p>
+                    <hr>                    
                     <table width="100%">                    
                       
   <tr>
@@ -305,7 +303,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <form action="{{route('question-image-upload', ['id' => $questionSetting->id])}}" method="post" enctype="multipart/form-data">
+  <form action="{{route('question-theory-image-upload', ['id' => $questionSetting->id])}}" method="post" enctype="multipart/form-data">
     @csrf
   <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -330,7 +328,7 @@
                   <!-- Modal Ends -->
                   <input type="hidden" name="currentQuestionNo" value="{{$question->question_no}}">
   </form>
-  <form action="{{route('delete-obj-image', ['id' => $questionSetting->id])}}" method="post">
+  <form action="{{route('delete-theory-image', ['id' => $questionSetting->id])}}" method="post">
     @csrf
   <div class="modal fade" id="exampleModal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-3" aria-hidden="true">
                     <div class="modal-dialog" role="document">

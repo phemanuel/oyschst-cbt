@@ -269,7 +269,6 @@
                   <th>Level</th>
                   <th>Semester</th>
                   <th>Exam Mode</th>
-                  <th>Exam Category</th>
                   <th>Exam Type</th>
                   <th>Exam Date</th>
                   <th>No of Questions</th>
@@ -287,7 +286,6 @@
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->semester }}</td>
                     <td>{{ $rs->exam_mode }}</td>
-                    <td>{{ $rs->exam_category}}</td>
                     <td>{{ $rs->exam_type }}</td>
                     <td>{{ $rs->exam_date }}</td>
                     <td>{{ $rs->no_of_qst }}</td>
@@ -295,10 +293,11 @@
                     <td>{{ $rs->exam_status }}                    
                     </td>                                       
                     <td>{{$rs->created_at}}</td>
-                    <td> 
-                      
+                    <td>                     
                       <a class="label label-success" href="{{route('report-objective-view', ['id' => $rs->id])}}">Check Result</a>
-                     
+                     </td>
+                    <td> 
+                    <a class="label label-info" href="{{route('report-objective-csv', ['id' => $rs->id])}}">Export CSV</a>
                     </td>
                 </tr>
                 @endforeach

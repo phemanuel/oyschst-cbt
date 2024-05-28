@@ -27,6 +27,7 @@ use App\Models\CbtEvaluation;
 use App\Models\CbtEvaluation1;
 use App\Models\CbtEvaluation2;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -43,7 +44,9 @@ class ReportController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
-        $questionSetting = QuestionSetting::orderBy('created_at', 'desc')->Paginate(20);
+        $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
+        ->orderBy('created_at', 'desc')
+        ->Paginate(20);
 
 
         return view('dashboard.report-objective', compact('softwareVersion','collegeSetup', 'questionSetting'));
@@ -71,7 +74,7 @@ class ReportController extends Controller
             return redirect()->back()->with('error', 'Result is not available for exam you selected.');
         }
 
-        return view('dashboard.report-view', compact('softwareVersion','collegeSetup','student'));
+        return view('dashboard.report-objective-view', compact('softwareVersion','collegeSetup','student'));
     }
 
     public function studentResult($id)
@@ -2115,6 +2118,76 @@ class ReportController extends Controller
         'questionNo', 'question1','question2', 'question3', 'question4', 'question5', 'question6'
         , 'question7', 'question8', 'question9', 'question10', 'studentAnswerData', 'correctAnswerData',
     'studentAnswer', 'correctAnswer','qstData', 'noOfQst'));
+    }
+
+    public function reportObjCsv($id)
+    {        
+        $questionSetting = QuestionSetting::where('id', $id)->first();                 
+        
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $level = $questionSetting->level;
+        $session1 = $questionSetting->session1;
+        $upload_no_of_qst = $questionSetting->no_of_qst;
+        $course = $questionSetting->course;
+        $semester = $questionSetting->semester;
+
+        // Create SQL query with parameter binding
+        $rows = DB::table('cbt_evaluations')
+            ->select('studentno', 'studentname', 'correct')
+            ->where('exam_type', $exam_type)
+            ->where('exam_category', $exam_category)
+            ->where('exam_mode', $exam_mode)
+            ->where('department', $department)
+            ->where('level', $level)
+            ->where('semester', $semester)
+            ->where('session1', $session1)
+            ->where('noofquestion', $upload_no_of_qst)
+            ->where('course', $course)
+            ->orderBy('studentno')
+            ->get()
+            ->toArray();
+        
+            // Check if rows are empty
+        if (empty($rows)) {
+            return redirect()->back()->with('error' , 'No results found .');
+        }
+
+        // Convert stdClass objects to arrays
+        $rows = array_map(function($row) {
+            return (array) $row;
+        }, $rows);
+
+        // Get the column names
+        $columnNames = [];
+        if (!empty($rows)) {
+            $columnNames = array_keys($rows[0]);
+        }
+
+        $date1 = date('d-m-Y');
+        $fileName = "{$session1}_{$exam_mode}_{$exam_type}_{$department}_{$date1}.csv";
+
+        // Create a callback function to generate the CSV data
+        $callback = function() use ($rows, $columnNames) {
+            $file = fopen('php://output', 'w');
+            // Write the column names
+            fputcsv($file, $columnNames);
+
+            // Write the rows
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+
+        // Return the CSV as a streamed response
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'application/excel',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]); 
     }
 
 

@@ -375,7 +375,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Date(dd/mm/yy)</label>
+                  <label for="exampleInputEmail1">Exam Date(mm/dd/yy)</label>
                 <div class="input-group date">
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
@@ -539,7 +539,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Date(dd/mm/yy)</label>
+                  <label for="exampleInputEmail1">Exam Date(mm/dd/yy)</label>
                 <div class="input-group date">
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>

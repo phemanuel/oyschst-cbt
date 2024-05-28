@@ -393,7 +393,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Date(dd/mm/yy)</label>
+                  <label for="exampleInputEmail1">Exam Date(mm/dd/yy)</label>
                 <div class="input-group date">
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
@@ -575,7 +575,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Date(dd/mm/yy)</label>
+                  <label for="exampleInputEmail1">Exam Date(mm/dd/yy)</label>
                 <div class="input-group date">
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
@@ -661,7 +661,7 @@
                 </p>
                   <ul>
                     <li> Select the necessary criteria.</li>
-                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template here.</a></li>
+                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-theory-csv')}}">You can download a sample template here.</a></li>
                     <li> Click on Start Import.</li>
                     <li> This will upload all the questions for the specified no of questions.</li>
                     <li> You can start editing the questions as desired.</li>

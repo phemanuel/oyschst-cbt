@@ -181,10 +181,14 @@ Route::get('/', function () {
         //--Questions
         Route::get('question', [QuestionController::class, 'question'])
         ->name('question');
-        Route::get('question-upload', [QuestionController::class, 'questionUpload'])
-        ->name('question-upload');
+        Route::get('question-obj-upload', [QuestionController::class, 'questionObjUpload'])
+        ->name('question-obj-upload');
+        Route::get('question-theory-upload', [QuestionController::class, 'questionTheoryUpload'])
+        ->name('question-theory-upload');
         Route::get('download-question-csv', [QuestionController::class, 'downloadQuestionCsv'])
-        ->name('download-question-csv');        
+        ->name('download-question-csv');  
+        Route::get('download-question-theory-csv', [QuestionController::class, 'downloadQuestionTheoryCsv'])
+        ->name('download-question-theory-csv');       
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
         ->name('question-edit.action');
         Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
@@ -214,6 +218,8 @@ Route::get('/', function () {
         ->name('question-image-upload');
         Route::get('question-image-upload/{id}', [QuestionController::class, 'uploadQuestionImage'])
         ->name('question-image-upload');
+        Route::post('delete-obj-image/{id}', [QuestionController::class, 'deleteObjImage'])
+        ->name('delete-obj-image');        
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
         ->name('question-upload-fill-gap');
@@ -225,7 +231,19 @@ Route::get('/', function () {
         Route::post('question-upload-theory', [QuestionController::class, 'questionUploadTheoryAction'])
         ->name('question-upload-theory.action');        
         Route::post('question-upload-theory-import', [QuestionController::class, 'questionUploadObjImportAction'])
-        ->name('question-upload-theory-import.action');        
+        ->name('question-upload-theory-import.action');   
+        Route::get('question-theory-view/{questionId}', [QuestionController::class, 'questionTheoryView'])
+        ->name('question-theory-view');     
+        Route::post('question-theory-search/{id}', [QuestionController::class, 'questionTheorySearch'])
+        ->name('question-theory-search');
+        Route::post('question-theory-image-upload/{id}', [QuestionController::class, 'uploadQuestionTheoryImage'])
+        ->name('question-theory-image-upload');
+        Route::get('question-theory-image-upload/{id}', [QuestionController::class, 'uploadQuestionTheoryImage'])
+        ->name('question-theory-image-upload');
+        Route::post('question-theory-save/{id}', [QuestionController::class, 'questionTheorySave'])
+        ->name('question-theory-save');
+        Route::post('delete-theory-image/{id}', [QuestionController::class, 'deleteTheoryImage'])
+        ->name('delete-theory-image');
         //--report
         Route::get('report', [ReportController::class, 'index'])
         ->name('report');
@@ -234,6 +252,8 @@ Route::get('/', function () {
         ->name('report-objective');
         Route::get('report-objective-view/{id}', [ReportController::class, 'reportObjectiveView'])
         ->name('report-objective-view');
+        Route::get('report-objective-csv/{id}', [ReportController::class, 'reportObjCsv'])
+        ->name('report-objective-csv');
         //-----Theory
         Route::get('report-theory', [ReportController::class, 'reportTheory'])
         ->name('report-theory');
