@@ -36,6 +36,7 @@ class ExamSetting extends Model
         'exam_mode', 
         'time_limit', 
         'no_of_qst',
+        'upload_no_of_qst',
         'course',
         'duration', 
         'check_result',

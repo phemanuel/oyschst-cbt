@@ -350,7 +350,25 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">No of questions to upload</label>
+                  <label for="exampleInputEmail1">Total No of questions to upload</label>
+                  <select name="upload_no_of_qst" class="form-control">
+                  <option value="10" selected>10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="50">50</option>
+                  <option value="60">60</option>
+                  <option value="70">70</option>
+                  <option value="80">80</option>
+                  <option value="90">90</option>
+                  <option value="100">100</option>
+                </select>
+                </div>             
+                @error('upload_no_of_qst')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">No of questions for student</label>
                   <select name="no_of_qst" class="form-control">
                   <option value="10" selected>10</option>
                   <option value="20">20</option>
@@ -514,6 +532,24 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
+                  <label for="exampleInputEmail1">Total No of questions to upload</label>
+                  <select name="upload_no_of_qst" class="form-control">
+                  <option value="10" selected>10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="50">50</option>
+                  <option value="60">60</option>
+                  <option value="70">70</option>
+                  <option value="80">80</option>
+                  <option value="90">90</option>
+                  <option value="100">100</option>
+                </select>
+                </div>             
+                @error('upload_no_of_qst')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
                   <label for="exampleInputEmail1">No of questions to upload</label>
                   <select name="no_of_qst" class="form-control">
                   <option value="10" selected>10</option>
@@ -595,6 +631,12 @@
                 </p>
                   <ul>
                     <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
                     <li> Click on Start Upload.</li>
                     <li> This will generate a dummy template for the specified no of questions.</li>
                     <li> You can start editing the questions as desired.</li>
@@ -625,6 +667,12 @@
                 </p>
                   <ul>
                     <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
                     <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template here.</a></li>
                     <li> Click on Start Import.</li>
                     <li> This will upload all the questions for the specified no of questions.</li>

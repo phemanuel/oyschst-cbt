@@ -270,7 +270,8 @@
                   <th>Exam Mode</th>
                   <th>Exam Type</th>
                   <th>Exam Date</th>
-                  <th>No of Questions</th>
+                  <th>Total No of Questions</th>
+                  <th>No of Questions(Student)</th>
                   <th>Duration</th>
                   <th>Check Result</th>
                   <th>Status</th>
@@ -288,8 +289,9 @@
                     <td>{{ $rs->exam_mode }}</td>
                     <td>{{ $rs->exam_type }}</td>
                     <td>{{ $rs->exam_date }}</td>
+                    <td>{{ $rs->upload_no_of_qst }}</td>
                     <td>{{ $rs->no_of_qst }}</td>
-                    <td>{{ $rs->duration }}</td>
+                    <td>{{ $rs->duration }} mins</td>
                     @if($rs->check_result == 1)
                     <td>YES</td>
                     @else

@@ -46,7 +46,8 @@ class ExamController extends Controller
                                                 ->where('level', $examSetting->level)
                                                 ->where('semester', $examSetting->semester)
                                                 ->where('session1', $examSetting->session1)
-                                                ->where('no_of_qst', $examSetting->no_of_qst)
+                                                ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+->where('no_of_qst', $examSetting->no_of_qst)
                                                 ->first();
 
             if(!$existingQuestion){
@@ -122,7 +123,7 @@ class ExamController extends Controller
             // return $this->cbtFillInGap($id);
         }
         elseif($examMode == "THEORY"){
-            // return $this->cbtTheory($id);
+             return redirect()->route('cbt-Theory', ['id' => $id]);
         }
     }
 
@@ -135,6 +136,7 @@ class ExamController extends Controller
 
         //--setup student cbt data
             $noOfQuestions = $examSetting->no_of_qst;
+            $uploadNoOfQuestions = $examSetting->upload_no_of_qst;
             $studentName = $studentData->surname . " " . $studentData->first_name . " " . $studentData->other_name;
             $studentNo = $studentData->admission_no;
             $department = $studentData->department;
@@ -145,11 +147,10 @@ class ExamController extends Controller
             $examType = $examSetting->exam_type;
             $semester = $examSetting->semester;
             $session1 = $examSetting->session1;  
-            $semester = $examSetting->semester;
-            $noOfQuestions  = $examSetting->no_of_qst;          
+            $semester = $examSetting->semester;                     
 
             // Generate a random set of numbers representing the questions
-            $questionNumbers = range(1, $noOfQuestions);
+            $questionNumbers = range(1, $uploadNoOfQuestions);
             shuffle($questionNumbers);
             $randomizedQuestions = array_slice($questionNumbers, 0, $noOfQuestions);
 

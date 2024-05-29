@@ -57,7 +57,10 @@ Route::get('/', function () {
     Route::get('cbt-process/{id}', [ExamController::class, 'cbtProcess'])
     ->name('cbt-process');   
     Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
-    ->name('cbt-page');  
+    ->name('cbt-page');
+    Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
+    ->name('cbt-continue');
+    //---Objective Based Test--------      
     Route::get('cbt/{id}/page1', [ExamController::class, 'cbtPage1'])
     ->name('cbt-page1');
     Route::get('cbt/{id}/page2', [ExamController::class, 'cbtPage2'])
@@ -78,8 +81,10 @@ Route::get('/', function () {
     ->name('cbt-page9');
     Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
     ->name('cbt-page10');
-    Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
-    ->name('cbt-continue');
+    //---Theory Based Questions ---
+    Route::get('cbt/theory/{id}', [ExamTheoryController::class, 'cbtTheory'])
+    ->name('cbt-theory');
+    
     //----Update Answers---
     Route::get('fetch-answers/{id}/{pageNo}', [ExamController::class, 'fetchAnswers'])
     ->name('fetch-answers');
@@ -145,6 +150,8 @@ Route::get('/', function () {
         ->name('login-status-view');
         Route::post('login-status/{id}', [StudentController::class, 'loginStatusAction'])
         ->name('login-status.action');
+        Route::get('login-status-all', [StudentController::class, 'loginStatusAll'])
+        ->name('login-status-all');
         //--change course
         Route::get('change-course', [StudentController::class, 'changeCourse'])
         ->name('change-course');

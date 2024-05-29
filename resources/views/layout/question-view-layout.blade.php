@@ -248,7 +248,7 @@
               @csrf
             <table width="100%">
             <tr>
-                              <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->no_of_qst}}</strong> </h3></td>
+                              <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->upload_no_of_qst}}</strong> </h3></td>
                 <td width="9%">Question No: </td>
                 <td width="15%"><input type="text" name="qst_search" class="form-control"> </td>
                 <td width="8%"><button type="submit" class="btn btn-success">Search</button></td>

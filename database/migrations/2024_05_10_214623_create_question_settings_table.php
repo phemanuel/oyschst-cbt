@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('session1');
             $table->string('department');
+            $table->integer('upload_no_of_qst');
             $table->integer('no_of_qst');
             $table->string('level');
             $table->integer('duration');

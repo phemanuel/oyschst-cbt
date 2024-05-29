@@ -265,7 +265,29 @@
         <!-- right column -->
         <div class="col-md-6">
           
-          
+          <!-- general form elements -->
+          <div class="box box-success">
+            <div class="box-header with-border">
+            <h3 class="box-title">Change the login/exam status for all student.</h3>           
+              
+            </div>
+            @if(session('success-all'))
+						<div class="alert alert-success">
+							{{ session('success-all') }}
+						</div>
+          @elseif(session('error-all'))
+						<div class="alert alert-danger">
+							{{ session('error-all') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->            
+              <div class="box-footer">
+                <a href="{{route('login-status-all')}}" class="btn btn-primary">Reset Login Status for all Student</a>
+              </div>            
+          </div>
+          <!-- /.box -->        
+
         </div>
         <!--/.col (right) -->
       </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2024 at 11:33 PM
+-- Generation Time: May 29, 2024 at 07:13 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -549,6 +549,15 @@ CREATE TABLE `courses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `courses`
+--
+
+INSERT INTO `courses` (`id`, `course`, `created_at`, `updated_at`) VALUES
+(1, 'ENTRANCE', '2024-05-29 00:02:52', '2024-05-29 00:02:52'),
+(2, 'ACCIDENT AND EMERGENCY', '2024-05-29 00:02:56', '2024-05-29 00:02:56'),
+(3, 'PREPARATORY', '2024-05-29 00:02:59', '2024-05-29 00:02:59');
+
 -- --------------------------------------------------------
 
 --
@@ -627,7 +636,7 @@ CREATE TABLE `exam_settings` (
 --
 
 INSERT INTO `exam_settings` (`id`, `level`, `course`, `session1`, `semester`, `department`, `exam_type`, `exam_category`, `exam_mode`, `time_limit`, `duration`, `no_of_qst`, `check_result`, `created_at`, `updated_at`) VALUES
-(1, '100', 'ENTRANCE', '2024/2025', 'First', 'Diploma in Community Health(CHEW)', 'ENTRANCE', 'GENERAL', 'OBJECTIVE', 5, 20, 20, 1, '2024-05-01 19:33:35', '2024-05-18 03:03:09');
+(1, '100', 'ACCIDENT AND EMERGENCY', '2024/2025', 'First', 'Diploma in Community Health(CHEW)', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 5, 50, 5, 1, '2024-05-01 19:33:35', '2024-05-29 22:02:50');
 
 -- --------------------------------------------------------
 
@@ -749,7 +758,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (20, '2024_05_14_110338_create_cbt_evaluations_table', 6),
 (21, '2024_05_14_110409_create_cbt_evaluation1s_table', 7),
 (22, '2024_05_14_110426_create_cbt_evaluation2s_table', 7),
-(23, '2024_05_18_054942_create_courses_table', 8);
+(23, '2024_05_18_054942_create_courses_table', 8),
+(24, '2024_05_28_095609_create_theory_questions_table', 9),
+(25, '2024_05_28_095649_create_theory_answers_table', 9);
 
 -- --------------------------------------------------------
 
@@ -844,7 +855,7 @@ INSERT INTO `questions` (`id`, `session1`, `department`, `level`, `semester`, `c
 (79, '2024/2025', 'Certificate for Pharmacy Technicians', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text', 18, '<p>How do we great a birthday celebrant in French?.......</p>\r\n\r\n<p>(A) Bonne anniverssaire</p>\r\n\r\n<p>(B)Bon anniversaire</p>\r\n\r\n<p>(C) Bonne anniversaire</p>\r\n\r\n<p>(D)Bon anniversary</p>', 'B', 'blank.jpg', '2024-05-14 01:38:44', '2024-05-14 01:43:16'),
 (80, '2024/2025', 'Certificate for Pharmacy Technicians', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text', 19, '<p>....................is the electronic board that serve as template for connection of other peripheral components of the computer</p>\r\n\r\n<p>(A) Motherboard</p>\r\n\r\n<p>(B) System Clock</p>\r\n\r\n<p>(C ) CMOS</p>\r\n\r\n<p>(D) Local Disk</p>', 'A', 'blank.jpg', '2024-05-14 01:38:44', '2024-05-14 01:43:29'),
 (81, '2024/2025', 'Certificate for Pharmacy Technicians', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text', 20, '<p>... garcon est beau (A)Le (B) L&#39; (C)La(D)Les</p>', 'A', 'blank.jpg', '2024-05-14 01:38:44', '2024-05-14 01:43:37'),
-(142, '2024/2025', 'Diploma in Community Health(CHEW)', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text-image', 1, '<p style=\"font-size: 24px; font-family: Arial;\">Itemize the levels of classification of living thing in correct sequence. (A) kingdom, phylum, class, family, order, genus, species (B). Kingdom, phylum, class, order, family, specie, genus (C). Kingdom, phylum, class, order, family, genus, specie (D) Kingdom, phylum, class, order, genus, family, specie</p>', 'A', '1715958659_1.jpg', '2024-05-17 04:51:53', '2024-05-17 22:10:59'),
+(142, '2024/2025', 'Diploma in Community Health(CHEW)', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text', 1, '<p style=\"font-size: 24px; font-family: Arial;\">Itemize the levels of classification of living thing in correct sequence. (A) kingdom, phylum, class, family, order, genus, species (B). Kingdom, phylum, class, order, family, specie, genus (C). Kingdom, phylum, class, order, family, genus, specie (D) Kingdom, phylum, class, order, genus, family, specie</p>', 'A', '1715958659_1.jpg', '2024-05-17 04:51:53', '2024-05-29 01:46:38'),
 (143, '2024/2025', 'Diploma in Community Health(CHEW)', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text-image', 2, '<p style=\"font-size: 24px; font-family: Arial;\">&nbsp; At the end of meosis, the parent cell produce??daughter cell (A) 5 (B)2 (C) 4 (D) 6 &nbsp;</p>', 'C', '1715958771_2.jpg', '2024-05-17 04:51:53', '2024-05-17 22:12:51'),
 (144, '2024/2025', 'Diploma in Community Health(CHEW)', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text', 3, '<p style=\"font-size: 24px; font-family: Arial;\">Mention the stages involve in the process of mitosis. (A). Interphase, prophase, metaphase, anaphase, telophase. (B). Prophase, interphase, telophase, metaphase, anaphase (C). Interphase, prophase, telophase, metaphase, anaphase (D). Telophase, interphase, prophase, metaphase, anaphase</p>', 'A', 'blank.jpg', '2024-05-17 04:51:53', '2024-05-17 05:02:40'),
 (145, '2024/2025', 'Diploma in Community Health(CHEW)', '100', 'First', 'ENTRANCE', 'ENTRANCE', 'OBJECTIVE', 'GENERAL', 20, 20, 'text', 4, '<p style=\"font-size: 24px; font-family: Arial;\">The process of photosynthesis starts in the..........and the....................of the chloroplast (A). Stroma and thylakoid (B). Thylakoid and stroma (C). cytoplasm and mitochondria (D). Thylakoid and cytoplasm</p>', 'B', 'blank.jpg', '2024-05-17 04:51:53', '2024-05-17 05:04:14'),
@@ -896,8 +907,9 @@ CREATE TABLE `question_settings` (
 
 INSERT INTO `question_settings` (`id`, `session1`, `department`, `course`, `no_of_qst`, `level`, `semester`, `duration`, `exam_type`, `exam_category`, `exam_status`, `exam_mode`, `exam_date`, `check_result`, `created_at`, `updated_at`) VALUES
 (1, '2024/2025', 'Certificate for  Medical Laboratory Technicians(MLT)', 'ENTRANCE', 10, '100', 'First', 10, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-06-04', 0, '2024-05-12 06:51:08', '2024-05-14 02:05:15'),
-(18, '2024/2025', 'Certificate for Pharmacy Technicians', 'ENTRANCE', 20, '100', 'First', 20, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-06-03', 0, '2024-05-14 01:38:44', '2024-05-15 04:15:24'),
-(22, '2024/2025', 'Diploma in Community Health(CHEW)', 'ENTRANCE', 20, '100', 'First', 20, 'ENTRANCE', 'GENERAL', 'Active', 'OBJECTIVE', '2024-06-04', 1, '2024-05-17 04:51:53', '2024-05-17 04:57:08');
+(18, '2024/2025', 'Certificate for Pharmacy Technicians', 'ENTRANCE', 20, '100', 'First', 20, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-06-03', 0, '2024-05-14 01:38:44', '2024-05-29 22:02:50'),
+(22, '2024/2025', 'Diploma in Community Health(CHEW)', 'ENTRANCE', 20, '100', 'First', 20, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-06-04', 1, '2024-05-17 04:51:53', '2024-05-29 22:02:42'),
+(23, '2024/2025', 'Diploma in Community Health(CHEW)', 'ACCIDENT AND EMERGENCY', 5, '100', 'First', 50, 'SEMESTER-EXAM', 'GENERAL', 'Active', 'THEORY', '2024-05-31', 1, '2024-05-29 00:05:27', '2024-05-29 22:02:50');
 
 -- --------------------------------------------------------
 
@@ -1282,6 +1294,73 @@ INSERT INTO `student_admissions` (`id`, `admission_no`, `surname`, `first_name`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `theory_answers`
+--
+
+CREATE TABLE `theory_answers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `examstatus` int(11) NOT NULL,
+  `studentname` varchar(255) NOT NULL,
+  `score` double NOT NULL,
+  `question_no` int(11) NOT NULL,
+  `no_of_qst` int(11) NOT NULL,
+  `session1` varchar(255) NOT NULL,
+  `department` varchar(255) NOT NULL,
+  `upload_no_of_qst` int(11) NOT NULL,
+  `level` varchar(255) NOT NULL,
+  `exam_type` varchar(255) NOT NULL,
+  `exam_category` varchar(255) NOT NULL,
+  `exam_mode` varchar(255) NOT NULL,
+  `question_type` varchar(255) NOT NULL,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
+  `graphic` varchar(255) NOT NULL,
+  `course` varchar(255) NOT NULL,
+  `semester` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `theory_questions`
+--
+
+CREATE TABLE `theory_questions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `question_no` int(11) NOT NULL,
+  `no_of_qst` int(11) NOT NULL,
+  `session1` varchar(255) NOT NULL,
+  `department` varchar(255) NOT NULL,
+  `upload_no_of_qst` int(11) NOT NULL,
+  `level` varchar(255) NOT NULL,
+  `exam_type` varchar(255) NOT NULL,
+  `exam_category` varchar(255) NOT NULL,
+  `exam_mode` varchar(255) NOT NULL,
+  `question_type` varchar(255) NOT NULL,
+  `question` text NOT NULL,
+  `graphic` varchar(255) NOT NULL,
+  `course` varchar(255) NOT NULL,
+  `semester` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `theory_questions`
+--
+
+INSERT INTO `theory_questions` (`id`, `question_no`, `no_of_qst`, `session1`, `department`, `upload_no_of_qst`, `level`, `exam_type`, `exam_category`, `exam_mode`, `question_type`, `question`, `graphic`, `course`, `semester`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Describe the primary assessment steps for a patient who arrives at the emergency department with severe trauma. Include the key components of the primary survey.</p>', '1716919090_THEORY_1.png', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-29 00:06:54', '2024-05-29 01:11:07'),
+(2, 2, 3, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Explain the differences between the types of shock (hypovolemic, cardiogenic, distributive, and obstructive) and their respective management strategies in an emergency setting.</p>', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-29 00:06:54', '2024-05-29 00:59:17'),
+(3, 3, 3, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Discuss the role of triage in the emergency department. How does the triage process prioritize patient care, and what are the common triage categories?</p>', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-29 00:06:54', '2024-05-29 00:59:32'),
+(4, 4, 3, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Identify and explain the key components of a mass casualty incident (MCI) response plan in an emergency department.</p>', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-29 00:06:55', '2024-05-29 00:59:42'),
+(5, 5, 3, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Describe the management of a patient presenting with acute myocardial infarction (AMI) in the emergency department, including the initial diagnostic steps and treatment.</p>', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-29 00:06:55', '2024-05-29 00:59:52');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1435,6 +1514,18 @@ ALTER TABLE `student_admissions`
   ADD UNIQUE KEY `student_admissions_admission_no_unique` (`admission_no`) USING HASH;
 
 --
+-- Indexes for table `theory_answers`
+--
+ALTER TABLE `theory_answers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `theory_questions`
+--
+ALTER TABLE `theory_questions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1485,7 +1576,7 @@ ALTER TABLE `college_setups`
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -1527,7 +1618,7 @@ ALTER TABLE `loading_checks`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1545,7 +1636,7 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `question_settings`
 --
 ALTER TABLE `question_settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `software_version`
@@ -1557,7 +1648,19 @@ ALTER TABLE `software_version`
 -- AUTO_INCREMENT for table `student_admissions`
 --
 ALTER TABLE `student_admissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=329;
+
+--
+-- AUTO_INCREMENT for table `theory_answers`
+--
+ALTER TABLE `theory_answers`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `theory_questions`
+--
+ALTER TABLE `theory_questions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`

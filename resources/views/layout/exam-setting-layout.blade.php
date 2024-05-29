@@ -315,21 +315,13 @@
                 </div>
                 <p><a href="{{route('college-setup')}}">Create Class/Level</a></p>
                 <div class="form-group">
-                  <label for="exampleInputPassword1">No of Question</label>
-                  <select name="no_of_qst" id="" class="form-control"> 
-                  <option value="{{$examSetting->no_of_qst}}" selected>{{$examSetting->no_of_qst}}</option>                 
-				<option value="10">10</option>
-				<option value="20">20</option>
-                <option value="30">30</option>
-				<option value="40">40</option>
-                <option value="50">50</option>
-				<option value="60">60</option>
-                <option value="70">70</option>
-				<option value="80">80</option>
-                <option value="90">90</option>
-				<option value="100">100</option>                
-                  </select>
+                  <label for="exampleInputPassword1">Total No of Question</label>
+                  <input type="text" name="upload_no_of_qst" class="form-control" value="{{$examSetting->upload_no_of_qst}}">
                 </div>  
+                <div class="form-group">
+                  <label for="exampleInputPassword1">No of Question for student</label>
+                  <input type="text" name="no_of_qst" class="form-control" value="{{$examSetting->no_of_qst}}">
+                </div> 
                 <div class="form-group">
                   <label for="exampleInputEmail1">Duration</label>
                   <input type="text" name="duration" class="form-control" value="{{$examSetting->duration}}">

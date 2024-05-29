@@ -439,4 +439,19 @@ class StudentController extends Controller
 
         return Response::download($filePath, 'student_sample.csv', ['Content-Type' => 'text/csv']);
     }
+
+    public function loginStatusAll()
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        
+        $students = StudentAdmission::all();
+
+        foreach ($students as $student) {
+            $student->login_status = 0;
+            $student->save();
+        }
+
+        return redirect()->route('login-status')->with('success-all', 'Login status reset successful.');
+    }
 }

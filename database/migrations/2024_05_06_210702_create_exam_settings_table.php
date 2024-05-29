@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('course');
             $table->integer('time_limit');
             $table->integer('no_of_qst');
+            $table->integer('upload_no_of_qst');
             $table->integer('duration');
             $table->timestamps();
         });

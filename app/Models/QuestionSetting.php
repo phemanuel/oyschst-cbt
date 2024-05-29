@@ -12,6 +12,7 @@ class QuestionSetting extends Model
     protected $fillable = [
         'session1',
         'department',
+        'upload_no_of_qst',
         'no_of_qst',
         'level',
         'duration',

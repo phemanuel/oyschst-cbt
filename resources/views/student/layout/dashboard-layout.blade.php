@@ -221,14 +221,14 @@
                       <td></td>
                       <td></td>
                      </tr>
-                     @if($examSetting->exam_category == 'GENERAL')
+                     @if($examSetting->exam_type == 'ENTRANCE')
                       <!-- <tr>
                       <td><p class="bold-text-font">Subject/Course</p></td>
                       <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
                       <td></td>
                       <td></td>
                      </tr> -->
-                     @elseif($examSetting->exam_category == 'SEMESTER')
+                     @elseif($examSetting->exam_type == 'SEMESTER-EXAM')
                      <tr>
                       <td><p class="bold-text-font">Subject/Course</p></td>
                       <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
@@ -242,12 +242,12 @@
                       <td></td>
                       <td></td>
                      </tr>
-                     <tr>
+                     <!-- <tr>
                       <td><p class="bold-text-font">Exam Category</p></td>
                       <td><p class="bold-text-font">{{$examSetting->exam_category}}</p></td>
                       <td></td>
                       <td></td>
-                     </tr>
+                     </tr> -->
                      <tr>
                       <td><p class="bold-text-font">Exam Type</p></td>
                       <td><p class="bold-text-font">{{$examSetting->exam_type}}</p></td>
