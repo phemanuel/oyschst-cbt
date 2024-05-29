@@ -517,7 +517,7 @@ class QuestionController extends Controller
 
         // Check if the question setting exists
         if (!$questionSetting) {
-            return redirect()->route('question')->with('error', 'Question setting not found.');
+            return redirect()->route('question-obj-upload')->with('error', 'Question setting not found.');
         }
 
         // Retrieve all records except the one with the given ID
@@ -549,9 +549,9 @@ class QuestionController extends Controller
         ]);
 
         if($currentExamStatus == 'Active') {
-            return redirect()->route('question')->with('success', 'Question disabled successfully.');
+            return redirect()->route('question-obj-upload')->with('success', 'Question disabled successfully.');
         }
-        return redirect()->route('question')->with('success', 'Question enabled successfully.');
+        return redirect()->route('question-obj-upload')->with('success', 'Question enabled successfully.');
     }
 
     public function deleteObjImage(Request $request, $id)
@@ -1223,6 +1223,54 @@ class QuestionController extends Controller
 
         return view('questions.question-theory-view', compact('question','softwareVersion', 'collegeSetup',
         'questionSetting'));        
+    }
+
+    public function questionTheoryEnable($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first(); 
+
+        // Retrieve the question setting by ID
+        $questionSetting = QuestionSetting::find($id);
+        $currentExamStatus = $questionSetting->exam_status;
+
+        // Check if the question setting exists
+        if (!$questionSetting) {
+            return redirect()->route('question-theory-upload')->with('error', 'Question setting not found.');
+        }
+
+        // Retrieve all records except the one with the given ID
+        $inactiveQuestionSettings = QuestionSetting::where('id', '!=', $id)
+            ->get();
+
+        // Update all other records to be inactive
+        foreach ($inactiveQuestionSettings as $inactiveQuestionSetting) {
+            $inactiveQuestionSetting->update(['exam_status' => 'Inactive']);
+        }
+
+        // Update the specific record to be active
+        $questionSetting->update(['exam_status' => 'Active']);
+
+        //----Update current exam settings---
+        $examSetting = ExamSetting::first();
+        $examSetting->update([
+            'level' => $questionSetting->level,
+            'semester' => $questionSetting->semester,
+            'course' => $questionSetting->course,
+            'session1' => $questionSetting->session1,
+            'department' => $questionSetting->department,
+            'exam_type' => $questionSetting->exam_type,
+            'exam_category' => $questionSetting->exam_category,
+            'exam_mode' => $questionSetting->exam_mode,
+            'no_of_qst' => $questionSetting->no_of_qst,
+            'duration' => $questionSetting->duration,
+            'check_result' => $questionSetting->check_result,
+        ]);
+
+        if($currentExamStatus == 'Active') {
+            return redirect()->route('question-theory-upload')->with('success', 'Question disabled successfully.');
+        }
+        return redirect()->route('question-theory-upload')->with('success', 'Question enabled successfully.');
     }
 
 }

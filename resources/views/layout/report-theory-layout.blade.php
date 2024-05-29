@@ -106,7 +106,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+          <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{auth()->user()->name}}</p>
@@ -134,7 +134,7 @@
             </span>
           </a>
         </li> 
-        <li class="active">
+        <li>
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -182,7 +182,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('report')}}">
             <i class="fa fa-folder"></i> <span>Report</span>
             <span class="pull-right-container">
@@ -209,12 +209,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Bank(Theory)       
-       <small><h4>(Note: You can search by Academic Session,Programme,Exam Type or Exam Mode)</h4></small> 
+        Report Theory     
+       <small><h4>(Note: You can search by Programme, Academic Session and Exam Type)</h4></small> 
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Question Bank(Theory)</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li> 
+        <li><a href="{{route('report')}}">Report</a></li>
+        <li class="active">Report Theory</li>
       </ol>
     </section>
 <div>
@@ -238,14 +239,14 @@
               <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('question-upload-theory')}}" class="btn btn-info">Upload Question</a>
+                <!-- <a href="#" class="btn btn-info">Upload Question</a> -->
                 </div>
               </div>
               <hr>
               <div class="box-header">
               <h3 class="box-title"></h3>
               <div class="box-tools">
-              <form action="{{ route('question-setting-search') }}" method="post" class="form-inline">
+              <form action="{{ route('report-search') }}" method="post" class="form-inline">
                 @csrf
                 <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
@@ -272,7 +273,6 @@
                   <th>Exam Date</th>
                   <th>No of Questions</th>
                   <th>Duration</th>
-                  <th>Check Result</th>
                   <th>Status</th>
                   <th>Created On</th>
                   <th>Actions</th>
@@ -289,25 +289,15 @@
                     <td>{{ $rs->exam_type }}</td>
                     <td>{{ $rs->exam_date }}</td>
                     <td>{{ $rs->no_of_qst }}</td>
-                    <td>{{ $rs->duration }}</td>
-                    @if($rs->check_result == 1)
-                    <td>YES</td>
-                    @else
-                    <td>NO</td>
-                    @endif
-                    <td>{{ $rs->exam_status }}
-                    @if ($rs->exam_status == 'Inactive')  
-                    <a class="label label-primary" href="{{route('question-theory-enable', ['questionId' => $rs->id])}}">Enable Question</a>
-                    @elseif ($rs->exam_status == 'Active')
-                    
-                    @endif 
-                    </td>
-                                       
+                    <td>{{ $rs->duration }}</td>                    
+                    <td>{{ $rs->exam_status }}                    
+                    </td>                                       
                     <td>{{$rs->created_at}}</td>
+                    <td>                     
+                      <a class="label label-success" href="{{route('report-objective-view', ['id' => $rs->id])}}">Check/Grade Result</a>
+                     </td>
                     <td> 
-                      
-                      <a class="label label-success" href="{{route('question-theory-view', ['questionId' => $rs->id])}}">Edit</a>
-                     
+                    <a class="label label-info" href="{{route('report-objective-csv', ['id' => $rs->id])}}">Export CSV</a>
                     </td>
                 </tr>
                 @endforeach

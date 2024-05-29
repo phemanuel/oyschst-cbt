@@ -190,9 +190,7 @@ Route::get('/', function () {
         Route::get('download-question-theory-csv', [QuestionController::class, 'downloadQuestionTheoryCsv'])
         ->name('download-question-theory-csv');       
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])
-        ->name('question-edit.action');
-        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
-        ->name('question-enable');
+        ->name('question-edit.action');        
         //-----Questions Objectives
         Route::get('question-upload-obj', [QuestionController::class, 'questionUploadObj'])
         ->name('question-upload-obj');
@@ -219,7 +217,9 @@ Route::get('/', function () {
         Route::get('question-image-upload/{id}', [QuestionController::class, 'uploadQuestionImage'])
         ->name('question-image-upload');
         Route::post('delete-obj-image/{id}', [QuestionController::class, 'deleteObjImage'])
-        ->name('delete-obj-image');        
+        ->name('delete-obj-image');    
+        Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
+        ->name('question-enable');    
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
         ->name('question-upload-fill-gap');
@@ -244,6 +244,8 @@ Route::get('/', function () {
         ->name('question-theory-save');
         Route::post('delete-theory-image/{id}', [QuestionController::class, 'deleteTheoryImage'])
         ->name('delete-theory-image');
+        Route::get('question-theory-enable/{questionId}', [QuestionController::class, 'questionTheoryEnable'])
+        ->name('question-theory-enable');
         //--report
         Route::get('report', [ReportController::class, 'index'])
         ->name('report');
@@ -259,6 +261,8 @@ Route::get('/', function () {
         ->name('report-theory');
         Route::get('report-theory-view/{id}', [ReportController::class, 'reportTheoryView'])
         ->name('report-theory-view');
+        Route::get('report-theory-csv/{id}', [ReportController::class, 'reportTheoryCsv'])
+        ->name('report-theory-csv');
         //-----Fill in Gap
         Route::get('report-fill-gap', [ReportController::class, 'reportFillGap'])
         ->name('report-fill-gap');

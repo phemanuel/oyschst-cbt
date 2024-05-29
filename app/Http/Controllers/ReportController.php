@@ -2191,4 +2191,42 @@ class ReportController extends Controller
     }
 
 
+    public function reportTheory()
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();        
+        $questionSetting = QuestionSetting::where('exam_mode', 'THEORY')
+        ->orderBy('created_at', 'desc')
+        ->Paginate(20);
+
+
+        return view('dashboard.report-theory', compact('softwareVersion','collegeSetup', 'questionSetting'));
+    }
+
+    public function reportTheoryView($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first(); 
+
+        $questionSetting = QuestionSetting::where('id', $id)->first();
+
+        $student = CbtEvaluation::where('session1', $questionSetting->session1)
+        ->where('department', $questionSetting->department)
+        ->where('level', $questionSetting->level)
+        ->where('semester', $questionSetting->semester)
+        ->where('course', $questionSetting->course)
+        ->where('exam_mode', $questionSetting->exam_mode)
+        ->where('exam_type', $questionSetting->exam_type)
+        ->where('exam_category', $questionSetting->exam_category)
+        ->where('noofquestion', $questionSetting->no_of_qst)
+        ->paginate(20);
+
+        if(!$student){
+            return redirect()->back()->with('error', 'Result is not available for exam you selected.');
+        }
+
+        return view('dashboard.report-theory-view', compact('softwareVersion','collegeSetup','student'));
+    }
+
+
 }

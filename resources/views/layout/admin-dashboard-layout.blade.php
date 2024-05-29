@@ -294,7 +294,7 @@
             <div class="box-body">
               <!-- the events -->
               <div id="external-events">
-                <div class="external-event bg-green">Current Exam</div> 
+                <div class="external-event bg-light-blue">Current Exam Dates</div> 
               </div>
             </div>
             <!-- /.box-body -->

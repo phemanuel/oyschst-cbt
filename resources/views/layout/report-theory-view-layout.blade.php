@@ -37,7 +37,21 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
 
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -106,7 +120,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dashboard/dist/img/avatar5.png" class="img-circle" alt="User Image">
+          <img src="{{asset('dashboard/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{auth()->user()->name}}</p>
@@ -133,8 +147,7 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> 
-        <li class="active">
+        </li> <li>
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -142,7 +155,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -209,43 +222,27 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Bank(Theory)       
-       <small><h4>(Note: You can search by Academic Session,Programme,Exam Type or Exam Mode)</h4></small> 
+        Student Result 
+       <small><h4>(Note: You can search for a student by Surname or Admission No)</h4></small>        
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Question Bank(Theory)</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>   
+        <li><a href="{{route('report')}}">Report</a> </li>     
+        <li class="active">Student Result</li>
       </ol>
     </section>
-<div>
-@if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
-</div>
+
     <!-- Main content -->
     <section class="content">
     <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title"></h3>
-              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('question-upload-theory')}}" class="btn btn-info">Upload Question</a>
-                </div>
-              </div>
-              <hr>
               <div class="box-header">
               <h3 class="box-title"></h3>
+              
               <div class="box-tools">
-              <form action="{{ route('question-setting-search') }}" method="post" class="form-inline">
+              <form action="{{ route('result-search') }}" method="post" class="form-inline">
                 @csrf
                 <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
@@ -256,68 +253,46 @@
                 </div>
             </form>
               </div>
-  </div>
-             
+              <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
-                  <th>Academic Session</th>
+                  <th>Avatar</th>
+                  <th>Reg/Matric No</th>
+                  <th>Name</th>
                   <th>Programme</th>
                   <th>Level</th>
-                  <th>Semester</th>
-                  <th>Exam Mode</th>
                   <th>Exam Type</th>
-                  <th>Exam Date</th>
-                  <th>No of Questions</th>
-                  <th>Duration</th>
-                  <th>Check Result</th>
-                  <th>Status</th>
-                  <th>Created On</th>
+                  <th>No of Qst</th>
+                  <th>Score</th>
                   <th>Actions</th>
                 </tr>
-                @if ($questionSetting->count() > 0)
-                @foreach ($questionSetting as $key => $rs)
+                @if ($student->count() > 0)
+                @foreach ($student as $key => $rs)
                 <tr>
-                    <td>{{ $key + 1 }}</td>                    
-                    <td>{{$rs->session1}}</td>
+                    <td>{{ $key + 1 }}</td>
+                    <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <td>{{$rs->studentno}}</td>
+                    <td>{{ $rs->studentname }}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>
-                    <td>{{ $rs->semester }}</td>
-                    <td>{{ $rs->exam_mode }}</td>
                     <td>{{ $rs->exam_type }}</td>
-                    <td>{{ $rs->exam_date }}</td>
-                    <td>{{ $rs->no_of_qst }}</td>
-                    <td>{{ $rs->duration }}</td>
-                    @if($rs->check_result == 1)
-                    <td>YES</td>
-                    @else
-                    <td>NO</td>
-                    @endif
-                    <td>{{ $rs->exam_status }}
-                    @if ($rs->exam_status == 'Inactive')  
-                    <a class="label label-primary" href="{{route('question-theory-enable', ['questionId' => $rs->id])}}">Enable Question</a>
-                    @elseif ($rs->exam_status == 'Active')
-                    
-                    @endif 
-                    </td>
-                                       
-                    <td>{{$rs->created_at}}</td>
-                    <td> 
-                      
-                      <a class="label label-success" href="{{route('question-theory-view', ['questionId' => $rs->id])}}">Edit</a>
-                     
-                    </td>
+                    <td>{{ $rs->noofquestion }}</td>                    
+                    <td>{{ $rs->correct }}</td>                    
+                    <td> <a class="label label-primary" href="{{route('exam-sheet-page1', ['id' => $rs->id])}}" target="_blank">Exam Sheet</a>  
+                    <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}" target="_blank">Print Result</a>                   
+                </td>
                 </tr>
                 @endforeach
                 @else
 		<tr>
-			<td colspan="8">Questions not available.</td>
+			<td colspan="8">Results not available.</td>
 		</tr>
         @endif
               </table>
-              {{ $questionSetting->links() }}
+              {{ $student->links() }}
             </div>
             <!-- /.box-body -->
           </div>
@@ -327,6 +302,37 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <div class="modal modal-info fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import Student List.</h4>
+              </div>
+              <div class="modal-body">
+                <p>Importing students from a CSV (Comma Separated Values) file is a convenient way to bulk upload questions into a system. 
+                Here's how the process typically works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-student-csv')}}">You can download a sample template here.</a></li>
+                    <li> Click on import.</li>
+                    <li> This will upload all students for the specified criteria.</li>
+                    <li> You can edit each student as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <a href="{{route('student-import')}}" class="btn btn-outline">Proceed</a>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">

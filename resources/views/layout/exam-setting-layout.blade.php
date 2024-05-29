@@ -254,8 +254,7 @@
                   <label for="exampleInputEmail1">Exam Category</label>
                   <select name="exam_category" id="" class="form-control">
                   <option value="{{$examSetting->exam_category}}" selected>{{$examSetting->exam_category}}</option>
-                    <option value="GENERAL">GENERAL</option>
-                    <option value="SEMESTER">SEMESTER</option>
+                    <option value="GENERAL">GENERAL</option>                  
                   </select>
                 </div>
               <div class="form-group">
