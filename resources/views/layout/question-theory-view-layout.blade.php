@@ -204,7 +204,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>  
-        <li><a href="{{route('question')}}">Question Bank</a></li>       
+        <li><a href="{{route('question-theory-upload')}}">Question Bank</a></li>       
         <li class="active">Question Upload(Theory)</li>
       </ol>
     </section>

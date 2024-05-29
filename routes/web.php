@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ExamTheoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -82,8 +83,10 @@ Route::get('/', function () {
     Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
     ->name('cbt-page10');
     //---Theory Based Questions ---
-    Route::get('cbt/theory/{id}', [ExamTheoryController::class, 'cbtTheory'])
+    Route::get('cbt-theory/{id}', [ExamTheoryController::class, 'cbtTheory'])
     ->name('cbt-theory');
+    Route::get('cbt-theory-page/{id}', [ExamTheoryController::class, 'cbtTheoryPage'])
+    ->name('cbt-theory-page');
     
     //----Update Answers---
     Route::get('fetch-answers/{id}/{pageNo}', [ExamController::class, 'fetchAnswers'])
@@ -237,7 +240,7 @@ Route::get('/', function () {
         ->name('question-upload-theory');
         Route::post('question-upload-theory', [QuestionController::class, 'questionUploadTheoryAction'])
         ->name('question-upload-theory.action');        
-        Route::post('question-upload-theory-import', [QuestionController::class, 'questionUploadObjImportAction'])
+        Route::post('question-upload-theory-import', [QuestionController::class, 'questionUploadTheoryImportAction'])
         ->name('question-upload-theory-import.action');   
         Route::get('question-theory-view/{questionId}', [QuestionController::class, 'questionTheoryView'])
         ->name('question-theory-view');     

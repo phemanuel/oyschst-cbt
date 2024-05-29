@@ -26,6 +26,7 @@ use App\Models\CbtEvaluation;
 use App\Models\CbtEvaluation1;
 use App\Models\CbtEvaluation2;
 use Carbon\Carbon;
+use App\Models\TheoryQuestion;
 
 
 
@@ -33,6 +34,36 @@ class ExamController extends Controller
 {
     //
     public function cbtCheck($id)
+    {
+        try {
+            $examSetting = ExamSetting::first();
+            $studentData = StudentAdmission::where('id', $id)->first();
+            $examSetting = ExamSetting::first();
+            // Check if the question for current exam setting is available
+            if($examSetting->exam_mode == "OBJECTIVE"){
+                return $this->cbtObjCheck($id);
+            }
+            elseif($examSetting->exam_mode == "FILL-IN-GAP"){
+                // return $this->cbtFillInGap($id);
+            }
+            elseif($examSetting->exam_mode == "THEORY"){
+                return $this->cbtTheoryCheck($id);
+            }
+                                            
+            return redirect()->route('cbt-process', ['id' => $studentData->id]);
+        } catch (ValidationException $e) {
+            // Handle the validation exception
+            // You can redirect back with errors or do other appropriate error handling
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Handle other exceptions, log them, and redirect to an error page
+            Log::error('Error during login: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred accessing this exam.');
+        }
+
+    }
+
+    public function cbtObjCheck($id)
     {
         try {
             $examSetting = ExamSetting::first();
@@ -47,7 +78,51 @@ class ExamController extends Controller
                                                 ->where('semester', $examSetting->semester)
                                                 ->where('session1', $examSetting->session1)
                                                 ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-->where('no_of_qst', $examSetting->no_of_qst)
+                                                ->where('no_of_qst', $examSetting->no_of_qst)
+                                                ->first();
+
+            if(!$existingQuestion){
+                return redirect()->back()->with('error', 'Question is unavailable.');
+            }
+            //----Check if student can access the current exam setting--- 
+            $studentDept = $studentData->department;
+            $studentLevel = $studentData->level;
+            $examDept = $examSetting->department;
+            $examLevel = $examSetting->level;
+
+            if($studentDept !== $examDept || $studentLevel !== $examLevel){
+                return redirect()->back()->with('error', 'You cannot access this exam.');
+            }
+                                            
+            return redirect()->route('cbt-process', ['id' => $studentData->id]);
+        } catch (ValidationException $e) {
+            // Handle the validation exception
+            // You can redirect back with errors or do other appropriate error handling
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Handle other exceptions, log them, and redirect to an error page
+            Log::error('Error during login: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred accessing this exam.');
+        }
+
+    }
+
+    public function cbtTheoryCheck($id)
+    {
+        try {
+            $examSetting = ExamSetting::first();
+            $studentData = StudentAdmission::where('id', $id)->first();
+            $examSetting = ExamSetting::first();
+            // Check if the question for current exam setting is available
+            $existingQuestion = TheoryQuestion::where('exam_type', $examSetting->exam_type)
+                                                ->where('exam_category', $examSetting->exam_category)
+                                                ->where('exam_mode', $examSetting->exam_mode)
+                                                ->where('department', $examSetting->department)
+                                                ->where('level', $examSetting->level)
+                                                ->where('semester', $examSetting->semester)
+                                                ->where('session1', $examSetting->session1)
+                                                ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+                                                ->where('no_of_qst', $examSetting->no_of_qst)
                                                 ->first();
 
             if(!$existingQuestion){
@@ -122,8 +197,8 @@ class ExamController extends Controller
         elseif($examMode == "FILL-IN-GAP"){
             // return $this->cbtFillInGap($id);
         }
-        elseif($examMode == "THEORY"){
-             return redirect()->route('cbt-Theory', ['id' => $id]);
+        elseif($examMode == "THEORY"){           
+            return redirect()->route('cbt-theory', ['id' => $id]);
         }
     }
 

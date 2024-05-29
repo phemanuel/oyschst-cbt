@@ -26,5 +26,6 @@ class TheoryAnswer extends Model
         'graphic',
         'course',
         'semester',
+        'score',
     ];
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('theory_answers', function (Blueprint $table) {
             $table->id();
             $table->integer('examstatus');
+            $table->string('studentno');
             $table->string('studentname');
             $table->double('score');
             $table->integer('question_no');

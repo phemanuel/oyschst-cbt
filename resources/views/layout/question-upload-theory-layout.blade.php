@@ -631,6 +631,12 @@
                 </p>
                   <ul>
                     <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
                     <li> Click on Start Upload.</li>
                     <li> This will generate a dummy template for the specified no of questions.</li>
                     <li> You can start editing the questions as desired.</li>
@@ -661,6 +667,12 @@
                 </p>
                   <ul>
                     <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
                     <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-theory-csv')}}">You can download a sample template here.</a></li>
                     <li> Click on Start Import.</li>
                     <li> This will upload all the questions for the specified no of questions.</li>

@@ -362,6 +362,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
+                  <option value="20">150</option>
+                  <option value="30">200</option>
+                  <option value="40">250</option>
+                  <option value="50">300</option>
+                  <option value="60">350</option>
+                  <option value="70">400</option>
+                  <option value="80">450</option>
+                  <option value="90">500</option>
                 </select>
                 </div>             
                 @error('upload_no_of_qst')
@@ -380,6 +388,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
+                  <option value="20">150</option>
+                  <option value="30">200</option>
+                  <option value="40">250</option>
+                  <option value="50">300</option>
+                  <option value="60">350</option>
+                  <option value="70">400</option>
+                  <option value="80">450</option>
+                  <option value="90">500</option>
                 </select>
                 </div>             
                 @error('no_of_qst')
@@ -544,6 +560,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
+                  <option value="20">150</option>
+                  <option value="30">200</option>
+                  <option value="40">250</option>
+                  <option value="50">300</option>
+                  <option value="60">350</option>
+                  <option value="70">400</option>
+                  <option value="80">450</option>
+                  <option value="90">500</option>
                 </select>
                 </div>             
                 @error('upload_no_of_qst')
@@ -562,6 +586,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
+                  <option value="20">150</option>
+                  <option value="30">200</option>
+                  <option value="40">250</option>
+                  <option value="50">300</option>
+                  <option value="60">350</option>
+                  <option value="70">400</option>
+                  <option value="80">450</option>
+                  <option value="90">500</option>
                 </select>
                 </div>             
                 @error('no_of_qst')
