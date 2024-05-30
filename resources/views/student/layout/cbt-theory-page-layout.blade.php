@@ -186,7 +186,7 @@
            
             <table class="table">
                 <tr>
-                    <td> <h3 class="page-title">Computer Based Test - Read questions carefully and select the answer appropriately.</h3></td>
+                    <td> <h3 class="page-title">Computer Based Test - Read questions carefully and answer appropriately.</h3></td>
                     <!-- <td> <button type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td> -->
                 </tr>
             </table>            
@@ -205,30 +205,40 @@
           <div class="row">         
               
               <!-- Questions will be dynamically loaded here -->
+             
                <!-- begin card -->
             <div class="col-12 grid-margin" id="question1">            
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title"> 
-                    <strong>Question 1 </strong>
+                    <strong>Question {{$currentQuestionNo}}</strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table" width="100%">
-                   
+                      @if($currentQuestionType === 'text-image')                   
                       <tr>                        
-                      <img src="" alt="questionImage" width="1200" height="250">                        
+                      <img src="{{asset('questions/'.$rs->graphic)}}" alt="questionImage" width="1200" height="250">                        
                       </tr>
                       <tr>
-                        <td><p class="bold-font-qst"></p></td>
-                        <td></td>
-                        <td></td>
+                        <td><p class="bold-font-qst">{!! $currentQuestion !!}</p></td>                        
                       </tr> 
-                      <tr>                        
-                        <td><p class="bold-font-qst"></p></td>
-                        <td></td>
-                        <td></td>
+                      <tr>
+                        <td> <textarea id="editor1" name="answer" rows="10" cols="80">
+                                            {{$currentAnswer}}
+                    </textarea>
+                  </td>
                       </tr>
-                      
+                      @else
+                      <tr>
+                        <td><p class="bold-font-qst">{!! $currentQuestion !!}</p></td>                        
+                      </tr> 
+                      <tr>
+                        <td> <textarea id="editor1" name="answer" rows="10" cols="80">
+                                            {{$currentAnswer}}
+                    </textarea>
+                  </td>
+                      </tr>
+                      @endif
                       <tr>
                       <td width="82%">
                       
@@ -241,7 +251,7 @@
               </div>
             </div>
            <!-- end card -->         
-  
+          
 
           </div>         
           
@@ -335,7 +345,19 @@
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <script src="{{ asset('student/js/jquery-3.5.1.min.js') }}"></script>
 
-
+        <!-- CK Editor -->
+<script src="{{asset('dashboard/bower_components/ckeditor/ckeditor.js')}}"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+<script>
+  $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1')
+    //bootstrap WYSIHTML5 - text editor
+    $('.textarea').wysihtml5()
+  })
+</script>
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('student/vendors/js/vendor.bundle.addons.js')}}"></script>

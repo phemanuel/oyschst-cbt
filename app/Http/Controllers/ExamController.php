@@ -27,6 +27,7 @@ use App\Models\CbtEvaluation1;
 use App\Models\CbtEvaluation2;
 use Carbon\Carbon;
 use App\Models\TheoryQuestion;
+use App\Models\TheoryAnswer;
 
 
 
@@ -1853,6 +1854,30 @@ class ExamController extends Controller
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
         $examSetting = ExamSetting::first();
+        
+        if($examSetting->exam_mode === 'OBJECTIVE'){
+            return $this->cbtObjPage($id);
+        }
+        elseif($examSetting->exam_mode === 'FILL-IN-GAP'){
+            // return $this->cbtObjFillInGap($id);
+        }
+        elseif($examSetting->exam_mode === 'THEORY'){
+            return $this->cbtTheoryPage($id);
+        }
+
+        $pageNo = 1;
+        $studentMin = $cbtEvaluation->minute;
+        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','pageNo','studentMin'));
+
+    }
+
+    public function cbtObjPage($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
 
         $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
             ->where('session1', $examSetting->session1)
@@ -1870,6 +1895,37 @@ class ExamController extends Controller
         $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','pageNo','studentMin'));
+
+    }
+
+    public function cbtTheoryPage($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
+
+        $cbtEvaluation = TheoryAnswer::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+            ->where('no_of_qst', $examSetting->no_of_qst)
+            ->first();
+
+        $currentQuestion = $cbtEvaluation->Q1;  
+        $currentAnswer = $cbtEvaluation->ANS1;       
+        $currentQuestionNo = 1;
+
+        $pageNo = 1;
+        $studentMin = $cbtEvaluation->minute;
+        return view('student.pages.cbt-theory-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','pageNo','studentMin','currentQuestion','currentQuestionNo','currentAnswer'));
 
     }
 

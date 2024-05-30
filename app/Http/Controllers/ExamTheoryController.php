@@ -52,14 +52,13 @@ class ExamTheoryController extends Controller
         $examType = $examSetting->exam_type;
         $semester = $examSetting->semester;
         $session1 = $examSetting->session1;
-        $semester = $examSetting->semester;
 
         // Generate a random set of numbers representing the questions
         $questionNumbers = range(1, $uploadNoOfQuestions);
         shuffle($questionNumbers);
         $randomizedQuestions = array_slice($questionNumbers, 0, $noOfQuestions);
 
-        $studentDataExist = CbtEvaluation::where('studentno', $studentData->admission_no)
+        $studentDataExist = TheoryAnswer::where('studentno', $studentData->admission_no)
             ->where('exam_mode', $examMode)
             ->where('exam_type', $examType)
             ->where('exam_category', $examCategory)
@@ -67,18 +66,16 @@ class ExamTheoryController extends Controller
             ->where('level', $level)
             ->where('semester', $semester)
             ->where('course', $course)
-            ->where('noofquestion', $noOfQuestions)
+            ->where('upload_no_of_qst', $uploadNoOfQuestions)
+            ->where('no_of_qst', $noOfQuestions)
             ->first();
 
         if ($studentDataExist) {
-            return response()->json([
-                'data' => $studentDataExist,
-            ]);
-            // return redirect()->route('cbt-continue', ['admission_no' => $studentData->admission_no]);
+            return redirect()->route('cbt-continue', ['admission_no' => $studentData->admission_no]);
         }
 
         // Create or update the student record
-        $student = CbtEvaluation::firstOrCreate([
+        $student = TheoryAnswer::firstOrCreate([
             'session1' => $session1,
             'studentname' => $studentName,
             'studentno' => $studentNo,
@@ -89,17 +86,13 @@ class ExamTheoryController extends Controller
             'exam_mode' => $examMode,
             'exam_type' => $examType,
             'semester' => $semester,
-            'correct' => 0,
-            'wrong' => 0,
             'minute' => $examSetting->duration * 60,
             'hour' => $examSetting->duration,
-            'pageno' => 1,
-            'msgstatus' => 0,
-            'examdate' => date('Y-m-d H:i:s'),
-            'starttime' => now(),
-            'endtime' => now(),
-            'noofquestion' => $noOfQuestions,
+            'no_of_qst' => $noOfQuestions,
+            'upload_no_of_qst' => $uploadNoOfQuestions,
             'examstatus' => 1,
+            'exam_date' => now(),
+            'total_score' => 0,
         ]);
 
         // Save the shuffled question numbers along with the student record
@@ -107,10 +100,8 @@ class ExamTheoryController extends Controller
             $field = 'A' . ($index + 1); // Generate field name like A1, A2, A3, etc.
             $student->{$field} = $questionNumber;
         }
-        // Save the changes
-        $student->save();
 
-        // Fetch the questions and create TheoryAnswer records
+        // Fetch the questions and update the same TheoryAnswer record
         foreach ($randomizedQuestions as $index => $questionNumber) {
             $question = TheoryQuestion::where('course', $course)
                 ->where('exam_mode', $examMode)
@@ -119,92 +110,56 @@ class ExamTheoryController extends Controller
                 ->where('department', $department)
                 ->where('level', $level)
                 ->where('semester', $semester)
-                ->where('no_of_qst', $noOfQuestions)
-                ->where('upload_no_of_qst', $uploadNoOfQuestions)
                 ->where('question_no', $questionNumber)
                 ->first();
 
             if ($question) {
-                TheoryAnswer::create([
-                    'examstatus' => 1,
-                    'studentname' => $studentName,
-                    'no_of_qst' => $noOfQuestions,
-                    'session1' => $session1,
-                    'department' => $department,
-                    'upload_no_of_qst' => $uploadNoOfQuestions,
-                    'level' => $level,
-                    'exam_type' => $examType,
-                    'exam_mode' => $examMode,
-                    'exam_category' => $examCategory,                    
-                    'studentno' => $studentNo,
-                    'course' => $course,
-                    'question_type' => $question->question_type,
-                    'question_no' => $questionNumber,
-                    'question' => $question->question,
-                    'answer' => '', 
-                    'score' => 0, 
-                    'graphic' => $question->graphic,
-                    'course' => $course,
-                    'semester' => $semester,
-                ]);
+                $questionField = 'Q' . ($index + 1);
+                $questionTypeField = 'QT' . ($index + 1); 
+                $questionTGraphicField = 'G' . ($index + 1);// Generate field name like Q1, Q2, Q3, etc.
+                $student->{$questionField} = $question->question;
+                $student->{$questionTGraphicField} = $question->graphic;
+                $student->{$questionTypeField} = $question->question_type;
             }
         }
 
-        
+        // Save the changes
+        $student->save();
+
         return redirect()->to(route('cbt-theory-page', ['id' => $studentData->id]));
     }
+
 
     public function cbtTheoryPage($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
+        $examSetting = ExamSetting::first();
 
-        $examSetting = ExamSetting::first();       
-        
-        //--get variables
-        $exam_type = $examSetting->exam_type;
-        $exam_category = $examSetting->exam_category;
-        $exam_mode = $examSetting->exam_mode;
-        $department = $examSetting->department;
-        $session1 = $examSetting->session1;
-        $upload_no_of_qst = $examSetting->upload_no_of_qst;
-        $no_of_qst = $examSetting->no_of_qst;
-        $level = $examSetting->level;
-        $course = $examSetting->course;
-        $semester = $examSetting->semester;
+        $cbtEvaluation = TheoryAnswer::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+            ->where('no_of_qst', $examSetting->no_of_qst)
+            ->first();
 
-        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
-                        ->where('session1', $examSetting->session1)
-                        ->where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->where('semester', $examSetting->semester)
-                        ->where('course', $examSetting->course)
-                        ->where('exam_mode', $examSetting->exam_mode)
-                        ->where('exam_type', $examSetting->exam_type)
-                        ->where('exam_category', $examSetting->exam_category)
-                        ->where('noofquestion' , $examSetting->no_of_qst)
-                        ->first();
-        $studentMin = $cbtEvaluation->minute;
-
-        $question = TheoryQuestion::where('exam_type', $exam_type)
-        ->where('exam_category', $exam_category)
-        ->where('exam_mode', $exam_mode)
-        ->where('department', $department)
-        ->where('level', $level)
-        ->where('semester', $semester)
-        ->where('session1', $session1)
-        ->where('course', $course)
-        ->where('upload_no_of_qst', $upload_no_of_qst)
-        ->where('no_of_qst', $no_of_qst)
-        ->where('question_no', 1)
-        ->first();        
+        $currentQuestion = $cbtEvaluation->Q1;  
+        $currentAnswer = $cbtEvaluation->ANS1;  
+        $currentQuestionType = $cbtEvaluation->question_type;  
+        $currentQuestionNo = 1;
 
         $pageNo = 1;
-        if (!$question){
-            return redirect()->back()->with('error', 'An error occurred. Please try again.');     
-        }
-        return view('student.pages.cbt-theory-page', compact('softwareVersion', 'collegeSetup'
-        ,'question', 'studentData','examSetting','pageNo','studentMin'));
+        $studentMin = $cbtEvaluation->minute;
+        return view('student.pages.cbt-theory-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','pageNo','studentMin','currentQuestion','currentQuestionNo','currentAnswer',
+    'currentQuestionType'));
+
     }
 }
