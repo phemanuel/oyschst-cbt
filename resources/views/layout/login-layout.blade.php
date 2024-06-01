@@ -60,6 +60,7 @@
 </style>
 
   @stack('style')
+
 </head>
 <body>
 
@@ -78,7 +79,7 @@
 							{{ session('error') }}
 						</div>
 						@endif	
-        <form action="{{route('login.action')}}" method="post">
+        <form id="start-cbt-form" method="post" action="{{route('login.action')}}">
 			@csrf
 			<p align="center"><img src="{{asset('/OYSCHSTLOGO.png')}}" alt=""></p> 
 			<hr>
@@ -115,7 +116,7 @@
 									<span class="invalid-feedback">{{ $message }}</span>
 									@enderror
           <div class="form-group">
-            <button class="btn btn-primary submit-btn btn-block">Login</button>
+            <button class="btn btn-success submit-btn btn-block" id="start-cbt-button">Login</button>
           </div>
           
           <div class="form-group">
@@ -133,6 +134,7 @@
 </div>
     </div>
   </div>
+  
 
   <!-- base js -->
   <script src="{{ asset('js/app.js') }}"></script>
@@ -144,5 +146,8 @@
 
 <!-- custom scripts -->
 @stack('custom-scripts')
+
+
+
 </body>
 </html>

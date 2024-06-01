@@ -191,7 +191,7 @@
         </li>
         <li>
           <a href="{{route('logout')}}">
-            <i class="fa fa-folder"></i> <span>Logout</span>
+            <i class="fa fa-power-off"></i> <span>Logout</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

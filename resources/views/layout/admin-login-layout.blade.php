@@ -95,7 +95,7 @@
             </div>
           </div>
           <div class="form-group">
-            <button class="btn btn-primary submit-btn btn-block">Login</button>
+            <button class="btn btn-success submit-btn btn-block">Login</button>
           </div>
           <div class="form-group d-flex justify-content-between">
             

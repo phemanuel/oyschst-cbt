@@ -688,30 +688,7 @@
   <!-- End custom js for this page-->
   <script src="{{asset('student/js/modal-demo.js')}}"></script>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      function enterFullScreen(element) {
-        if (element.requestFullscreen) {
-          element.requestFullscreen();
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) {
-          element.webkitRequestFullscreen();
-        } else if (element.msRequestFullscreen) {
-          element.msRequestFullscreen();
-        }
-      }
-
-      enterFullScreen(document.documentElement);
-
-      document.addEventListener('fullscreenchange', function() {
-        if (!document.fullscreenElement) {
-          alert('Please stay in full-screen mode for the best test experience.');
-          enterFullScreen(document.documentElement);
-        }
-      });
-    });
-  </script>
+    
 
 </body>
 

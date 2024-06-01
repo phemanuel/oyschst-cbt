@@ -53,6 +53,7 @@
         border-radius: 5px; /* Rounded corners */
     }
 </style>
+
 </head>
 <body class="horizontal-menu">
   <div class="container-scroller">
@@ -309,37 +310,8 @@
   <script src="{{asset('student/js/dashboard.js')}}"></script>
   <!-- End custom js for this page-->
 
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const startCbtButton = document.getElementById('start-cbt-button');
+  
 
-        startCbtButton.addEventListener('click', () => {
-            // Trigger full-screen mode
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen().then(() => {
-                    // Redirect to the CBT page after entering full-screen mode
-                    window.location.href = '/cbt-page-url';
-                });
-            } else if (elem.mozRequestFullScreen) { // Firefox
-                elem.mozRequestFullScreen().then(() => {
-                    window.location.href = '/cbt-page-url';
-                });
-            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                elem.webkitRequestFullscreen().then(() => {
-                    window.location.href = '/cbt-page-url';
-                });
-            } else if (elem.msRequestFullscreen) { // IE/Edge
-                elem.msRequestFullscreen().then(() => {
-                    window.location.href = '/cbt-page-url';
-                });
-            } else {
-                // Fallback if full-screen API is not supported
-                window.location.href = '/cbt-page-url';
-            }
-        });
-    });
-    </script>
 </body>
 
 

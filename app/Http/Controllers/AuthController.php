@@ -54,33 +54,29 @@ class AuthController extends Controller
 
             $admission_no = $request->get('admission_no');
 
-            // $admission_no = session::put('admission_no');
-            // $department = session::put('department');
-        
             // Attempt to authenticate the student
             $student = StudentAdmission::where('admission_no', $credentials['admission_no'])
                 ->where('department', $credentials['department'])
                 ->first();
             $loginStatus = $student->login_status;
-            if ($student) {
-                //---check login status ---
-                if($loginStatus == 1){
-                    return redirect()->back()->with('error', 'You are logged in already.');
-                }
-                elseif($loginStatus == 2){
-                    return redirect()->back()->with('error', 'You have completed the test.');
-                }
-                elseif($loginStatus == 0){
-                    //---Update Login status ---
-                    $student->login_status = 1;
-                    $student->save();
-                    // Authentication successful, redirect to student dashboard
-                    return redirect()->route('dashboard',['admission_no' => $admission_no]);
-                }                
-            } else {
-                // Authentication failed, redirect back with error message
-                return redirect()->back()->with('error', 'Invalid admission number or department');
+            if (!$student) {
+              // Authentication failed, redirect back with error message
+              return redirect()->back()->with('error', 'Invalid admission number or department');                 
+            } 
+            //---check login status ---
+            if($loginStatus == 1){
+                return redirect()->back()->with('error', 'You are logged in already.');
             }
+            elseif($loginStatus == 2){
+                return redirect()->back()->with('error', 'You have completed the test.');
+            }
+            elseif($loginStatus == 0){
+                //---Update Login status ---
+                $student->login_status = 1;
+                $student->save();
+                // Authentication successful, redirect to student dashboard
+                return redirect()->route('dashboard',['admission_no' => $admission_no]);
+            } 
         } catch (Exception $e) {
             // Handle any exceptions
             // Log the error if needed

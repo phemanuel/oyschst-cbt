@@ -152,13 +152,12 @@
         </li>
         <li>
           <a href="{{route('login-status')}}">
-            <i class="fa fa-user"></i> <span>Student Login Status</span>
+            <i class="fa fa-user"></i> <span>Student Login/Exam Status</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>        
-        <li>
+        </li>  <li>
           <a href="{{route('change-course')}}">
             <i class="fa fa-laptop"></i> <span>Change of Course</span>
             <span class="pull-right-container">
@@ -192,7 +191,7 @@
         </li>
         <li>
           <a href="{{route('logout')}}">
-            <i class="fa fa-folder"></i> <span>Logout</span>
+            <i class="fa fa-power-off"></i> <span>Logout</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
