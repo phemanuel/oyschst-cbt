@@ -138,7 +138,7 @@
                     Computer Based Test
                   </h4>
                   <div class="border-bottom text-center pb-4">
-                        <img src="{{asset('uploads/'. $studentData->picture_name)}}" alt="profile" class="img-lg rounded-circle mb-3"/>
+                        <img src="{{asset('uploads/'. $studentData->picture_name . 'jpg')}}" alt="profile" class="img-lg rounded-circle mb-3"/>
                         
                         
                       </div>

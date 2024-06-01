@@ -282,7 +282,7 @@
                 @foreach ($student as $key => $rs)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->picture_name)}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <td><img src="{{asset('uploads/'. $rs->picture_name . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
                     <td>{{$rs->admission_no}}</td>
                     <td>{{ $rs->surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
                     <td>{{ $rs->department }}</td>

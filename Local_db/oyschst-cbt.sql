@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2024 at 01:16 AM
+-- Generation Time: May 30, 2024 at 04:25 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -509,8 +509,7 @@ CREATE TABLE `cbt_evaluations` (
 --
 
 INSERT INTO `cbt_evaluations` (`id`, `examstatus`, `studentname`, `correct`, `noofquestion`, `wrong`, `studentno`, `score`, `level`, `session1`, `semester`, `hour`, `minute`, `qstno`, `A1`, `A2`, `A3`, `A4`, `A5`, `A6`, `A7`, `A8`, `A9`, `A10`, `A11`, `A12`, `A13`, `A14`, `A15`, `A16`, `A17`, `A18`, `A19`, `A20`, `A21`, `A22`, `A23`, `A24`, `A25`, `A26`, `A27`, `A28`, `A29`, `A30`, `A31`, `A32`, `A33`, `A34`, `A35`, `A36`, `A37`, `A38`, `A39`, `A40`, `A41`, `A42`, `A43`, `A44`, `A45`, `A46`, `A47`, `A48`, `A49`, `A50`, `A51`, `A52`, `A53`, `A54`, `A55`, `A56`, `A57`, `A58`, `A59`, `A60`, `A61`, `A62`, `A63`, `A64`, `A65`, `A66`, `A67`, `A68`, `A69`, `A70`, `A71`, `A72`, `A73`, `A74`, `A75`, `A76`, `A77`, `A78`, `A79`, `A80`, `A81`, `A82`, `A83`, `A84`, `A85`, `A86`, `A87`, `A88`, `A89`, `A90`, `A91`, `A92`, `A93`, `A94`, `A95`, `A96`, `A97`, `A98`, `A99`, `A100`, `department`, `exam_mode`, `exam_category`, `course`, `pageno`, `examdate`, `exam_type`, `msgstatus`, `starttime`, `endtime`, `created_at`, `updated_at`) VALUES
-(1, '1', 'AKINYOOYE AKINFEMI EMMANUEL', '0', '30', '0', '20221200', NULL, '100', '2024/2025', 'First', 49, 2940, NULL, 12, 17, 9, 46, 4, 27, 36, 49, 14, 24, 8, 6, 47, 40, 15, 44, 13, 50, 2, 3, 5, 34, 16, 38, 19, 20, 30, 25, 11, 21, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Diploma in Community Health(CHEW)', 'OBJECTIVE', 'GENERAL', 'ENTRANCE', '1', '2024-05-29 19:21:46', 'ENTRANCE', '0', '2024-05-29 19:21:46', '2024-05-29 19:21:46', '2024-05-30 02:21:46', '2024-05-30 02:22:49'),
-(7, '1', 'AKINYOOYE AKINFEMI EMMANUEL', '0', '4', '0', '20221200', NULL, '100', '2024/2025', 'First', 49, 2940, NULL, 3, 4, 5, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Diploma in Community Health(CHEW)', 'THEORY', 'GENERAL', 'ACCIDENT AND EMERGENCY', '1', '2024-05-29 23:14:44', 'SEMESTER-EXAM', '0', '2024-05-29 23:14:44', '2024-05-29 23:14:44', '2024-05-30 06:14:44', '2024-05-30 06:15:46');
+(1, '1', 'AKINYOOYE AKINFEMI EMMANUEL', '0', '30', '0', '20221200', NULL, '100', '2024/2025', 'First', 49, 2940, NULL, 12, 17, 9, 46, 4, 27, 36, 49, 14, 24, 8, 6, 47, 40, 15, 44, 13, 50, 2, 3, 5, 34, 16, 38, 19, 20, 30, 25, 11, 21, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Diploma in Community Health(CHEW)', 'OBJECTIVE', 'GENERAL', 'ENTRANCE', '1', '2024-05-29 19:21:46', 'ENTRANCE', '0', '2024-05-29 19:21:46', '2024-05-29 19:21:46', '2024-05-30 02:21:46', '2024-05-30 02:22:49');
 
 -- --------------------------------------------------------
 
@@ -763,7 +762,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (22, '2024_05_14_110426_create_cbt_evaluation2s_table', 7),
 (23, '2024_05_18_054942_create_courses_table', 8),
 (24, '2024_05_28_095609_create_theory_questions_table', 9),
-(25, '2024_05_28_095649_create_theory_answers_table', 9);
+(25, '2024_05_28_095649_create_theory_answers_table', 9),
+(26, '2024_05_30_010610_create_theory_answers_table', 10),
+(27, '2024_05_30_011457_create_theory_answers_table', 11),
+(28, '2024_05_30_011703_create_theory_answers_table', 12),
+(29, '2024_05_30_020706_create_theory_answers_table', 13),
+(30, '2024_05_30_021219_create_theory_answers_table', 14);
 
 -- --------------------------------------------------------
 
@@ -1395,7 +1399,7 @@ INSERT INTO `student_admissions` (`id`, `admission_no`, `surname`, `first_name`,
 (320, '20240324', 'OGUNLADE', 'OLUWATOBILOBA', 'ESTHER', 'Certificate for Pharmacy Technicians', '7032069414', 'EKITI', '100', 'Female', '8032419849', 'OGUNLADEESTHER', 'OGUNLADEESTHER', '20240324.jpg', '2023/2024', '0', 0, 'student', '2024-05-09 19:19:27', '2024-05-09 19:19:27'),
 (321, '20240325', 'ADESOKAN', 'ABIODUN', 'ESTHER', 'Diploma in Community Health(CHEW)', '7070489379', 'OSUN', '100', 'Female', '8037887478', '7070489379', '7070489379', '20240325.jpg', '2023/2024', '0', 0, 'student', '2024-05-09 19:19:27', '2024-05-09 19:19:27'),
 (322, '20240326', 'ADEOSUN', 'OLAWUMI', 'COMFORT', 'Diploma in Community Health(CHEW)', '8100805394', 'OGUN', '100', 'Female', '8136057714', '8100805394', '8100805394', '20240326.jpg', '2023/2024', '0', 0, 'student', '2024-05-09 19:19:27', '2024-05-09 19:19:27'),
-(328, '20221200', 'AKINYOOYE', 'AKINFEMI', 'EMMANUEL', 'Diploma in Community Health(CHEW)', '7032689329', 'OYO', '100', 'Male', '7032689329', '7032689329', '7032689329', '20221200.jpg', '2024/2025', '1', 0, 'student', '2024-05-12 20:43:22', '2024-05-30 06:09:23');
+(328, '20221200', 'AKINYOOYE', 'AKINFEMI', 'EMMANUEL', 'Diploma in Community Health(CHEW)', '7032689329', 'OYO', '100', 'Male', '7032689329', '7032689329', '7032689329', '20221200.jpg', '2024/2025', '1', 0, 'student', '2024-05-12 20:43:22', '2024-05-30 09:15:01');
 
 -- --------------------------------------------------------
 
@@ -1408,8 +1412,7 @@ CREATE TABLE `theory_answers` (
   `examstatus` int(11) NOT NULL,
   `studentno` varchar(255) NOT NULL,
   `studentname` varchar(255) NOT NULL,
-  `score` double NOT NULL,
-  `question_no` int(11) NOT NULL,
+  `total_score` double NOT NULL,
   `no_of_qst` int(11) NOT NULL,
   `session1` varchar(255) NOT NULL,
   `department` varchar(255) NOT NULL,
@@ -1418,12 +1421,71 @@ CREATE TABLE `theory_answers` (
   `exam_type` varchar(255) NOT NULL,
   `exam_category` varchar(255) NOT NULL,
   `exam_mode` varchar(255) NOT NULL,
-  `question_type` varchar(255) NOT NULL,
-  `question` text NOT NULL,
-  `answer` text NOT NULL,
-  `graphic` varchar(255) NOT NULL,
   `course` varchar(255) NOT NULL,
   `semester` varchar(255) NOT NULL,
+  `minute` int(11) NOT NULL,
+  `hour` int(11) NOT NULL,
+  `exam_date` date NOT NULL,
+  `A1` int(11) DEFAULT NULL,
+  `A2` int(11) DEFAULT NULL,
+  `A3` int(11) DEFAULT NULL,
+  `A4` int(11) DEFAULT NULL,
+  `A5` int(11) DEFAULT NULL,
+  `A6` int(11) DEFAULT NULL,
+  `A7` int(11) DEFAULT NULL,
+  `A8` int(11) DEFAULT NULL,
+  `A9` int(11) DEFAULT NULL,
+  `A10` int(11) DEFAULT NULL,
+  `Q1` text DEFAULT NULL,
+  `Q2` text DEFAULT NULL,
+  `Q3` text DEFAULT NULL,
+  `Q4` text DEFAULT NULL,
+  `Q5` text DEFAULT NULL,
+  `Q6` text DEFAULT NULL,
+  `Q7` text DEFAULT NULL,
+  `Q8` text DEFAULT NULL,
+  `Q9` text DEFAULT NULL,
+  `Q10` text DEFAULT NULL,
+  `ANS1` text DEFAULT NULL,
+  `ANS2` text DEFAULT NULL,
+  `ANS3` text DEFAULT NULL,
+  `ANS4` text DEFAULT NULL,
+  `ANS5` text DEFAULT NULL,
+  `ANS6` text DEFAULT NULL,
+  `ANS7` text DEFAULT NULL,
+  `ANS8` text DEFAULT NULL,
+  `ANS9` text DEFAULT NULL,
+  `ANS10` text DEFAULT NULL,
+  `score1` double DEFAULT NULL,
+  `score2` double DEFAULT NULL,
+  `score3` double DEFAULT NULL,
+  `score4` double DEFAULT NULL,
+  `score5` double DEFAULT NULL,
+  `score6` double DEFAULT NULL,
+  `score7` double DEFAULT NULL,
+  `score8` double DEFAULT NULL,
+  `score9` double DEFAULT NULL,
+  `score10` double DEFAULT NULL,
+  `QT1` varchar(255) DEFAULT NULL,
+  `QT2` varchar(255) DEFAULT NULL,
+  `QT3` varchar(255) DEFAULT NULL,
+  `QT4` varchar(255) DEFAULT NULL,
+  `QT5` varchar(255) DEFAULT NULL,
+  `QT6` varchar(255) DEFAULT NULL,
+  `QT7` varchar(255) DEFAULT NULL,
+  `QT8` varchar(255) DEFAULT NULL,
+  `QT9` varchar(255) DEFAULT NULL,
+  `QT10` varchar(255) DEFAULT NULL,
+  `G1` varchar(255) DEFAULT NULL,
+  `G2` varchar(255) DEFAULT NULL,
+  `G3` varchar(255) DEFAULT NULL,
+  `G4` varchar(255) DEFAULT NULL,
+  `G5` varchar(255) DEFAULT NULL,
+  `G6` varchar(255) DEFAULT NULL,
+  `G7` varchar(255) DEFAULT NULL,
+  `G8` varchar(255) DEFAULT NULL,
+  `G9` varchar(255) DEFAULT NULL,
+  `G10` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1432,11 +1494,8 @@ CREATE TABLE `theory_answers` (
 -- Dumping data for table `theory_answers`
 --
 
-INSERT INTO `theory_answers` (`id`, `examstatus`, `studentno`, `studentname`, `score`, `question_no`, `no_of_qst`, `session1`, `department`, `upload_no_of_qst`, `level`, `exam_type`, `exam_category`, `exam_mode`, `question_type`, `question`, `answer`, `graphic`, `course`, `semester`, `created_at`, `updated_at`) VALUES
-(1, 1, '20221200', 'AKINYOOYE AKINFEMI EMMANUEL', 0, 3, 4, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Discuss the role of triage in the emergency department. How does the triage process prioritize patient care, and what are the common triage categories?</p>', '', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-30 06:14:44', '2024-05-30 06:14:44'),
-(2, 1, '20221200', 'AKINYOOYE AKINFEMI EMMANUEL', 0, 4, 4, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Identify and explain the key components of a mass casualty incident (MCI) response plan in an emergency department.</p>', '', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-30 06:14:44', '2024-05-30 06:14:44'),
-(3, 1, '20221200', 'AKINYOOYE AKINFEMI EMMANUEL', 0, 5, 4, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Describe the management of a patient presenting with acute myocardial infarction (AMI) in the emergency department, including the initial diagnostic steps and treatment.</p>', '', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-30 06:14:44', '2024-05-30 06:14:44'),
-(4, 1, '20221200', 'AKINYOOYE AKINFEMI EMMANUEL', 0, 2, 4, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'text', '<p style=\"font-size: 24px; font-family: Arial;\">Explain the differences between the types of shock (hypovolemic, cardiogenic, distributive, and obstructive) and their respective management strategies in an emergency setting.</p>', '', 'blank.jpg', 'ACCIDENT AND EMERGENCY', 'First', '2024-05-30 06:14:44', '2024-05-30 06:14:44');
+INSERT INTO `theory_answers` (`id`, `examstatus`, `studentno`, `studentname`, `total_score`, `no_of_qst`, `session1`, `department`, `upload_no_of_qst`, `level`, `exam_type`, `exam_category`, `exam_mode`, `course`, `semester`, `minute`, `hour`, `exam_date`, `A1`, `A2`, `A3`, `A4`, `A5`, `A6`, `A7`, `A8`, `A9`, `A10`, `Q1`, `Q2`, `Q3`, `Q4`, `Q5`, `Q6`, `Q7`, `Q8`, `Q9`, `Q10`, `ANS1`, `ANS2`, `ANS3`, `ANS4`, `ANS5`, `ANS6`, `ANS7`, `ANS8`, `ANS9`, `ANS10`, `score1`, `score2`, `score3`, `score4`, `score5`, `score6`, `score7`, `score8`, `score9`, `score10`, `QT1`, `QT2`, `QT3`, `QT4`, `QT5`, `QT6`, `QT7`, `QT8`, `QT9`, `QT10`, `G1`, `G2`, `G3`, `G4`, `G5`, `G6`, `G7`, `G8`, `G9`, `G10`, `created_at`, `updated_at`) VALUES
+(1, 1, '20221200', 'AKINYOOYE AKINFEMI EMMANUEL', 0, 4, '2024/2025', 'Diploma in Community Health(CHEW)', 5, '100', 'SEMESTER-EXAM', 'GENERAL', 'THEORY', 'ACCIDENT AND EMERGENCY', 'First', 3000, 50, '2024-05-30', 1, 3, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, '<p style=\"font-size: 24px; font-family: Arial;\">Describe the primary assessment steps for a patient who arrives at the emergency department with severe trauma. Include the key components of the primary survey.</p>', '<p style=\"font-size: 24px; font-family: Arial;\">Discuss the role of triage in the emergency department. How does the triage process prioritize patient care, and what are the common triage categories?</p>', '<p style=\"font-size: 24px; font-family: Arial;\">Identify and explain the key components of a mass casualty incident (MCI) response plan in an emergency department.</p>', '<p style=\"font-size: 24px; font-family: Arial;\">Explain the differences between the types of shock (hypovolemic, cardiogenic, distributive, and obstructive) and their respective management strategies in an emergency setting.</p>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'text', 'text', 'text', 'text', NULL, NULL, NULL, NULL, NULL, NULL, 'blank.jpg', 'blank.jpg', 'blank.jpg', 'blank.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-30 09:18:09', '2024-05-30 09:18:09');
 
 -- --------------------------------------------------------
 
@@ -1740,7 +1799,7 @@ ALTER TABLE `loading_checks`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1776,7 +1835,7 @@ ALTER TABLE `student_admissions`
 -- AUTO_INCREMENT for table `theory_answers`
 --
 ALTER TABLE `theory_answers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `theory_questions`

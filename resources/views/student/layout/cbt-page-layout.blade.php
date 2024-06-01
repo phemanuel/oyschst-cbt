@@ -85,9 +85,16 @@
         border-radius: 5px; /* Rounded corners */
     }
 </style>
+<style>
+        .green-hr {
+            border: 1px solid green;
+        }
+    </style>
 </head>
 <body class="sidebar-fixed">
-  <div class="container-scroller">
+<div id="cbt-content">
+        <!-- CBT Content goes here -->
+        <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -95,8 +102,14 @@
         <!-- <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a> -->
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        
-        <ul class="navbar-nav">
+      <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item d-none d-lg-flex">
+            <a class="nav-link" href="#">            
+              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">        
           <li class="nav-item nav-search d-none d-md-flex">
           <strong><p class="bold-text-font">Student No: {{$studentData->admission_no}}</p></strong>
           </li>
@@ -115,14 +128,12 @@
           <li class="nav-item nav-search d-none d-md-flex">
           <strong><p class="bold-text-font">{{ $examSetting->duration}} Mins </p></strong>
           </li>
-        </ul>
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item d-none d-lg-flex">
-            <a class="nav-link" href="#">            
-              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
-            </a>
+          <li class="nav-item nav-search d-none d-md-flex">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
+                    Submit Test</button>
           </li>
         </ul>
+        
         
       </div>
       
@@ -141,6 +152,7 @@
               <span class="bold-text-font-menu">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 Question Menu&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>            
           </li>
+         
           <hr>
           @if($examSetting->no_of_qst == 10)
           <li class="nav-item">           
@@ -372,21 +384,15 @@
               <i class=""></i>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;              
               <button type="button" name="10" id="10"  class="btn btn-success">Question 91-100</button>
           </li>
-          @endif
-          <hr>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
-                    Submit Test</button>
+          @endif          
         <hr>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
               <span class="bold-text-font-menu">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 Exam Details&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>           
           </li>
-          <hr>
+          <hr> -->
           <table class="table">
-            <tr>
-                <td><p class="bold-text-font-menu">Academic Session:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
-            </tr>
+            
             <tr>
             <td><p class="bold-text-font-menu">Exam Type:</p></td>
                 <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
@@ -405,6 +411,8 @@
             @endif
             
           </table>
+          <hr>
+          
         </ul>
       </nav>
       <!-- partial -->
@@ -679,6 +687,32 @@
   <script src="{{asset('student/js/dashboard.js')}}"></script>
   <!-- End custom js for this page-->
   <script src="{{asset('student/js/modal-demo.js')}}"></script>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function enterFullScreen(element) {
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+          element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) {
+          element.msRequestFullscreen();
+        }
+      }
+
+      enterFullScreen(document.documentElement);
+
+      document.addEventListener('fullscreenchange', function() {
+        if (!document.fullscreenElement) {
+          alert('Please stay in full-screen mode for the best test experience.');
+          enterFullScreen(document.documentElement);
+        }
+      });
+    });
+  </script>
+
 </body>
 
 

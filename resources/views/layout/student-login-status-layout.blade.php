@@ -208,11 +208,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Login/Exam Status        
+        Login Status        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Login/Exam Status</li>
+        <li class="active">Login Status</li>
       </ol>
     </section>
 
@@ -224,7 +224,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Change the login/exam status of a student.</h3>           
+            <h3 class="box-title">Change the login status of a student.</h3>           
               
             </div>
             @if(session('success'))
@@ -257,18 +257,42 @@
               </div>
             </form>
           </div>
-          <!-- /.box -->        
-
+          <!-- /.box -->               
+          
         </div>
         <!--/.col (left) -->
-        
+        <div class="col-md-6">
+          
+          <!-- general form elements -->
+          <div class="box box-success">
+            <div class="box-header with-border">
+            <h3 class="box-title">Change the login status for all student.</h3>           
+              
+            </div>
+            @if(session('success-all'))
+						<div class="alert alert-success">
+							{{ session('success-all') }}
+						</div>
+          @elseif(session('error-all'))
+						<div class="alert alert-danger">
+							{{ session('error-all') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->            
+              <div class="box-footer">
+                <a href="{{route('login-status-all')}}" class="btn btn-primary">Reset Login Status for all Student</a>
+              </div>            
+          </div>
+          <!-- /.box -->        
+  </div>
         <!-- right column -->
         <div class="col-md-6">
           
           <!-- general form elements -->
           <div class="box box-success">
             <div class="box-header with-border">
-            <h3 class="box-title">Change the login/exam status for all student.</h3>           
+            <h3 class="box-title">Change the login status for all student.</h3>           
               
             </div>
             @if(session('success-all'))
@@ -290,6 +314,44 @@
 
         </div>
         <!--/.col (right) -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+            <h3 class="box-title">Change the login status of a student.</h3>           
+              
+            </div>
+            @if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('login-status-view')}}" method="post">
+              @csrf              
+              <div class="box-body">              
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Reg/Matric No</label>
+                  <input type="text" name="admission_no" class="form-control" value="{{old('admission_no')}}">
+                </div>             
+                @error('name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Proceed</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->    
       </div>
       <!-- /.row -->
     </section>

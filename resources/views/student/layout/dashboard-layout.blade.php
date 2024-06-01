@@ -135,7 +135,7 @@
                     User Information
                   </h4>
                   <div class="border-bottom text-center pb-4">
-                        <img src="{{asset('uploads/'. $studentData->picture_name)}}" alt="profile" class="img-lg rounded-circle mb-3"/>
+                        <img src="{{asset('uploads/'. $studentData->picture_name . '.jpg')}}" alt="profile" class="img-lg rounded-circle mb-3"/>
                         
                         
                       </div>
@@ -182,7 +182,7 @@
                       @csrf
                       <div class="form-check">
 													<label class="form-check-label">
-                          <button type="submit" class="btn btn-success btn-block">Start Computer Based Test</button>                            
+                          <button type="submit" class="btn btn-success btn-block" id="start-cbt-button">Start Computer Based Test</button>                            
 													</label>
 												</div> 
                     </form>                   
@@ -308,6 +308,38 @@
   <!-- Custom js for this page-->
   <script src="{{asset('student/js/dashboard.js')}}"></script>
   <!-- End custom js for this page-->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const startCbtButton = document.getElementById('start-cbt-button');
+
+        startCbtButton.addEventListener('click', () => {
+            // Trigger full-screen mode
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    // Redirect to the CBT page after entering full-screen mode
+                    window.location.href = '/cbt-page-url';
+                });
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen().then(() => {
+                    window.location.href = '/cbt-page-url';
+                });
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                elem.webkitRequestFullscreen().then(() => {
+                    window.location.href = '/cbt-page-url';
+                });
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen().then(() => {
+                    window.location.href = '/cbt-page-url';
+                });
+            } else {
+                // Fallback if full-screen API is not supported
+                window.location.href = '/cbt-page-url';
+            }
+        });
+    });
+    </script>
 </body>
 
 

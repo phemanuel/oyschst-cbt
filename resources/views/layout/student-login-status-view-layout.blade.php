@@ -238,44 +238,36 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            @foreach($checkAdmission as $check)
-            <form role="form" action="{{route('login-status.action', ['id' => $check->id])}}" method="post">
+            
+            <form role="form" action="{{route('login-status.action', ['id' => $checkAdmission->id])}}" method="post">
               @csrf  
               
               <div class="box-body">              
                 <div class="form-group">
                   <label for="exampleInputEmail1">Reg/Matric No</label>
-                  <p>{{$check->admission_no}}</p>
+                  <p>{{$checkAdmission->admission_no}}</p>
                 </div>   
                 <div class="form-group">
                   <label for="exampleInputEmail1">Name</label>
-                  <p>{{$check->surname . " " . $check->first_name . " " . $check->other_name}}</p>
+                  <p>{{$checkAdmission->surname . " " . $checkAdmission->first_name . " " . $checkAdmission->other_name}}</p>
                 </div>  
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
-                  <p>{{$check->level }}</p>
+                  <p>{{$checkAdmission->level }}</p>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
-                  <p>{{$check->department}}</p>
+                  <p>{{$checkAdmission->department}}</p>
                 </div>   
                 <div class="form-group">
                   <label for="exampleInputEmail1">Login Status</label>
-                  <input type="text" name="login_status" class="form-control" value="{{$check->login_status}}">
+                  <input type="text" name="login_status" class="form-control" value="{{$checkAdmission->login_status}}">
                 </div>             
                 @error('login_status')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
-                @endforeach
-                @foreach($checkExamData as $rs)
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Exam Status</label>
-                  <input type="text" name="exam_status" class="form-control" value="{{$rs->examstatus}}">
-                </div>             
-                @error('exam_status')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                @endforeach
+               
+                
               </div>
              
               <!-- /.box-body -->

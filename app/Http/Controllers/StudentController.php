@@ -161,6 +161,34 @@ class StudentController extends Controller
             // Validate the request data as needed
             $validatedData = $request->validate([                
                 'login_status' => 'required|integer',  
+                //'exam_status' => 'required|integer',              
+            ]);
+
+            // Retrieve the user skill based on the $id
+            $changeStatus = StudentAdmission::findOrFail($id);
+            $examSetting = ExamSetting::first();
+            $admission_no = $changeStatus->admission_no;
+            
+            // Update the user skill attributes based on the request data
+            $changeStatus->update([
+                'login_status' => $validatedData['login_status'],                
+            ]);           
+
+            // Redirect to the user's skill list or another appropriate page
+            return redirect()->route('login-status')->with('success', 'Login Status updated successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = 'Error-update course: ' . $e->getMessage();
+            Log::error($errorMessage);
+            // Handle any exceptions or errors here
+            return back()->with('error', 'An error occurred while updating the course. Please try again.');
+        }
+    }
+
+    public function examStatusAction(Request $request, $id)
+    {
+        try {
+            // Validate the request data as needed
+            $validatedData = $request->validate([ 
                 'exam_status' => 'required|integer',              
             ]);
 
@@ -178,22 +206,18 @@ class StudentController extends Controller
             ->where('exam_category', $examSetting->exam_category)
             ->where('noofquestion' , $examSetting->no_of_qst)
             ->first();
-
-            // Update the user skill attributes based on the request data
-            $changeStatus->update([
-                'login_status' => $validatedData['login_status'],                
-            ]);
+            
             $examStatus->update([
                 'examstatus' => $validatedData['exam_status'],                
             ]);
 
             // Redirect to the user's skill list or another appropriate page
-            return redirect()->route('login-status')->with('success', 'Login/Exam Status updated successfully.');
+            return redirect()->route('login-status')->with('success', 'Exam Status updated successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-update course: ' . $e->getMessage();
             Log::error($errorMessage);
             // Handle any exceptions or errors here
-            return back()->with('error', 'An error occurred while updating the course. Please try again.');
+            return back()->with('error', 'An error occurred while updating the exam status. Please try again.');
         }
     }
 
@@ -259,7 +283,7 @@ class StudentController extends Controller
                 'login_status' => 0,
                 'login_attempts' => 0,
                 'state'      => $validatedData['state'], 
-                'picture_name' => $imageName,
+                'picture_name' => $validatedData['admission_no'],
                              
             ]);
 
@@ -429,7 +453,7 @@ class StudentController extends Controller
                         'password' => $data['phone_no'],
                         'session1' => $session1,
                         'user_type' => 'student',
-                        // 'picture_name' => 'blank.jpg',
+                        //'picture_name' => 'blank',
                         'login_status' => 0,
                         'login_attempts' => 0,
                         'created_at' => date('Y-m-d H:i:s'),

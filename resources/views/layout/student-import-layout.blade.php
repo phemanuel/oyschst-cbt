@@ -225,7 +225,7 @@
           <div class="box box-primary">
             <div class="box-header with-border">
             <h3 class="box-title">Import all students.</h3>
-            <p align="right"><a href="{{route('student')}}" class="btn btn-success">Back to Student List</a></p>
+            <p align="right"><a href="{{route('student-list')}}" class="btn btn-success">Back to Student List</a></p>
               
             </div>
             @if(session('success'))
