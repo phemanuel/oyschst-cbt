@@ -120,6 +120,42 @@ class StudentController extends Controller
             // Check if student is found
             if (!$checkAdmission) {
                 return redirect()->route('login-status')->with('error', 'Invalid Reg No/Matric No.');
+            }           
+
+            // Return the view with the required data
+            return view('dashboard.student-login-status-view', compact(
+                'softwareVersion', 'checkAdmission','dept','collegeSetup'
+            ));
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during login status view: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred during login status view. Please try again.');
+        }
+    }
+
+    public function examStatusView(Request $request)
+    {
+        try {
+            // Validate the request
+            $validatedData = $request->validate([
+                'admission_no' => 'required|string',
+            ]);
+
+            $admission_no = $validatedData['admission_no'];
+            $dept = Department::orderBy('department')->get();
+            $softwareVersion = SoftwareVersion::first();
+            $collegeSetup = CollegeSetup::first();
+            $examSetting = ExamSetting::first();
+
+            // Fetch student admission
+            $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->first();
+
+            // Check if student is found
+            if (!$checkAdmission) {
+                return redirect()->route('login-status')->with('error-exam', 'Invalid Reg No/Matric No.');
             }
 
             // Fetch exam data
@@ -137,11 +173,11 @@ class StudentController extends Controller
 
             // Check if student has exam record
             if (!$checkExamData) {
-                return redirect()->route('login-status')->with('error', 'Exam record not found.');
+                return redirect()->route('login-status')->with('error-exam', 'Exam record not found.');
             }
 
             // Return the view with the required data
-            return view('dashboard.student-login-status-view', compact(
+            return view('dashboard.student-exam-status-view', compact(
                 'softwareVersion', 'checkAdmission','dept','collegeSetup','checkExamData'
             ));
         } catch (ValidationException $e) {
@@ -212,7 +248,7 @@ class StudentController extends Controller
             ]);
 
             // Redirect to the user's skill list or another appropriate page
-            return redirect()->route('login-status')->with('success', 'Exam Status updated successfully.');
+            return redirect()->route('login-status')->with('success-exam', 'Exam Status updated successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-update course: ' . $e->getMessage();
             Log::error($errorMessage);
@@ -497,4 +533,6 @@ class StudentController extends Controller
 
         return redirect()->route('login-status')->with('success-all', 'Login status reset successful.');
     }
+
+    
 }

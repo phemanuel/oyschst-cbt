@@ -155,6 +155,12 @@ Route::get('/', function () {
         ->name('login-status.action');
         Route::get('login-status-all', [StudentController::class, 'loginStatusAll'])
         ->name('login-status-all');
+        Route::post('exam-status-view', [StudentController::class, 'examStatusView'])
+        ->name('exam-status-view');
+        Route::post('exam-status/{id}', [StudentController::class, 'examStatusAction'])
+        ->name('exam-status.action');
+        // Route::get('exam-status-all', [StudentController::class, 'examStatusAll'])
+        // ->name('exam-status-all');
         //--change course
         Route::get('change-course', [StudentController::class, 'changeCourse'])
         ->name('change-course');
