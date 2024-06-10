@@ -384,7 +384,7 @@ class QuestionController extends Controller
         $level = $questionSetting->level;
         $session1 = $questionSetting->session1;
         $no_of_qst = $questionSetting->no_of_qst;
-        $upload_no_qst = $questionSetting->upload_no_qst;
+        $upload_no_of_qst = $questionSetting->upload_no_of_qst;
         $question = Session::get('question');
         $answer = Session::get('answer');
         $currentQuestionNo = Session::get('currentQuestionNo');

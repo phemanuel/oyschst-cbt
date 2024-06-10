@@ -102,6 +102,9 @@
         <!-- <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a> -->
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="fas fa-bars"></span>
+        </button>
       <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item d-none d-lg-flex">
             <a class="nav-link" href="#">            
@@ -148,6 +151,28 @@
            
           </li>
           <hr>
+          <table class="table">
+            
+            <tr>
+            <td><p class="bold-text-font-menu">Exam Type:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
+            </tr>
+            @if($examSetting->exam_category == 'SEMESTER')
+            <tr>
+                <td><p class="bold-text-font-menu">Semester:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
+            </tr>
+            <tr>
+                <td><p class="bold-text-font-menu">Course:</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
+            </tr>
+            @else
+
+            @endif
+            
+          </table>         
+           <hr>
+          
           <li class="nav-item">
               <span class="bold-text-font-menu">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 Question Menu&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>            
@@ -391,27 +416,7 @@
                 Exam Details&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>           
           </li>
           <hr> -->
-          <table class="table">
-            
-            <tr>
-            <td><p class="bold-text-font-menu">Exam Type:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
-            </tr>
-            @if($examSetting->exam_category == 'SEMESTER')
-            <tr>
-                <td><p class="bold-text-font-menu">Semester:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
-            </tr>
-            <tr>
-                <td><p class="bold-text-font-menu">Course:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
-            </tr>
-            @else
-
-            @endif
-            
-          </table>
-          <hr>
+          
           
         </ul>
       </nav>
