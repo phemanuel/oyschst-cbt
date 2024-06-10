@@ -207,7 +207,7 @@ class QuestionController extends Controller
         $answer = $request->input('answer');
         $currentQuestionNo = $request->input('currentQuestionNo');
         // Strip HTML tags from the question input
-        $question = strip_tags($question);
+        //$question = strip_tags($question);
 
         // Store question and answer data in the session
         Session::put('question', $question);
@@ -320,7 +320,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' =>  $question,
                 'answer' => $answer,
             ]);
 
@@ -363,7 +363,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' => $question ,
                 'answer' => $answer,
             ]);
             return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
@@ -409,7 +409,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' => $question,
                 'answer' => $answer,
             ]);
 
@@ -452,7 +452,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' => $question,
                 'answer' => $answer,
             ]);
             return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You are already at the first question.');
@@ -530,28 +530,26 @@ class QuestionController extends Controller
 
         // Retrieve the question setting by ID
         $questionSetting = QuestionSetting::find($id);
-        $currentExamStatus = $questionSetting->exam_status;
 
         // Check if the question setting exists
         if (!$questionSetting) {
             return redirect()->route('question-obj-upload')->with('error', 'Question setting not found.');
         }
 
-        // Retrieve all records except the one with the given ID
-        $inactiveQuestionSettings = QuestionSetting::where('id', '!=', $id)
-            ->get();
+        // Check if an exam setting already exists for the given department, level, and exam mode
+        $existingExamSetting = ExamSetting::where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('no_of_qst', $questionSetting->no_of_qst)
+            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
+            ->exists();
 
-        // Update all other records to be inactive
-        foreach ($inactiveQuestionSettings as $inactiveQuestionSetting) {
-            $inactiveQuestionSetting->update(['exam_status' => 'Inactive']);
+        if ($existingExamSetting) {
+            return redirect()->route('question-obj-upload')->with('error', 'Exam setting has already been enabled for this department, level, and exam mode.');
         }
 
-        // Update the specific record to be active
-        $questionSetting->update(['exam_status' => 'Active']);
-
-        //----Update current exam settings---
-        $examSetting = ExamSetting::first();
-        $examSetting->update([
+        // Create a new exam setting with the provided variables
+        ExamSetting::create([
             'level' => $questionSetting->level,
             'semester' => $questionSetting->semester,
             'course' => $questionSetting->course,
@@ -564,61 +562,15 @@ class QuestionController extends Controller
             'no_of_qst' => $questionSetting->no_of_qst,
             'duration' => $questionSetting->duration,
             'check_result' => $questionSetting->check_result,
+            'time_limit' => 10,
         ]);
 
-        if($currentExamStatus == 'Active') {
-            return redirect()->route('question-obj-upload')->with('success', 'Question disabled successfully.');
-        }
-        return redirect()->route('question-obj-upload')->with('success', 'Question enabled successfully.');
+        // Update the specific question setting to be active
+        $questionSetting->update(['exam_status' => 'Active']);
+
+        return redirect()->route('question-obj-upload')->with('success', 'Exam setting enabled successfully.');
     }
 
-    public function deleteObjImage(Request $request, $id)
-    {
-        $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();
-        $questionId = $request->input('questionId');
-        $questionNo = $request->input('questionNo');
-        $questionSetting = QuestionSetting::where('id', $questionId)->first();       
-        
-        //--get variables
-        $exam_type = $questionSetting->exam_type;
-        $exam_category = $questionSetting->exam_category;
-        $exam_mode = $questionSetting->exam_mode;
-        $department = $questionSetting->department;
-        $level = $questionSetting->level;
-        $session1 = $questionSetting->session1;
-        $upload_no_of_qst = $questionSetting->upload_no_of_qst;
-        $no_of_qst  = $questionSetting->no_of_qst;        
-        $course = $questionSetting->course;
-        $semester = $questionSetting->semester;
-
-        //----Update Current Question --------------------------------
-        $questionUpdate = Question::where('exam_type', $exam_type)
-        ->where('exam_category', $exam_category)
-        ->where('exam_mode', $exam_mode)
-        ->where('department', $department)
-        ->where('level', $level)
-        ->where('semester', $semester)
-        ->where('session1', $session1)
-        ->where('course', $course)
-        ->where('upload_no_of_qst', $upload_no_of_qst)
-        ->where('no_of_qst', $no_of_qst)
-        ->where('question_no', $questionNo)
-        ->first();        
-
-        $question_type = $questionUpdate->question_type;
-        if($question_type === 'text'){
-            return redirect()->route('question-view', ['questionId' => $questionId])->with('error', 'There is no image to delete.');
-        }
-        else{
-        $questionUpdate->question_type = 'text';
-        $questionUpdate->save();
-
-        return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'Image deleted successfully.');
-        }
-
-        
-    }
 
     public function downloadQuestionCsv()
     {
@@ -680,58 +632,60 @@ class QuestionController extends Controller
                 'check_result' => 1,                                       
             ]);
 
-            //--Import all question for the said no of question selected in the question table
-            $num_questions = $validatedData['upload_no_of_qst'];
-                if ($request->hasFile('file')) {
-                    $file = $request->file('file');
-                    $fileName = $file->getRealPath();        
-                    if (($handle = fopen($fileName, "r")) !== FALSE) {
-                        $headers = fgetcsv($handle, 10000, ","); // Read headers
-                        $question_no = 1;
-                        while (($column = fgetcsv($handle, 10000, ",")) !== FALSE && $question_no <= $num_questions) {
-                            $data = array_combine($headers, $column); // Combine headers with data                            
-                            $data['question'] = mb_convert_encoding($data['question'], 'UTF-8', 'UTF-8');
-                            // Insert data into database
-                            $questionText = '<p style="font-size: 24px; font-family: Arial;">' . $data['question'] . '</p>';
+            // Import all question for the said no of question selected in the question table
+        $num_questions = $validatedData['upload_no_of_qst'];
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getRealPath();
+            if (($handle = fopen($fileName, "r")) !== FALSE) {
+                $headers = fgetcsv($handle, 10000, ","); // Read headers
+                $question_no = 1;
+                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE && $question_no <= $num_questions) {
+                    $data = array_combine($headers, $column); // Combine headers with data
 
-                            // Now insert into the database with modified question text
-                            DB::table('questions')->insert([
-                                'question_no' => $question_no,
-                                'question' => $questionText,
-                                'answer' => $data['answer'],                    
-                                'session1' => $validatedData['session1'],
-                                'department' => $validatedData['department'],
-                                'level' => $validatedData['level'],
-                                'semester' => $validatedData['semester'],
-                                'exam_category' => 'GENERAL',
-                                'exam_type' => $validatedData['exam_type'],
-                                'exam_mode' => 'OBJECTIVE',
-                                'course' => $validatedData['course'],
-                                'no_of_qst' => $validatedData['no_of_qst'],
-                                'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
-                                'question_type' => 'text',
-                                'graphic' => 'blank.jpg',
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-                            
-                            $question_no++; 
-                        }
-                        fclose($handle);
-                    } else {
-                        // Log or handle missing data
-                    Log::warning('Missing data in row: ' . json_encode($row));
-                    return redirect()->back()->with('error', 'Question import not successful.');
-                    }  
-                } else {
-            
-                    return redirect()->back()->with('error', 'No file was uploaded.');
-                } 
-                         
-            
-            $questionId = $questionSetting->id;
-        
-            return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start editing your questions.');
+                    // Clean up question text and maintain line breaks
+                    $questionText = nl2br(mb_convert_encoding($data['question'], 'UTF-8', 'UTF-8'));
+
+                    // Format the question text for better display
+                    $formattedQuestion = '<p style="font-size: 24px; font-family: Arial;">' . $questionText . '</p>';
+
+                    // Insert data into database
+                    DB::table('questions')->insert([
+                        'question_no' => $question_no,
+                        'question' => $formattedQuestion,
+                        'answer' => $data['answer'],
+                        'session1' => $validatedData['session1'],
+                        'department' => $validatedData['department'],
+                        'level' => $validatedData['level'],
+                        'semester' => $validatedData['semester'],
+                        'exam_category' => 'GENERAL',
+                        'exam_type' => $validatedData['exam_type'],
+                        'exam_mode' => 'OBJECTIVE',
+                        'course' => $validatedData['course'],
+                        'no_of_qst' => $validatedData['no_of_qst'],
+                        'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
+                        'question_type' => 'text',
+                        'graphic' => 'blank.jpg',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    $question_no++;
+                }
+                fclose($handle);
+            } else {
+                // Log or handle missing data
+                Log::warning('Missing data in row: ' . json_encode($row));
+                return redirect()->back()->with('error', 'Question import not successful.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'No file was uploaded.');
+        }
+
+        $questionId = $questionSetting->id;
+
+        return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start editing your questions.');
+
             
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -917,7 +871,7 @@ class QuestionController extends Controller
         $question = $request->input('question');
         $currentQuestionNo = $request->input('currentQuestionNo');
         // Strip HTML tags from the question input
-        $question = strip_tags($question);
+        //$question = strip_tags($question);
 
         // Store question and answer data in the session
         Session::put('question', $question);
@@ -1032,7 +986,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' =>  $question,
                 
             ]);
 
@@ -1075,7 +1029,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' =>  $question,
                 
             ]);
             return redirect()->route('question-theory-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
@@ -1120,7 +1074,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' => $question,
                 
             ]);
 
@@ -1163,7 +1117,7 @@ class QuestionController extends Controller
             ->first();
 
             $questionUpdate->update([
-                'question' => '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>',
+                'question' => $question,
                 
             ]);
             return redirect()->route('question-theory-view', ['questionId' => $id])->with('error', 'You are already at the first question.');
@@ -1273,28 +1227,26 @@ class QuestionController extends Controller
 
         // Retrieve the question setting by ID
         $questionSetting = QuestionSetting::find($id);
-        $currentExamStatus = $questionSetting->exam_status;
 
         // Check if the question setting exists
         if (!$questionSetting) {
             return redirect()->route('question-theory-upload')->with('error', 'Question setting not found.');
         }
 
-        // Retrieve all records except the one with the given ID
-        $inactiveQuestionSettings = QuestionSetting::where('id', '!=', $id)
-            ->get();
+        // Check if an exam setting already exists for the given department, level, and exam mode
+        $existingExamSetting = ExamSetting::where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('no_of_qst', $questionSetting->no_of_qst)
+            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
+            ->exists();
 
-        // Update all other records to be inactive
-        foreach ($inactiveQuestionSettings as $inactiveQuestionSetting) {
-            $inactiveQuestionSetting->update(['exam_status' => 'Inactive']);
+        if ($existingExamSetting) {
+            return redirect()->route('question-theory-upload')->with('error', 'Exam setting has already been enabled for this department, level, and exam mode.');
         }
 
-        // Update the specific record to be active
-        $questionSetting->update(['exam_status' => 'Active']);
-
-        //----Update current exam settings---
-        $examSetting = ExamSetting::first();
-        $examSetting->update([
+        // Create a new exam setting with the provided variables
+        ExamSetting::create([
             'level' => $questionSetting->level,
             'semester' => $questionSetting->semester,
             'course' => $questionSetting->course,
@@ -1307,12 +1259,13 @@ class QuestionController extends Controller
             'no_of_qst' => $questionSetting->no_of_qst,
             'duration' => $questionSetting->duration,
             'check_result' => $questionSetting->check_result,
+            'time_limit' => 10,
         ]);
 
-        if($currentExamStatus == 'Active') {
-            return redirect()->route('question-theory-upload')->with('success', 'Question disabled successfully.');
-        }
-        return redirect()->route('question-theory-upload')->with('success', 'Question enabled successfully.');
+        // Update the specific question setting to be active
+        $questionSetting->update(['exam_status' => 'Active']);
+
+        return redirect()->route('question-theory-upload')->with('success', 'Exam setting enabled successfully.');
     }
 
     public function questionUploadTheoryImportAction(Request $request)
@@ -1378,14 +1331,16 @@ class QuestionController extends Controller
                         $question_no = 1;
                         while (($column = fgetcsv($handle, 10000, ",")) !== FALSE && $question_no <= $num_questions) {
                             $data = array_combine($headers, $column); // Combine headers with data                            
-                            $data['question'] = mb_convert_encoding($data['question'], 'UTF-8', 'UTF-8');
-                            // Insert data into database
-                            $questionText = '<p style="font-size: 24px; font-family: Arial;">' . $data['question'] . '</p>';
+                             // Clean up question text and maintain line breaks
+                            $questionText = nl2br(mb_convert_encoding($data['question'], 'UTF-8', 'UTF-8'));
+
+                            // Format the question text for better display
+                            $formattedQuestion = '<p style="font-size: 24px; font-family: Arial;">' . $questionText . '</p>';
 
                             // Now insert into the database with modified question text
                             DB::table('theory_questions')->insert([
                                 'question_no' => $question_no,
-                                'question' => $questionText,                   
+                                'question' => $formattedQuestion,                   
                                 'session1' => $validatedData['session1'],
                                 'department' => $validatedData['department'],
                                 'level' => $validatedData['level'],
