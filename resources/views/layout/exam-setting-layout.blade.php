@@ -141,7 +141,7 @@
             </span>
           </a>          
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('exam-setting')}}">
             <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
@@ -149,7 +149,7 @@
             </span>
           </a>
         </li> 
-        <li class="active">
+        <li>
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -222,12 +222,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Question Upload(Objectives)        
+        Edit Exam Settings        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{route('question')}}">Question Bank</a></li>        
-        <li class="active">Question Upload(Objectives)</li>
+        <li class="active">Edit Exam Settings</li>
       </ol>
     </section>
 
@@ -240,7 +239,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Update the current exam settings.</h3>
+            <!-- <h3 class="box-title">Update the current exam settings.</h3> -->
             </div>
             <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
