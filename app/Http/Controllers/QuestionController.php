@@ -44,7 +44,9 @@ class QuestionController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
-                         ->orderBy('created_at', 'desc')->Paginate(20);
+                            ->orderBy('exam_status', 'asc')
+                            ->orderBy('created_at', 'asc')
+                            ->Paginate(20);
 
         return view('questions.question-obj-upload', compact('softwareVersion','collegeSetup','questionSetting'));
     }
@@ -536,37 +538,55 @@ class QuestionController extends Controller
             return redirect()->route('question-obj-upload')->with('error', 'Question setting not found.');
         }
 
-        // Check if an exam setting already exists for the given department, level, and exam mode
+        // Update all other question settings with the same department and level to be inactive
+        QuestionSetting::where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('id', '!=', $id)
+            ->update(['exam_status' => 'Inactive']);
+
+        // Set the clicked question setting to active
+        $questionSetting->update(['exam_status' => 'Active']);
+
+        // Check if an exam setting already exists for the given department and level
         $existingExamSetting = ExamSetting::where('department', $questionSetting->department)
             ->where('level', $questionSetting->level)
-            ->where('exam_mode', $questionSetting->exam_mode)
-            ->where('no_of_qst', $questionSetting->no_of_qst)
-            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
             ->exists();
 
         if ($existingExamSetting) {
-            return redirect()->route('question-obj-upload')->with('error', 'Exam setting has already been enabled for this department, level, and exam mode.');
+            // Update the existing exam setting with the provided variables
+            ExamSetting::where('department', $questionSetting->department)
+                ->where('level', $questionSetting->level)
+                ->update([
+                    'semester' => $questionSetting->semester,
+                    'course' => $questionSetting->course,
+                    'session1' => $questionSetting->session1,
+                    'exam_type' => $questionSetting->exam_type,
+                    'exam_category' => $questionSetting->exam_category,
+                    'exam_mode' => $questionSetting->exam_mode,
+                    'upload_no_of_qst' => $questionSetting->upload_no_of_qst,
+                    'no_of_qst' => $questionSetting->no_of_qst,
+                    'duration' => $questionSetting->duration,
+                    'check_result' => $questionSetting->check_result,
+                    'exam_date' => $questionSetting->exam_date,
+                ]);
+        } else {
+            // Create a new exam setting with the provided variables
+            ExamSetting::create([
+                'level' => $questionSetting->level,
+                'semester' => $questionSetting->semester,
+                'course' => $questionSetting->course,
+                'session1' => $questionSetting->session1,
+                'department' => $questionSetting->department,
+                'exam_type' => $questionSetting->exam_type,
+                'exam_category' => $questionSetting->exam_category,
+                'exam_mode' => $questionSetting->exam_mode,
+                'upload_no_of_qst' => $questionSetting->upload_no_of_qst,
+                'no_of_qst' => $questionSetting->no_of_qst,
+                'duration' => $questionSetting->duration,
+                'check_result' => $questionSetting->check_result,
+                'time_limit' => 10,
+            ]);
         }
-
-        // Create a new exam setting with the provided variables
-        ExamSetting::create([
-            'level' => $questionSetting->level,
-            'semester' => $questionSetting->semester,
-            'course' => $questionSetting->course,
-            'session1' => $questionSetting->session1,
-            'department' => $questionSetting->department,
-            'exam_type' => $questionSetting->exam_type,
-            'exam_category' => $questionSetting->exam_category,
-            'exam_mode' => $questionSetting->exam_mode,
-            'upload_no_of_qst' => $questionSetting->upload_no_of_qst,
-            'no_of_qst' => $questionSetting->no_of_qst,
-            'duration' => $questionSetting->duration,
-            'check_result' => $questionSetting->check_result,
-            'time_limit' => 10,
-        ]);
-
-        // Update the specific question setting to be active
-        $questionSetting->update(['exam_status' => 'Active']);
 
         return redirect()->route('question-obj-upload')->with('success', 'Exam setting enabled successfully.');
     }
@@ -704,7 +724,10 @@ class QuestionController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $questionSetting = QuestionSetting::where('exam_mode', 'THEORY')
-                         ->orderBy('created_at', 'desc')->Paginate(20);
+                         ->orderBy('exam_status', 'asc')
+                         ->orderBy('created_at', 'asc')
+                         ->Paginate(20);
+
 
         return view('questions.question-theory-upload', compact('softwareVersion','collegeSetup','questionSetting'));
     }
@@ -1233,37 +1256,55 @@ class QuestionController extends Controller
             return redirect()->route('question-theory-upload')->with('error', 'Question setting not found.');
         }
 
-        // Check if an exam setting already exists for the given department, level, and exam mode
+        // Update all other question settings with the same department and level to be inactive
+        QuestionSetting::where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('id', '!=', $id)
+            ->update(['exam_status' => 'Inactive']);
+
+        // Set the clicked question setting to active
+        $questionSetting->update(['exam_status' => 'Active']);
+
+        // Check if an exam setting already exists for the given department and level
         $existingExamSetting = ExamSetting::where('department', $questionSetting->department)
             ->where('level', $questionSetting->level)
-            ->where('exam_mode', $questionSetting->exam_mode)
-            ->where('no_of_qst', $questionSetting->no_of_qst)
-            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
             ->exists();
 
         if ($existingExamSetting) {
-            return redirect()->route('question-theory-upload')->with('error', 'Exam setting has already been enabled for this department, level, and exam mode.');
+            // Update the existing exam setting with the provided variables
+            ExamSetting::where('department', $questionSetting->department)
+                ->where('level', $questionSetting->level)
+                ->update([
+                    'semester' => $questionSetting->semester,
+                    'course' => $questionSetting->course,
+                    'session1' => $questionSetting->session1,
+                    'exam_type' => $questionSetting->exam_type,
+                    'exam_category' => $questionSetting->exam_category,
+                    'exam_mode' => $questionSetting->exam_mode,
+                    'upload_no_of_qst' => $questionSetting->upload_no_of_qst,
+                    'no_of_qst' => $questionSetting->no_of_qst,
+                    'duration' => $questionSetting->duration,
+                    'check_result' => $questionSetting->check_result,
+                    'exam_date' => $questionSetting->exam_date,
+                ]);
+        } else {
+            // Create a new exam setting with the provided variables
+            ExamSetting::create([
+                'level' => $questionSetting->level,
+                'semester' => $questionSetting->semester,
+                'course' => $questionSetting->course,
+                'session1' => $questionSetting->session1,
+                'department' => $questionSetting->department,
+                'exam_type' => $questionSetting->exam_type,
+                'exam_category' => $questionSetting->exam_category,
+                'exam_mode' => $questionSetting->exam_mode,
+                'upload_no_of_qst' => $questionSetting->upload_no_of_qst,
+                'no_of_qst' => $questionSetting->no_of_qst,
+                'duration' => $questionSetting->duration,
+                'check_result' => $questionSetting->check_result,
+                'time_limit' => 10,
+            ]);
         }
-
-        // Create a new exam setting with the provided variables
-        ExamSetting::create([
-            'level' => $questionSetting->level,
-            'semester' => $questionSetting->semester,
-            'course' => $questionSetting->course,
-            'session1' => $questionSetting->session1,
-            'department' => $questionSetting->department,
-            'exam_type' => $questionSetting->exam_type,
-            'exam_category' => $questionSetting->exam_category,
-            'exam_mode' => $questionSetting->exam_mode,
-            'upload_no_of_qst' => $questionSetting->upload_no_of_qst,
-            'no_of_qst' => $questionSetting->no_of_qst,
-            'duration' => $questionSetting->duration,
-            'check_result' => $questionSetting->check_result,
-            'time_limit' => 10,
-        ]);
-
-        // Update the specific question setting to be active
-        $questionSetting->update(['exam_status' => 'Active']);
 
         return redirect()->route('question-theory-upload')->with('success', 'Exam setting enabled successfully.');
     }

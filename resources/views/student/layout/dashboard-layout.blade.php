@@ -229,7 +229,7 @@
                       <td></td>
                       <td></td>
                      </tr> -->
-                     @elseif($examSetting->exam_type == 'SEMESTER-EXAM')
+                     @else
                      <tr>
                       <td><p class="bold-text-font">Subject/Course</p></td>
                       <td><p class="bold-text-font">{{$examSetting->course}}</p></td>

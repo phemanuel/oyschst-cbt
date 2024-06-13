@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('no_of_qst');
             $table->integer('upload_no_of_qst');
             $table->integer('duration');
+            $table->date('exam_date');
             $table->timestamps();
         });
     }

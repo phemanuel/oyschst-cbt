@@ -476,8 +476,7 @@
                   </div>
                   <!-- Modal Ends -->
 
-                  </div>
-    
+                  </div>                 
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
@@ -496,6 +495,7 @@
 
   <!-- Time counter -->
   <script>
+     "use strict";
         let duration = {{ $studentMin }}; // Duration in seconds
         let remainingTime = duration;
 

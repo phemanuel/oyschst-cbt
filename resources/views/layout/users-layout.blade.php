@@ -40,6 +40,13 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style>
+   .bold-font {
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -140,10 +147,9 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>
-        <li>
+        </li> <li>
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -217,32 +223,40 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-            <h3 class="box-title">List of Users.</h3>
-            <p align="right"><a href="{{route('add-user')}}" class="btn btn-success">Add User</a></p>
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title"></h3>
+              <a href="{{route('add-user')}}" class="btn btn-primary">Create User</a>             
               
-            </div>
-            @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
+              <div class="box-header">
+              <h3 class="box-title"></h3>             
+              
+              <hr>
             <!-- /.box-header -->
-            <!-- form start -->
-            <table class="table table-striped">
+            <div class="box-body table-responsive no-padding">
+            <table width="100%" class="table table-bordered">
+<tr>           
+                      <th>&nbsp;</th> 
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th colspan="8"><div align="center" class="bold-font">Roles and Permission</div></th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                      </tr>
                       <tr>           
                       <th>ID</th> 
                         <th>Admin Name</th>
                         <th>Email Address</th>
+                        <th>Exam Setting</th>
+                        <th>Question Bank</th>
+                        <th>Student List/Upload</th>
+                        <th>Student Login/Exam Status</th>
+                        <th>Change Course</th>
+                        <th>Create Admin User</th>
+                        <th>College Setup</th>
+                        <th>Report</th>
                         <th>Created On</th>
                         <th>Action</th>
                       </tr>
@@ -253,8 +267,64 @@
                         <td>{{$key +1}}</td>                         
                         <td>{{$rd->name}}</td>
                         <td><div class="badge badge-info">{{$rd->email}}</div></td>
+                        <td>
+                          @if($rd->exam_setting == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->exam_setting == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->qst_bank == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->qst_bank == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->std_list == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->std_list == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->std_login_status == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->std_login_status == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->change_course == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->change_course == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->user_create == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->user_create == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->college_setup== 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->college_setup == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
+                        <td>
+                        @if($rd->report == 1)
+                          <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18">
+                          @elseif($rd->report == 0)
+                          <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18">
+                          @endif
+                        </td>
                         <td>{{$rd->created_at}}</td>
-                        <td><a href="#" class="btn btn-outline-primary">Edit</a></td>
+                        <td><a href="{{route('edit-user', ['id' => $rd->id])}}" class="btn btn-outline-primary">Edit</a></td>
                       </tr>  
                       @endforeach
 		@else
@@ -264,19 +334,12 @@
 		@endif                                   
                     </table>
                     {{ $users->links() }}
+            </div>
+            <!-- /.box-body -->
           </div>
           <!-- /.box -->
-
         </div>
-        <!--/.col (left) -->
-        <!-- right column -->
-        <div class="col-md-6">
-          
-          
-        </div>
-        <!--/.col (right) -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>

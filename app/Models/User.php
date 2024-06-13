@@ -23,6 +23,15 @@ class User extends Authenticatable
         'password',
         'login_attempts',
         'email_verified_status',
+        'user_type',
+        'exam_setting',
+        'qst_bank',
+        'std_list',
+        'std_login_status',
+        'change_course',
+        'user_create',
+        'college_setup',
+        'report',
         
     ];
 

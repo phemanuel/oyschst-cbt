@@ -102,7 +102,7 @@ Route::get('/', function () {
     Route::get('cbt/{admission_no}/result', [ExamController::class, 'cbtResult'])
     ->name('cbt-result'); 
     Route::post('/update-remaining-time/{id}', [ExamController::class, 'updateRemainingTime'])
-    ->name('exam.updateRemainingTime');  
+    ->name('update-remaining-time');  
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');    
     // Logout route
@@ -121,7 +121,9 @@ Route::get('/', function () {
         //--exam setting
         Route::get('exam-setting', [DashboardController::class, 'examSetting'])
         ->name('exam-setting');
-        Route::put('exam-setting', [DashboardController::class, 'examSettingAction'])
+        Route::get('exam-setting-edit/{id}', [DashboardController::class, 'examSettingEdit'])
+        ->name('exam-setting-edit');
+        Route::put('exam-setting-edit/{id}', [DashboardController::class, 'examSettingAction'])
         ->name('exam-setting.action');
         Route::get('exam-type', [DashboardController::class, 'examType'])
         ->name('exam-type');
@@ -319,7 +321,11 @@ Route::get('/', function () {
         Route::get('add-user', [DashboardController::class, 'addUser'])
         ->name('add-user'); 
         Route::post('add-user', [DashboardController::class, 'addUserAction'])
-        ->name('add-user.action');               
+        ->name('add-user.action');   
+        Route::get('edit-user/{id}', [DashboardController::class, 'editUser'])
+        ->name('edit-user'); 
+        Route::post('edit-user/{id}', [DashboardController::class, 'editUserAction'])
+        ->name('edit-user.action');            
   
     });
      

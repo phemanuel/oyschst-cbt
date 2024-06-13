@@ -31,12 +31,15 @@ class DashboardController extends Controller
     public function index($admission_no)
     {
         $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();
-        $examSetting = ExamSetting::first();       
+        $softwareVersion = SoftwareVersion::first();          
 
         $studentData = StudentAdmission::where('admission_no', $admission_no)
                         //->where('department', $department)
                         ->first();
+
+        $examSetting = ExamSetting::where('department', $studentData->department)
+        ->where('level', $studentData->level)
+        ->first();    
 
         return view('student.pages.dashboard', compact('softwareVersion', 'collegeSetup', 'studentData',
     'examSetting'));
@@ -58,11 +61,20 @@ class DashboardController extends Controller
     public function examSetting()
     {
         $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();        
+        $examSetting = ExamSetting::paginate(20);
+        
+        return view('dashboard.exam-setting-view', compact('softwareVersion','examSetting', 'collegeSetup'));
+    }
+
+    public function examSettingEdit($id)
+    {
+        $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examtype = ExamType::orderBy('exam_type')->get();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::findOrFail($id);
         $level = CbtClass::orderBy('level')->get();
         $courseData = Courses::orderBy('course')->get();
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
@@ -108,7 +120,7 @@ class DashboardController extends Controller
         }
     }
 
-    public function examSettingAction(Request $request)
+    public function examSettingAction(Request $request, $id)
     {
         try {
             // Validate form input
@@ -121,18 +133,32 @@ class DashboardController extends Controller
                 'semester' => 'required',
                 'level' => 'required',
                 'no_of_qst' => 'required',
+                'upload_no_of_qst' => 'required',
                 'time_limit' => 'required',
                 'duration' => 'required',
                 'check_result' => 'required',
                 'course' => 'required',
+                'exam_date' => 'required',
             ]);
 
-            // Find the exam setting to update
-            $examSetting = ExamSetting::first();
-
-            // Update the exam setting with the validated data
-            $examSetting->update($validatedData);
-
+            $examSetting = ExamSetting::findOrFail($id);
+            // Find the exam setting to update           
+            $examSettingUpdate = $examSetting->update([
+                'session1' => $validatedData['session1'],
+                'department' => $validatedData['department'],
+                'level' => $validatedData['level'],
+                'semester' => $validatedData['semester'],
+                'exam_category' => $validatedData['exam_category'],
+                'exam_type' => $validatedData['exam_type'],
+                'exam_mode' => $validatedData['exam_mode'],
+                'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
+                'no_of_qst' => $validatedData['no_of_qst'],
+                'duration' => $validatedData['duration'],
+                'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
+                'course' => $validatedData['course'],   
+                'check_result' => $validatedData['check_result'],                                       
+            ]);
+            
             // Redirect back with success message
             return redirect()->back()->with('success', 'Exam setting updated successfully.');
             }catch (ValidationException $e) {
@@ -177,7 +203,24 @@ class DashboardController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string|min:8|confirmed',
+                'exam_setting' => 'nullable|boolean',
+                'qst_bank' => 'nullable|boolean',
+                'std_list' => 'nullable|boolean',
+                'std_login_status' => 'nullable|boolean',
+                'change_course' => 'nullable|boolean',
+                'user_create' => 'nullable|boolean',
+                'college_setup' => 'nullable|boolean',
+                'report' => 'nullable|boolean',
             ]);
+
+            $examSetting = $request->has('exam_setting') && $request->exam_setting ? 1 : 0;
+            $qst_bank = $request->has('qst_bank') && $request->qst_bank ? 1 : 0;
+            $std_list = $request->has('std_list') && $request->std_list ? 1 : 0;
+            $std_login_status = $request->has('std_login_status') && $request->std_login_status ? 1 : 0;
+            $change_course = $request->has('change_course') && $request->change_course ? 1 : 0;
+            $user_create = $request->has('user_create') && $request->user_create ? 1 : 0;
+            $college_setup = $request->has('college_setup') && $request->college_setup ? 1 : 0;
+            $report = $request->has('report') && $request->report ? 1 : 0;
 
             $email_token =Str::random(40);            
 
@@ -189,16 +232,16 @@ class DashboardController extends Controller
                 'login_attempts' => 0,
                 'remember_token' => $email_token,
                 // 'user_picture' => 'profile_pictures/blank.jpg',
-                'user_type' => 'admin',                
-            ]);
-
-            // $email_message = "We have sent instructions to verify your email, kindly follow instructions to continue, 
-            // please check both your inbox and spam folder.";
-            // session(['email' => $validatedData['email']]);
-            // session(['full_name' => $validatedData['first_name']]);
-            // session(['email_token' => $email_token]);
-            // session(['email_message' => $email_message]);
-
+                'user_type' => 'admin', 
+                'exam_setting' => $examSetting  ,
+                'qst_bank' => $qst_bank,
+                'std_list' => $td_list,
+                'std_login_status' => $td_login_status,
+                'change_course' => $change_course,
+                'user_create' => $user_create,
+                'college_setup' => $college_setup,
+                'report' => $report,             
+            ]);   
 
             return redirect()->route('users')->with('success', 'User has been created successfully.');
         } catch (ValidationException $e) {
@@ -210,7 +253,58 @@ class DashboardController extends Controller
 
             return redirect()->back()->with('error', 'An error occurred during registration. Please try again.');
         }
-    }    
+    }   
+    
+    public function editUser($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $user = User::findOrFail($id);
+
+        return view('dashboard.edit-user', compact('softwareVersion', 'collegeSetup','user'));
+    }
+
+    public function editUserAction(Request $request, $id)
+    {
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'new-password' => 'nullable|string|min:8|confirmed',
+            ]);
+
+            $user = User::findOrFail($id);
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+
+            if ($request->filled('new-password')) {
+                $user->password = Hash::make($request->input('new-password'));
+            }
+
+            // Handle checkboxes
+            $user->exam_setting = $request->has('exam_setting') ? 1 : 0;
+            $user->qst_bank = $request->has('qst_bank') ? 1 : 0;
+            $user->std_list = $request->has('std_list') ? 1 : 0;
+            $user->std_login_status = $request->has('std_login_status') ? 1 : 0;
+            $user->change_course = $request->has('change_course') ? 1 : 0;
+            $user->user_create = $request->has('user_create') ? 1 : 0;
+            $user->college_setup = $request->has('college_setup') ? 1 : 0;
+            $user->report = $request->has('report') ? 1 : 0;
+
+            $user->save();
+
+            return redirect()->route('users')->with('success', 'User has been updated successfully.');
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during user update: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred during the update. Please try again.');
+        }
+
+    }
 
     public function addCourse()
     {

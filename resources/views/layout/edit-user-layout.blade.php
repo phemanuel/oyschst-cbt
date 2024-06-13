@@ -207,11 +207,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Add User        
+        Edit User        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Add User</li>
+        <li class="active">Edit User</li>
       </ol>
     </section>
 
@@ -223,7 +223,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Create a  user.</h3>
+            <h3 class="box-title">Edit a  user.</h3>
             <p align="right"><a href="{{route('users')}}" class="btn btn-success">Back to User List</a></p>
               
             </div>
@@ -238,34 +238,31 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('add-user.action')}}" method="post">
+            <form role="form" action="{{route('edit-user.action', ['id' => $user->id])}}" method="post">
               @csrf              
               <div class="box-body">              
                 <div class="form-group">
                   <label for="exampleInputEmail1">Name</label>
-                  <input type="text" name="name" class="form-control" value="{{old('name')}}">
+                  <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
                 </div>             
                 @error('name')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
                   <label for="exampleInputEmail1">Email Address</label>
-                  <input type="email" name="email" class="form-control" value="{{old('email')}}">
+                  <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
                 </div>             
                 @error('email')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Password</label>
-                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
+                  <label for="exampleInputEmail1">New Password (leave blank to keep current password):</label>
+                  <input type="password" name="new-password" class="form-control" autocomplete="new-password">
                 </div>             
                 @error('password')
                     <span class="invalid-feedback">{{ $message }}</span>
-                @enderror                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Confirm Password</label>
-                  <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
-                </div>             
+                @enderror              
+                          
                 <hr>
                 <h4><u> <strong>User Roles and Permission</strong></u></h4>
                 <div class="form-group">
@@ -273,7 +270,7 @@
                   <tr>
                     <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="exam_setting">
+                      <input type="checkbox" name="exam_setting" value="1" {{ $user->exam_setting ? 'checked' : '' }}>
                       Exam Setting
                     </label>
                   </div>           
@@ -282,7 +279,7 @@
                 @enderror</td>
                 <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="qst_bank">
+                      <input type="checkbox" name="qst_bank" value="1" {{ $user->qst_bank ? 'checked' : '' }}>
                       Question Bank
                     </label>
                   </div>
@@ -293,7 +290,7 @@
                   <tr>
                     <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="std_list">
+                      <input type="checkbox" name="std_list" value="1" {{ $user->std_list ? 'checked' : '' }}>
                       Student List/Upload
                     </label>
                   </div>
@@ -302,7 +299,7 @@
                 @enderror</td>
                 <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="std_login_status">
+                      <input type="checkbox" name="std_login_status" value="1" {{ $user->std_login_status ? 'checked' : '' }}>
                       Student Login/Exam Status
                     </label>
                   </div>
@@ -313,7 +310,7 @@
                   <tr>
                     <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="change_course">
+                      <input type="checkbox" name="change_course" value="1" {{ $user->change_course ? 'checked' : '' }}>
                       Change of Course
                     </label>
                   </div>
@@ -322,7 +319,7 @@
                 @enderror</td>
                     <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="user_create">
+                      <input type="checkbox" name="user_create" value="1" {{ $user->user_create ? 'checked' : '' }}>
                       Create Users
                     </label>
                   </div>
@@ -333,7 +330,7 @@
                   <tr>
                     <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="college_setup">
+                      <input type="checkbox" name="college_setup" value="1" {{ $user->college_setup ? 'checked' : '' }}>
                       College Setup
                     </label>
                   </div>
@@ -342,7 +339,7 @@
                 @enderror</td>
                     <td><div class="checkbox">
                     <label>
-                      <input type="checkbox" name="report">
+                      <input type="checkbox" name="report" value="1" {{ $user->report ? 'checked' : '' }}>
                       Report
                     </label>
                   </div>
@@ -357,7 +354,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add User</button>
+                <button type="submit" class="btn btn-primary">Update User</button>
               </div>
             </form>
           </div>

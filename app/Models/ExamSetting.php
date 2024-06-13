@@ -40,5 +40,6 @@ class ExamSetting extends Model
         'course',
         'duration', 
         'check_result',
+        'exam_date',
     ];
 }

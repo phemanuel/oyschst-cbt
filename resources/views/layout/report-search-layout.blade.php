@@ -141,10 +141,9 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>
-        <li>
+        </li> <li>
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

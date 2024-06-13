@@ -126,7 +126,7 @@
             </span>
           </a>          
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('exam-setting')}}">
             <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
@@ -140,10 +140,9 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>
-        <li>
+        </li> <li>
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -164,7 +163,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('users')}}">
             <i class="fa fa-user"></i> <span>Users</span>
             <span class="pull-right-container">
@@ -207,172 +206,85 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Add User        
+        Exam Setting        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Add User</li>
+        <li class="active">Exam Setting</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <!-- left column -->
-        <div class="col-md-6">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-            <h3 class="box-title">Create a  user.</h3>
-            <p align="right"><a href="{{route('users')}}" class="btn btn-success">Back to User List</a></p>
-              
-            </div>
-            @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title"></h3>
+              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
+             
+             
             <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" action="{{route('add-user.action')}}" method="post">
-              @csrf              
-              <div class="box-body">              
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="text" name="name" class="form-control" value="{{old('name')}}">
-                </div>             
-                @error('name')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email Address</label>
-                  <input type="email" name="email" class="form-control" value="{{old('email')}}">
-                </div>             
-                @error('email')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Password</label>
-                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
-                </div>             
-                @error('password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Confirm Password</label>
-                  <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
-                </div>             
-                <hr>
-                <h4><u> <strong>User Roles and Permission</strong></u></h4>
-                <div class="form-group">
-                  <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="exam_setting">
-                      Exam Setting
-                    </label>
-                  </div>           
-                @error('exam_setting')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="qst_bank">
-                      Question Bank
-                    </label>
-                  </div>
-                  @error('qst_bank')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="std_list">
-                      Student List/Upload
-                    </label>
-                  </div>
-                  @error('std_list')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="std_login_status">
-                      Student Login/Exam Status
-                    </label>
-                  </div>
-                  @error('std_login_status')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="change_course">
-                      Change of Course
-                    </label>
-                  </div>
-                  @error('change_course')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="user_create">
-                      Create Users
-                    </label>
-                  </div>
-                  @error('user_create')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="college_setup">
-                      College Setup
-                    </label>
-                  </div>
-                  @error('college_setup')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="report">
-                      Report
-                    </label>
-                  </div>
-                  @error('report')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  </table>
-                  
-                </div>
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add User</button>
-              </div>
-            </form>
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th>ID</th>
+                  <th>Academic Session</th>
+                  <th>Programme</th>
+                  <th>Level</th>
+                  <th>Semester</th>
+                  <th>Exam Mode</th>
+                  <th>Exam Type</th>
+                  <th>Exam Date</th>
+                  <th>Total No of Questions</th>
+                  <th>No of Questions(Student)</th>
+                  <th>Duration</th>
+                  <th>Check Result</th>
+                  <th>Status</th>
+                  <th>Created On</th>
+                  <th>Actions</th>
+                </tr>
+                @if ($examSetting->count() > 0)
+                @foreach ($examSetting as $key => $rs)
+                <tr>
+                    <td>{{ $key + 1 }}</td>                    
+                    <td>{{$rs->session1}}</td>
+                    <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->semester }}</td>
+                    <td>{{ $rs->exam_mode }}</td>
+                    <td>{{ $rs->exam_type }}</td>
+                    <td>{{ $rs->exam_date }}</td>
+                    <td>{{ $rs->upload_no_of_qst }}</td>
+                    <td>{{ $rs->no_of_qst }}</td>
+                    <td>{{ $rs->duration }} mins</td>
+                    @if($rs->check_result == 1)
+                    <td>YES</td>
+                    @else
+                    <td>NO</td>
+                    @endif
+                    <td>{{ $rs->exam_status }} </td>
+                    <td>{{$rs->created_at}}</td>
+                    <td> 
+                      
+                      <a class="label label-success" href="{{route('exam-setting-edit', ['id' => $rs->id])}}">Edit</a>
+                     
+                    </td>
+                </tr>
+                @endforeach
+                @else
+		<tr>
+			<td colspan="8">Exams not available.</td>
+		</tr>
+        @endif
+              </table>
+              {{ $examSetting->links() }}
+            </div>
+            <!-- /.box-body -->
           </div>
           <!-- /.box -->
-
         </div>
-        <!--/.col (left) -->
-        <!-- right column -->
-        <div class="col-md-6">
-          
-          
-        </div>
-        <!--/.col (right) -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>

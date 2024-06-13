@@ -31,6 +31,21 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
 
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -126,24 +141,24 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('exam-setting')}}">
             <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li> 
+        <li class="active">
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li>
-        <li>
+        </li> <li>
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -207,16 +222,18 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Exam Setting        
+        Question Upload(Objectives)        
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Exam Setting</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{route('question')}}">Question Bank</a></li>        
+        <li class="active">Question Upload(Objectives)</li>
       </ol>
     </section>
 
     <!-- Main content -->
-    <section class="content">
+   <!-- Main content -->
+   <section class="content">
       <div class="row">
         <!-- left column -->
         <div class="col-md-6">
@@ -225,6 +242,11 @@
             <div class="box-header with-border">
             <h3 class="box-title">Update the current exam settings.</h3>
             </div>
+            <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                <a href="{{route('exam-setting')}}" class="btn btn-info">Back to Exam Settings</a>
+                </div>
+              </div>
             @if(session('success'))
 						<div class="alert alert-success">
 							{{ session('success') }}
@@ -236,7 +258,7 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('exam-setting.action')}}" method="post">
+            <form role="form" action="{{route('exam-setting.action', ['id' => $examSetting->id])}}" method="post">
               @csrf
               @method('PUT')
               <div class="box-body">
@@ -314,6 +336,22 @@
                 </div>
                 <p><a href="{{route('college-setup')}}">Create Class/Level</a></p>
                 <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Date(mm/dd/yy)</label>
+                <div class="input-group date">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  @php
+                use Carbon\Carbon;
+                $formattedDate = Carbon::parse($examSetting->exam_date)->format('m/d/Y');
+            @endphp
+                  <input type="text" class="form-control pull-right" id="datepicker" name="exam_date" value="{{$formattedDate}}">
+                </div> 
+  </div>           
+                @error('exam_date')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
                   <label for="exampleInputPassword1">Total No of Question</label>
                   <input type="text" name="upload_no_of_qst" class="form-control" value="{{$examSetting->upload_no_of_qst}}">
                 </div>  
@@ -367,7 +405,85 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
+
+        
+
+    <!-- /.content -->
   </div>
+
+  <div class="modal modal-info fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Upload Single Questions.</h4>
+              </div>
+              <div class="modal-body">
+                <p>Uploading questions one at a time is suitable when you want to manually review and input each question. 
+                  Here's how this process generally works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
+                    <li> Click on Start Upload.</li>
+                    <li> This will generate a dummy template for the specified no of questions.</li>
+                    <li> You can start editing the questions as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-outline">Save changes</button> -->
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal modal-info fade" id="modal-success1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import all questions.</h4>
+              </div>
+              <div class="modal-body">
+              <p>Importing questions from a CSV (Comma Separated Values) file is a convenient way to bulk upload questions into a system. 
+                Here's how the process typically works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
+                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template here.</a></li>
+                    <li> Click on Start Import.</li>
+                    <li> This will upload all the questions for the specified no of questions.</li>
+                    <li> You can start editing the questions as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-outline">Save changes</button> -->
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -572,42 +688,122 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('dashboard/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('dashboard/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<!-- Morris.js charts -->
-<script src="{{asset('dashboard/bower_components/raphael/raphael.min.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/morris.js/morris.min.js')}}"></script>
-<!-- Sparkline -->
-<script src="{{asset('dashboard/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script>
-<!-- jvectormap -->
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
-<!-- jQuery Knob Chart -->
-<script src="{{asset('dashboard/bower_components/jquery-knob/dist/jquery.knob.min.js')}}"></script>
-<!-- daterangepicker -->
+<!-- Select2 -->
+<script src="{{asset('dashboard/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+<!-- InputMask -->
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.js')}}"></script>
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.date.extensions.js')}}"></script>
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
+<!-- date-range-picker -->
 <script src="{{asset('dashboard/bower_components/moment/min/moment.min.js')}}"></script>
 <script src="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-<!-- datepicker -->
+<!-- bootstrap datepicker -->
 <script src="{{asset('dashboard/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
-<!-- Slimscroll -->
+<!-- bootstrap color picker -->
+<script src="{{asset('dashboard/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js')}}"></script>
+<!-- bootstrap time picker -->
+<script src="{{asset('dashboard/plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<!-- SlimScroll -->
 <script src="{{asset('dashboard/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
+<!-- iCheck 1.0.1 -->
+<script src="{{asset('dashboard/plugins/iCheck/icheck.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('dashboard/bower_components/fastclick/lib/fastclick.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('dashboard/dist/js/adminlte.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('dashboard/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
+<!-- Page script -->
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    //Timepicker
+    $('.timepicker').timepicker({
+      showInputs: false
+    })
+  })
+</script>
 </body>
 </html>

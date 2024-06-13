@@ -111,11 +111,13 @@ class StudentController extends Controller
             $admission_no = $validatedData['admission_no'];
             $dept = Department::orderBy('department')->get();
             $softwareVersion = SoftwareVersion::first();
-            $collegeSetup = CollegeSetup::first();
-            $examSetting = ExamSetting::first();
+            $collegeSetup = CollegeSetup::first();            
 
             // Fetch student admission
             $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->first();
+            $examSetting = ExamSetting::where('department', $checkAdmission->department)
+            ->where('level', $checkAdmission->level)
+            ->first();
 
             // Check if student is found
             if (!$checkAdmission) {
@@ -147,11 +149,13 @@ class StudentController extends Controller
             $admission_no = $validatedData['admission_no'];
             $dept = Department::orderBy('department')->get();
             $softwareVersion = SoftwareVersion::first();
-            $collegeSetup = CollegeSetup::first();
-            $examSetting = ExamSetting::first();
+            $collegeSetup = CollegeSetup::first();            
 
             // Fetch student admission
             $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->first();
+            $examSetting = ExamSetting::where('department', $checkAdmission->department)
+            ->where('level', $checkAdmission->level)
+            ->first();
 
             // Check if student is found
             if (!$checkAdmission) {
@@ -202,7 +206,9 @@ class StudentController extends Controller
 
             // Retrieve the user skill based on the $id
             $changeStatus = StudentAdmission::findOrFail($id);
-            $examSetting = ExamSetting::first();
+            $examSetting = ExamSetting::where('department', $changeStatus->department)
+            ->where('level', $changeStatus->level)
+            ->first();
             $admission_no = $changeStatus->admission_no;
             
             // Update the user skill attributes based on the request data
@@ -230,7 +236,9 @@ class StudentController extends Controller
 
             // Retrieve the user skill based on the $id
             $changeStatus = StudentAdmission::findOrFail($id);
-            $examSetting = ExamSetting::first();
+            $examSetting = ExamSetting::where('department', $changeStatus->department)
+            ->where('level', $changeStatus->level)
+            ->first();
             $admission_no = $changeStatus->admission_no;
             $examStatus = $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
             ->where('session1', $examSetting->session1)

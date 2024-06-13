@@ -36,10 +36,11 @@ class ExamController extends Controller
     //
     public function cbtCheck($id)
     {
-        try {
-            $examSetting = ExamSetting::first();
+        try {            
             $studentData = StudentAdmission::where('id', $id)->first();
-            $examSetting = ExamSetting::first();
+            $examSetting = ExamSetting::where('department', $studentData->department)
+            ->where('level', $studentData->level)
+            ->first(); 
             // Check if the question for current exam setting is available
             if($examSetting->exam_mode == "OBJECTIVE"){
                 return $this->cbtObjCheck($id);
@@ -66,10 +67,11 @@ class ExamController extends Controller
 
     public function cbtObjCheck($id)
     {
-        try {
-            $examSetting = ExamSetting::first();
+        try {            
             $studentData = StudentAdmission::where('id', $id)->first();
-            $examSetting = ExamSetting::first();
+            $examSetting = ExamSetting::where('department', $studentData->department)
+            ->where('level', $studentData->level)
+            ->first(); 
             // Check if the question for current exam setting is available
             $existingQuestion = Question::where('exam_type', $examSetting->exam_type)
                                                 ->where('exam_category', $examSetting->exam_category)
@@ -111,9 +113,13 @@ class ExamController extends Controller
     public function cbtTheoryCheck($id)
     {
         try {
-            $examSetting = ExamSetting::first();
+            $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
             $studentData = StudentAdmission::where('id', $id)->first();
-            $examSetting = ExamSetting::first();
+            $examSetting = ExamSetting::where('department', $studentData->department)
+            ->where('level', $studentData->level)
+            ->first(); 
             // Check if the question for current exam setting is available
             $existingQuestion = TheoryQuestion::where('exam_type', $examSetting->exam_type)
                                                 ->where('exam_category', $examSetting->exam_category)
@@ -155,12 +161,14 @@ class ExamController extends Controller
     public function cbtContinue($admission_no)
     {
         $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();
-        $examSetting = ExamSetting::first(); 
+        $softwareVersion = SoftwareVersion::first();        
 
         $studentData = StudentAdmission::where('admission_no', $admission_no)
                         //->where('department', $department)
                         ->first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
                         ->where('session1', $examSetting->session1)
@@ -189,7 +197,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         $examMode = $examSetting->exam_mode;
         if($examMode == "OBJECTIVE"){
@@ -208,7 +218,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first();                        
 
         //--setup student cbt data
             $noOfQuestions = $examSetting->no_of_qst;
@@ -220,8 +232,7 @@ class ExamController extends Controller
             $course = $examSetting->course;
             $examCategory = $examSetting->exam_category;
             $examMode = $examSetting->exam_mode;
-            $examType = $examSetting->exam_type;
-            $semester = $examSetting->semester;
+            $examType = $examSetting->exam_type;            
             $session1 = $examSetting->session1;  
             $semester = $examSetting->semester;                     
 
@@ -393,7 +404,10 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
+                       
 
         if($examSetting->no_of_qst < 10){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -422,7 +436,7 @@ class ExamController extends Controller
                         ->where('exam_type', $examSetting->exam_type)
                         ->where('exam_category', $examSetting->exam_category)
                         ->where('noofquestion' , $examSetting->no_of_qst)
-                        ->first();
+                        ->first();                       
                         
         //---Qst1
         $question1 = Question::commonConditionsQst($cbtEvaluation->A1, $examSetting, $studentData)->first();        
@@ -496,7 +510,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 20){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -599,7 +615,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 30){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -702,7 +720,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 40){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -804,7 +824,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 50){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -906,7 +928,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 60){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -1008,7 +1032,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 70){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -1111,7 +1137,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 80){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -1214,7 +1242,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 90){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -1317,7 +1347,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         if($examSetting->no_of_qst < 100){
             return redirect()->back()->with('error', 'You have exceeded the no of questions to attempt. 
@@ -1417,7 +1449,9 @@ class ExamController extends Controller
     {
         // Fetch the student data
         $studentData = StudentAdmission::find($id);
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         // Log incoming request data for debugging
         Log::info('Request Data:', $request->all());
@@ -1539,7 +1573,9 @@ class ExamController extends Controller
     public function cbtSubmit($id)
     {
         $studentData = StudentAdmission::findOrFail($id);
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         // Total number of questions
         $noOfQuestions = $examSetting->no_of_qst;
@@ -1649,11 +1685,15 @@ class ExamController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $examSetting = ExamSetting::first(); 
-
+        
         $studentData = StudentAdmission::where('admission_no', $admission_no)
                         //->where('department', $department)
                         ->first();
+
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first();  
+
 
         $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
                         ->where('session1', $examSetting->session1)
@@ -1679,8 +1719,10 @@ class ExamController extends Controller
     {
         $remainingTime = $request->input('remaining_time');
 
-        $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $studentData = StudentAdmission::findOrFail($id);
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         $studentQstData = CbtEvaluation::where('studentno', $studentData->admission_no)
             ->where('session1', $examSetting->session1)
@@ -1707,7 +1749,9 @@ class ExamController extends Controller
     {
         // Fetch the student data
         $studentData = StudentAdmission::find($id);
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         // Fetch the student's answer record
         $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
@@ -1853,7 +1897,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
         
         if($examSetting->exam_mode === 'OBJECTIVE'){
             return $this->cbtObjPage($id);
@@ -1877,7 +1923,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
             ->where('session1', $examSetting->session1)
@@ -1903,7 +1951,9 @@ class ExamController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
-        $examSetting = ExamSetting::first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
 
         $cbtEvaluation = TheoryAnswer::where('studentno', $studentData->admission_no)
             ->where('session1', $examSetting->session1)
