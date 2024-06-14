@@ -238,128 +238,152 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('add-user.action')}}" method="post">
-              @csrf              
-              <div class="box-body">              
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="text" name="name" class="form-control" value="{{old('name')}}">
-                </div>             
-                @error('name')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email Address</label>
-                  <input type="email" name="email" class="form-control" value="{{old('email')}}">
-                </div>             
-                @error('email')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Password</label>
-                  <input type="password" name="password" class="form-control" value="{{old('password')}}">
-                </div>             
-                @error('password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Confirm Password</label>
-                  <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
-                </div>             
-                <hr>
-                <h4><u> <strong>User Roles and Permission</strong></u></h4>
-                <div class="form-group">
-                  <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="exam_setting">
-                      Exam Setting
-                    </label>
-                  </div>           
-                @error('exam_setting')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="qst_bank">
-                      Question Bank
-                    </label>
-                  </div>
-                  @error('qst_bank')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="std_list">
-                      Student List/Upload
-                    </label>
-                  </div>
-                  @error('std_list')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="std_login_status">
-                      Student Login/Exam Status
-                    </label>
-                  </div>
-                  @error('std_login_status')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="change_course">
-                      Change of Course
-                    </label>
-                  </div>
-                  @error('change_course')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="user_create">
-                      Create Users
-                    </label>
-                  </div>
-                  @error('user_create')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="college_setup">
-                      College Setup
-                    </label>
-                  </div>
-                  @error('college_setup')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="report">
-                      Report
-                    </label>
-                  </div>
-                  @error('report')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  </table>
-                  
-                </div>
-              </div>
-              <!-- /.box-body -->
+            <form role="form" action="{{ route('add-user.action') }}" method="post">
+    @csrf
+    <div class="box-body">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+            @error('name')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+            @error('email')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control">
+            @error('password')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="password_confirmation">Confirm Password</label>
+            <input type="password" name="password_confirmation" class="form-control">
+        </div>
+        <hr>
+        <h4><u><strong>User Roles and Permission</strong></u></h4>
+        <div class="form-group">
+            <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Exam Setting</strong><br />
+                                <input type="checkbox" name="exam_setting" value="1"> Access Module<br />
+                                <input type="checkbox" name="edit_exam_setting" value="1"> Edit
+                            </label>
+                        </div>
+                        @error('exam_setting')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Question Bank</strong><br />
+                                <input type="checkbox" name="qst_bank" value="1"> Access Module<br />
+                                <input type="checkbox" name="create_question_bank" value="1"> Create<br />
+                                <input type="checkbox" name="edit_question_bank" value="1"> Edit
+                            </label>
+                        </div>
+                        @error('qst_bank')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Student List/Upload</strong><br />
+                                <input type="checkbox" name="std_list" value="1"> Access Module<br />
+                                <input type="checkbox" name="create_std_list" value="1"> Create<br />
+                                <input type="checkbox" name="edit_std_list" value="1"> Edit<br />
+                                <input type="checkbox" name="delete_std_list" value="1"> Delete
+                            </label>
+                        </div>
+                        @error('std_list')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Student Login/Exam Status</strong><br />
+                                <input type="checkbox" name="std_login_status" value="1"> Access Module<br />
+                                <input type="checkbox" name="edit_std_login_status" value="1"> Edit
+                            </label>
+                        </div>
+                        @error('std_login_status')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Change Course</strong><br />
+                                <input type="checkbox" name="change_course" value="1"> Access Module<br />
+                                <input type="checkbox" name="edit_change_course" value="1"> Edit
+                            </label>
+                        </div>
+                        @error('change_course')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Users</strong><br />
+                                <input type="checkbox" name="user_create" value="1"> Access Module<br />
+                                <input type="checkbox" name="create_user_create" value="1"> Create<br />
+                                <input type="checkbox" name="edit_user_create" value="1"> Edit<br />
+                                <input type="checkbox" name="status_user_create" value="1"> Activate/Deactivate
+                            </label>
+                        </div>
+                        @error('user_create')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>College Setup</strong><br />
+                                <input type="checkbox" name="college_setup" value="1"> Access Module<br />
+                                <input type="checkbox" name="create_college_setup" value="1"> Create<br />
+                                <input type="checkbox" name="edit_college_setup" value="1"> Edit<br />
+                                <input type="checkbox" name="delete_college_setup" value="1"> Delete
+                            </label>
+                        </div>
+                        @error('college_setup')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Report</strong><br />
+                                <input type="checkbox" name="report" value="1"> Access Module<br />
+                                <input type="checkbox" name="check_report" value="1"> Check Result<br />
+                                <input type="checkbox" name="export_report" value="1"> Export Report
+                            </label>
+                        </div>
+                        @error('report')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add User</button>
-              </div>
-            </form>
+    <div class="box-footer">
+        <button type="submit" class="btn btn-primary">Add User</button>
+    </div>
+</form>
+
           </div>
           <!-- /.box -->
 

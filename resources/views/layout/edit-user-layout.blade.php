@@ -238,125 +238,148 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('edit-user.action', ['id' => $user->id])}}" method="post">
-              @csrf              
-              <div class="box-body">              
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
-                </div>             
-                @error('name')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email Address</label>
-                  <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
-                </div>             
-                @error('email')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">New Password (leave blank to keep current password):</label>
-                  <input type="password" name="new-password" class="form-control" autocomplete="new-password">
-                </div>             
-                @error('password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror              
-                          
-                <hr>
-                <h4><u> <strong>User Roles and Permission</strong></u></h4>
-                <div class="form-group">
-                  <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="exam_setting" value="1" {{ $user->exam_setting ? 'checked' : '' }}>
-                      Exam Setting
-                    </label>
-                  </div>           
-                @error('exam_setting')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="qst_bank" value="1" {{ $user->qst_bank ? 'checked' : '' }}>
-                      Question Bank
-                    </label>
-                  </div>
-                  @error('qst_bank')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="std_list" value="1" {{ $user->std_list ? 'checked' : '' }}>
-                      Student List/Upload
-                    </label>
-                  </div>
-                  @error('std_list')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="std_login_status" value="1" {{ $user->std_login_status ? 'checked' : '' }}>
-                      Student Login/Exam Status
-                    </label>
-                  </div>
-                  @error('std_login_status')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="change_course" value="1" {{ $user->change_course ? 'checked' : '' }}>
-                      Change of Course
-                    </label>
-                  </div>
-                  @error('change_course')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="user_create" value="1" {{ $user->user_create ? 'checked' : '' }}>
-                      Create Users
-                    </label>
-                  </div>
-                  @error('user_create')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  <tr>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="college_setup" value="1" {{ $user->college_setup ? 'checked' : '' }}>
-                      College Setup
-                    </label>
-                  </div>
-                  @error('college_setup')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                    <td><div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="report" value="1" {{ $user->report ? 'checked' : '' }}>
-                      Report
-                    </label>
-                  </div>
-                  @error('report')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror</td>
-                  </tr>
-                  </table>
-                  
-                </div>
-              </div>
-              <!-- /.box-body -->
+            <form role="form" action="{{ route('edit-user.action', ['id' => $user->id]) }}" method="post">
+    @csrf
+    @method('PUT')
+    <div class="box-body">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
+            @error('name')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
+            @error('email')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="new-password">New Password (leave blank to keep current password):</label>
+            <input type="password" name="new-password" class="form-control" autocomplete="new-password">
+            @error('password')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+        <hr>
+        <h4><u><strong>User Roles and Permission</strong></u></h4>
+        <div class="form-group">
+            <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Exam Setting</strong><br />
+                                <input type="checkbox" name="exam_setting" value="1" {{ $user->exam_setting ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="edit_exam_setting" value="1" {{ $user->edit_exam_setting ? 'checked' : '' }}> Edit
+                            </label>
+                        </div>
+                        @error('exam_setting')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Question Bank</strong><br />
+                                <input type="checkbox" name="qst_bank" value="1" {{ $user->qst_bank ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="create_question_bank" value="1" {{ $user->create_question_bank ? 'checked' : '' }}> Create<br />
+                                <input type="checkbox" name="edit_question_bank" value="1" {{ $user->edit_question_bank ? 'checked' : '' }}> Edit
+                            </label>
+                        </div>
+                        @error('qst_bank')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Student List/Upload</strong><br />
+                                <input type="checkbox" name="std_list" value="1" {{ $user->std_list ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="create_std_list" value="1" {{ $user->create_std_list ? 'checked' : '' }}> Create<br />
+                                <input type="checkbox" name="edit_std_list" value="1" {{ $user->edit_std_list ? 'checked' : '' }}> Edit<br />
+                                <input type="checkbox" name="delete_std_list" value="1" {{ $user->delete_std_list ? 'checked' : '' }}> Delete
+                            </label>
+                        </div>
+                        @error('std_list')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Student Login/Exam Status</strong><br />
+                                <input type="checkbox" name="std_login_status" value="1" {{ $user->std_login_status ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="edit_std_login_status" value="1" {{ $user->edit_std_login_status ? 'checked' : '' }}> Edit
+                            </label>
+                        </div>
+                        @error('std_login_status')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Change Course</strong><br />
+                                <input type="checkbox" name="change_course" value="1" {{ $user->change_course ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="edit_change_course" value="1" {{ $user->edit_change_course ? 'checked' : '' }}> Edit
+                            </label>
+                        </div>
+                        @error('change_course')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Users</strong><br />
+                                <input type="checkbox" name="user_create" value="1" {{ $user->user_create ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="create_user_create" value="1" {{ $user->create_user_create ? 'checked' : '' }}> Create<br />
+                                <input type="checkbox" name="edit_user_create" value="1" {{ $user->edit_user_create ? 'checked' : '' }}> Edit<br />
+                                <input type="checkbox" name="status_user_create" value="1" {{ $user->status_user_create ? 'checked' : '' }}> Activate/Deactivate
+                            </label>
+                        </div>
+                        @error('user_create')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>College Setup</strong><br />
+                                <input type="checkbox" name="college_setup" value="1" {{ $user->college_setup ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="create_college_setup" value="1" {{ $user->create_college_setup ? 'checked' : '' }}> Create<br />
+                                <input type="checkbox" name="edit_college_setup" value="1" {{ $user->edit_college_setup ? 'checked' : '' }}> Edit<br />
+                                <input type="checkbox" name="delete_college_setup" value="1" {{ $user->delete_college_setup ? 'checked' : '' }}> Delete
+                            </label>
+                        </div>
+                        @error('college_setup')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><strong>Report</strong><br />
+                                <input type="checkbox" name="report" value="1" {{ $user->report ? 'checked' : '' }}> Access Module<br />
+                                <input type="checkbox" name="check_report" value="1" {{ $user->check_report ? 'checked' : '' }}> Check Result<br />
+                                <input type="checkbox" name="export_report" value="1" {{ $user->export_report ? 'checked' : '' }}> Export Report
+                            </label>
+                        </div>
+                        @error('report')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Update User</button>
-              </div>
-            </form>
+    <div class="box-footer">
+        <button type="submit" class="btn btn-primary">Update User</button>
+    </div>
+</form>
           </div>
           <!-- /.box -->
 

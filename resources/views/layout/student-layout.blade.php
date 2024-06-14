@@ -262,6 +262,15 @@
             </form>
               </div>
               <hr>
+              @if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
@@ -275,7 +284,7 @@
                   <th>Phone No</th>
                   <th>State</th>
                   <th>Login Status</th>
-                  <th>Actions</th>
+                  <th>Actions</th>                  
                 </tr>
                 @if ($student->count() > 0)
                 @foreach ($student as $key => $rs)
@@ -296,6 +305,7 @@
                     <td> <a class="label label-primary" href="{{route('student-edit.action', ['id' => $rs->id])}}">Edit</a>
                     <a class="label label-danger" href="{{route('student-delete.action', ['id' => $rs->id])}}">Delete</a>                    
                 </td>
+                <td></td>
                 </tr>
                 @endforeach
                 @else

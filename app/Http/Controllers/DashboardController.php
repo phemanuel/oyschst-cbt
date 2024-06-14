@@ -204,56 +204,73 @@ class DashboardController extends Controller
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string|min:8|confirmed',
                 'exam_setting' => 'nullable|boolean',
+                'edit_exam_setting' => 'nullable|boolean',
                 'qst_bank' => 'nullable|boolean',
+                'create_question_bank' => 'nullable|boolean',
+                'edit_question_bank' => 'nullable|boolean',
                 'std_list' => 'nullable|boolean',
+                'create_std_list' => 'nullable|boolean',
+                'edit_std_list' => 'nullable|boolean',
+                'delete_std_list' => 'nullable|boolean',
                 'std_login_status' => 'nullable|boolean',
+                'edit_std_login_status' => 'nullable|boolean',
                 'change_course' => 'nullable|boolean',
+                'edit_change_course' => 'nullable|boolean',
                 'user_create' => 'nullable|boolean',
+                'create_user_create' => 'nullable|boolean',
+                'edit_user_create' => 'nullable|boolean',
+                'status_user_create' => 'nullable|boolean',
                 'college_setup' => 'nullable|boolean',
+                'create_college_setup' => 'nullable|boolean',
+                'edit_college_setup' => 'nullable|boolean',
+                'delete_college_setup' => 'nullable|boolean',
                 'report' => 'nullable|boolean',
+                'check_report' => 'nullable|boolean',
+                'export_report' => 'nullable|boolean',
             ]);
 
-            $examSetting = $request->has('exam_setting') && $request->exam_setting ? 1 : 0;
-            $qst_bank = $request->has('qst_bank') && $request->qst_bank ? 1 : 0;
-            $std_list = $request->has('std_list') && $request->std_list ? 1 : 0;
-            $std_login_status = $request->has('std_login_status') && $request->std_login_status ? 1 : 0;
-            $change_course = $request->has('change_course') && $request->change_course ? 1 : 0;
-            $user_create = $request->has('user_create') && $request->user_create ? 1 : 0;
-            $college_setup = $request->has('college_setup') && $request->college_setup ? 1 : 0;
-            $report = $request->has('report') && $request->report ? 1 : 0;
-
-            $email_token =Str::random(40);            
+            $email_token = Str::random(40);            
 
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
-                'password' => Hash::make($validatedData['password']),                
+                'password' => Hash::make($validatedData['password']),
                 'email_verified_status' => 1,
                 'login_attempts' => 0,
                 'remember_token' => $email_token,
-                // 'user_picture' => 'profile_pictures/blank.jpg',
-                'user_type' => 'admin', 
-                'exam_setting' => $examSetting  ,
-                'qst_bank' => $qst_bank,
-                'std_list' => $td_list,
-                'std_login_status' => $td_login_status,
-                'change_course' => $change_course,
-                'user_create' => $user_create,
-                'college_setup' => $college_setup,
-                'report' => $report,             
-            ]);   
+                'user_type' => 'admin',
+                'exam_setting' => $request->has('exam_setting') ? 1 : 0,
+                'edit_exam_setting' => $request->has('edit_exam_setting') ? 1 : 0,
+                'qst_bank' => $request->has('qst_bank') ? 1 : 0,
+                'create_question_bank' => $request->has('create_question_bank') ? 1 : 0,
+                'edit_question_bank' => $request->has('edit_question_bank') ? 1 : 0,
+                'std_list' => $request->has('std_list') ? 1 : 0,
+                'create_std_list' => $request->has('create_std_list') ? 1 : 0,
+                'edit_std_list' => $request->has('edit_std_list') ? 1 : 0,
+                'delete_std_list' => $request->has('delete_std_list') ? 1 : 0,
+                'std_login_status' => $request->has('std_login_status') ? 1 : 0,
+                'edit_std_login_status' => $request->has('edit_std_login_status') ? 1 : 0,
+                'change_course' => $request->has('change_course') ? 1 : 0,
+                'edit_change_course' => $request->has('edit_change_course') ? 1 : 0,
+                'user_create' => $request->has('user_create') ? 1 : 0,
+                'create_user_create' => $request->has('create_user_create') ? 1 : 0,
+                'edit_user_create' => $request->has('edit_user_create') ? 1 : 0,
+                'status_user_create' => $request->has('status_user_create') ? 1 : 0,
+                'college_setup' => $request->has('college_setup') ? 1 : 0,
+                'create_college_setup' => $request->has('create_college_setup') ? 1 : 0,
+                'edit_college_setup' => $request->has('edit_college_setup') ? 1 : 0,
+                'delete_college_setup' => $request->has('delete_college_setup') ? 1 : 0,
+                'report' => $request->has('report') ? 1 : 0,
+                'check_report' => $request->has('check_report') ? 1 : 0,
+                'export_report' => $request->has('export_report') ? 1 : 0,
+            ]);
 
-            return redirect()->route('users')->with('success', 'User has been created successfully.');
-        } catch (ValidationException $e) {
-            // Validation failed. Redirect back with validation errors.
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (Exception $e) {
-            // Log the error
-            Log::error('Error during user registration: ' . $e->getMessage());
-
-            return redirect()->back()->with('error', 'An error occurred during registration. Please try again.');
+            return redirect()->route('users')->with('success', 'User added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to add user. ' . $e->getMessage()]);
         }
-    }   
+    }
+
     
     public function editUser($id)
     {
@@ -271,40 +288,73 @@ class DashboardController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $id,
                 'new-password' => 'nullable|string|min:8|confirmed',
+                'exam_setting' => 'nullable|boolean',
+                'edit_exam_setting' => 'nullable|boolean',
+                'qst_bank' => 'nullable|boolean',
+                'create_question_bank' => 'nullable|boolean',
+                'edit_question_bank' => 'nullable|boolean',
+                'std_list' => 'nullable|boolean',
+                'create_std_list' => 'nullable|boolean',
+                'edit_std_list' => 'nullable|boolean',
+                'delete_std_list' => 'nullable|boolean',
+                'std_login_status' => 'nullable|boolean',
+                'edit_std_login_status' => 'nullable|boolean',
+                'change_course' => 'nullable|boolean',
+                'edit_change_course' => 'nullable|boolean',
+                'user_create' => 'nullable|boolean',
+                'create_user_create' => 'nullable|boolean',
+                'edit_user_create' => 'nullable|boolean',
+                'status_user_create' => 'nullable|boolean',
+                'college_setup' => 'nullable|boolean',
+                'create_college_setup' => 'nullable|boolean',
+                'edit_college_setup' => 'nullable|boolean',
+                'delete_college_setup' => 'nullable|boolean',
+                'report' => 'nullable|boolean',
+                'check_report' => 'nullable|boolean',
+                'export_report' => 'nullable|boolean',
             ]);
 
             $user = User::findOrFail($id);
-            $user->name = $validatedData['name'];
-            $user->email = $validatedData['email'];
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
 
             if ($request->filled('new-password')) {
                 $user->password = Hash::make($request->input('new-password'));
             }
 
-            // Handle checkboxes
             $user->exam_setting = $request->has('exam_setting') ? 1 : 0;
+            $user->edit_exam_setting = $request->has('edit_exam_setting') ? 1 : 0;
             $user->qst_bank = $request->has('qst_bank') ? 1 : 0;
+            $user->create_question_bank = $request->has('create_question_bank') ? 1 : 0;
+            $user->edit_question_bank = $request->has('edit_question_bank') ? 1 : 0;
             $user->std_list = $request->has('std_list') ? 1 : 0;
+            $user->create_std_list = $request->has('create_std_list') ? 1 : 0;
+            $user->edit_std_list = $request->has('edit_std_list') ? 1 : 0;
+            $user->delete_std_list = $request->has('delete_std_list') ? 1 : 0;
             $user->std_login_status = $request->has('std_login_status') ? 1 : 0;
+            $user->edit_std_login_status = $request->has('edit_std_login_status') ? 1 : 0;
             $user->change_course = $request->has('change_course') ? 1 : 0;
+            $user->edit_change_course = $request->has('edit_change_course') ? 1 : 0;
             $user->user_create = $request->has('user_create') ? 1 : 0;
+            $user->create_user_create = $request->has('create_user_create') ? 1 : 0;
+            $user->edit_user_create = $request->has('edit_user_create') ? 1 : 0;
+            $user->status_user_create = $request->has('status_user_create') ? 1 : 0;
             $user->college_setup = $request->has('college_setup') ? 1 : 0;
+            $user->create_college_setup = $request->has('create_college_setup') ? 1 : 0;
+            $user->edit_college_setup = $request->has('edit_college_setup') ? 1 : 0;
+            $user->delete_college_setup = $request->has('delete_college_setup') ? 1 : 0;
             $user->report = $request->has('report') ? 1 : 0;
+            $user->check_report = $request->has('check_report') ? 1 : 0;
+            $user->export_report = $request->has('export_report') ? 1 : 0;
 
             $user->save();
 
-            return redirect()->route('users')->with('success', 'User has been updated successfully.');
-        } catch (ValidationException $e) {
-            // Validation failed. Redirect back with validation errors.
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (Exception $e) {
-            // Log the error
-            Log::error('Error during user update: ' . $e->getMessage());
-
-            return redirect()->back()->with('error', 'An error occurred during the update. Please try again.');
+            return redirect()->route('users')->with('success', 'User updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to update user. ' . $e->getMessage()]);
         }
-
     }
+
 
     public function addCourse()
     {
@@ -539,6 +589,50 @@ class DashboardController extends Controller
             });
 
         return response()->json($examDates);
+    }
+
+    public function deactivateUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->user_status = "Inactive";
+            $user->save();
+
+            return redirect()->route('users')->with('success', 'User deactivated successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = 'Error-deactivating user: ' . $e->getMessage();
+            Log::error($errorMessage);
+            return redirect()->route('users')->with('error', 'There was a problem deactivating user.');
+        }
+    }
+
+    public function activateUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->user_status = "Active";
+            $user->save();
+
+            return redirect()->route('users')->with('success', 'User activated successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = 'Error-activating user: ' . $e->getMessage();
+            Log::error($errorMessage);
+            return redirect()->route('users')->with('error', 'There was a problem activating user.');
+        }
+    }
+
+    public function userSearch(Request $request)
+    {
+        $searchTerm = $request->input('search');
+
+        // Perform search query
+        $users = User::where('name', 'LIKE', "%{$searchTerm}%")            
+            ->paginate(10);
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        
+        return view('dashboard.users-search', compact('softwareVersion','collegeSetup',
+    'users'));
     }
 
 }

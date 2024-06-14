@@ -325,7 +325,13 @@ Route::get('/', function () {
         Route::get('edit-user/{id}', [DashboardController::class, 'editUser'])
         ->name('edit-user'); 
         Route::post('edit-user/{id}', [DashboardController::class, 'editUserAction'])
-        ->name('edit-user.action');            
+        ->name('edit-user.action'); 
+        Route::get('deactivate-user/{id}', [DashboardController::class, 'deactivateUser'])
+        ->name('deactivate-user');  
+        Route::get('activate-user/{id}', [DashboardController::class, 'activateUser'])
+        ->name('activate-user');  
+        Route::post('user-search', [DashboardController::class, 'userSearch'])
+        ->name('user-search');           
   
     });
      

@@ -1,4 +1,4 @@
-@extends('layout.user-dashboard-layout')
+@extends('layout.users-dashboard-layout')
 @section('pageTitle', isset($pageTitle) ? $pageTitle : 'Dashboard :: Computer Based Test')
 @section('content')
     content here
