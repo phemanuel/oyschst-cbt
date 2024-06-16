@@ -179,8 +179,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -288,7 +288,9 @@
                       <tr> 
                         <td rowspan="4">{{$key +1}}</td>                         
                         <td rowspan="4">{{$rd->name}}</td>
-                        <td rowspan="4"><div class="badge badge-info">{{$rd->email}}</div></td>
+                        <td rowspan="4"><div >{{$rd->email}}</div>
+                        <div class="badge badge-info"><strong>Status : {{$rd->user_status}}</strong></div>
+                      </td>
                         <td>Access Module</td>
                         <td>@if($rd->exam_setting == 1) <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18" /> @elseif($rd->exam_setting == 0) <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18" /> @endif </td>
                         <td>Access Module</td>
@@ -363,9 +365,12 @@
                         <td>@if($rd->status_user_create == 1) <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18" /> @elseif($rd->status_user_create == 0) <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18" /> @endif </td>
                         <td>Delete</td>
                         <td>@if($rd->delete_college_setup== 1) <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18" /> @elseif($rd->delete_college_setup == 0) <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18" /> @endif </td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td>Grading Result</td>
+                        <td>@if($rd->grading_report == 1) <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18" /> @elseif($rd->grading_report == 0) <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18" /> @endif </td>
                       </tr>  
+                      <tr>
+			<td colspan="23">&nbsp;</td>
+        </tr>
                       @endforeach
 		@else
 		<tr>

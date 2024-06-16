@@ -164,8 +164,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

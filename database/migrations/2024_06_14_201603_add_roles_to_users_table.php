@@ -44,6 +44,7 @@ return new class extends Migration
             $table->integer('report');
             $table->integer('check_report');
             $table->integer('export_report');
+            $table->integer('grading_report');
             //---User status
             $table->enum('user_status',['Active','Inactive']);
         });

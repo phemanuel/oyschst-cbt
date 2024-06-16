@@ -172,8 +172,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -221,9 +221,8 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
-              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
-             
-             
+              <a href="{{route('exam-type')}}" class="btn btn-primary">Create Exam Type</a>
+              <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">

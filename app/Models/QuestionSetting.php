@@ -24,5 +24,6 @@ class QuestionSetting extends Model
         'course',
         'check_result',
         'semester',
+        'lock_status',
     ];
 }

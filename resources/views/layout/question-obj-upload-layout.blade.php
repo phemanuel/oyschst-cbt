@@ -173,8 +173,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -272,6 +272,7 @@
                   <th>No of Questions(Student)</th>
                   <th>Duration</th>
                   <th>Check Result</th>
+                  <th>Lock/Unlock Exam</th>
                   <th>Status</th>
                   <th>Created On</th>
                   <th>Actions</th>
@@ -295,6 +296,15 @@
                     @else
                     <td>NO</td>
                     @endif
+                    @if($rs->lock_status == 1)
+                      <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-success" data-id="{{ $rs->id }}">
+        Unlock
+    </button></td>
+                      @elseif($rs->lock_status == 0)
+                      <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-success1" data-id="{{ $rs->id }}">
+        Lock
+    </button></td>
+                      @endif            
                     <td>{{ $rs->exam_status }}
                     @if ($rs->exam_status == 'Inactive')  
                     <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>
@@ -309,7 +319,7 @@
                       <a class="label label-success" href="{{route('question-view', ['questionId' => $rs->id])}}">Edit</a>
                      
                     </td>
-                </tr>
+                </tr>              
                 @endforeach
                 @else
 		<tr>
@@ -531,6 +541,88 @@
 </div>
 <!-- ./wrapper -->
 
+<div class="modal modal-info fade" id="modal-success">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Unlock Exam.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter your password to unlock the exam.</p>
+                <form id="unlock-form" method="post">
+                    @csrf
+                    <table class="table">
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" name="user_password" class="form-control"></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline">Unlock Exam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal modal-info fade" id="modal-success1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Lock Exam.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter your password to lock the exam.</p>
+                <form id="lock-form" method="post">
+                    @csrf
+                    <table class="table">
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" name="user_password" class="form-control"></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline">Lock Exam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#modal-success').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id'); // Extract info from data-* attributes
+            var form = $('#unlock-form'); // Find the form in the modal
+            var action = "{{ url('/unlock-exam') }}/" + id;
+            form.attr('action', action); // Set the action attribute
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#modal-success1').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id'); // Extract info from data-* attributes
+            var form = $('#lock-form'); // Find the form in the modal
+            var action = "{{ url('/lock-exam') }}/" + id;
+            form.attr('action', action); // Set the action attribute
+        });
+    });
+</script>
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -569,4 +661,5 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
 </body>
+
 </html>

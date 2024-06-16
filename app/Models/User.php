@@ -56,6 +56,7 @@ class User extends Authenticatable
         'report',
         'check_report',
         'export_report',
+        'grading_report',
         //---user status
         'user_status',
         

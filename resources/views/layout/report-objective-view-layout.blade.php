@@ -155,7 +155,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -187,14 +187,14 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('report')}}">
             <i class="fa fa-folder"></i> <span>Report</span>
             <span class="pull-right-container">
@@ -258,7 +258,7 @@
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
-                  <th>Avatar</th>
+                  <!-- <th>Avatar</th> -->
                   <th>Reg/Matric No</th>
                   <th>Name</th>
                   <th>Programme</th>
@@ -272,7 +272,7 @@
                 @foreach ($student as $key => $rs)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <!-- <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td> -->
                     <td>{{$rs->studentno}}</td>
                     <td>{{ $rs->studentname }}</td>
                     <td>{{ $rs->department }}</td>

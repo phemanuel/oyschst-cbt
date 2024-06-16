@@ -31,6 +31,7 @@ return new class extends Migration
             $table->integer('upload_no_of_qst');
             $table->integer('duration');
             $table->date('exam_date');
+            $table->integer('lock_status');
             $table->timestamps();
         });
     }

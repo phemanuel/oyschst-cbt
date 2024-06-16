@@ -173,8 +173,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -265,6 +265,7 @@
         </div>
         <hr>
         <h4><u><strong>User Roles and Permission</strong></u></h4>
+        <p>Note: You have to give access to a module, before any other permission.</p>
         <div class="form-group">
             <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
                 <tr>
@@ -363,7 +364,8 @@
                             <label><strong>Report</strong><br />
                                 <input type="checkbox" name="report" value="1" {{ $user->report ? 'checked' : '' }}> Access Module<br />
                                 <input type="checkbox" name="check_report" value="1" {{ $user->check_report ? 'checked' : '' }}> Check Result<br />
-                                <input type="checkbox" name="export_report" value="1" {{ $user->export_report ? 'checked' : '' }}> Export Report
+                                <input type="checkbox" name="export_report" value="1" {{ $user->export_report ? 'checked' : '' }}> Export Report<br />
+                                <input type="checkbox" name="grading_report" value="1" {{ $user->grading_report ? 'checked' : '' }}> Grading Report
                             </label>
                         </div>
                         @error('report')

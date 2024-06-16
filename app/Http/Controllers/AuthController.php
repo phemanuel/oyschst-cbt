@@ -96,6 +96,12 @@ class AuthController extends Controller
             ])->validate();
                 
             $userLog = User::where('email', $request->input('email'))->first();
+            //---Check if user is active-----
+            $userStatus = $userLog->user_status;
+            if($userStatus == 'Inactive'){
+                return redirect()->back()->with('error', 'You have been deactivated from using the application.');
+            }
+            
             if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
                 //---check the no of attempts=====
                 if($userLog->login_attempts < 5){

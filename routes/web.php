@@ -173,6 +173,8 @@ Route::get('/', function () {
         Route::post('search', [StudentController::class, 'search'])
         ->name('search'); 
         //---Add programmes
+        Route::get('add-department', [DashboardController::class, 'addDepartment'])
+        ->name('add-department');
         Route::get('add-course', [DashboardController::class, 'addCourse'])
         ->name('add-course');
         Route::post('add-course', [DashboardController::class, 'addCourseAction'])
@@ -181,17 +183,23 @@ Route::get('/', function () {
         ->name('add-course-college.action');
         Route::get('course/{id}', [DashboardController::class, 'deleteDeptAction'])
         ->name('delete-dept.action'); 
-        //--Add class/level--        
+        //--Add class/level--  
+        Route::get('add-class', [DashboardController::class, 'addClass'])
+        ->name('add-class');      
         Route::post('add-class', [DashboardController::class, 'addClassAction'])
         ->name('add-class.action'); 
         Route::get('class/{id}', [DashboardController::class, 'deleteClassAction'])
         ->name('delete-class.action'); 
-        //--Add subject/course--        
+        //--Add subject/course--  
+        Route::get('add-subject', [DashboardController::class, 'addSubject'])
+        ->name('add-subject');       
         Route::post('add-subject', [DashboardController::class, 'addSubjectAction'])
         ->name('add-subject.action'); 
         Route::get('subject/{id}', [DashboardController::class, 'deleteSubjectAction'])
         ->name('delete-subject.action'); 
         //--college update
+        Route::get('admin-setup', [DashboardController::class, 'adminSetup'])
+        ->name('admin-setup');
         Route::get('college-setup', [DashboardController::class, 'collegeSetup'])
         ->name('college-setup');
         Route::put('college-setup', [DashboardController::class, 'collegeSetupAction'])
@@ -324,14 +332,20 @@ Route::get('/', function () {
         ->name('add-user.action');   
         Route::get('edit-user/{id}', [DashboardController::class, 'editUser'])
         ->name('edit-user'); 
-        Route::post('edit-user/{id}', [DashboardController::class, 'editUserAction'])
+        Route::put('edit-user/{id}', [DashboardController::class, 'editUserAction'])
         ->name('edit-user.action'); 
         Route::get('deactivate-user/{id}', [DashboardController::class, 'deactivateUser'])
         ->name('deactivate-user');  
         Route::get('activate-user/{id}', [DashboardController::class, 'activateUser'])
         ->name('activate-user');  
         Route::post('user-search', [DashboardController::class, 'userSearch'])
-        ->name('user-search');           
+        ->name('user-search');   
+        
+        Route::post('lock-exam/{id}', [DashboardController::class, 'lockExam'])
+        ->name('lock-exam');   
+        Route::post('unlock-exam/{id}', [DashboardController::class, 'unlockExam'])
+        ->name('unlock-exam');  
+        
   
     });
      

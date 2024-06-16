@@ -33,26 +33,47 @@ class QuestionController extends Controller
     //
     public function question()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->qst_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();        
+        $softwareVersion = SoftwareVersion::first();
 
         return view('questions.question', compact('softwareVersion','collegeSetup'));        
     }
 
     public function questionObjUpload()
-    {        
+    {   
+        //--Check for permission---
+        $userStatus = auth()->user()->qst_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
                             ->orderBy('exam_status', 'asc')
                             ->orderBy('created_at', 'asc')
-                            ->Paginate(20);
+                            ->Paginate(20);        
 
         return view('questions.question-obj-upload', compact('softwareVersion','collegeSetup','questionSetting'));
     }
 
     public function questionUploadObj()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_question_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $level = CbtClass::orderBy('level')->get();
@@ -60,6 +81,9 @@ class QuestionController extends Controller
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examType = ExamType::Paginate(10);
         $courseData = Courses::orderBy('course')->get();
+
+        
+
         return view('questions.question-upload-obj', compact('softwareVersion','collegeSetup','level',
     'dept','acad_sessions', 'examType','courseData'));
 
@@ -158,6 +182,13 @@ class QuestionController extends Controller
 
     public function questionView($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_question_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
 
@@ -720,7 +751,14 @@ class QuestionController extends Controller
     }
 
     public function questionTheoryUpload()
-    {        
+    {   
+        //--Check for permission---
+        $userStatus = auth()->user()->qst_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $questionSetting = QuestionSetting::where('exam_mode', 'THEORY')
@@ -728,12 +766,18 @@ class QuestionController extends Controller
                          ->orderBy('created_at', 'asc')
                          ->Paginate(20);
 
-
         return view('questions.question-theory-upload', compact('softwareVersion','collegeSetup','questionSetting'));
     }
 
     public function questionUploadTheory()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_question_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $level = CbtClass::orderBy('level')->get();
@@ -741,6 +785,7 @@ class QuestionController extends Controller
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $examType = ExamType::Paginate(10);
         $courseData = Courses::orderBy('course')->get();
+
         return view('questions.question-upload-theory', compact('softwareVersion','collegeSetup','level',
     'dept','acad_sessions', 'examType','courseData'));
 
@@ -845,6 +890,13 @@ class QuestionController extends Controller
 
     public function questionTheoryView($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_question_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
 
@@ -1426,6 +1478,26 @@ class QuestionController extends Controller
             return redirect()->back()->with('error', 'An error occurred during question Upload. Please try again.');
         }        
         
+    }
+
+    public function questionUploadFillGap()
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $level = CbtClass::orderBy('level')->get();
+        $dept = Department::orderBy('department')->get();
+        $acad_sessions = AcademicSession::orderBy('session1')->get();
+        $examType = ExamType::Paginate(10);
+        $courseData = Courses::orderBy('course')->get();
+
+        //--Check for permission---
+        $userStatus = auth()->user()->qst_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            create questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
+        return redirect()->back()->with('success', 'This module is under development.');
     }
 
 }

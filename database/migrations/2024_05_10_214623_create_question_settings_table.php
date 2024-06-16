@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('exam_date');
             $table->string('course');
             $table->string('semester');
+            $table->integer('lock_status');
             $table->timestamps();
         });
     }

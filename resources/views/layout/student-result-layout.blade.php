@@ -203,8 +203,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -286,7 +286,7 @@
                 <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
                 <tr>
                     <td width="348">&nbsp;</td>
-                    <td width="116"><img name="" src="{{asset('uploads/'. $studentResult->studentno . '.jpg')}}" width="94" height="102" alt="" /></td>
+                    <td width="116"><img name="" src="{{asset('uploads/'. $studentPicture . '.jpg')}}" width="94" height="102" alt="" /></td>
                 </tr>
                 </table></td>
             </tr>

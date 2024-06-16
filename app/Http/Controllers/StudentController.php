@@ -31,6 +31,13 @@ class StudentController extends Controller
     //
     public function changeCourse()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->change_course;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access the CHANGE COURSE module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         return view('dashboard.change-course', compact('softwareVersion', 'collegeSetup'));
@@ -38,6 +45,12 @@ class StudentController extends Controller
 
     public function changeCourseView(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_change_course;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT the CHANGE COURSE module, contact the Administrator to grant access.');
+        }
 
         try{
             $validatedData = $request->validate([
@@ -95,6 +108,13 @@ class StudentController extends Controller
 
     public function loginStatus()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->std_login_status;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access the STUDENT LOGIN/EXAM STATUS module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         return view('dashboard.student-login-status', compact('softwareVersion','collegeSetup'));
@@ -102,6 +122,13 @@ class StudentController extends Controller
 
     public function loginStatusView(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_std_login_status;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT students in the STUDENT LOGIN/EXAM STATUS module, contact the Administrator to grant access.');
+        }
+
         try {
             // Validate the request
             $validatedData = $request->validate([
@@ -140,6 +167,13 @@ class StudentController extends Controller
 
     public function examStatusView(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_std_login_status;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT students in the STUDENT LOGIN/EXAM STATUS module, contact the Administrator to grant access.');
+        }
+
         try {
             // Validate the request
             $validatedData = $request->validate([
@@ -267,6 +301,13 @@ class StudentController extends Controller
 
     public function student()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->std_list;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access the STUDENT LIST/UPLOAD module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $student = StudentAdmission::Paginate(20);
@@ -275,6 +316,13 @@ class StudentController extends Controller
 
     public function studentCreate()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_std_list;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE students in the STUDENT LIST/UPLOAD module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $level = CbtClass::orderBy('level')->get();
@@ -350,7 +398,7 @@ class StudentController extends Controller
 
         // Perform search query
         $results = StudentAdmission::where('admission_no', 'LIKE', "%{$searchTerm}%")
-            ->orWhere('Surname', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('surname', 'LIKE', "%{$searchTerm}%")
             ->paginate(20);
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
@@ -361,6 +409,13 @@ class StudentController extends Controller
 
     public function studentEdit($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_std_list;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT students in the STUDENT LIST/UPLOAD module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $class = CbtClass::orderBy('level')->get();
@@ -437,6 +492,13 @@ class StudentController extends Controller
 
     public function studentDelete($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->delete_std_list;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            DELETE students in the STUDENT LIST/UPLOAD module, contact the Administrator to grant access.');
+        }
+
         try {
             $studentData = StudentAdmission::findOrFail($id);
             $studentData->delete();
@@ -451,6 +513,13 @@ class StudentController extends Controller
 
     public function studentImport()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_std_list;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE students in the STUDENT LIST/UPLOAD module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $acad_sessions = AcademicSession::orderBy('session1')->get(); 
@@ -470,6 +539,7 @@ class StudentController extends Controller
         // ]);
 
         // Process the uploaded Excel file
+        
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $fileName = $file->getRealPath();            
@@ -529,6 +599,13 @@ class StudentController extends Controller
 
     public function loginStatusAll()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_std_login_status;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT students in the STUDENT LOGIN/EXAM STATUS module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         

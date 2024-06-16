@@ -60,15 +60,29 @@ class DashboardController extends Controller
 
     public function examSetting()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->exam_setting;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to access 
+            the EXAM SETTING module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
-        $examSetting = ExamSetting::paginate(20);
+        $examSetting = ExamSetting::paginate(20);        
         
         return view('dashboard.exam-setting-view', compact('softwareVersion','examSetting', 'collegeSetup'));
     }
 
     public function examSettingEdit($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_exam_setting;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            edit EXAM SETTING module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $dept = Department::orderBy('department')->get();
@@ -76,7 +90,8 @@ class DashboardController extends Controller
         $examtype = ExamType::orderBy('exam_type')->get();
         $examSetting = ExamSetting::findOrFail($id);
         $level = CbtClass::orderBy('level')->get();
-        $courseData = Courses::orderBy('course')->get();
+        $courseData = Courses::orderBy('course')->get();        
+
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
         'examtype','examSetting', 'collegeSetup', 'level','courseData'));
     }
@@ -174,6 +189,13 @@ class DashboardController extends Controller
 
     public function Users()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->user_create;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access the USERS module, contact the Administrator to grant access.');
+        }
+
         try {
             $collegeSetup = CollegeSetup::first();
             $users = User::paginate(10);
@@ -191,6 +213,13 @@ class DashboardController extends Controller
 
     public function addUser()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_user_create;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE users in the USERS module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         return view('dashboard.add-user', compact('softwareVersion', 'collegeSetup'));
@@ -227,6 +256,7 @@ class DashboardController extends Controller
                 'report' => 'nullable|boolean',
                 'check_report' => 'nullable|boolean',
                 'export_report' => 'nullable|boolean',
+                'grading_report' => 'nullable|boolean',
             ]);
 
             $email_token = Str::random(40);            
@@ -263,6 +293,7 @@ class DashboardController extends Controller
                 'report' => $request->has('report') ? 1 : 0,
                 'check_report' => $request->has('check_report') ? 1 : 0,
                 'export_report' => $request->has('export_report') ? 1 : 0,
+                'grading_report' => $request->has('grading_report') ? 1 : 0,
             ]);
 
             return redirect()->route('users')->with('success', 'User added successfully!');
@@ -274,6 +305,13 @@ class DashboardController extends Controller
     
     public function editUser($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_user_create;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EDIT users in the USERS module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $user = User::findOrFail($id);
@@ -312,6 +350,7 @@ class DashboardController extends Controller
                 'report' => 'nullable|boolean',
                 'check_report' => 'nullable|boolean',
                 'export_report' => 'nullable|boolean',
+                'grading_report' => 'nullable|boolean',
             ]);
 
             $user = User::findOrFail($id);
@@ -346,6 +385,8 @@ class DashboardController extends Controller
             $user->report = $request->has('report') ? 1 : 0;
             $user->check_report = $request->has('check_report') ? 1 : 0;
             $user->export_report = $request->has('export_report') ? 1 : 0;
+            $user->grading_report = $request->has('grading_report') ? 1 : 0;
+            
 
             $user->save();
 
@@ -363,6 +404,25 @@ class DashboardController extends Controller
         $softwareVersion = SoftwareVersion::first();
         return view('dashboard.add-course', compact('courses', 'softwareVersion', 'collegeSetup'));
     }
+
+    public function addDepartment()
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access ADMIN SETUP module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $courses = Department::paginate(9);
+        $classes = CbtClass::paginate(10);
+        $courseData = Courses::paginate(10);
+        return view('dashboard.add-department', compact('courses', 'softwareVersion','collegeSetup',
+    'classes', 'courseData'));
+        
+    }    
 
     public function addCourseAction(Request $request)
     {
@@ -389,6 +449,13 @@ class DashboardController extends Controller
 
     public function collegeSetup()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access ADMIN SETUP module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $courses = Department::paginate(9);
@@ -397,10 +464,55 @@ class DashboardController extends Controller
         return view('dashboard.college-setup', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
+    }        
+
+    public function adminSetup()
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access ADMIN SETUP module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $courses = Department::paginate(9);
+        $classes = CbtClass::paginate(10);
+        $courseData = Courses::paginate(10);
+        return view('dashboard.admin-setup', compact('courses', 'softwareVersion','collegeSetup',
+    'classes', 'courseData'));
+        
+    }   
+    
+    public function addClass()
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access ADMIN SETUP module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $courses = Department::paginate(9);
+        $classes = CbtClass::paginate(10);
+        $courseData = Courses::paginate(10);
+        return view('dashboard.add-class', compact('courses', 'softwareVersion','collegeSetup',
+    'classes', 'courseData'));
+        
     }    
 
     public function addClassAction(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             $validatedData = $request->validate([
                 'level' => 'required|string',
@@ -416,7 +528,7 @@ class DashboardController extends Controller
                 'level' => $validatedData['level'],                     
             ]);
 
-            return redirect()->route('college-setup')->with('success-class', 'Class/Level has been created successfully.');
+            return redirect()->route('add-class')->with('success-class', 'Class/Level has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -430,20 +542,53 @@ class DashboardController extends Controller
 
     public function deleteClassAction($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->delete_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            DELETE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             $class = cbtClass::findOrFail($id);
             $class->delete();
 
-            return redirect()->route('college-setup')->with('success-class', 'Class/Level deleted successfully.');
+            return redirect()->route('add-class')->with('success-class', 'Class/Level deleted successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-delete class: ' . $e->getMessage();
             Log::error($errorMessage);
-            return redirect()->route('college-setup')->with('error-class', 'There was a problem deleting class.');
+            return redirect()->back()->with('error-class', 'There was a problem deleting class.');
         }
     }
 
+    public function addSubject()
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access ADMIN SETUP module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $courses = Department::paginate(9);
+        $classes = CbtClass::paginate(10);
+        $courseData = Courses::paginate(10);
+        return view('dashboard.add-subject', compact('courses', 'softwareVersion','collegeSetup',
+    'classes', 'courseData'));
+        
+    }    
+
     public function addSubjectAction(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             $validatedData = $request->validate([
                 'subject' => 'required|string',
@@ -459,7 +604,7 @@ class DashboardController extends Controller
                 'course' => $validatedData['subject'],                     
             ]);
 
-            return redirect()->route('college-setup')->with('success-subject', 'Subject/Course has been created successfully.');
+            return redirect()->route('add-subject')->with('success-subject', 'Subject/Course has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -473,20 +618,34 @@ class DashboardController extends Controller
 
     public function deleteSubjectAction($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->delete_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            DELETE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             $subject = Courses::findOrFail($id);
             $subject->delete();
 
-            return redirect()->route('college-setup')->with('success-subject', 'Subject/Course deleted successfully.');
+            return redirect()->route('add-subject')->with('success-subject', 'Subject/Course deleted successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-delete subject: ' . $e->getMessage();
             Log::error($errorMessage);
-            return redirect()->route('college-setup')->with('error-subject', 'There was a problem deleting subject/course.');
+            return redirect()->back()->with('error-subject', 'There was a problem deleting subject/course.');
         }
     }
 
     public function addCourseCollegeAction(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             $validatedData = $request->validate([
                 'department' => 'required|string',
@@ -496,7 +655,7 @@ class DashboardController extends Controller
                 'department' => $validatedData['department'],                     
             ]);
 
-            return redirect()->route('college-setup')->with('success-dept', 'Programme has been created successfully.');
+            return redirect()->route('add-department')->with('success-dept', 'Programme has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -510,11 +669,18 @@ class DashboardController extends Controller
 
     public function deleteDeptAction($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->delete_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            DELETE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             $dept = Department::findOrFail($id);
             $dept->delete();
 
-            return redirect()->route('college-setup')->with('success-dept', 'Programme deleted successfully.');
+            return redirect()->route('add-department')->with('success-dept', 'Programme deleted successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-delete Programme: ' . $e->getMessage();
             Log::error($errorMessage);
@@ -524,6 +690,13 @@ class DashboardController extends Controller
 
     public function collegeSetupAction(Request $request)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->edit_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            edit COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
         try {
             // Validate form input
             $validatedData = $request->validate([
@@ -593,6 +766,13 @@ class DashboardController extends Controller
 
     public function deactivateUser($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->status_user_create;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            ACTIVATE/DEACTIVATE users in the USERS module, contact the Administrator to grant access.');
+        }
+
         try {
             $user = User::findOrFail($id);
             $user->user_status = "Inactive";
@@ -626,13 +806,62 @@ class DashboardController extends Controller
         $searchTerm = $request->input('search');
 
         // Perform search query
-        $users = User::where('name', 'LIKE', "%{$searchTerm}%")            
+        $users = User::where('name', 'LIKE', "%{$searchTerm}%") 
+            ->orWhere('email', 'LIKE', "%{$searchTerm}%")           
             ->paginate(10);
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         
         return view('dashboard.users-search', compact('softwareVersion','collegeSetup',
     'users'));
+    }
+
+    public function lockExam(Request $request, $id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+
+            // Validate the request
+        $request->validate([
+            'user_password' => 'required|string',
+        ]);
+
+        // Check if the provided password matches the logged-in user's password
+        if (Hash::check($request->user_password, Auth::user()->password)) {
+            // Proceed to unlock the exam
+            $lockExam = QuestionSetting::findOrFail($id);
+            $lockExam->lock_status = 1;
+            $lockExam->save();
+
+            return redirect()->route('question-obj-upload')->with('success', 'Exam locked successfully.');
+        } else {
+            // If the password is incorrect, redirect back with an error message
+            return redirect()->back()->with('error', 'Invalid password. Please try again.');
+        }
+    }
+
+    public function unlockExam(Request $request, $id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+
+            // Validate the request
+        $request->validate([
+            'user_password' => 'required|string',
+        ]);
+
+        // Check if the provided password matches the logged-in user's password
+        if (Hash::check($request->user_password, Auth::user()->password)) {
+            // Proceed to unlock the exam
+            $lockExam = QuestionSetting::findOrFail($id);
+            $lockExam->lock_status = 0;
+            $lockExam->save();
+
+            return redirect()->route('question-obj-upload')->with('success', 'Exam unlocked successfully.');
+        } else {
+            // If the password is incorrect, redirect back with an error message
+            return redirect()->back()->with('error', 'Invalid password. Please try again.');
+        }
     }
 
 }

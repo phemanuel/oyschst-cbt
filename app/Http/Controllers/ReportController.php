@@ -34,6 +34,13 @@ class ReportController extends Controller
     //
     public function index()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->report;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access REPORT module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first(); 
 
@@ -42,6 +49,14 @@ class ReportController extends Controller
 
     public function reportObjective()
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->report;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access REPORT module, contact the Administrator to grant access.');
+        }
+
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
@@ -54,6 +69,13 @@ class ReportController extends Controller
 
     public function reportObjectiveView($id)
     {
+        //--Check for permission---
+        $userStatus = auth()->user()->check_report;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CHECK results in the REPORT module, contact the Administrator to grant access.');
+        }
+
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first(); 
 
@@ -68,13 +90,14 @@ class ReportController extends Controller
         ->where('exam_type', $questionSetting->exam_type)
         ->where('exam_category', $questionSetting->exam_category)
         ->where('noofquestion', $questionSetting->no_of_qst)
-        ->paginate(20);
+        ->paginate(20);        
 
         if(!$student){
             return redirect()->back()->with('error', 'Result is not available for exam you selected.');
         }
 
-        return view('dashboard.report-objective-view', compact('softwareVersion','collegeSetup','student'));
+        return view('dashboard.report-objective-view', compact('softwareVersion','collegeSetup',
+        'student'));
     }
 
     public function studentResult($id)
@@ -83,12 +106,17 @@ class ReportController extends Controller
         $softwareVersion = SoftwareVersion::first(); 
 
         $studentResult = CbtEvaluation::where('id',$id)->first();
+        $admissionNo = $studentResult->studentno;
+
+        $studentData = StudentAdmission::where('admission_no' , $admissionNo)->first();
+        $studentPicture = $studentData->picture_name;
 
         if (!$studentResult){
             return redirect()->back()->with('error', 'Result not found.');
         }
 
-        return view('dashboard.student-result', compact('softwareVersion','collegeSetup','studentResult'));
+        return view('dashboard.student-result', compact('softwareVersion','collegeSetup',
+        'studentResult','studentPicture'));
     }
 
     public function resultSearch(Request $request)
@@ -2121,7 +2149,14 @@ class ReportController extends Controller
     }
 
     public function reportObjCsv($id)
-    {        
+    {   
+        //--Check for permission---
+        $userStatus = auth()->user()->export_report;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EXPORT results in the REPORT module, contact the Administrator to grant access.');
+        }
+
         $questionSetting = QuestionSetting::where('id', $id)->first();                 
         
         //--get variables

@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>@yield('pageTitle')</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="shortcut icon" href="{{ asset('/favicon.png') }}">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -28,9 +30,7 @@
   <link rel="stylesheet" href="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.css')}}">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/fullcalendar/dist/fullcalendar.min.css')}}">
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/fullcalendar/dist/fullcalendar.print.min.css')}}" media="print">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -40,7 +40,6 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-  <link rel="stylesheet" href="{{ asset('css/tooltipster.bundle.min.css') }}" />
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -58,6 +57,9 @@
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </a>
 
       <div class="navbar-custom-menu">
@@ -116,7 +118,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         
-        <li class="active">
+        <li>
           <a href="{{route('admin-dashboard')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <span class="pull-right-container">
@@ -126,7 +128,7 @@
         </li>
         <li>
           <a href="{{route('exam-setting')}}">
-            <i class="fa fa-th"></i> <span>Exam Setting</span> 
+            <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -169,9 +171,9 @@
             </span>
           </a>          
         </li>
-        <li>
-          <a href="{{route('admin-setup')}}">
-            <i class="fa fa-table"></i> <span>Admin Setup</span>
+        <li class="active">
+          <a href="{{route('college-setup')}}">
+            <i class="fa fa-table"></i> <span>College Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -204,122 +206,89 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard        
+        Subject/Course Setup      
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>  
+        <li><a href="{{route('admin-setup')}}"> Admin Setup</a></li>         
+        <li class="active">Subject/Course Setup</li>
       </ol>
     </section>
-    @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
+
     <!-- Main content -->
     <section class="content">
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3>{{$users->count()}}</h3>
-
-              <p>Admin Users</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="{{route('users')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>{{$students->count()}}<sup style="font-size: 20px"></sup></h3>
-
-              <p>Students</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="{{route('student-list')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>{{$questions->count()}}</h3>
-
-              <p>Questions</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="{{route('question')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{$departments->count()}}</h3>
-
-              <p>Programmes</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="{{route('college-setup')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
-
-     <!-- Main content -->
-     <section class="content">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="box box-solid">
+      <div class="row">     
+      <div class="col-md-6">
+          <div class="box box-success">
             <div class="box-header with-border">
-              <h4 class="box-title"></h4>
+            <h3 class="box-title">Add Subject/Course.</h3>           
+              
             </div>
-            <div class="box-body">
-              <!-- the events -->
-              <div id="external-events">
-                <div class="external-event bg-light-blue">Current Exam Dates</div> 
+            @if(session('success-subject'))
+						<div class="alert alert-success">
+							{{ session('success-subject') }}
+						</div>
+          @elseif(session('error-subject'))
+						<div class="alert alert-danger">
+							{{ session('error-subject') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('add-subject.action')}}" method="post">
+              @csrf              
+              <div class="box-body">              
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <input type="text" name="subject" class="form-control" value="{{old('subject')}}">
+                </div>             
+                @error('subject')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
+                <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>                     
+                <!-- Display the available departments   -->
+                <table class="table table-striped">
+                      <tr>           
+                      <th>Sn</th> 
+                        <th>Subject/Course</th>                        
+                        <th>Created On</th> 
+                        <th>Actions</th>                      
+                      </tr>
+
+                      @if ($courseData->count() > 0)
+			@foreach ($courseData as $key => $rt)
+                      <tr> 
+                        <td>{{$key +1}}</td>                         
+                        <td>{{$rt->course}}</td>                        
+                        <td>{{$rt->created_at}}</td>
+                        <td><a class="label label-danger" href="{{route('delete-subject.action', ['id' => $rt->id])}}">Delete</a> </td>                        
+                      </tr>  
+                      @endforeach
+		@else
+		<tr>
+			<td colspan="8">Subject/Course not available.</td>
+		</tr>
+		@endif                                   
+                    </table>
+                    {{ $courseData->links() }}
               </div>
-            </div>
-            <!-- /.box-body -->
+              <!-- /.box-body -->
+
+              
+            </form>
           </div>
-          <!-- /. box -->
-         
+          <!-- /.box -->
         </div>
-        <!-- /.col -->
-        <div class="col-md-9">
-          <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-              <div id="calendar"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
+        <!--/.col (left) -->
+        
+        <!-- right column -->
+        <div class="col-md-6">
+          
+          
         </div>
-        <!-- /.col -->
+        <!--/.col (right) -->
       </div>
       <!-- /.row -->
     </section>
@@ -566,84 +535,5 @@
 <script src="{{asset('dashboard/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
-<!-- fullCalendar -->
-<script src="{{asset('dashboard/bower_components/moment/moment.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/fullcalendar/dist/fullcalendar.min.js')}}"></script>
-<!-- Page specific script -->
-
-<script>
-    $(function () {
-        /* Initialize the calendar */
-        var date = new Date();
-        var d = date.getDate(),
-            m = date.getMonth(),
-            y = date.getFullYear();
-
-        // Function to fetch exam dates from the server
-        function fetchExamDates() {
-            return $.ajax({
-                url: '/exam-dates',
-                method: 'GET',
-                dataType: 'json'
-            });
-        }
-
-        // Fetch exam dates and initialize the calendar
-        fetchExamDates().done(function(examDates) {
-            $('#calendar').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                },
-                buttonText: {
-                    today: 'today',
-                    month: 'month',
-                    week: 'week',
-                    day: 'day'
-                },
-                events: examDates,
-                editable: true,
-                droppable: true,
-                eventRender: function(event, element) {
-                    // Add Tooltipster to each event
-                    element.tooltipster({
-                        content: $(`
-                            <div>
-                                <strong>${event.title}</strong><br>
-                                ${event.description}
-                            </div>
-                        `),
-                        theme: 'tooltipster-light',
-                        interactive: true,
-                        delay: 100
-                    });
-                },
-                drop: function (date, allDay) {
-                    var originalEventObject = $(this).data('eventObject');
-                    var copiedEventObject = $.extend({}, originalEventObject);
-                    copiedEventObject.start = date;
-                    copiedEventObject.allDay = allDay;
-                    copiedEventObject.backgroundColor = $(this).css('background-color');
-                    copiedEventObject.borderColor = $(this).css('border-color');
-                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-                    if ($('#drop-remove').is(':checked')) {
-                        $(this).remove();
-                    }
-                }
-            });
-            
-            // Initialize Tooltipster
-            $('.fc-event').tooltipster({
-                theme: 'tooltipster-light',
-                interactive: true,
-                delay: 100
-            });
-        }).fail(function() {
-            alert('Failed to fetch exam dates.');
-        });
-    });
-</script>
-<script src="{{ asset('js/tooltipster.bundle.min.js') }}"></script>
 </body>
 </html>

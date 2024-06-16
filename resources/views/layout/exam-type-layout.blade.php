@@ -172,8 +172,8 @@
           </a>          
         </li>
         <li>
-          <a href="{{route('college-setup')}}">
-            <i class="fa fa-table"></i> <span>College Setup</span>
+          <a href="{{route('admin-setup')}}">
+            <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -243,7 +243,10 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Exam Type</label>
                   <input type="text" name="exam_type" class="form-control">
-                </div>             
+                </div>  
+                <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>           
                 
                 <!-- Display the available departments   -->
                 <table class="table table-striped">
@@ -270,11 +273,7 @@
                     </table>
                     {{ $examType->links() }}
               </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
-              </div>
+              <!-- /.box-body -->              
             </form>
           </div>
           <!-- /.box -->
