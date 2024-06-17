@@ -828,12 +828,31 @@ class DashboardController extends Controller
 
         // Check if the provided password matches the logged-in user's password
         if (Hash::check($request->user_password, Auth::user()->password)) {
-            // Proceed to unlock the exam
-            $lockExam = QuestionSetting::findOrFail($id);
-            $lockExam->lock_status = 1;
-            $lockExam->save();
+            // Proceed to lock the exam
+            $questionSetting = QuestionSetting::findOrFail($id);
+            $questionSetting->lock_status = 1;
+            $questionSetting->save();
+
+            $examSetting = ExamSetting::where('exam_type', $questionSetting->exam_type)
+            ->where('exam_category', $questionSetting->exam_category)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('semester', $questionSetting->semester)
+            ->where('session1', $questionSetting->session1)
+            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
+            ->where('no_of_qst', $questionSetting->no_of_qst)
+            ->first();
+
+            if(!$examSetting){
+                return redirect()->route('question-obj-upload')->with('success', 'Exam locked successfully.');
+            }
+            
+            $examSetting->lock_status = 1;
+            $examSetting->save();
 
             return redirect()->route('question-obj-upload')->with('success', 'Exam locked successfully.');
+            
         } else {
             // If the password is incorrect, redirect back with an error message
             return redirect()->back()->with('error', 'Invalid password. Please try again.');
@@ -853,9 +872,27 @@ class DashboardController extends Controller
         // Check if the provided password matches the logged-in user's password
         if (Hash::check($request->user_password, Auth::user()->password)) {
             // Proceed to unlock the exam
-            $lockExam = QuestionSetting::findOrFail($id);
-            $lockExam->lock_status = 0;
-            $lockExam->save();
+            $questionSetting = QuestionSetting::findOrFail($id);
+            $questionSetting->lock_status = 0;
+            $questionSetting->save();
+
+            $examSetting = ExamSetting::where('exam_type', $questionSetting->exam_type)
+            ->where('exam_category', $questionSetting->exam_category)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('semester', $questionSetting->semester)
+            ->where('session1', $questionSetting->session1)
+            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
+            ->where('no_of_qst', $questionSetting->no_of_qst)
+            ->first();
+
+            if(!$examSetting){
+                return redirect()->route('question-obj-upload')->with('success', 'Exam unlocked successfully.');
+            }
+
+            $examSetting->lock_status = 0;
+            $examSetting->save();
 
             return redirect()->route('question-obj-upload')->with('success', 'Exam unlocked successfully.');
         } else {

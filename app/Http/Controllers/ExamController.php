@@ -52,7 +52,7 @@ class ExamController extends Controller
                 return $this->cbtTheoryCheck($id);
             }
                                             
-            return redirect()->route('cbt-process', ['id' => $studentData->id]);
+            //return redirect()->route('cbt-process', ['id' => $studentData->id]);
         } catch (ValidationException $e) {
             // Handle the validation exception
             // You can redirect back with errors or do other appropriate error handling
@@ -72,6 +72,7 @@ class ExamController extends Controller
             $examSetting = ExamSetting::where('department', $studentData->department)
             ->where('level', $studentData->level)
             ->first(); 
+            
             // Check if the question for current exam setting is available
             $existingQuestion = Question::where('exam_type', $examSetting->exam_type)
                                                 ->where('exam_category', $examSetting->exam_category)

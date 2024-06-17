@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use App\Models\CollegeSetup;
 use App\Models\SoftwareVersion;
+use App\Models\ExamSetting;
 
 class AuthController extends Controller
 {
@@ -71,6 +72,14 @@ class AuthController extends Controller
                 return redirect()->back()->with('error', 'You have completed the test.');
             }
             elseif($loginStatus == 0){
+                //--Check the lock status of the exam---
+                $examSetting = ExamSetting::where('department', $student->department)
+                                ->where('level', $student->level)
+                                ->first(); 
+                $examLockStatus = $examSetting->lock_status;
+                if ($examLockStatus == 1){
+                    return redirect()->back()->with('error', 'The exam has been locked by the tutor in-charge.');
+                }
                 //---Update Login status ---
                 $student->login_status = 1;
                 $student->save();

@@ -233,8 +233,10 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
+              <p><strong>Lock/Unlock Exam : This denies the user access to the exam.</p></strong>
+              <p><strong>Enable Question : This add the question to the list of exam to be done for the day.</p></strong>
               <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
-              <div class="box-tools">
+              <div class="box-tools">                
                 <div class="input-group input-group-sm" style="width: 150px;">
                 <a href="{{route('question-upload-obj')}}" class="btn btn-info">Upload Question</a>
                 </div>
@@ -272,10 +274,10 @@
                   <th>No of Questions(Student)</th>
                   <th>Duration</th>
                   <th>Check Result</th>
-                  <th>Lock/Unlock Exam</th>
-                  <th>Status</th>
                   <th>Created On</th>
-                  <th>Actions</th>
+                  <th>Lock/Unlock Exam</th>
+                  <th>Status</th>                  
+                  <th>Actions</th>                  
                 </tr>
                 @if ($questionSetting->count() > 0)
                 @foreach ($questionSetting as $key => $rs)
@@ -296,6 +298,7 @@
                     @else
                     <td>NO</td>
                     @endif
+                    <td>{{$rs->created_at}}</td>
                     @if($rs->lock_status == 1)
                       <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-success" data-id="{{ $rs->id }}">
         Unlock
@@ -311,14 +314,12 @@
                     @elseif ($rs->exam_status == 'Active')
                     <!-- <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a> -->
                     @endif 
-                    </td>
-                                       
-                    <td>{{$rs->created_at}}</td>
+                    </td> 
                     <td> 
                       
                       <a class="label label-success" href="{{route('question-view', ['questionId' => $rs->id])}}">Edit</a>
                      
-                    </td>
+                    </td>                    
                 </tr>              
                 @endforeach
                 @else

@@ -560,6 +560,9 @@
 
                         // Render the fetched questions
                         renderQuestions(response);
+
+                         // Scroll to the top of the page
+                        $('html, body').animate({ scrollTop: 0 }, 'fast');
                     },
                     error: function(xhr, status, error) {
                         console.error('Error fetching questions:', error);

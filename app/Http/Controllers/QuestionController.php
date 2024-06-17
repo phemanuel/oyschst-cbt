@@ -139,7 +139,8 @@ class QuestionController extends Controller
                 'duration' => $validatedData['duration'],
                 'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
                 'course' => $validatedData['course'],  
-                'check_result' => 1,                                         
+                'check_result' => 1,   
+                'lock_status' => 0,                                      
             ]);
 
             //--Create a dummy question for the said no of question selected in the question table
@@ -599,6 +600,7 @@ class QuestionController extends Controller
                     'duration' => $questionSetting->duration,
                     'check_result' => $questionSetting->check_result,
                     'exam_date' => $questionSetting->exam_date,
+                    'lock_status' => $questionSetting->lock_status,
                 ]);
         } else {
             // Create a new exam setting with the provided variables
@@ -616,6 +618,7 @@ class QuestionController extends Controller
                 'duration' => $questionSetting->duration,
                 'check_result' => $questionSetting->check_result,
                 'time_limit' => 10,
+                'lock_status' => $questionSetting->lock_status,
             ]);
         }
 
@@ -680,7 +683,8 @@ class QuestionController extends Controller
                 'duration' => $validatedData['duration'],
                 'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
                 'course' => $validatedData['course'],   
-                'check_result' => 1,                                       
+                'check_result' => 1,       
+                'lock_status' => 0,                                
             ]);
 
             // Import all question for the said no of question selected in the question table
@@ -841,7 +845,8 @@ class QuestionController extends Controller
                 'duration' => $validatedData['duration'],
                 'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
                 'course' => $validatedData['course'],  
-                'check_result' => 1,                                         
+                'check_result' => 1,   
+                'lock_status' => 0,                                      
             ]);
 
             //--Create a dummy question for the said no of question selected in the question table
@@ -1338,6 +1343,7 @@ class QuestionController extends Controller
                     'duration' => $questionSetting->duration,
                     'check_result' => $questionSetting->check_result,
                     'exam_date' => $questionSetting->exam_date,
+                    'lock_status' => $questionSetting->lock_status,
                 ]);
         } else {
             // Create a new exam setting with the provided variables
@@ -1355,6 +1361,7 @@ class QuestionController extends Controller
                 'duration' => $questionSetting->duration,
                 'check_result' => $questionSetting->check_result,
                 'time_limit' => 10,
+                'lock_status' => $questionSetting->lock_status,
             ]);
         }
 
@@ -1411,7 +1418,9 @@ class QuestionController extends Controller
                 'duration' => $validatedData['duration'],
                 'exam_date' => date("Y-m-d", strtotime($validatedData['exam_date'])),  
                 'course' => $validatedData['course'],   
-                'check_result' => 1,                                       
+                'check_result' => 1,     
+                'lock_status' => 0, 
+                                                 
             ]);
 
             //--Import all question for the said no of question selected in the question table

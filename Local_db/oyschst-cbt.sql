@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2024 at 01:11 AM
+-- Generation Time: Jun 16, 2024 at 02:27 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -629,6 +629,7 @@ CREATE TABLE `exam_settings` (
   `no_of_qst` int(11) NOT NULL,
   `check_result` int(10) NOT NULL,
   `exam_date` date DEFAULT NULL,
+  `lock_status` int(10) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -637,9 +638,9 @@ CREATE TABLE `exam_settings` (
 -- Dumping data for table `exam_settings`
 --
 
-INSERT INTO `exam_settings` (`id`, `level`, `course`, `session1`, `semester`, `department`, `exam_type`, `exam_category`, `exam_mode`, `time_limit`, `duration`, `upload_no_of_qst`, `no_of_qst`, `check_result`, `exam_date`, `created_at`, `updated_at`) VALUES
-(1, '100', 'PREPARATORY', '2024/2025', 'First', 'Certificate for  Medical Laboratory Technicians(MLT)', 'PREPARATORY', 'GENERAL', 'OBJECTIVE', 10, 50, 50, 50, 1, '2024-07-04', '2024-06-11 03:01:30', '2024-06-14 04:18:55'),
-(3, '100', 'PREPARATORY', '2024/2025', 'First', 'Diploma in Community Health(CHEW)', 'PREPARATORY', 'GENERAL', 'OBJECTIVE', 10, 20, 100, 100, 1, NULL, '2024-06-14 05:07:44', '2024-06-14 05:07:44');
+INSERT INTO `exam_settings` (`id`, `level`, `course`, `session1`, `semester`, `department`, `exam_type`, `exam_category`, `exam_mode`, `time_limit`, `duration`, `upload_no_of_qst`, `no_of_qst`, `check_result`, `exam_date`, `lock_status`, `created_at`, `updated_at`) VALUES
+(1, '100', 'PREPARATORY', '2024/2025', 'First', 'Certificate for  Medical Laboratory Technicians(MLT)', 'PREPARATORY', 'GENERAL', 'OBJECTIVE', 10, 50, 50, 50, 1, '2024-07-04', 0, '2024-06-11 03:01:30', '2024-06-14 04:18:55'),
+(3, '100', 'PREPARATORY', '2024/2025', 'First', 'Diploma in Community Health(CHEW)', 'PREPARATORY', 'GENERAL', 'OBJECTIVE', 10, 20, 100, 100, 1, NULL, 0, '2024-06-14 05:07:44', '2024-06-14 05:07:44');
 
 -- --------------------------------------------------------
 
@@ -1121,6 +1122,7 @@ CREATE TABLE `question_settings` (
   `exam_mode` varchar(255) NOT NULL,
   `exam_date` date NOT NULL,
   `check_result` int(10) NOT NULL,
+  `lock_status` int(10) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1129,12 +1131,12 @@ CREATE TABLE `question_settings` (
 -- Dumping data for table `question_settings`
 --
 
-INSERT INTO `question_settings` (`id`, `session1`, `department`, `course`, `upload_no_of_qst`, `no_of_qst`, `level`, `semester`, `duration`, `exam_type`, `exam_category`, `exam_status`, `exam_mode`, `exam_date`, `check_result`, `created_at`, `updated_at`) VALUES
-(1, '2024/2025', 'Diploma in Community Health(CHEW)', 'PREPARATORY', 50, 50, '100', 'First', 50, 'PREPARATORY', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-07-02', 1, '2024-06-11 02:02:26', '2024-06-14 05:07:44'),
-(2, '2024/2025', 'Certificate for  Medical Laboratory Technicians(MLT)', 'PREPARATORY', 50, 50, '100', 'First', 50, 'PREPARATORY', 'GENERAL', 'Active', 'OBJECTIVE', '2024-07-02', 1, '2024-06-11 02:40:02', '2024-06-14 03:27:46'),
-(3, '2024/2025', 'Diploma in Community Health(CHEW)', 'ENTRANCE', 30, 30, '100', 'First', 30, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-07-01', 1, '2024-06-11 03:32:38', '2024-06-14 05:07:44'),
-(4, '2024/2025', 'Certificate for  Medical Laboratory Technicians(MLT)', 'ENTRANCE', 30, 30, '100', 'First', 30, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-07-02', 1, '2024-06-11 03:33:12', '2024-06-14 03:27:46'),
-(6, '2024/2025', 'Diploma in Community Health(CHEW)', 'PREPARATORY', 100, 100, '100', 'First', 20, 'PREPARATORY', 'GENERAL', 'Active', 'OBJECTIVE', '2024-07-03', 1, '2024-06-14 05:06:25', '2024-06-14 05:07:44');
+INSERT INTO `question_settings` (`id`, `session1`, `department`, `course`, `upload_no_of_qst`, `no_of_qst`, `level`, `semester`, `duration`, `exam_type`, `exam_category`, `exam_status`, `exam_mode`, `exam_date`, `check_result`, `lock_status`, `created_at`, `updated_at`) VALUES
+(1, '2024/2025', 'Diploma in Community Health(CHEW)', 'PREPARATORY', 50, 50, '100', 'First', 50, 'PREPARATORY', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-07-02', 1, 1, '2024-06-11 02:02:26', '2024-06-16 07:25:44'),
+(2, '2024/2025', 'Certificate for  Medical Laboratory Technicians(MLT)', 'PREPARATORY', 50, 50, '100', 'First', 50, 'PREPARATORY', 'GENERAL', 'Active', 'OBJECTIVE', '2024-07-02', 1, 1, '2024-06-11 02:40:02', '2024-06-16 07:25:21'),
+(3, '2024/2025', 'Diploma in Community Health(CHEW)', 'ENTRANCE', 30, 30, '100', 'First', 30, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-07-01', 1, 0, '2024-06-11 03:32:38', '2024-06-14 05:07:44'),
+(4, '2024/2025', 'Certificate for  Medical Laboratory Technicians(MLT)', 'ENTRANCE', 30, 30, '100', 'First', 30, 'ENTRANCE', 'GENERAL', 'Inactive', 'OBJECTIVE', '2024-07-02', 1, 0, '2024-06-11 03:33:12', '2024-06-16 07:25:55'),
+(6, '2024/2025', 'Diploma in Community Health(CHEW)', 'PREPARATORY', 100, 100, '100', 'First', 20, 'PREPARATORY', 'GENERAL', 'Active', 'OBJECTIVE', '2024-07-03', 1, 1, '2024-06-14 05:06:25', '2024-06-16 07:25:35');
 
 -- --------------------------------------------------------
 
@@ -2816,7 +2818,7 @@ INSERT INTO `student_admissions` (`id`, `admission_no`, `surname`, `first_name`,
 (1616, 'HTDE2023123', 'AYODELE IFEOLUWA SEUN', '', '', 'Diploma for Health Technicians(DE)', '', 'OYO', '100', 'Female', '', '', '', '20230059', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-01 16:40:14'),
 (1617, 'HTDE2023124', 'JAMES FAITH OLUWATOSIN ', '', '', 'Diploma for Health Technicians(DE)', '', 'OYO', '100', 'Female', '', '', '', '20231077', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-01 16:40:14'),
 (1618, 'HTDE2023125', 'AYODELE IFEOLUWA SEUN', '', '', 'Diploma for Health Technicians(DE)', '', 'Ekiti', '100', 'Female', '', '', '', '20230059', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-01 16:40:14'),
-(1619, 'CHEW2023001', 'ABDULAZEEZ ISIAQ OPEYEMI', '', '', 'Diploma in Community Health(CHEW)', '', 'OYO', '100', 'Male', '', '', '', '20230924', '2024/2025', '1', 0, 'student', '2024-06-01 16:40:14', '2024-06-14 05:08:04'),
+(1619, 'CHEW2023001', 'ABDULAZEEZ ISIAQ OPEYEMI', '', '', 'Diploma in Community Health(CHEW)', '', 'OYO', '100', 'Male', '', '', '', '20230924', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-16 03:01:32'),
 (1620, 'CHEW2023002', 'ABDULKAREEM SOFIAT  AJOLAYO', '', '', 'Diploma in Community Health(CHEW)', '', 'OYO', '100', 'Female', '', '', '', '20230764', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-14 04:54:29'),
 (1621, 'CHEW2023003', 'ADEAGBO CHRISTIANAH ODUNAYO', '', '', 'Diploma in Community Health(CHEW)', '', 'OYO', '100', 'Female', '', '', '', '20230533', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-01 16:40:14'),
 (1622, 'CHEW2023004', 'ADEBAYO ADEOLA VICTORIA', '', '', 'Diploma in Community Health(CHEW)', '', 'OYO', '100', 'Female', '', '', '', '20230600', '2024/2025', '0', 0, 'student', '2024-06-01 16:40:14', '2024-06-01 16:40:14'),
@@ -3561,6 +3563,7 @@ CREATE TABLE `users` (
   `report` int(11) NOT NULL,
   `check_report` int(11) NOT NULL,
   `export_report` int(11) NOT NULL,
+  `grading_report` int(10) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3569,9 +3572,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_type`, `user_status`, `name`, `email`, `email_verified_status`, `email_verified_at`, `password`, `remember_token`, `login_attempts`, `exam_setting`, `edit_exam_setting`, `qst_bank`, `create_question_bank`, `edit_question_bank`, `std_list`, `create_std_list`, `edit_std_list`, `delete_std_list`, `std_login_status`, `edit_std_login_status`, `change_course`, `edit_change_course`, `user_create`, `create_user_create`, `edit_user_create`, `status_user_create`, `college_setup`, `create_college_setup`, `edit_college_setup`, `delete_college_setup`, `report`, `check_report`, `export_report`, `created_at`, `updated_at`) VALUES
-(1, 'superadmin', 'Active', 'Admin CBT', 'admin@gmail.com', 1, NULL, '$2y$12$ZnTRyBs.WISiLa5h/2lwxu3.zl1UR6I8Jn8DftqX4I3swyQIHBQS2', NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2024-05-09 19:19:26', '2024-06-15 04:03:36'),
-(3, 'admin', 'Active', 'Miracle Peters', 'miracle.kingsbranding@gmail.com', 1, NULL, '$2y$12$tQDDVYqfpc/SldYiYwJfEuRUQBW32vIvbxkXLH70jGkZvGzsrBArW', NULL, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, '2024-06-15 06:01:55', '2024-06-15 06:01:55');
+INSERT INTO `users` (`id`, `user_type`, `user_status`, `name`, `email`, `email_verified_status`, `email_verified_at`, `password`, `remember_token`, `login_attempts`, `exam_setting`, `edit_exam_setting`, `qst_bank`, `create_question_bank`, `edit_question_bank`, `std_list`, `create_std_list`, `edit_std_list`, `delete_std_list`, `std_login_status`, `edit_std_login_status`, `change_course`, `edit_change_course`, `user_create`, `create_user_create`, `edit_user_create`, `status_user_create`, `college_setup`, `create_college_setup`, `edit_college_setup`, `delete_college_setup`, `report`, `check_report`, `export_report`, `grading_report`, `created_at`, `updated_at`) VALUES
+(1, 'superadmin', 'Active', 'Admin CBT', 'admin@gmail.com', 1, NULL, '$2y$12$ZnTRyBs.WISiLa5h/2lwxu3.zl1UR6I8Jn8DftqX4I3swyQIHBQS2', NULL, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, '2024-05-09 19:19:26', '2024-06-16 05:26:17'),
+(3, 'admin', 'Active', 'Miracle Peters', 'miracle.kingsbranding@gmail.com', 1, NULL, '$2y$12$tQDDVYqfpc/SldYiYwJfEuRUQBW32vIvbxkXLH70jGkZvGzsrBArW', NULL, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, '2024-06-15 06:01:55', '2024-06-16 03:40:58');
 
 --
 -- Indexes for dumped tables
@@ -3734,7 +3737,7 @@ ALTER TABLE `academic_sessions`
 -- AUTO_INCREMENT for table `cbt_classes`
 --
 ALTER TABLE `cbt_classes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `cbt_evaluation1`
@@ -3764,13 +3767,13 @@ ALTER TABLE `college_setups`
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `exam_settings`
