@@ -72,10 +72,15 @@ class AuthController extends Controller
                 return redirect()->back()->with('error', 'You have completed the test.');
             }
             elseif($loginStatus == 0){
-                //--Check the lock status of the exam---
+                //---check if the exam has been added to the exams to be accessed-
                 $examSetting = ExamSetting::where('department', $student->department)
                                 ->where('level', $student->level)
                                 ->first(); 
+                
+                if(!$examSetting){
+                    return redirect()->back()->with('error', 'The exam is not available.');
+                }
+                //--Check the lock status of the exam---
                 $examLockStatus = $examSetting->lock_status;
                 if ($examLockStatus == 1){
                     return redirect()->back()->with('error', 'The exam has been locked by the tutor in-charge.');
