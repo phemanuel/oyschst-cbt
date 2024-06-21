@@ -232,8 +232,8 @@
               <div class="box-tools">
               <form action="{{ route('user-search') }}" method="post" class="form-inline">
                 @csrf
-                <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
+                <div class="input-group input-group-sm" style="width: 300px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Name or Email">
 
                     <div class="input-group-btn">
                     <button type="submit" class="btn btn-success">Search</button>

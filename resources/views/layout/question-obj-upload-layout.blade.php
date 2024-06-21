@@ -233,8 +233,8 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
-              <p><strong>Lock/Unlock Exam : This denies the user access to the exam.</p></strong>
-              <p><strong>Enable Question : This add the question to the list of exam to be done for the day.</p></strong>
+              <p><strong>Lock/Unlock Exam : This denies the user access to the exam.(To be done by the tutor in-charge)</p></strong>
+              <p><strong>Enable Question : This add the question to the list of exam to be done for the day.(To be done by the admin)</p></strong>
               <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
               <div class="box-tools">                
                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -247,7 +247,7 @@
               <div class="box-tools">
               <form action="{{ route('question-setting-search') }}" method="post" class="form-inline">
                 @csrf
-                <div class="input-group input-group-sm" style="width: 150px;">
+                <div class="input-group input-group-sm" style="width: 300px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
 
                     <div class="input-group-btn">

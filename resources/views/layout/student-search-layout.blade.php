@@ -224,7 +224,7 @@
               <h3 class="box-title"></h3>
               <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a>
               <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
+                <div class="input-group input-group-sm" style="width: 300px;">
                 <a href="{{route('student-list')}}" class="btn btn-info">Student List</a>
                 </div>
               </div>

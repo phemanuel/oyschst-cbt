@@ -245,7 +245,7 @@
               <div class="box-tools">
               <form action="{{ route('question-setting-search') }}" method="post" class="form-inline">
                 @csrf
-                <div class="input-group input-group-sm" style="width: 150px;">
+                <div class="input-group input-group-sm" style="width: 300px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
 
                     <div class="input-group-btn">
