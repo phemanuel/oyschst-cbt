@@ -46,7 +46,7 @@ Route::get('/', function () {
     Route::get('admin', [AuthController::class, 'adminLogin'])->name('admin-login');
     Route::post('admin', [AuthController::class, 'adminLoginAction'])->name('admin-login.action');
 
-    //--Student routes
+    //--User routes
     Route::group(['middleware' => ['student.auth']], function () {
        //-----Dashboard routes-----
     Route::get('user-dashboard/{admission_no}', [DashboardController::class, 'index'])
@@ -60,8 +60,8 @@ Route::get('/', function () {
     Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
     ->name('cbt-page');
     Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
-    ->name('cbt-continue');
-    //---Objective Based Test--------      
+    ->name('cbt-continue');    
+    //---Objective Module--------      
     Route::get('cbt/{id}/page1', [ExamController::class, 'cbtPage1'])
     ->name('cbt-page1');
     Route::get('cbt/{id}/page2', [ExamController::class, 'cbtPage2'])
@@ -81,13 +81,7 @@ Route::get('/', function () {
     Route::get('cbt/{id}/page9', [ExamController::class, 'cbtPage9'])
     ->name('cbt-page9');
     Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
-    ->name('cbt-page10');
-    //---Theory Based Questions ---
-    Route::get('cbt-theory/{id}', [ExamTheoryController::class, 'cbtTheory'])
-    ->name('cbt-theory');
-    Route::get('cbt-theory-page/{id}', [ExamTheoryController::class, 'cbtTheoryPage'])
-    ->name('cbt-theory-page');
-    
+    ->name('cbt-page10');        
     //----Update Answers---
     Route::get('fetch-answers/{id}/{pageNo}', [ExamController::class, 'fetchAnswers'])
     ->name('fetch-answers');
@@ -100,9 +94,26 @@ Route::get('/', function () {
     ->name('cbt-submit');
     //---Display result
     Route::get('cbt/{admission_no}/result', [ExamController::class, 'cbtResult'])
-    ->name('cbt-result'); 
+    ->name('cbt-result');     
     Route::post('/update-remaining-time/{id}', [ExamController::class, 'updateRemainingTime'])
-    ->name('update-remaining-time');  
+    ->name('update-remaining-time'); 
+    //-----Theory Module---------    
+    Route::get('cbt-theory/{id}', [ExamTheoryController::class, 'cbtTheory'])
+    ->name('cbt-theory');
+    Route::get('cbt-theory-page/{id}', [ExamTheoryController::class, 'cbtTheoryPage'])
+    ->name('cbt-theory-page');
+    Route::post('/update-remaining-time-theory/{id}', [ExamTheoryController::class, 'updateRemainingTimeTheory'])
+    ->name('update-remaining-time-theory');  
+    //---Save theory answers ---
+    Route::get('answer-next/{id}', [ExamTheoryController::class, 'answerNext'])
+    ->name('answer-next');
+    Route::get('answer-previous/{id}', [ExamTheoryController::class, 'answerPrevious'])
+    ->name('answer-previous');    
+    Route::post('answer-save/{id}', [ExamTheoryController::class, 'answerSave'])
+    ->name('answer-save');
+    Route::post('save-answer/{id}', [ExamTheoryController::class, 'saveAnswer'])
+    ->name('save-answer');
+    //-------------------------
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');    
     // Logout route

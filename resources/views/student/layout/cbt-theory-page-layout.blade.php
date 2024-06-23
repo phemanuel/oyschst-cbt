@@ -150,14 +150,10 @@
             <tr>
             <td><p class="bold-text-font-menu">Exam Type:</p></td>
                 <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
-            </tr>
-            <tr>
-            <td><p class="bold-text-font-menu">Exam Mode:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->exam_mode}}</p></td>
-            </tr>
+            </tr>            
             <tr>
                 <td><p class="bold-text-font-menu">Semester:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
+                <td><p class="bold-text-font-menu">{{$examSetting->semester}}</p></td>
             </tr>
             <tr>
                 <td><p class="bold-text-font-menu">Course:</p></td>
@@ -202,58 +198,62 @@
 						</div>
 						@endif	
           </div>
+          <!-- question-Loaded -->
           <div class="row">         
-              
-              <!-- Questions will be dynamically loaded here -->
-             
-               <!-- begin card -->
-            <div class="col-12 grid-margin" id="question1">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{$currentQuestionNo}}</strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                      @if($currentQuestionType === 'text-image')                   
-                      <tr>                        
-                      <img src="{{asset('questions/'.$rs->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $currentQuestion !!}</p></td>                        
-                      </tr> 
-                      <tr>
-                        <td> <textarea id="editor1" name="answer" rows="10" cols="80">
-                                            {{$currentAnswer}}
-                    </textarea>
-                  </td>
-                      </tr>
-                      @else
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $currentQuestion !!}</p></td>                        
-                      </tr> 
-                      <tr>
-                        <td> <textarea id="editor1" name="answer" rows="10" cols="80">
-                                            {{$currentAnswer}}
-                    </textarea>
-                  </td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">
-                      
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>                    
-                  </div>
-                </div>                
-              </div>
-            </div>
-           <!-- end card -->         
-          
+  <!-- Questions will be dynamically loaded here -->
+  <div class="col-12 grid-margin">            
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"> 
+          <strong>Question <span id="currentQuestionNo">{{$currentQuestionNo}}</span> of {{$examSetting->no_of_qst}}</strong>
+        </h4>
+        <form id="answer-form" method="POST">
+          @csrf
+          <div class="table-responsive">
+            <table class="table" width="100%">
+              @if($currentQuestionType === 'text-image')                   
+              <tr>                        
+                <img id="question-image" src="{{asset('questions/'.$rs->graphic)}}" alt="questionImage" width="1200" height="250">                        
+              </tr>
+              @endif
+              <tr>
+                <td><p id="current-question" class="bold-font-qst">{!! $currentQuestion !!}</p></td>                        
+              </tr> 
+              <tr>
+                <td>
+                  <textarea id="editor1" name="answer" rows="10" cols="80">{{$currentAnswer}}</textarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="82%"></td>
+                <td></td>
+                <td></p></td>
+            </table>                    
+          </div>
+          <div class="box-body pad"> 
+            <table width="100%">                    
+              <tr>
+                <td width="8%">
+                  <button type="button" id="prev-button" class="btn btn-primary">Previous Question</button>
+                </td>
+                <td width="75%">
+                  <button type="button" id="next-button" class="btn btn-info">Next Question</button>
+                </td>
+                <td width="7%">&nbsp;</td>
+                <td width="10%">
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">Submit Exam</button>
+                </td>
+                <td width="10%"></td>
+              </tr>
+            </table>
+          </div>
+          <input type="hidden" name="currentQuestionNo" id="hidden-currentQuestionNo" value="{{$currentQuestionNo}}">
+        </form>
+      </div>                
+    </div>
+  </div>
+</div>
 
-          </div>         
           
           <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -317,7 +317,7 @@
         }
 
         function saveRemainingTime(remainingMinutes) {
-            fetch('/update-remaining-time/{{ $studentData->id }}', {
+            fetch('/update-remaining-time-theory/{{ $studentData->id }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -340,8 +340,55 @@
 
         startTimer();
     </script>
+<script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Replace the <textarea id="editor1"> with a CKEditor instance
+    CKEDITOR.replace('editor1');
 
-<!-- Fetch questions and update Answers -->
+    function saveAnswerAndNavigate(direction) {
+        let formData = {
+            _token: '{{ csrf_token() }}', // Ensure CSRF token is included
+            answer: CKEDITOR.instances.editor1.getData(),
+            currentQuestionNo: $('#hidden-currentQuestionNo').val(),
+            direction: direction
+        };
+
+        $.ajax({
+            url: "{{ route('save-answer', ['id' => $studentData->id]) }}",
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+                console.log('Success:', response);
+                // Update the view with new question data
+                $('#currentQuestionNo').text(response.currentQuestionNo);
+                $('#hidden-currentQuestionNo').val(response.currentQuestionNo);
+                $('#current-question').html(response.currentQuestion);
+                CKEDITOR.instances.editor1.setData(response.currentAnswer);
+                if(response.currentQuestionType === 'text-image') {
+                    $('#question-image').attr('src', "{{ asset('questions/') }}/" + response.questionImage);
+                } else {
+                    $('#question-image').hide();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    document.getElementById('next-button').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        saveAnswerAndNavigate('next');
+    });
+
+    document.getElementById('prev-button').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        saveAnswerAndNavigate('prev');
+    });
+});
+</script>
+
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <script src="{{ asset('student/js/jquery-3.5.1.min.js') }}"></script>
 
@@ -349,7 +396,7 @@
 <script src="{{asset('dashboard/bower_components/ckeditor/ckeditor.js')}}"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
-<script>
+<!-- <script>
   $(function () {
     // Replace the <textarea id="editor1"> with a CKEditor
     // instance, using default configuration.
@@ -357,7 +404,7 @@
     //bootstrap WYSIHTML5 - text editor
     $('.textarea').wysihtml5()
   })
-</script>
+</script> -->
   <!-- plugins:js -->
   <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('student/vendors/js/vendor.bundle.addons.js')}}"></script>

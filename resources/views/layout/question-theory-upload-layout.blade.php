@@ -233,6 +233,8 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
+              <p><strong>Lock/Unlock Exam : This denies the user access to the exam.(To be done by the tutor in-charge)</p></strong>
+              <p><strong>Enable Question : This add the question to the list of exam to be done for the day.(To be done by the admin)</p></strong>
               <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -271,9 +273,10 @@
                   <th>Total No of Questions</th>
                   <th>No of Questions(Student)</th>
                   <th>Duration</th>
-                  <th>Check Result</th>
-                  <th>Status</th>
+                  <th>Check Result</th>                   
                   <th>Created On</th>
+                  <th>Lock/Unlock Exam</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
                 @if ($questionSetting->count() > 0)
@@ -295,15 +298,23 @@
                     @else
                     <td>NO</td>
                     @endif
+                    <td>{{$rs->created_at}}</td>
+                    @if($rs->lock_status == 1)
+                      <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-success" data-id="{{ $rs->id }}">
+        Unlock
+    </button></td>
+                      @elseif($rs->lock_status == 0)
+                      <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-success1" data-id="{{ $rs->id }}">
+        Lock
+    </button></td>
+                      @endif   
                     <td>{{ $rs->exam_status }}
                     @if ($rs->exam_status == 'Inactive')  
                     <a class="label label-primary" href="{{route('question-theory-enable', ['questionId' => $rs->id])}}">Enable Question</a>
-                    @elseif ($rs->exam_status == 'Active')
-                    
+                    @elseif ($rs->exam_status == 'Active')                    
                     @endif 
-                    </td>
-                                       
-                    <td>{{$rs->created_at}}</td>
+                    </td>                                       
+                    
                     <td> 
                       
                       <a class="label label-success" href="{{route('question-theory-view', ['questionId' => $rs->id])}}">Edit</a>
@@ -530,7 +541,88 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<div class="modal modal-info fade" id="modal-success">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Unlock Exam.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter your password to unlock the exam.</p>
+                <form id="unlock-form" method="post">
+                    @csrf
+                    <table class="table">
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" name="user_password" class="form-control"></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline">Unlock Exam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<div class="modal modal-info fade" id="modal-success1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Lock Exam.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter your password to lock the exam.</p>
+                <form id="lock-form" method="post">
+                    @csrf
+                    <table class="table">
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" name="user_password" class="form-control"></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline">Lock Exam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#modal-success').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id'); // Extract info from data-* attributes
+            var form = $('#unlock-form'); // Find the form in the modal
+            var action = "{{ url('/unlock-exam') }}/" + id;
+            form.attr('action', action); // Set the action attribute
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#modal-success1').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id'); // Extract info from data-* attributes
+            var form = $('#lock-form'); // Find the form in the modal
+            var action = "{{ url('/lock-exam') }}/" + id;
+            form.attr('action', action); // Set the action attribute
+        });
+    });
+</script>
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->

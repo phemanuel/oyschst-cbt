@@ -113,11 +113,11 @@ class ExamController extends Controller
 
     public function cbtTheoryCheck($id)
     {
-        try {
+        try {            
+            $studentData = StudentAdmission::where('id', $id)->first();
             $examSetting = ExamSetting::where('department', $studentData->department)
                         ->where('level', $studentData->level)
                         ->first(); 
-            $studentData = StudentAdmission::where('id', $id)->first();
             $examSetting = ExamSetting::where('department', $studentData->department)
             ->where('level', $studentData->level)
             ->first(); 
