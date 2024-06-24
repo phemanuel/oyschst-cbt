@@ -199,206 +199,6 @@ class ExamTheoryController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function answerSave(Request $request, $id)
-    {
-        $request->validate([
-            'action' => 'required|string|in:previous,next',
-            'answer' => 'nullable|string',
-            'currentQuestionNo' => 'required|integer',                
-        ]);       
-
-        $action = $request->input('action'); 
-        $answer = $request->input('answer');
-        $currentQuestionNo = $request->input('currentQuestionNo');       
-
-        // Store question and answer data in the session
-        Session::put('answer', $answer);
-        Session::put('currentQuestionNo', $currentQuestionNo);        
-
-        if ($action === 'previous') {            
-            // Handle the previous action
-            return $this->answerPrevious($id);
-        } elseif ($action === 'next') {            
-            // Handle the next action
-            return $this->answerNext($id);
-        }else {
-            // Handle invalid action
-            return response()->json(['error' => 'Invalid action'], 400);
-        }
-    }
-
-    public function answerNext($id)
-    {
-        $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();
-        $studentData = StudentAdmission::findOrFail($id);
-        $examSetting = ExamSetting::where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->first();     
-        
-        //--get variables
-        $answer = Session::get('answer');
-        $currentQuestionNo = Session::get('currentQuestionNo');        
-        
-        $course = $examSetting->course;
-
-        // Check if current question number is less than total questions
-        if ($currentQuestionNo < $upload_no_of_qst) { 
-            
-            //----Update Current Answer --------------------------------
-            $answerUpdate = TheoryAnswer::where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
-            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-            ->where('no_of_qst', $examSetting->no_of_qst)
-            ->first();
-
-            $answerUpdate->update([
-                'ANS'.$currentQuestionNo => $answer,
-            ]);
-
-            // Increment question number
-            $nextQuestionNo = $currentQuestionNo + 1;
-
-            // Retrieve next question
-            $question = TheoryAnswer::where('studentno', $studentData->admission_no)
-            ->where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
-            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-            ->where('no_of_qst', $examSetting->no_of_qst)
-            ->first();
-
-            $currentQuestionNo = $nextQuestionNo;
-            $currentQuestion = $question->{'Q' . $currentQuestionNo};  
-            $currentAnswer = $question->{'ANS' . $currentQuestionNo};  
-            $currentQuestionType = $question->{'QT' . $currentQuestionNo}; 
-
-            if (!$question) {
-                return redirect()->route('cbt-theory-page')->with('error', 'Next question not found.');
-            }            
-
-            $pageNo = 1;
-            $studentMin = $question->minute;
-        return view('student.pages.cbt-theory-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','pageNo','studentMin','currentQuestion','currentQuestionNo','currentAnswer',
-        'currentQuestionType'));
-        } else {            
-            //----Update Current Answer --------------------------------
-            $answerUpdate = TheoryAnswer::where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
-            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-            ->where('no_of_qst', $examSetting->no_of_qst)
-            ->first();
-
-            $answerUpdate->update([
-                'ANS'.$currentQuestionNo => $answer,
-            ]);
-            return redirect()->route('cbt-theory-page', ['id' => $id])->with('error', 'You have reached the last question, submit the exam.');
-        }
-    }
-
-    public function answerPrevious($id)
-    {
-        $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();
-        $studentData = StudentAdmission::findOrFail($id);
-        $examSetting = ExamSetting::where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->first();       
-        
-        //--get variables        
-        $answer = Session::get('answer');
-        $currentQuestionNo = Session::get('currentQuestionNo');        
-
-        // Check if current question number is greater than 1
-        if ($currentQuestionNo > 1) {  
-
-            //----Update Current Answer --------------------------------
-            $answerUpdate = TheoryAnswer::where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
-            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-            ->where('no_of_qst', $examSetting->no_of_qst)
-            ->first();
-
-            $answerUpdate->update([
-                'ANS'.$currentQuestionNo => $answer,
-            ]);
-
-            // Decrement question number
-            $previousQuestionNo = $currentQuestionNo - 1;            
-
-             // Retrieve next question
-             $question = TheoryAnswer::where('studentno', $studentData->admission_no)
-             ->where('session1', $examSetting->session1)
-             ->where('department', $examSetting->department)
-             ->where('level', $examSetting->level)
-             ->where('semester', $examSetting->semester)
-             ->where('course', $examSetting->course)
-             ->where('exam_mode', $examSetting->exam_mode)
-             ->where('exam_type', $examSetting->exam_type)
-             ->where('exam_category', $examSetting->exam_category)
-             ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-             ->where('no_of_qst', $examSetting->no_of_qst)
-             ->first();
- 
-             $currentQuestionNo = $previousQuestionNo;
-             $currentQuestion = $question->{'Q' . $currentQuestionNo};  
-             $currentAnswer = $question->{'ANS' . $currentQuestionNo};  
-             $currentQuestionType = $question->{'QT' . $currentQuestionNo}; 
- 
-             if (!$question) {
-                 return redirect()->route('cbt-theory-page')->with('error', 'Previous question not found.');
-             }            
- 
-             $pageNo = 1;
-             $studentMin = $question->minute;
-         return view('student.pages.cbt-theory-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-         'examSetting','pageNo','studentMin','currentQuestion','currentQuestionNo','currentAnswer',
-         'currentQuestionType'));            
-        } else {
-            //----Update Current Answer --------------------------------
-            $answerUpdate = TheoryAnswer::where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
-            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-            ->where('no_of_qst', $examSetting->no_of_qst)
-            ->first();
-
-            $answerUpdate->update([
-                'ANS'.$currentQuestionNo => $answer,
-            ]);
-            return redirect()->route('cbt-theory-page', ['id' => $id])->with('error', 'You are already at the first question, you can only submit.');
-        }
-    }
-
     public function saveAnswer(Request $request, $id)
     {
         $studentData = StudentAdmission::findOrFail($id);
@@ -410,6 +210,7 @@ class ExamTheoryController extends Controller
         $answer = $request->input('answer');
         $currentQuestionNo = $request->input('currentQuestionNo');
         $direction = $request->input('direction');
+        $totalQuestions = $examSetting->no_of_qst;
 
         //----Update Current Answer --------------------------------
         $answerUpdate = TheoryAnswer::where('session1', $examSetting->session1)
@@ -431,8 +232,14 @@ class ExamTheoryController extends Controller
         // Determine next or previous question
         if ($direction === 'next') {
             $currentQuestionNo++;
+            if ($currentQuestionNo > $totalQuestions) {
+                return response()->json(['error' => 'You have reached the end of the questions.']);
+            }
         } else {
             $currentQuestionNo--;
+            if ($currentQuestionNo < 1) {
+                return response()->json(['error' => 'You are at the beginning of the questions.']);
+            }
         }
 
         // Retrieve the new question
@@ -459,8 +266,10 @@ class ExamTheoryController extends Controller
             'currentQuestion' => $currentQuestion,
             'currentAnswer' => $currentAnswer,
             'currentQuestionType' => $currentQuestionType,
-            'questionImage' => $questionImage
+            'questionImage' => $questionImage,
+            'totalQuestions' => $totalQuestions
         ]);
     }
+
 
 }

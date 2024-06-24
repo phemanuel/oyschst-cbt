@@ -161,6 +161,37 @@ class ExamController extends Controller
 
     public function cbtContinue($admission_no)
     {
+        try {            
+            $studentData = StudentAdmission::where('admission_no', $admission_no)->first();
+            $examSetting = ExamSetting::where('department', $studentData->department)
+            ->where('level', $studentData->level)
+            ->first(); 
+            // Check if the question for current exam setting is available
+            if($examSetting->exam_mode == "OBJECTIVE"){
+                return $this->cbtObjContinue($admission_no);
+            }
+            elseif($examSetting->exam_mode == "FILL-IN-GAP"){
+                // return $this->cbtFillInGapContinue($admission_no$id);
+            }
+            elseif($examSetting->exam_mode == "THEORY"){
+                return $this->cbtTheoryContinue($admission_no);
+            }
+                                            
+            //return redirect()->route('cbt-process', ['id' => $studentData->id]);
+        } catch (ValidationException $e) {
+            // Handle the validation exception
+            // You can redirect back with errors or do other appropriate error handling
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Handle other exceptions, log them, and redirect to an error page
+            Log::error('Error during login: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred accessing this exam.');
+        }
+
+    }    
+
+    public function cbtObjContinue($admission_no)
+    {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
 
@@ -184,6 +215,42 @@ class ExamController extends Controller
                         ->first();
         $examStatus = $cbtEvaluation->examstatus;
         $pageNo = $cbtEvaluation->pageno;
+        $studentMin = $cbtEvaluation->minute / 60;
+        If($examStatus == 2){
+            return redirect()->back()->with('error', 'You have completed the computer based test.');
+        } 
+        
+        return view('student.pages.cbt-continue', compact('softwareVersion', 'collegeSetup', 'studentData',
+        'examSetting','pageNo','studentMin'));
+    }
+
+    public function cbtTheoryContinue($admission_no)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();        
+
+        $studentData = StudentAdmission::where('admission_no', $admission_no)
+                        //->where('department', $department)
+                        ->first();
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
+
+        $cbtEvaluation = TheoryAnswer::where('studentno', $admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $examSetting->department)
+                        ->where('level', $examSetting->level)
+                        ->where('semester', $examSetting->semester)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('upload_no_of_qst' , $examSetting->upload_no_of_qst)
+                        ->where('no_of_qst' , $examSetting->no_of_qst)
+                        ->first();
+
+        $examStatus = $cbtEvaluation->examstatus;
+        $pageNo = 1;
         $studentMin = $cbtEvaluation->minute / 60;
         If($examStatus == 2){
             return redirect()->back()->with('error', 'You have completed the computer based test.');
@@ -1906,16 +1973,11 @@ class ExamController extends Controller
             return $this->cbtObjPage($id);
         }
         elseif($examSetting->exam_mode === 'FILL-IN-GAP'){
-            // return $this->cbtObjFillInGap($id);
+            // return $this->cbtFillInGapPage($id);
         }
         elseif($examSetting->exam_mode === 'THEORY'){
             return $this->cbtTheoryPage($id);
-        }
-
-        $pageNo = 1;
-        $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','pageNo','studentMin'));
+        }      
 
     }
 
@@ -1953,8 +2015,8 @@ class ExamController extends Controller
         $softwareVersion = SoftwareVersion::first();
         $studentData = StudentAdmission::where('id', $id)->first();
         $examSetting = ExamSetting::where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->first(); 
+            ->where('level', $studentData->level)
+            ->first(); 
 
         $cbtEvaluation = TheoryAnswer::where('studentno', $studentData->admission_no)
             ->where('session1', $examSetting->session1)
@@ -1969,14 +2031,17 @@ class ExamController extends Controller
             ->where('no_of_qst', $examSetting->no_of_qst)
             ->first();
 
-        $currentQuestion = $cbtEvaluation->Q1;  
-        $currentAnswer = $cbtEvaluation->ANS1;       
         $currentQuestionNo = 1;
+        $currentQuestion = $cbtEvaluation->{'Q' . $currentQuestionNo};  
+        $currentAnswer = $cbtEvaluation->{'ANS' . $currentQuestionNo};  
+        $currentQuestionType = $cbtEvaluation->{'QT' . $currentQuestionNo};  
+        
 
         $pageNo = 1;
         $studentMin = $cbtEvaluation->minute;
         return view('student.pages.cbt-theory-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','pageNo','studentMin','currentQuestion','currentQuestionNo','currentAnswer'));
+        'examSetting','pageNo','studentMin','currentQuestion','currentQuestionNo','currentAnswer',
+         'currentQuestionType'));
 
     }
 

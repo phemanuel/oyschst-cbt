@@ -95,8 +95,17 @@
         <!-- <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a> -->
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        
-        <ul class="navbar-nav">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="fas fa-bars"></span>
+        </button>
+      <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item d-none d-lg-flex">
+            <a class="nav-link" href="#">            
+              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">        
           <li class="nav-item nav-search d-none d-md-flex">
           <strong><p class="bold-text-font">Student No: {{$studentData->admission_no}}</p></strong>
           </li>
@@ -115,14 +124,12 @@
           <li class="nav-item nav-search d-none d-md-flex">
           <strong><p class="bold-text-font">{{ $examSetting->duration}} Mins </p></strong>
           </li>
-        </ul>
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item d-none d-lg-flex">
-            <a class="nav-link" href="#">            
-              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
-            </a>
+          <li class="nav-item nav-search d-none d-md-flex">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
+                    Submit Exam</button>
           </li>
         </ul>
+        
         
       </div>
       
@@ -200,59 +207,42 @@
           </div>
           <!-- question-Loaded -->
           <div class="row">         
-  <!-- Questions will be dynamically loaded here -->
-  <div class="col-12 grid-margin">            
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title"> 
-          <strong>Question <span id="currentQuestionNo">{{$currentQuestionNo}}</span> of {{$examSetting->no_of_qst}}</strong>
-        </h4>
-        <form id="answer-form" method="POST">
-          @csrf
-          <div class="table-responsive">
-            <table class="table" width="100%">
-              @if($currentQuestionType === 'text-image')                   
-              <tr>                        
-                <img id="question-image" src="{{asset('questions/'.$rs->graphic)}}" alt="questionImage" width="1200" height="250">                        
-              </tr>
-              @endif
-              <tr>
-                <td><p id="current-question" class="bold-font-qst">{!! $currentQuestion !!}</p></td>                        
-              </tr> 
-              <tr>
-                <td>
-                  <textarea id="editor1" name="answer" rows="10" cols="80">{{$currentAnswer}}</textarea>
-                </td>
-              </tr>
-              <tr>
-                <td width="82%"></td>
-                <td></td>
-                <td></p></td>
-            </table>                    
-          </div>
-          <div class="box-body pad"> 
-            <table width="100%">                    
-              <tr>
-                <td width="8%">
-                  <button type="button" id="prev-button" class="btn btn-primary">Previous Question</button>
-                </td>
-                <td width="75%">
-                  <button type="button" id="next-button" class="btn btn-info">Next Question</button>
-                </td>
-                <td width="7%">&nbsp;</td>
-                <td width="10%">
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">Submit Exam</button>
-                </td>
-                <td width="10%"></td>
-              </tr>
-            </table>
-          </div>
-          <input type="hidden" name="currentQuestionNo" id="hidden-currentQuestionNo" value="{{$currentQuestionNo}}">
-        </form>
-      </div>                
-    </div>
-  </div>
+          <div id="questions-container">
+    <!-- This will be populated with questions dynamically -->
+    <form class="answer-form" data-question-number="{{$currentQuestionNo}}">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <strong>Question {{$currentQuestionNo}} of {{$examSetting->no_of_qst}}</strong>
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table" width="100%">
+                            @if($currentQuestionType === 'text-image')
+                                <img id="question-image" src="{{ asset('questions/') }}/{{$questionImage}}" alt="questionImage" width="1200" height="250">
+                            @endif
+                            <tr>
+                                <td colspan="3"><p id="current-question" style="font-size: 34px">{!!$currentQuestion!!}</p></td>
+                            </tr>
+                            <tr>
+                                <td width="82%">
+                                    <textarea id="editor1" name="answer" rows="10" cols="80">{{$currentAnswer}}</textarea>
+                                </td>
+                            </tr>
+                        </table>                    
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </form>
 </div>
+
+<input type="hidden" id="hidden-currentQuestionNo" value="{{$currentQuestionNo}}">
+<button id="prev-button" class="btn btn-success">Previous Question</button>&nbsp;&nbsp;
+<button id="next-button" class="btn btn-info">Next Question</button>
+
+
+          </div>
 
           
           <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
@@ -343,12 +333,18 @@
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Replace the <textarea id="editor1"> with a CKEditor instance
-    CKEDITOR.replace('editor1');
+    function initializeCKEditor() {
+        // Check if an instance of CKEditor exists and destroy it if it does
+        if (CKEDITOR.instances.editor1) {
+            CKEDITOR.instances.editor1.destroy(true);
+        }
+        // Initialize CKEditor
+        CKEDITOR.replace('editor1');
+    }
 
     function saveAnswerAndNavigate(direction) {
         let formData = {
-            _token: '{{ csrf_token() }}', // Ensure CSRF token is included
+            _token: '{{ csrf_token() }}',
             answer: CKEDITOR.instances.editor1.getData(),
             currentQuestionNo: $('#hidden-currentQuestionNo').val(),
             direction: direction
@@ -359,22 +355,57 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             data: formData,
             success: function(response) {
-                console.log('Success:', response);
-                // Update the view with new question data
-                $('#currentQuestionNo').text(response.currentQuestionNo);
-                $('#hidden-currentQuestionNo').val(response.currentQuestionNo);
-                $('#current-question').html(response.currentQuestion);
-                CKEDITOR.instances.editor1.setData(response.currentAnswer);
-                if(response.currentQuestionType === 'text-image') {
-                    $('#question-image').attr('src', "{{ asset('questions/') }}/" + response.questionImage);
+                if (response.error) {
+                    alert(response.error);
                 } else {
-                    $('#question-image').hide();
+                    // Render the new question
+                    renderQuestion(response);
+
+                    // Reinitialize CKEditor for the new content
+                    initializeCKEditor();
                 }
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
             }
         });
+    }
+
+    function renderQuestion(response) {
+        // Clear the current content
+        $('#questions-container').empty();
+
+        // Build the new question HTML
+        let questionHtml = `
+            <form class="answer-form" data-question-number="${response.currentQuestionNo}">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <strong>Question ${response.currentQuestionNo} of ${response.totalQuestions}</strong>
+                            </h4>
+                            <div class="table-responsive">
+                                <table class="table" width="100%">
+                                    ${response.currentQuestionType === 'text-image' ? `<img id="question-image" src="${response.questionImage}" alt="questionImage" width="1200" height="250">` : ''}
+                                    <tr>
+                                        <td colspan="3"><p id="current-question" style="font-size: 34px">${response.currentQuestion}</p></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="82%">
+                                            <textarea id="editor1" name="answer" rows="10" cols="80">${response.currentAnswer}</textarea>
+                                        </td>
+                                    </tr>
+                                </table>                    
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+            </form>
+        `;
+
+        // Append the new question HTML
+        $('#questions-container').append(questionHtml);
+        $('#hidden-currentQuestionNo').val(response.currentQuestionNo);
     }
 
     document.getElementById('next-button').addEventListener('click', function(event) {
@@ -386,9 +417,12 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault(); // Prevent default form submission
         saveAnswerAndNavigate('prev');
     });
-});
-</script>
 
+    // Initialize CKEditor on initial page load
+    initializeCKEditor();
+});
+
+</script>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <script src="{{ asset('student/js/jquery-3.5.1.min.js') }}"></script>
 
