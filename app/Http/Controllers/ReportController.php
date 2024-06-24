@@ -28,6 +28,7 @@ use App\Models\CbtEvaluation1;
 use App\Models\CbtEvaluation2;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\TheoryAnswer;
 
 class ReportController extends Controller
 {
@@ -2245,7 +2246,7 @@ class ReportController extends Controller
 
         $questionSetting = QuestionSetting::where('id', $id)->first();
 
-        $student = CbtEvaluation::where('session1', $questionSetting->session1)
+        $student = TheoryAnswer::where('session1', $questionSetting->session1)
         ->where('department', $questionSetting->department)
         ->where('level', $questionSetting->level)
         ->where('semester', $questionSetting->semester)
@@ -2253,15 +2254,181 @@ class ReportController extends Controller
         ->where('exam_mode', $questionSetting->exam_mode)
         ->where('exam_type', $questionSetting->exam_type)
         ->where('exam_category', $questionSetting->exam_category)
-        ->where('noofquestion', $questionSetting->no_of_qst)
+        ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
+        ->where('no_of_qst', $questionSetting->no_of_qst)
         ->paginate(20);
 
         if(!$student){
             return redirect()->back()->with('error', 'Result is not available for exam you selected.');
         }
 
-        return view('dashboard.report-theory-view', compact('softwareVersion','collegeSetup','student'));
+        return view('dashboard.report-theory-view', compact('softwareVersion','collegeSetup','student',
+        'questionSetting'));
     }
 
+    public function reportTheoryCsv($id)
+    {   
+        //--Check for permission---
+        $userStatus = auth()->user()->export_report;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            EXPORT results in the REPORT module, contact the Administrator to grant access.');
+        }
+
+        $questionSetting = QuestionSetting::where('id', $id)->first();                 
+        
+        //--get variables
+        $exam_type = $questionSetting->exam_type;
+        $exam_category = $questionSetting->exam_category;
+        $exam_mode = $questionSetting->exam_mode;
+        $department = $questionSetting->department;
+        $level = $questionSetting->level;
+        $session1 = $questionSetting->session1;
+        $upload_no_of_qst = $questionSetting->upload_no_of_qst;
+        $no_of_qst = $questionSetting->no_of_qst;
+        $course = $questionSetting->course;
+        $semester = $questionSetting->semester;
+
+        // Create SQL query with parameter binding
+        $rows = DB::table('theory_answers')
+            ->select('studentno', 'studentname', 'course','level','semester', 'total_score')
+            ->where('exam_type', $exam_type)
+            ->where('exam_category', $exam_category)
+            ->where('exam_mode', $exam_mode)
+            ->where('department', $department)
+            ->where('level', $level)
+            ->where('semester', $semester)
+            ->where('session1', $session1)
+            ->where('upload_no_of_qst', $upload_no_of_qst)
+            ->where('no_of_qst', $no_of_qst)
+            ->where('course', $course)
+            ->orderBy('studentno')
+            ->get()
+            ->toArray();
+        
+            // Check if rows are empty
+        if (empty($rows)) {
+            return redirect()->back()->with('error' , 'No results found .');
+        }
+
+        // Convert stdClass objects to arrays
+        $rows = array_map(function($row) {
+            return (array) $row;
+        }, $rows);
+
+        // Get the column names
+        $columnNames = [];
+        if (!empty($rows)) {
+            $columnNames = array_keys($rows[0]);
+        }
+
+        $date1 = date('d-m-Y');
+        $fileName = "{$session1}_{$exam_mode}_{$exam_type}_{$department}_{$course}_{$level}_{$semester}_{$date1}.csv";
+
+        // Create a callback function to generate the CSV data
+        $callback = function() use ($rows, $columnNames) {
+            $file = fopen('php://output', 'w');
+            // Write the column names
+            fputcsv($file, $columnNames);
+
+            // Write the rows
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+
+        // Return the CSV as a streamed response
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'application/excel',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]); 
+    }
+
+    public function examTheorySheet($qstId, $id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = TheoryAnswer::where('id', $id)->first();               
+
+        $currentQuestionNo = 1;
+        $currentQuestion = $studentData->{'Q' . $currentQuestionNo};  
+        $currentAnswer = $studentData->{'ANS' . $currentQuestionNo};  
+        $currentQuestionType = $studentData->{'QT' . $currentQuestionNo}; 
+        $currentGrade = $studentData->{'score' . $currentQuestionNo}; 
+
+        return view('dashboard.exam-theory-sheet', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'currentQuestion','currentQuestionNo','currentAnswer',
+    'currentQuestionType','currentGrade','qstId'));
+
+    }
+
+    public function saveScore(Request $request, $qstId, $id)
+    {
+        $studentData = TheoryAnswer::findOrFail($id);
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
+        
+        $grade = $request->input('grade');
+        $currentQuestionNo = $request->input('currentQuestionNo');
+        $direction = $request->input('direction');
+        $totalQuestions = $examSetting->no_of_qst;        
+
+        $studentData->update([            
+            'score'.$currentQuestionNo => $grade,
+        ]);
+
+        if ($direction === 'next') {
+            $currentQuestionNo++;
+            if ($currentQuestionNo > $totalQuestions) {
+                return response()->json(['error' => 'You have reached the end of the questions.']);
+            }
+        } else {
+            $currentQuestionNo--;
+            if ($currentQuestionNo < 1) {
+                return response()->json(['error' => 'You are at the beginning of the questions.']);
+            }
+        }
+
+        $question = $studentData;
+        $currentQuestion = $question->{'Q' . $currentQuestionNo};  
+        $currentAnswer = $question->{'ANS' . $currentQuestionNo};  
+        $currentGrade = $question->{'score' . $currentQuestionNo}; 
+        $currentQuestionType = $question->{'QT' . $currentQuestionNo};
+        $questionImage = $currentQuestionType === 'text-image' ? asset('questions/'.$question->graphic) : '';
+
+        return response()->json([
+            'currentQuestionNo' => $currentQuestionNo,
+            'currentQuestion' => $currentQuestion,
+            'currentAnswer' => $currentAnswer,
+            'currentGrade' => $currentGrade,
+            'currentQuestionType' => $currentQuestionType,
+            'questionImage' => $questionImage,
+            'totalQuestions' => $totalQuestions
+        ]);
+    }
+
+    public function grading($qstId, $id)
+    {
+        $studentData = TheoryAnswer::findOrFail($id);        
+    
+        $totalQuestions = $studentData->no_of_qst;  
+    
+        // Calculate total score
+        $totalScore = 0;
+        for ($i = 1; $i <= $totalQuestions; $i++) {
+            $totalScore += $studentData->{'score' . $i};
+        }
+    
+        // Update the total score and grading status
+        $studentData->update([
+            'total_score' => $totalScore,
+            'grading_status' => 1,
+        ]);
+    
+        return redirect()->route('report-theory-view', ['id' => $qstId])->with('success', 
+        'Grading Score has been submitted successfully');
+    }
 
 }

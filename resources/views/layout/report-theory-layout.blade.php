@@ -292,10 +292,10 @@
                     </td>                                       
                     <td>{{$rs->created_at}}</td>
                     <td>                     
-                      <a class="label label-success" href="{{route('report-objective-view', ['id' => $rs->id])}}">Check/Grade Result</a>
+                      <a class="label label-success" href="{{route('report-theory-view', ['id' => $rs->id])}}">Check/Grade Exam</a>
                      </td>
                     <td> 
-                    <a class="label label-info" href="{{route('report-objective-csv', ['id' => $rs->id])}}">Export CSV</a>
+                    <a class="label label-info" href="{{route('report-theory-csv', ['id' => $rs->id])}}">Export CSV</a>
                     </td>
                 </tr>
                 @endforeach

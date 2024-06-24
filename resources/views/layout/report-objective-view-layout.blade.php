@@ -226,7 +226,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>   
-        <li><a href="{{route('report')}}">Report</a> </li>     
+        <li><a href="{{route('report-objective')}}">Report</a> </li>     
         <li class="active">Student Result</li>
       </ol>
     </section>

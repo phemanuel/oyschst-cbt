@@ -96,6 +96,7 @@ return new class extends Migration
             $table->string('G8')->nullable();
             $table->string('G9')->nullable();
             $table->string('G10')->nullable();
+            $table->integer('grading_status');
             $table->timestamps();
         });
     }

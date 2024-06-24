@@ -95,6 +95,7 @@ class ExamTheoryController extends Controller
             'examstatus' => 1,
             'exam_date' => now(),
             'total_score' => 0,
+            'grading_status' => 0,
         ]);
 
         // Save the shuffled question numbers along with the student record
@@ -271,5 +272,46 @@ class ExamTheoryController extends Controller
         ]);
     }
 
+    public function cbtSubmit($id)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $studentData = StudentAdmission::findOrFail($id);
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first(); 
+        
+        // Retrieve the new question
+        $question = TheoryAnswer::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+            ->where('no_of_qst', $examSetting->no_of_qst)
+            ->first();
+        
+            $question->update([
+                'examstatus' => 2,
+            ]);
+
+            $studentData->update([
+                'login_status' => 2,
+            ]);
+
+            return redirect()->route('cbt-theory-result', ['admission_no' => $studentData->admission_no]);
+    }
+
+    public function cbtTheoryResult ($admission_no)
+    {
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        
+        return view('student.pages.cbt-theory-result', compact('softwareVersion', 'collegeSetup'));
+    }
 
 }

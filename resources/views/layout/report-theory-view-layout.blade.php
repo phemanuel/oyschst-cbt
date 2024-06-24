@@ -226,7 +226,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>   
-        <li><a href="{{route('report')}}">Report</a> </li>     
+        <li><a href="{{route('report-theory')}}">Report</a> </li>     
         <li class="active">Student Result</li>
       </ol>
     </section>
@@ -239,7 +239,7 @@
             <div class="box-header">
               <div class="box-header">
               <h3 class="box-title"></h3>
-              
+              <a href="#" class="btn btn-success">Grade Exam</a>
               <div class="box-tools">
               <form action="{{ route('result-search') }}" method="post" class="form-inline">
                 @csrf
@@ -252,13 +252,22 @@
                 </div>
             </form>
               </div>
+              @if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
               <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
-                  <th>Avatar</th>
+                  <!-- <th>Avatar</th> -->
                   <th>Reg/Matric No</th>
                   <th>Name</th>
                   <th>Programme</th>
@@ -272,16 +281,16 @@
                 @foreach ($student as $key => $rs)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
+                    <!-- <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td> -->
                     <td>{{$rs->studentno}}</td>
                     <td>{{ $rs->studentname }}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->exam_type }}</td>
-                    <td>{{ $rs->noofquestion }}</td>                    
-                    <td>{{ $rs->correct }}</td>                    
-                    <td> <a class="label label-primary" href="{{route('exam-sheet-page1', ['id' => $rs->id])}}" target="_blank">Exam Sheet</a>  
-                    <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}" target="_blank">Print Result</a>                   
+                    <td>{{ $rs->no_of_qst }}</td>                    
+                    <td>{{ $rs->total_score }}</td>                    
+                    <td> <a class="label label-primary" href="{{route('exam-theory-sheet',['qstId' => $questionSetting->id , 'id' => $rs->id])}}" target="_blank">Grade Exam</a>  
+                    <!-- <a class="label label-success" href="{{route('student-theory-result',['qstId' => $questionSetting->id, 'id' => $rs->id])}}" target="_blank">Print Result</a>                    -->
                 </td>
                 </tr>
                 @endforeach

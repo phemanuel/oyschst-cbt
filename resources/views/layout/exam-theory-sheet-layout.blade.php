@@ -97,20 +97,13 @@
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
       <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="fas fa-bars"></span>
-        </button>
-      <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item d-none d-lg-flex">
-            <a class="nav-link" href="#">            
-              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
-            </a>
-          </li>
-        </ul>
+        </button>      
         <ul class="navbar-nav">        
           <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Student No: {{$studentData->admission_no}}</p></strong>
+          <strong><p class="bold-text-font">Student No: {{$studentData->studentno}}</p></strong>
           </li>
           <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Student Name: {{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}</p></strong>
+          <strong><p class="bold-text-font">Student Name: {{ $studentData->studentname }} </p></strong>
           </li>
           <li class="nav-item nav-search d-none d-md-flex">
           <strong><p class="bold-text-font">Programme: {{ $studentData->department}} </p></strong>
@@ -119,14 +112,11 @@
           <strong><p class="bold-text-font">Level: {{ $studentData->level}} </p></strong>
           </li>
           <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">{{ $examSetting->no_of_qst}} Questions </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">{{ $examSetting->duration}} Mins </p></strong>
-          </li>
+          <strong><p class="bold-text-font">{{ $studentData->no_of_qst}} Questions </p></strong>
+          </li>          
           <li class="nav-item nav-search d-none d-md-flex">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
-                    Submit Test</button>
+                    Submit Grading Score</button>
           </li>
         </ul>
         
@@ -152,32 +142,20 @@
           <table class="table">
             <tr>
                 <td><p class="bold-text-font-menu">Academic Session:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
+                <td><p class="bold-text-font-menu">{{$studentData->session1}}</p></td>
             </tr>
             <tr>
             <td><p class="bold-text-font-menu">Exam Type:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
+                <td><p class="bold-text-font-menu">{{$studentData->exam_type}}</p></td>
             </tr>            
             <tr>
                 <td><p class="bold-text-font-menu">Semester:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->semester}}</p></td>
+                <td><p class="bold-text-font-menu">{{$studentData->semester}}</p></td>
             </tr>
             <tr>
                 <td><p class="bold-text-font-menu">Course:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
-            </tr>
-            <!-- @if($examSetting->exam_category == 'SEMESTER-EXAM')
-            <tr>
-                <td><p class="bold-text-font-menu">Semester:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
-            </tr>
-            <tr>
-                <td><p class="bold-text-font-menu">Course:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
-            </tr>
-            @else
-
-            @endif -->
+                <td><p class="bold-text-font-menu">{{$studentData->course}}</p></td>
+            </tr>          
             
           </table>
         </ul>
@@ -189,8 +167,8 @@
            
             <table class="table">
                 <tr>
-                    <td> <h3 class="page-title">Computer Based Test - Read questions carefully and answer appropriately.</h3></td>
-                    <!-- <td> <button type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td> -->
+                    <td> <h3 class="page-title">Computer Based Test - Grading</h3></td>
+                    
                 </tr>
             </table>            
           </div>          
@@ -214,7 +192,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">
-                        <strong>Question {{$currentQuestionNo}} of {{$examSetting->no_of_qst}}</strong>
+                        <strong>Question {{$currentQuestionNo}} of {{$studentData->no_of_qst}}</strong>
                     </h4>
                     <div class="table-responsive">
                         <table class="table" width="100%">
@@ -226,9 +204,15 @@
                             </tr>
                             <tr>
                                 <td width="82%">
-                                <h5><strong><label for="grade-input">Answer:</label></strong></h5>
+                               <h5><strong><label for="grade-input">Answer:</label></strong></h5> 
                                     <textarea id="editor1" name="answer" rows="10" cols="80">{{$currentAnswer}}</textarea>
                                 </td>
+                            </tr>
+                            <tr>
+                            <td width="82%">
+                                           <h5><strong><label for="grade-input">Score:</label</strong></h5>
+                                            <input type="number" id="grade-input" name="grade" value="{{$currentGrade}}" min="0" max="100" class="form-control" style="width: 100px;">
+                                        </td>
                             </tr>
                         </table>                    
                     </div>
@@ -254,7 +238,7 @@
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel-2">Submit Computer Based Test</h5>
+                          <h5 class="modal-title" id="exampleModalLabel-2">Submit Grading Score</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
@@ -263,7 +247,7 @@
                           <p>Are you sure you want to submit.</p>
                         </div>
                         <div class="modal-footer">
-                          <a href="{{route('cbt-theory-submit', ['id' => $studentData->id])}}"  class="btn btn-success">Yes</a>
+                          <a href="{{route('grading', ['qstId'=> $qstId , 'id' => $studentData->id])}}"  class="btn btn-success">Yes</a>
                           <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
                         </div>
                       </div>
@@ -288,62 +272,14 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
-
-  <!-- Time counter -->
-  <script>
-        let duration = {{ $studentMin }}; // Duration in seconds
-        let remainingTime = duration;
-
-        function startTimer() {
-            const interval = setInterval(() => {
-                if (remainingTime > 0) {
-                    remainingTime--;
-                    if (remainingTime % 60 === 0) {
-                        saveRemainingTime(Math.floor(remainingTime));
-                    }
-                    updateTimerDisplay(remainingTime);
-                } else {
-                    clearInterval(interval);
-                    alert("Time is up!");
-                    // Redirect the user after the alert is dismissed
-                    window.location.href = "{{ route('cbt-theory-submit', ['id' => $studentData->id]) }}";
-                }
-            }, 1000);
-        }
-
-        function saveRemainingTime(remainingMinutes) {
-            fetch('/update-remaining-time-theory/{{ $studentData->id }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ remaining_time: remainingMinutes })
-            }).then(response => response.json())
-              .then(data => {
-                  if (!data.success) {
-                      console.error('Failed to save remaining time');
-                  }
-              });
-        }
-
-        function updateTimerDisplay(remainingTime) {
-            const minutes = Math.floor(remainingTime / 60);
-            const seconds = remainingTime % 60;
-            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-        }
-
-        startTimer();
-    </script>
+  
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function initializeCKEditor() {
-        // Check if an instance of CKEditor exists and destroy it if it does
         if (CKEDITOR.instances.editor1) {
             CKEDITOR.instances.editor1.destroy(true);
         }
-        // Initialize CKEditor
         CKEDITOR.replace('editor1');
     }
 
@@ -351,22 +287,20 @@ document.addEventListener('DOMContentLoaded', function() {
         let formData = {
             _token: '{{ csrf_token() }}',
             answer: CKEDITOR.instances.editor1.getData(),
+            grade: $('#grade-input').val(),
             currentQuestionNo: $('#hidden-currentQuestionNo').val(),
             direction: direction
         };
 
         $.ajax({
-            url: "{{ route('save-answer', ['id' => $studentData->id]) }}",
+            url: "{{ route('save-score', ['qstId'=> $qstId , 'id' => $studentData->id]) }}",
             method: 'POST',
             data: formData,
             success: function(response) {
                 if (response.error) {
                     alert(response.error);
                 } else {
-                    // Render the new question
                     renderQuestion(response);
-
-                    // Reinitialize CKEditor for the new content
                     initializeCKEditor();
                 }
             },
@@ -377,10 +311,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderQuestion(response) {
-        // Clear the current content
         $('#questions-container').empty();
 
-        // Build the new question HTML
         let questionHtml = `
             <form class="answer-form" data-question-number="${response.currentQuestionNo}">
                 <div class="col-12 grid-margin">
@@ -401,6 +333,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <textarea id="editor1" name="answer" rows="10" cols="80">${response.currentAnswer}</textarea>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td width="82%">
+                                            <h5><strong><label for="grade-input">Score:</label</strong></h5>
+                                            <input type="number" id="grade-input" name="grade" value="${response.currentGrade}" min="0" max="100" class="form-control" style="width: 100px;">
+                                        </td>
+                                    </tr>
                                 </table>                    
                             </div>
                         </div>                
@@ -409,26 +347,24 @@ document.addEventListener('DOMContentLoaded', function() {
             </form>
         `;
 
-        // Append the new question HTML
         $('#questions-container').append(questionHtml);
         $('#hidden-currentQuestionNo').val(response.currentQuestionNo);
     }
 
     document.getElementById('next-button').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
         saveAnswerAndNavigate('next');
     });
 
     document.getElementById('prev-button').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
         saveAnswerAndNavigate('prev');
     });
 
-    // Initialize CKEditor on initial page load
     initializeCKEditor();
 });
-
 </script>
+
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <script src="{{ asset('student/js/jquery-3.5.1.min.js') }}"></script>
 

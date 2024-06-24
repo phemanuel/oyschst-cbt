@@ -28,6 +28,6 @@ class TheoryAnswer extends Model
         'ANS1', 'ANS2', 'ANS3', 'ANS4', 'ANS5', 'ANS6', 'ANS7', 'ANS8', 'ANS9', 'ANS10',
 		'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10',
         'QT1', 'QT2', 'QT3', 'QT4', 'QT5', 'QT6', 'QT7', 'QT8', 'QT9', 'QT10',
-		'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10',
+		'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10','grading_status',
     ];
 }

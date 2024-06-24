@@ -113,6 +113,12 @@ Route::get('/', function () {
     ->name('answer-save');
     Route::post('save-answer/{id}', [ExamTheoryController::class, 'saveAnswer'])
     ->name('save-answer');
+    //--Submit Test
+    Route::get('cbt/{id}/submit', [ExamTheoryController::class, 'cbtSubmit'])
+    ->name('cbt-theory-submit');
+    //----result
+    Route::get('cbt/{admission_no}/result', [ExamTheoryController::class, 'cbtTheoryResult'])
+    ->name('cbt-theory-result'); 
     //-------------------------
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');    
@@ -300,6 +306,15 @@ Route::get('/', function () {
         ->name('report-theory-view');
         Route::get('report-theory-csv/{id}', [ReportController::class, 'reportTheoryCsv'])
         ->name('report-theory-csv');
+        Route::get('exam-theory-sheet/{qstId}/{id}', [ReportController::class, 'examTheorySheet'])
+        ->name('exam-theory-sheet');
+        Route::get('student-theory-result/{qstId}/{id}', [ReportController::class, 'studentTheoryResult'])
+        ->name('student-theory-result');
+        Route::post('save-score/{qstId}/{id}', [ReportController::class, 'saveScore'])
+        ->name('save-score');
+        Route::get('grading/{qstId}/{id}', [ReportController::class, 'grading'])
+        ->name('grading');
+
         //-----Fill in Gap
         Route::get('report-fill-gap', [ReportController::class, 'reportFillGap'])
         ->name('report-fill-gap');
