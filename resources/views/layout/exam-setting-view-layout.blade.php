@@ -230,6 +230,7 @@
                   <th>ID</th>
                   <th>Academic Session</th>
                   <th>Programme</th>
+                  <th>Course</th>
                   <th>Level</th>
                   <th>Semester</th>
                   <th>Exam Mode</th>
@@ -249,6 +250,7 @@
                     <td>{{ $key + 1 }}</td>                    
                     <td>{{$rs->session1}}</td>
                     <td>{{ $rs->department }}</td>
+                    <td>{{$rs->course}}</td>
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->semester }}</td>
                     <td>{{ $rs->exam_mode }}</td>

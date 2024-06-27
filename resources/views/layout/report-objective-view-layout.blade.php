@@ -258,7 +258,7 @@
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
-                  <!-- <th>Avatar</th> -->
+                  <th>Avatar</th>
                   <th>Reg/Matric No</th>
                   <th>Name</th>
                   <th>Programme</th>
@@ -266,20 +266,26 @@
                   <th>Exam Type</th>
                   <th>No of Qst</th>
                   <th>Score</th>
+                  <th>Exam Status</th>
                   <th>Actions</th>
                 </tr>
                 @if ($student->count() > 0)
                 @foreach ($student as $key => $rs)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <!-- <td><img src="{{asset('uploads/'. $rs->studentno . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td> -->
+                    <td><img src="{{asset('uploads/'. $rs->picture_name . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
                     <td>{{$rs->studentno}}</td>
                     <td>{{ $rs->studentname }}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->exam_type }}</td>
                     <td>{{ $rs->noofquestion }}</td>                    
-                    <td>{{ $rs->correct }}</td>                    
+                    <td>{{ $rs->correct }}</td>   
+                    @if($rs->examstatus == 1)
+                    <td>Not Completed</td>
+                    @elseif($rs->examstatus == 2)
+                    <td>Completed</td>
+                    @endif                 
                     <td> <a class="label label-primary" href="{{route('exam-sheet-page1', ['id' => $rs->id])}}" target="_blank">Exam Sheet</a>  
                     <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}" target="_blank">Print Result</a>                   
                 </td>

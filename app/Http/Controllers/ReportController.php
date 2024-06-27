@@ -82,16 +82,20 @@ class ReportController extends Controller
 
         $questionSetting = QuestionSetting::where('id', $id)->first();
 
-        $student = CbtEvaluation::where('session1', $questionSetting->session1)
-        ->where('department', $questionSetting->department)
-        ->where('level', $questionSetting->level)
-        ->where('semester', $questionSetting->semester)
-        ->where('course', $questionSetting->course)
-        ->where('exam_mode', $questionSetting->exam_mode)
-        ->where('exam_type', $questionSetting->exam_type)
-        ->where('exam_category', $questionSetting->exam_category)
-        ->where('noofquestion', $questionSetting->no_of_qst)
-        ->paginate(20);        
+        // Join TheoryAnswer with StudentAdmission to get picturename
+        $student = CbtEvaluation::where('cbt_evaluations.session1', $questionSetting->session1) 
+        ->where('cbt_evaluations.department', $questionSetting->department)
+        ->where('cbt_evaluations.level', $questionSetting->level)
+        ->where('cbt_evaluations.semester', $questionSetting->semester)
+        ->where('cbt_evaluations.course', $questionSetting->course)
+        ->where('cbt_evaluations.exam_mode', $questionSetting->exam_mode)
+        ->where('cbt_evaluations.exam_type', $questionSetting->exam_type)
+        ->where('cbt_evaluations.exam_category', $questionSetting->exam_category)
+        ->where('cbt_evaluations.noofquestion', $questionSetting->no_of_qst)
+        ->where('examstatus', 2)
+        ->join('student_admissions', 'cbt_evaluations.studentno', '=', 'student_admissions.admission_no')
+        ->select('cbt_evaluations.*', 'student_admissions.picture_name')
+        ->paginate(20);     
 
         if(!$student){
             return redirect()->back()->with('error', 'Result is not available for exam you selected.');
@@ -2246,24 +2250,27 @@ class ReportController extends Controller
 
         $questionSetting = QuestionSetting::where('id', $id)->first();
 
-        $student = TheoryAnswer::where('session1', $questionSetting->session1)
-        ->where('department', $questionSetting->department)
-        ->where('level', $questionSetting->level)
-        ->where('semester', $questionSetting->semester)
-        ->where('course', $questionSetting->course)
-        ->where('exam_mode', $questionSetting->exam_mode)
-        ->where('exam_type', $questionSetting->exam_type)
-        ->where('exam_category', $questionSetting->exam_category)
-        ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
-        ->where('no_of_qst', $questionSetting->no_of_qst)
+        // Join TheoryAnswer with StudentAdmission to get picturename
+        $student = TheoryAnswer::where('theory_answers.session1', $questionSetting->session1) // Specify theory_answers.session1 here
+        ->where('theory_answers.department', $questionSetting->department)
+        ->where('theory_answers.level', $questionSetting->level)
+        ->where('theory_answers.semester', $questionSetting->semester)
+        ->where('theory_answers.course', $questionSetting->course)
+        ->where('theory_answers.exam_mode', $questionSetting->exam_mode)
+        ->where('theory_answers.exam_type', $questionSetting->exam_type)
+        ->where('theory_answers.exam_category', $questionSetting->exam_category)
+        ->where('theory_answers.upload_no_of_qst', $questionSetting->upload_no_of_qst)
+        ->where('theory_answers.no_of_qst', $questionSetting->no_of_qst)
+        ->where('examstatus', 2)
+        ->join('student_admissions', 'theory_answers.studentno', '=', 'student_admissions.admission_no')
+        ->select('theory_answers.*', 'student_admissions.picture_name')
         ->paginate(20);
 
-        if(!$student){
-            return redirect()->back()->with('error', 'Result is not available for exam you selected.');
+        if($student->isEmpty()){
+            return redirect()->back()->with('error', 'Result is not available for the exam you selected.');
         }
 
-        return view('dashboard.report-theory-view', compact('softwareVersion','collegeSetup','student',
-        'questionSetting'));
+        return view('dashboard.report-theory-view', compact('softwareVersion', 'collegeSetup', 'student', 'questionSetting'));
     }
 
     public function reportTheoryCsv($id)

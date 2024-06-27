@@ -8,6 +8,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamTheoryController;
+use App\Http\Controllers\AIController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -114,7 +115,7 @@ Route::get('/', function () {
     Route::post('save-answer/{id}', [ExamTheoryController::class, 'saveAnswer'])
     ->name('save-answer');
     //--Submit Test
-    Route::get('cbt/{id}/submit', [ExamTheoryController::class, 'cbtSubmit'])
+    Route::get('cbt-theory/{id}/submit', [ExamTheoryController::class, 'cbtSubmit'])
     ->name('cbt-theory-submit');
     //----result
     Route::get('cbt/{admission_no}/result', [ExamTheoryController::class, 'cbtTheoryResult'])
@@ -370,10 +371,12 @@ Route::get('/', function () {
         Route::post('lock-exam/{id}', [DashboardController::class, 'lockExam'])
         ->name('lock-exam');   
         Route::post('unlock-exam/{id}', [DashboardController::class, 'unlockExam'])
-        ->name('unlock-exam');  
-        
+        ->name('unlock-exam');          
   
     });
+
+    Route::get('test-chatgpt', [AIController::class, 'testOpenAI'])
+        ->name('test-chatgpt'); 
      
       
 
