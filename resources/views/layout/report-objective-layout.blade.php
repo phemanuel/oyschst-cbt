@@ -234,7 +234,28 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
-              <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
+              <form action="{{route('report-objective-view-all')}}" method="post">
+                @csrf
+                <table width="70%" cellpadding="3" cellspacing="3">
+  <h3><strong>Check all result.</strong></h3>
+                  <tr>
+                  <td>Academic Session</td>
+                  <td><select name="session1" id="" class="form-control">                                
+                  @foreach($acad_sessions as $rd)
+				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
+				@endforeach
+                  </select></td>
+                    <td>&nbsp;&nbsp;&nbsp;Exam Type</td>
+                    <td> <select name="exam_type" id="" class="form-control">                  
+                  @foreach($examType as $rd)
+				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
+				@endforeach
+                  </select></td>   
+                    <td>&nbsp;&nbsp;&nbsp;</td>
+                    <td><button type="submit" class="btn btn-info">Check Result</button></td>                 
+                  </tr>
+                </table>
+              </form>
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
                 <!-- <a href="#" class="btn btn-info">Upload Question</a> -->

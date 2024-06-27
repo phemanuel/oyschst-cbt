@@ -63,9 +63,12 @@ class ReportController extends Controller
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
         ->orderBy('created_at', 'desc')
         ->Paginate(20);
+        $acad_sessions = AcademicSession::orderBy('session1')->get();
+        $examType = ExamType::orderBy('exam_type')->get();
 
 
-        return view('dashboard.report-objective', compact('softwareVersion','collegeSetup', 'questionSetting'));
+        return view('dashboard.report-objective', compact('softwareVersion','collegeSetup', 
+        'questionSetting','acad_sessions','examType'));
     }
 
     public function reportObjectiveView($id)
@@ -102,6 +105,39 @@ class ReportController extends Controller
         }
 
         return view('dashboard.report-objective-view', compact('softwareVersion','collegeSetup',
+        'student'));
+    }
+
+    public function reportObjectiveViewAll(Request $request)
+    {   
+        //--Check for permission---
+        $userStatus = auth()->user()->check_report;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CHECK results in the REPORT module, contact the Administrator to grant access.');
+        }
+
+        $validatedData = $request->validate([
+            'exam_type' => 'required|string',    
+            'session1' => 'required|string',   
+        ]);
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+
+        // Join TheoryAnswer with StudentAdmission to get picturename
+        $student = CbtEvaluation::where('cbt_evaluations.session1', $validatedData['session1'])         
+        ->where('cbt_evaluations.exam_type', $validatedData['exam_type'])
+        ->where('examstatus', 2)
+        ->join('student_admissions', 'cbt_evaluations.studentno', '=', 'student_admissions.admission_no')
+        ->select('cbt_evaluations.*', 'student_admissions.picture_name')
+        ->paginate(20);     
+
+        if(!$student){
+            return redirect()->back()->with('error', 'Result is not available for exam you selected.');
+        }
+
+        return view('dashboard.report-objective-view-all', compact('softwareVersion','collegeSetup',
         'student'));
     }
 

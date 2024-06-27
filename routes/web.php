@@ -298,8 +298,11 @@ Route::get('/', function () {
         ->name('report-objective');
         Route::get('report-objective-view/{id}', [ReportController::class, 'reportObjectiveView'])
         ->name('report-objective-view');
+        Route::post('report-objective-view/result', [ReportController::class, 'reportObjectiveViewAll'])
+        ->name('report-objective-view-all');
         Route::get('report-objective-csv/{id}', [ReportController::class, 'reportObjCsv'])
         ->name('report-objective-csv');
+
         //-----Theory
         Route::get('report-theory', [ReportController::class, 'reportTheory'])
         ->name('report-theory');
