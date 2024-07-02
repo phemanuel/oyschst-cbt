@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('first_name')->nullable();
             $table->text('surname')->nullable();
             $table->text('department')->nullable();
+            $table->text('department1')->nullable();
             $table->text('other_name')->nullable();
             $table->text('phone_no')->nullable();
             $table->text('state')->nullable();

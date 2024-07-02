@@ -14,6 +14,7 @@ class StudentAdmission extends Model
         'first_name', 
         'surname', 
         'department', 
+        'department1', 
         'other_name', 
         'phone_no', 
         'state', 

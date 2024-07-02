@@ -261,8 +261,10 @@
                   <th>Avatar</th>
                   <th>Reg/Matric No</th>
                   <th>Name</th>
-                  <th>Programme</th>
+                  <th>Programme(1st Choice)</th>
+                  <th>Programme(2nd Choice)</th>
                   <th>Level</th>
+                  <th>State</th>
                   <th>Exam Type</th>
                   <th>No of Qst</th>
                   <th>Score</th>
@@ -277,7 +279,9 @@
                     <td>{{$rs->studentno}}</td>
                     <td>{{ $rs->studentname }}</td>
                     <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->department1 }}</td>
                     <td>{{ $rs->level }}</td>
+                    <td>{{ $rs->state}}</td>
                     <td>{{ $rs->exam_type }}</td>
                     <td>{{ $rs->noofquestion }}</td>                    
                     <td>{{ $rs->correct }}</td>   

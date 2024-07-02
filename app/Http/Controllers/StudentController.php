@@ -557,6 +557,7 @@ class StudentController extends Controller
                         'first_name' => $data['first_name'],
                         'other_name' => $data['other_name'],
                         'department' => $data['department'],
+                        'department1' => $data['department1'],
                         'phone_no' => $data['phone_no'],
                         'phone_no1' => $data['phone_no'],
                         'state' => $data['state'],

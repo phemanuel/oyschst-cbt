@@ -601,7 +601,7 @@
                                               <table class="table" width="100%">
                                                   ${questionType === 'text-image' && graphic ? `<img src="${imagePath}" alt="questionImage" width="1200" height="300">` : ''}
                                                   <tr>
-                                                      <td colspan="3"><p style="font-size: 34px">${question}</p></td>
+                                                      <td colspan="3"><p style="font-size: 24px; font-family: Arial;">${question}</p></td>
                                                   </tr>
                                                   <tr>
                                                       <td width="82%">

@@ -279,7 +279,8 @@
                   <th>Avatar</th>
                   <th>Reg/Matric No</th>
                   <th>Name</th>
-                  <th>Programme</th>
+                  <th>Programme(1st Choice)</th>
+                  <th>Programme(2nd Choice)</th>
                   <th>Level</th>
                   <th>Phone No</th>
                   <th>State</th>
@@ -294,6 +295,7 @@
                     <td>{{$rs->admission_no}}</td>
                     <td>{{ $rs->surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
                     <td>{{ $rs->department }}</td>
+                    <td>{{ $rs->department1 }}</td>
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->phone_no }}</td>
                     <td>{{ $rs->state }}</td>

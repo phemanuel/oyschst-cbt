@@ -97,8 +97,9 @@ class ReportController extends Controller
         ->where('cbt_evaluations.noofquestion', $questionSetting->no_of_qst)
         ->where('examstatus', 2)
         ->join('student_admissions', 'cbt_evaluations.studentno', '=', 'student_admissions.admission_no')
-        ->select('cbt_evaluations.*', 'student_admissions.picture_name')
-        ->paginate(20);     
+        ->select('cbt_evaluations.*', 'student_admissions.picture_name', 'student_admissions.state',
+        'student_admissions.department1')
+        ->paginate(20);  
 
         if(!$student){
             return redirect()->back()->with('error', 'Result is not available for exam you selected.');
@@ -2213,19 +2214,27 @@ class ReportController extends Controller
 
         // Create SQL query with parameter binding
         $rows = DB::table('cbt_evaluations')
-            ->select('studentno', 'studentname', 'correct')
-            ->where('exam_type', $exam_type)
-            ->where('exam_category', $exam_category)
-            ->where('exam_mode', $exam_mode)
-            ->where('department', $department)
-            ->where('level', $level)
-            ->where('semester', $semester)
-            ->where('session1', $session1)
-            ->where('noofquestion', $upload_no_of_qst)
-            ->where('course', $course)
-            ->orderBy('studentno')
-            ->get()
-            ->toArray();
+        ->join('student_admissions', 'cbt_evaluations.studentno', '=', 'student_admissions.admission_no')
+        ->select(
+            'cbt_evaluations.studentno',
+            'cbt_evaluations.studentname',
+            'cbt_evaluations.correct',
+            'student_admissions.state' ,
+            'student_admissions.department1'
+        )
+        ->where('cbt_evaluations.exam_type', $exam_type)
+        ->where('cbt_evaluations.exam_category', $exam_category)
+        ->where('cbt_evaluations.exam_mode', $exam_mode)
+        ->where('cbt_evaluations.department', $department)
+        ->where('cbt_evaluations.level', $level)
+        ->where('cbt_evaluations.semester', $semester)
+        ->where('cbt_evaluations.session1', $session1)
+        ->where('cbt_evaluations.noofquestion', $upload_no_of_qst)
+        ->where('cbt_evaluations.course', $course)
+        ->orderBy('cbt_evaluations.studentno')
+        ->get()
+        ->toArray();
+
         
             // Check if rows are empty
         if (empty($rows)) {
