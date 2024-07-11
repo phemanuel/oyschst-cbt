@@ -396,6 +396,12 @@ class StudentController extends Controller
     {
         $searchTerm = $request->input('search');
 
+        return redirect()->route('search-list', ['searchTerm' => $searchTerm]);
+    }
+
+    public function searchList($searchTerm)
+    {
+
         // Perform search query
         $results = StudentAdmission::where('admission_no', 'LIKE', "%{$searchTerm}%")
             ->orWhere('surname', 'LIKE', "%{$searchTerm}%")

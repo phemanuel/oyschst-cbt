@@ -190,6 +190,8 @@ Route::get('/', function () {
         ->name('change-course.action');
         Route::post('search', [StudentController::class, 'search'])
         ->name('search'); 
+        Route::get('search-list/{searchTerm}', [StudentController::class, 'searchList'])
+        ->name('search-list'); 
         //---Add programmes
         Route::get('add-department', [DashboardController::class, 'addDepartment'])
         ->name('add-department');
