@@ -245,10 +245,13 @@ class StudentController extends Controller
             ->first();
             $admission_no = $changeStatus->admission_no;
             
+            if(!$changeStatus){
+                return redirect()->back()->with('error', 'Student no cannot be found.');
+            }
             // Update the user skill attributes based on the request data
             $changeStatus->update([
                 'login_status' => $validatedData['login_status'],                
-            ]);           
+            ]);         
 
             // Redirect to the user's skill list or another appropriate page
             return redirect()->route('login-status')->with('success', 'Login Status updated successfully.');
@@ -285,6 +288,10 @@ class StudentController extends Controller
             ->where('noofquestion' , $examSetting->no_of_qst)
             ->first();
             
+            if(!$changeStatus){
+                return redirect()->back()->with('error', 'Student no cannot be found.');
+            }
+
             $examStatus->update([
                 'examstatus' => $validatedData['exam_status'],                
             ]);
