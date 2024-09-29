@@ -123,7 +123,7 @@
             <!-- preload user information -->
           </div>
           <div class="text-block text-center my-3">
-            <span class="text-small font-weight-semibold">© 2020 - <?php echo date('Y') ?> Oyo State College of Health Science and Technology.</span>
+            <span class="text-small font-weight-semibold">© 2020 - <?php echo date('Y') ?> {{$collegeSetup->name}}.</span>
             
           </div>
         </form>

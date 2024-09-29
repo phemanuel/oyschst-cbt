@@ -33,19 +33,22 @@ class AuthController extends Controller
     public function login()
     {
         $dept = Department::orderBy('department')->get();
-        return view('auth.user-login', compact('dept'));
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        return view('auth.user-login', compact('dept','collegeSetup','softwareVersion'));
 
     }
 
     public function adminLogin()
-    {        
-        return view('auth.admin-login');
+    {   
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        return view('auth.admin-login',compact('collegeSetup','softwareVersion'));
 
     }
 
     public function loginAction(Request $request)
-    {       
-        
+    {
         try {
             // Validate request data
             $credentials = $request->validate([
@@ -53,114 +56,130 @@ class AuthController extends Controller
                 'department' => 'required|string',
             ]);
 
-            $admission_no = $request->get('admission_no');
+            $admission_no = $credentials['admission_no'];
 
-            // Attempt to authenticate the student
-            $student = StudentAdmission::where('admission_no', $credentials['admission_no'])
+            // Attempt to find the student using the admission number and department
+            $student = StudentAdmission::where('admission_no', $admission_no)
                 ->where('department', $credentials['department'])
                 ->first();
-            $loginStatus = $student->login_status;
+
+            // Check if student exists
             if (!$student) {
-              // Authentication failed, redirect back with error message
-              return redirect()->back()->with('error', 'Invalid admission number or department');                 
-            } 
-            //---check login status ---
-            if($loginStatus == 1){
-                return redirect()->back()->with('error', 'You are logged in already.');
+                // If student doesn't exist, return error
+                return redirect()->back()->with('error', 'Invalid admission number or department');                 
             }
-            elseif($loginStatus == 2){
-                return redirect()->back()->with('error', 'You have completed the test.');
+
+            // Fetch login status
+            $loginStatus = $student->login_status;
+
+            // Check login status
+            switch ($loginStatus) {
+                case 1:
+                    return redirect()->back()->with('error', 'You are already logged in.');
+
+                case 2:
+                    return redirect()->back()->with('error', 'You have completed the test.');
+
+                case 0:
+                    // Check if the exam is available
+                    $examSetting = ExamSetting::where('department', $student->department)
+                        ->where('level', $student->level)
+                        ->first();
+
+                    // If no exam is available for the student’s department/level
+                    if (!$examSetting) {
+                        return redirect()->back()->with('error', 'The exam is not available.');
+                    }
+
+                    // Check if the exam has been locked
+                    if ($examSetting->lock_status == 1) {
+                        return redirect()->back()->with('error', 'The exam has been locked by the tutor in charge.');
+                    }
+
+                    // Update login status to "logged in"
+                    $student->login_status = 1;
+                    $student->save();
+
+                    // Encode the admission number to handle slashes or special characters
+                    $encoded_admission_no = urlencode($admission_no);
+
+                    // Authentication successful, redirect to student dashboard with encoded admission number
+                    return redirect()->route('dashboard', ['admission_no' => $encoded_admission_no]);
+
+                default:
+                    return redirect()->back()->with('error', 'Invalid login status.');
             }
-            elseif($loginStatus == 0){
-                //---check if the exam has been added to the exams to be accessed-
-                $examSetting = ExamSetting::where('department', $student->department)
-                                ->where('level', $student->level)
-                                ->first(); 
-                
-                if(!$examSetting){
-                    return redirect()->back()->with('error', 'The exam is not available.');
-                }
-                //--Check the lock status of the exam---
-                $examLockStatus = $examSetting->lock_status;
-                if ($examLockStatus == 1){
-                    return redirect()->back()->with('error', 'The exam has been locked by the tutor in-charge.');
-                }
-                //---Update Login status ---
-                $student->login_status = 1;
-                $student->save();
-                // Authentication successful, redirect to student dashboard
-                return redirect()->route('dashboard',['admission_no' => $admission_no]);
-            } 
-        } catch (Exception $e) {
-            // Handle any exceptions
-            // Log the error if needed
+
+        } catch (\Exception $e) {
+            // Log any exceptions that occur
             Log::error('Error during student login: ' . $e->getMessage());
-            // Redirect back with error message
+
+            // Redirect back with an error message
             return redirect()->back()->with('error', 'An error occurred. Please try again later.');
         }
-            
     }
 
-    public function adminLoginAction(Request $request)
-    {
-        try {
-            validator::make($request->all(), [
-                'email' => 'required|email',
-                'password' => 'required'
-            ])->validate();
-                
-            $userLog = User::where('email', $request->input('email'))->first();
-            //---Check if user is active-----
-            $userStatus = $userLog->user_status;
-            if($userStatus == 'Inactive'){
-                return redirect()->back()->with('error', 'You have been deactivated from using the application.');
-            }
-            
-            if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-                //---check the no of attempts=====
-                if($userLog->login_attempts < 5){
-                    //--increment the number of attempts
-                    $userLog->increment('login_attempts');
-                    // Log the failed login attempt into the failed_logins table.
-                    FailedLogins::create([
-                    'ip_address' => $request->ip(),
-                    'admission_no' => $request->input('email'),
-                ]);
+
+        public function adminLoginAction(Request $request)
+        {
+            try {
+                validator::make($request->all(), [
+                    'email' => 'required|email',
+                    'password' => 'required'
+                ])->validate();
+                    
+                $userLog = User::where('email', $request->input('email'))->first();
+                //---Check if user is active-----
+                $userStatus = $userLog->user_status;
+                if($userStatus == 'Inactive'){
+                    return redirect()->back()->with('error', 'You have been deactivated from using the application.');
                 }
-                elseif($userLog->login_attempts >= 5){
-                    return redirect()->route('user-locked')->with('seconds', '60');
-                }                
-                throw ValidationException::withMessages([
-                    'email' => trans('auth.failed')
-                ]);
-            }            
+                
+                if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+                    //---check the no of attempts=====
+                    if($userLog->login_attempts < 5){
+                        //--increment the number of attempts
+                        $userLog->increment('login_attempts');
+                        // Log the failed login attempt into the failed_logins table.
+                        FailedLogins::create([
+                        'ip_address' => $request->ip(),
+                        'admission_no' => $request->input('email'),
+                    ]);
+                    }
+                    elseif($userLog->login_attempts >= 5){
+                        return redirect()->route('user-locked')->with('seconds', '60');
+                    }                
+                    throw ValidationException::withMessages([
+                        'email' => trans('auth.failed')
+                    ]);
+                }            
 
-            // User is authenticated at this point
-            $user = Auth::user();
-            //---reset the user login attempts----
-            Auth::user()->update(['login_attempts' => 0]);
-        
-            if ($user->email_verified_status == 1) {
-                // Email is verified, proceed with login
-                $request->session()->regenerate();
-                return redirect()->route('admin-dashboard');
-            } else {                    
-                // Email is not verified, return a flash message
-                //Auth::logout(); // Log the user out since the email is not verified                    
-                $email_address = $request->email;         
-                 return view('auth.email-not-verify');
-                 
-            }
-        } catch (ValidationException $e) {
-            // Handle the validation exception
-            // You can redirect back with errors or do other appropriate error handling
-            return redirect()->route('admin-login')->withErrors($e->errors())->withInput();
-        } catch (Exception $e) {
-            // Handle other exceptions, log them, and redirect to an error page
-            Log::error('Error during login: ' . $e->getMessage());
-            return redirect()->route('admin-login');
-        }    
-    }
+                // User is authenticated at this point
+                $user = Auth::user();
+                //---reset the user login attempts----
+                Auth::user()->update(['login_attempts' => 0]);
+            
+                if ($user->email_verified_status == 1) {
+                    // Email is verified, proceed with login
+                    $request->session()->regenerate();
+                    return redirect()->route('admin-dashboard');
+                } else {                    
+                    // Email is not verified, return a flash message
+                    //Auth::logout(); // Log the user out since the email is not verified                    
+                    $email_address = $request->email;         
+                    return view('auth.email-not-verify');
+                    
+                }
+            } catch (ValidationException $e) {
+                // Handle the validation exception
+                // You can redirect back with errors or do other appropriate error handling
+                return redirect()->route('admin-login')->withErrors($e->errors())->withInput();
+            } catch (Exception $e) {
+                // Handle other exceptions, log them, and redirect to an error page
+                Log::error('Error during login: ' . $e->getMessage());
+                return redirect()->route('admin-login');
+            }    
+        }
 
     public function logout(Request $request)
     {

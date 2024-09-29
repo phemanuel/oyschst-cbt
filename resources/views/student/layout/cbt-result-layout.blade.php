@@ -81,7 +81,7 @@
           <li class="nav-item dropdown">            
             <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">
             <!-- <img src="{{asset($collegeSetup->avatar)}}" alt="" width="50" height="50"> -->
-            <strong><p class="bold-text">Oyo State College of Health Science and Technology</p></strong>
+            <strong><p class="bold-text">{{$collegeSetup->name}}</p></strong>
             </a>            
           </li>        
           

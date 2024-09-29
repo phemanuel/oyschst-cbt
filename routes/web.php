@@ -94,7 +94,7 @@ Route::get('/', function () {
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');
     //---Display result
-    Route::get('cbt/{admission_no}/result', [ExamController::class, 'cbtResult'])
+    Route::get('cbt-result/{admission_no}/result', [ExamController::class, 'cbtResult'])
     ->name('cbt-result');     
     Route::post('/update-remaining-time/{id}', [ExamController::class, 'updateRemainingTime'])
     ->name('update-remaining-time'); 
