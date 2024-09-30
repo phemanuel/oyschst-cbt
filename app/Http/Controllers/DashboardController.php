@@ -714,10 +714,11 @@ class DashboardController extends Controller
                 $userCertificateFile = $request->file('file');
                 $fileId = uniqid();                
                 // Generate filenames                 
-                $userCertificateFilename = $fileId . '_avatar' . $userCertificateFile->getClientOriginalExtension();
+                $userCertificateFilename = $fileId . '_avatar' . "." . $userCertificateFile->getClientOriginalExtension();
                 // Store file
-                $certificatePath = $userCertificateFile->storeAs('college', $userCertificateFilename, 'public');
-                $collegeSetup->avatar = $certificatePath  ;           
+                $certificatePath = $userCertificateFile->move(public_path('college'), $userCertificateFilename); 
+                //$certificatePath = $userCertificateFile->storeAs('college', $userCertificateFilename, 'public');
+                $collegeSetup->avatar = "college/" . $userCertificateFilename  ;           
             }    
 
             // Update the exam setting with the validated data
