@@ -50,7 +50,7 @@ Route::get('/', function () {
     //--User routes
     Route::group(['middleware' => ['student.auth']], function () {
        //-----Dashboard routes-----
-    Route::get('user-dashboard/{admission_no}', [DashboardController::class, 'index'])
+    Route::get('user-dashboard/{id}', [DashboardController::class, 'index'])
     ->name('dashboard');
     // ->middleware(StudentAuth::class);  
     //----Computer Based Test--------
@@ -60,7 +60,7 @@ Route::get('/', function () {
     ->name('cbt-process');   
     Route::get('cbt-page/{id}', [ExamController::class, 'cbtPage'])
     ->name('cbt-page');
-    Route::get('cbt/{admission_no}', [ExamController::class, 'cbtContinue'])
+    Route::get('cbt/{id}', [ExamController::class, 'cbtContinue'])
     ->name('cbt-continue');    
     //---Objective Module--------      
     Route::get('cbt/{id}/page1', [ExamController::class, 'cbtPage1'])
@@ -94,7 +94,7 @@ Route::get('/', function () {
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');
     //---Display result
-    Route::get('cbt-result/{admission_no}/result', [ExamController::class, 'cbtResult'])
+    Route::get('cbt-result/{id}/result', [ExamController::class, 'cbtResult'])
     ->name('cbt-result');     
     Route::post('/update-remaining-time/{id}', [ExamController::class, 'updateRemainingTime'])
     ->name('update-remaining-time'); 
@@ -118,7 +118,7 @@ Route::get('/', function () {
     Route::get('cbt-theory/{id}/submit', [ExamTheoryController::class, 'cbtSubmit'])
     ->name('cbt-theory-submit');
     //----result
-    Route::get('cbt/{admission_no}/result', [ExamTheoryController::class, 'cbtTheoryResult'])
+    Route::get('cbt-theory-result/{id}/result', [ExamTheoryController::class, 'cbtTheoryResult'])
     ->name('cbt-theory-result'); 
     //-------------------------
     Route::get('signup', [AuthController::class, 'signup'])->name('signup');

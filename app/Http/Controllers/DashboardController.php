@@ -28,12 +28,12 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     //
-    public function index($admission_no)
+    public function index($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();          
 
-        $studentData = StudentAdmission::where('admission_no', $admission_no)
+        $studentData = StudentAdmission::where('id', $id)
                         //->where('department', $department)
                         ->first();
 

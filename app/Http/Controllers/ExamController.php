@@ -159,22 +159,23 @@ class ExamController extends Controller
 
     }
 
-    public function cbtContinue($admission_no)
+    public function cbtContinue($id)
     {
         try {            
-            $studentData = StudentAdmission::where('admission_no', $admission_no)->first();
+            $studentData = StudentAdmission::where('id', $id)->first();
+            //$admission_no = $studentData->admission_no;
             $examSetting = ExamSetting::where('department', $studentData->department)
             ->where('level', $studentData->level)
             ->first(); 
             // Check if the question for current exam setting is available
             if($examSetting->exam_mode == "OBJECTIVE"){
-                return $this->cbtObjContinue($admission_no);
+                return $this->cbtObjContinue($id);
             }
             elseif($examSetting->exam_mode == "FILL-IN-GAP"){
-                // return $this->cbtFillInGapContinue($admission_no$id);
+                // return $this->cbtFillInGapContinue($id);
             }
             elseif($examSetting->exam_mode == "THEORY"){
-                return $this->cbtTheoryContinue($admission_no);
+                return $this->cbtTheoryContinue($id);
             }
                                             
             //return redirect()->route('cbt-process', ['id' => $studentData->id]);
@@ -190,19 +191,19 @@ class ExamController extends Controller
 
     }    
 
-    public function cbtObjContinue($admission_no)
+    public function cbtObjContinue($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
 
-        $studentData = StudentAdmission::where('admission_no', $admission_no)
+        $studentData = StudentAdmission::where('id', $id)
                         //->where('department', $department)
                         ->first();
         $examSetting = ExamSetting::where('department', $studentData->department)
                         ->where('level', $studentData->level)
                         ->first(); 
 
-        $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
                         ->where('session1', $examSetting->session1)
                         ->where('department', $examSetting->department)
                         ->where('level', $examSetting->level)
@@ -224,19 +225,19 @@ class ExamController extends Controller
         'examSetting','pageNo','studentMin'));
     }
 
-    public function cbtTheoryContinue($admission_no)
+    public function cbtTheoryContinue($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
 
-        $studentData = StudentAdmission::where('admission_no', $admission_no)
+        $studentData = StudentAdmission::where('id', $id)
                         //->where('department', $department)
                         ->first();
         $examSetting = ExamSetting::where('department', $studentData->department)
                         ->where('level', $studentData->level)
                         ->first(); 
 
-        $cbtEvaluation = TheoryAnswer::where('studentno', $admission_no)
+        $cbtEvaluation = TheoryAnswer::where('studentno', $studentData->admission_no)
                         ->where('session1', $examSetting->session1)
                         ->where('department', $examSetting->department)
                         ->where('level', $examSetting->level)
@@ -320,7 +321,7 @@ class ExamController extends Controller
             ->where('noofquestion', $noOfQuestions)
             ->first();
             if($studentDataExist){
-                return redirect()->route('cbt-continue', ['admission_no' => $studentData->admission_no]);
+                return redirect()->route('cbt-continue', ['id' => $studentData->id]);
             }
             // Create or update the student record
             $student = CbtEvaluation::firstOrCreate([
@@ -1745,16 +1746,16 @@ class ExamController extends Controller
             'wrong' => $noOfQuestions - $correctCount,
         ]);
 
-        return redirect()->route('cbt-result', ['admission_no' => $studentData->admission_no]);
+        return redirect()->route('cbt-result', ['id' => $studentData->id]);
     }
 
 
-    public function cbtResult($admission_no)
+    public function cbtResult($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         
-        $studentData = StudentAdmission::where('admission_no', $admission_no)
+        $studentData = StudentAdmission::where('id', $id)
                         //->where('department', $department)
                         ->first();
 
@@ -1763,7 +1764,7 @@ class ExamController extends Controller
                         ->first();  
 
 
-        $cbtEvaluation = CbtEvaluation::where('studentno', $admission_no)
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
                         ->where('session1', $examSetting->session1)
                         ->where('department', $examSetting->department)
                         ->where('level', $examSetting->level)

@@ -73,7 +73,7 @@ class ExamTheoryController extends Controller
             ->first();
 
         if ($studentDataExist) {
-            return redirect()->route('cbt-continue', ['admission_no' => $studentData->admission_no]);
+            return redirect()->route('cbt-continue', ['id' => $studentData->id]);
         }
 
         // Create or update the student record
@@ -303,10 +303,10 @@ class ExamTheoryController extends Controller
                 'login_status' => 2,
             ]);
 
-            return redirect()->route('cbt-theory-result', ['admission_no' => $studentData->admission_no]);
+            return redirect()->route('cbt-theory-result', ['id' => $studentData->id]);
     }
 
-    public function cbtTheoryResult ($admission_no)
+    public function cbtTheoryResult ($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();

@@ -62,6 +62,8 @@ class AuthController extends Controller
             $student = StudentAdmission::where('admission_no', $admission_no)
                 ->where('department', $credentials['department'])
                 ->first();
+            
+            $studentId = $student->id;
 
             // Check if student exists
             if (!$student) {
@@ -104,7 +106,7 @@ class AuthController extends Controller
                     $encoded_admission_no = urlencode($admission_no);
 
                     // Authentication successful, redirect to student dashboard with encoded admission number
-                    return redirect()->route('dashboard', ['admission_no' => $encoded_admission_no]);
+                    return redirect()->route('dashboard', ['id' => $studentId]);
 
                 default:
                     return redirect()->back()->with('error', 'Invalid login status.');
