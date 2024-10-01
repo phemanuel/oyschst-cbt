@@ -221,7 +221,7 @@
       <div class="col-md-6">
           <div class="box box-success">
             <div class="box-header with-border">
-            <h3 class="box-title">Add Subject/Course.</h3>           
+            <h3 class="box-title">Edit Subject/Course.</h3>           
               
             </div>
             @if(session('success-subject'))
@@ -235,19 +235,20 @@
 						@endif	
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{route('add-subject.action')}}" method="post">
+            <form role="form" action="{{route('edit-subject.action' , ['id' => $courseData->id])}}" method="post">
               @csrf              
               <div class="box-body">              
                 <div class="form-group">
                   <label for="exampleInputEmail1">Subject/Course</label>
-                  <input type="text" name="subject" class="form-control" value="{{old('subject')}}">
+                  <input type="text" name="subject" class="form-control" value="{{ old('subject') ?? $courseData->course }}">
                 </div>             
                 @error('subject')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror 
                 <div class="form-group">
                   <label for="exampleInputEmail1">Programme</label>
-                  <select name="programme" id="" class="form-control input-font-size-12">                    
+                  <select name="programme" id="" class="form-control input-font-size-12"> 
+                  <option value="{{$courseData->programme}}">{{$courseData->programme}}</option>                   
                     @foreach($courses as $rc)
                     <option value="{{$rc->department}}">{{$rc->department}}</option>
                     @endforeach
@@ -258,7 +259,8 @@
                 @enderror
                 <div class="form-group">
                   <label for="exampleInputEmail1">Level</label>
-                  <select name="level" id="" class="form-control input-font-size-12">                    
+                  <select name="level" id="" class="form-control input-font-size-12"> 
+                  <option value="{{$courseData->level}}">{{$courseData->level}}</option>                   
                     @foreach($classes as $rc)
                     <option value="{{$rc->level}}">{{$rc->level}}</option>
                     @endforeach
@@ -268,38 +270,9 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-primary">Update</button>
               </div>                     
-                <!-- Display the available departments   -->
-                <table class="table table-striped">
-                      <tr>           
-                      <th>Sn</th> 
-                        <th>Subject/Course</th>  
-                        <th>Programme</th>
-                        <th>Level</th>                      
-                        <th>Created On</th> 
-                        <th>Actions</th>                      
-                      </tr>
-
-                      @if ($courseData->count() > 0)
-			@foreach ($courseData as $key => $rt)
-                      <tr> 
-                        <td>{{$key +1}}</td>                         
-                        <td>{{$rt->course}}</td> 
-                        <td>{{$rt->programme}}</td>
-                        <td>{{$rt->level}}</td>                       
-                        <td>{{$rt->created_at}}</td>
-                        <td><a class="label label-success" href="{{route('edit-subject', ['id' => $rt->id])}}">Edit</a> </td>
-                        <td><a class="label label-danger" href="{{route('delete-subject.action', ['id' => $rt->id])}}">Delete</a> </td>                        
-                      </tr>  
-                      @endforeach
-		@else
-		<tr>
-			<td colspan="8">Subject/Course not available.</td>
-		</tr>
-		@endif                                   
-                    </table>
-                    {{ $courseData->links() }}
+               
               </div>
               <!-- /.box-body -->
 

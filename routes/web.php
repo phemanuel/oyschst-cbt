@@ -215,6 +215,10 @@ Route::get('/', function () {
         ->name('add-subject');       
         Route::post('add-subject', [DashboardController::class, 'addSubjectAction'])
         ->name('add-subject.action'); 
+        Route::get('edit-subject/{id}', [DashboardController::class, 'editSubject'])
+        ->name('edit-subject');
+        Route::post('edit-subject/{id}', [DashboardController::class, 'editSubjectAction'])
+        ->name('edit-subject.action');
         Route::get('subject/{id}', [DashboardController::class, 'deleteSubjectAction'])
         ->name('delete-subject.action'); 
         //--college update

@@ -572,7 +572,7 @@ class DashboardController extends Controller
 
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $courses = Department::paginate(9);
+        $courses = Department::all();
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
         return view('dashboard.add-subject', compact('courses', 'softwareVersion','collegeSetup',
@@ -592,16 +592,23 @@ class DashboardController extends Controller
         try {
             $validatedData = $request->validate([
                 'subject' => 'required|string',
+                'programme' => 'required|string',
+                'level' => 'required|string',
             ]);    
             
             //---Check for duplicates
-            $checkSubject = Courses::where('course', $validatedData['subject'])->first();
+            $checkSubject = Courses::where('course', $validatedData['subject'])
+            ->where('programme', $validatedData['programme'])
+            ->where('level', $validatedData['level'])
+            ->first();
             if($checkSubject){
                 return redirect()->back()->with('error-subject', 'Subject/Course has already been created.');
             }
 
             $subject = Courses::create([
-                'course' => $validatedData['subject'],                     
+                'course' => $validatedData['subject'],   
+                'programme' => $validatedData['programme'], 
+                'level' => $validatedData['level'],                  
             ]);
 
             return redirect()->route('add-subject')->with('success-subject', 'Subject/Course has been created successfully.');
@@ -615,6 +622,68 @@ class DashboardController extends Controller
             return redirect()->back()->with('error-subject', 'An error occurred during subject/course creation. Please try again.');
         }
     }
+
+    public function editSubject($id)
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access ADMIN SETUP module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $courses = Department::all();
+        $classes = CbtClass::paginate(10);
+        $courseData = Courses::where('id', '=', $id)->first();
+        return view('dashboard.edit-subject', compact('courses', 'softwareVersion','collegeSetup',
+    'classes', 'courseData'));
+        
+    } 
+
+    public function editSubjectAction(Request $request, $id)
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE in the COLLEGE SETUP module, contact the Administrator to grant access.');
+        }
+
+        try {
+            $validatedData = $request->validate([
+                'subject' => 'required|string',
+                'programme' => 'required|string',
+                'level' => 'required|string',
+            ]);    
+            
+            //---Check if it exists
+            $checkSubject = Courses::where('id', $id)
+            ->first();
+            if(!$checkSubject){
+                return redirect()->back()->with('error-subject', 'Subject/Course cannot be found.');
+            }
+
+            // update subject/course
+            $checkSubject->course = $validatedData['subject'];
+            $checkSubject->programme = $validatedData['programme'];
+            $checkSubject->level = $validatedData['level'];
+
+            $checkSubject->save();
+
+            return redirect()->route('add-subject')->with('success-subject', 'Subject/Course has been updated successfully.');
+        } catch (ValidationException $e) {
+            // Validation failed. Redirect back with validation errors.
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error during subject edit: ' . $e->getMessage());
+
+            return redirect()->back()->with('error-subject', 'An error occurred during subject/course edit. Please try again.');
+        }
+    }
+
 
     public function deleteSubjectAction($id)
     {
