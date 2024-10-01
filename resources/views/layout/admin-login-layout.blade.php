@@ -67,7 +67,7 @@
 						@endif	
         <form action="{{route('admin-login.action')}}" method="post">
         @csrf
-			<p align="center"><img src="{{asset('/OYSCHSTLOGO.png')}}" alt=""></p> 
+			<p align="center"><img src="{{asset($collegeSetup->avatar)}}" alt=""></p> 
 			<hr>
           <div class="form-group">
             <label class="label">Email Address</label>

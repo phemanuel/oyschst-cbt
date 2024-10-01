@@ -81,7 +81,7 @@
 						@endif	
         <form id="start-cbt-form" method="post" action="{{route('login.action')}}">
 			@csrf
-			<p align="center"><img src="{{asset('/OYSCHSTLOGO.png')}}" alt=""></p> 
+			<p align="center"><img src="{{asset($collegeSetup->avatar)}}" alt=""></p> 
 			<hr>
           <div class="form-group">
             <strong><label class="label">Reg/Matric No</label></strong>
