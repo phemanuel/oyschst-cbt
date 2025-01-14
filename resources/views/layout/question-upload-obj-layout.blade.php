@@ -266,7 +266,17 @@
             <!-- form start -->
             <form role="form" action="{{route('question-upload-obj.action')}}" method="post" enctype="multipart/form-data">
               @csrf              
-              <div class="box-body">  
+              <div class="box-body"> 
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Exam View Type</label>
+                  <select name="exam_view_type" id="" class="form-control">                  
+                  <option value="Multi-Page">Multi-Page</option>
+                  <option value="Single-Page">Single-Page</option>
+                  </select>
+                </div>             
+                @error('exam_view_type')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror 
               <div class="form-group">
                   <label for="exampleInputEmail1">Academic Session</label>
                   <select name="session1" id="" class="form-control">

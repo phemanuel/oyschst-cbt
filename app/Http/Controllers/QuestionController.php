@@ -99,7 +99,8 @@ class QuestionController extends Controller
                 'department' => 'required|string',
                 'level' => 'required|string',
                 // 'exam_category' => 'required|string',
-                'exam_type' => 'required|string',   
+                'exam_type' => 'required|string', 
+                'exam_view_type' => 'required|string',
                 'duration' => 'required|string',
                 'exam_date' => 'required|string', 
                 'upload_no_of_qst' => 'required|integer', 
@@ -119,6 +120,7 @@ class QuestionController extends Controller
                                             ->where('course', $validatedData['course'])
                                             ->where('upload_no_of_qst', $validatedData['upload_no_of_qst'])
                                             ->where('no_of_qst', $validatedData['no_of_qst'])
+                                            ->where('exam_view_type', $validatedData['exam_view_type'])
                                             ->first();
         
         if ($existingQuestion) {
@@ -133,6 +135,7 @@ class QuestionController extends Controller
                 'semester' => $validatedData['semester'],
                 'exam_category' => 'GENERAL',
                 'exam_type' => $validatedData['exam_type'],
+                'exam_view_type' => $validatedData['exam_view_type'],
                 'exam_mode' => 'OBJECTIVE',
                 'exam_status' => 'Inactive',
                 'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
@@ -144,31 +147,66 @@ class QuestionController extends Controller
                 'lock_status' => 0,                                      
             ]);
 
-            //--Create a dummy question for the said no of question selected in the question table
-            $num_questions = $validatedData['upload_no_of_qst'];
-            for ($i = 1; $i <= $num_questions; $i++) {
-                Question::create([
-                    'question_no' => $i,
-                    'question' => '<p style="font-size: 24px; font-family: Arial;">' .'Question'. $i . '</p>',
-                    'exam_mode' => 'OBJECTIVE',
-                    'exam_type' => $validatedData['exam_type'],
-                    'exam_category' => 'GENERAL',
-                    'session1' => $validatedData['session1'],
-                    'department' => $validatedData['department'],
-                    'level' => $validatedData['level'],
-                    'semester' => $validatedData['semester'],
-                    'course' => $validatedData['course'],
-                    'no_of_qst' => $validatedData['no_of_qst'],
-                    'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
-                    'question_type' => 'text',
-                    'answer' => 'E',
-                    'graphic' => 'blank.jpg',
-                ]);
-            }            
-            
-            $questionId = $questionSetting->id;
+            //check the exam vie type-----
+            if($validatedData['exam_view_type'] == 'Multi-Page'){
+                //--Create a dummy question for the said no of question selected in the question table
+                $num_questions = $validatedData['upload_no_of_qst'];
+                for ($i = 1; $i <= $num_questions; $i++) {
+                    Question::create([
+                        'question_no' => $i,
+                        'question' => '<p style="font-size: 24px; font-family: Arial;">' .'Question'. $i . '</p>',
+                        'exam_mode' => 'OBJECTIVE',
+                        'exam_type' => $validatedData['exam_type'],
+                        'exam_category' => 'GENERAL',
+                        'session1' => $validatedData['session1'],
+                        'department' => $validatedData['department'],
+                        'level' => $validatedData['level'],
+                        'semester' => $validatedData['semester'],
+                        'course' => $validatedData['course'],
+                        'no_of_qst' => $validatedData['no_of_qst'],
+                        'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
+                        'question_type' => 'text',
+                        'answer' => 'E',
+                        'graphic' => 'blank.jpg',
+                    ]);
+                }            
+                
+                $questionId = $questionSetting->id;
         
-            return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
+                return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
+            }
+            elseif($validatedData['exam_view_type'] == 'Single-Page'){
+                //--Create a dummy question for the said no of question selected in the question table
+                $num_questions = $validatedData['upload_no_of_qst'];
+                for ($i = 1; $i <= $num_questions; $i++) {
+                    QuestionSingle::create([
+                        'question_no' => $i,
+                        'question' => '<p style="font-size: 24px; font-family: Arial;">' .'Question'. $i . '</p>',
+                        'exam_mode' => 'OBJECTIVE',
+                        'exam_type' => $validatedData['exam_type'],
+                        'exam_category' => 'GENERAL',
+                        'session1' => $validatedData['session1'],
+                        'department' => $validatedData['department'],
+                        'level' => $validatedData['level'],
+                        'semester' => $validatedData['semester'],
+                        'course' => $validatedData['course'],
+                        'no_of_qst' => $validatedData['no_of_qst'],
+                        'upload_no_of_qst' => $validatedData['upload_no_of_qst'],
+                        'question_type' => 'text',
+                        'answer' => 'E',
+                        'option_a' => '<p style="font-size: 20px; font-family: Arial;">' .'Option A'. $i . '</p>',
+                        'option_b' => '<p style="font-size: 20px; font-family: Arial;">' .'Option B'. $i . '</p>',
+                        'option_c' => '<p style="font-size: 20px; font-family: Arial;">' .'Option C'. $i . '</p>',
+                        'option_d' => '<p style="font-size: 20px; font-family: Arial;">' .'Option D'. $i . '</p>',
+                        'graphic' => 'blank.jpg',
+                    ]);
+                }            
+                
+                $questionId = $questionSetting->id;
+            
+                return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
+            }
+            
             
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -268,10 +306,11 @@ class QuestionController extends Controller
     
             $action = $request->input('action');     
             $question = $request->input('question');
+            $formattedQuestion = '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>';
             $answer = $request->input('answer');
             $currentQuestionNo = $request->input('currentQuestionNo');
             // Store question and answer data in the session   
-            Session::put('question', $question);
+            Session::put('question', $formattedQuestion);
             Session::put('answer', $answer);
             Session::put('currentQuestionNo', $currentQuestionNo); 
         }
@@ -287,8 +326,10 @@ class QuestionController extends Controller
                 'currentQuestionNo' => 'required|integer',                
             ]);       
     
-            $action = $request->input('action');     
-            $question = $request->input('question');
+            $action = $request->input('action');  
+            $question = strip_tags($request->input('question')); 
+            $formattedQuestion = '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>';
+            // $question = $request->input('question');
             $answer = $request->input('answer'); 
             $formattedOptionA = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_a') . '</p>';
             $formattedOptionB = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_b') . '</p>';
@@ -296,17 +337,15 @@ class QuestionController extends Controller
             $formattedOptionD = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_d') . '</p>';           
             $currentQuestionNo = $request->input('currentQuestionNo');
             // Store question and answer data in the session   
-            Session::put('question', $question);
+            Session::put('question', $formattedQuestion);
             Session::put('answer', $answer);
             Session::put('option_a', $formattedOptionA);
             Session::put('option_b', $formattedOptionB);
             Session::put('option_c', $formattedOptionC);
             Session::put('option_d', $formattedOptionD);
             Session::put('currentQuestionNo', $currentQuestionNo); 
-        }
+        }        
         
-        // Strip HTML tags from the question input
-        //$question = strip_tags($question);
 
         if ($action === 'previous') {            
             // Handle the previous action
@@ -395,34 +434,57 @@ class QuestionController extends Controller
         $answer = Session::get('answer');
         $currentQuestionNo = Session::get('currentQuestionNo');
         $course = $questionSetting->course;
+        $examViewType = $questionSetting->exam_view_type;
 
         // Check if current question number is less than total questions
-        if ($currentQuestionNo < $upload_no_of_qst) { 
+        if($examViewType == 'Multi-Page'){
+            if ($currentQuestionNo < $upload_no_of_qst) { 
             
-            //----Update Current Question --------------------------------
-            $questionUpdate = Question::where('exam_type', $exam_type)
-            ->where('exam_category', $exam_category)
-            ->where('exam_mode', $exam_mode)
-            ->where('department', $department)
-            ->where('level', $level)
-            ->where('semester', $semester)
-            ->where('session1', $session1)
-            ->where('course', $course)
-            ->where('upload_no_of_qst', $upload_no_of_qst)
-            ->where('no_of_qst', $no_of_qst)
-            ->where('question_no', $currentQuestionNo)
-            ->first();
-
-            $questionUpdate->update([
-                'question' =>  $question,
-                'answer' => $answer,
-            ]);
-
-            // Increment question number
-            $nextQuestionNo = $currentQuestionNo + 1;
-
-            // Retrieve next question
-            $question = Question::where('exam_type', $exam_type)
+                //----Update Current Question --------------------------------
+                $questionUpdate = Question::where('exam_type', $exam_type)
+                ->where('exam_category', $exam_category)
+                ->where('exam_mode', $exam_mode)
+                ->where('department', $department)
+                ->where('level', $level)
+                ->where('semester', $semester)
+                ->where('session1', $session1)
+                ->where('course', $course)
+                ->where('upload_no_of_qst', $upload_no_of_qst)
+                ->where('no_of_qst', $no_of_qst)
+                ->where('question_no', $currentQuestionNo)
+                ->first();
+    
+                $questionUpdate->update([
+                    'question' =>  $question,
+                    'answer' => $answer,
+                ]);
+    
+                // Increment question number
+                $nextQuestionNo = $currentQuestionNo + 1;
+    
+                // Retrieve next question
+                $question = Question::where('exam_type', $exam_type)
+                    ->where('exam_category', $exam_category)
+                    ->where('exam_mode', $exam_mode)
+                    ->where('department', $department)
+                    ->where('level', $level)
+                    ->where('semester', $semester)
+                    ->where('session1', $session1)
+                    ->where('upload_no_of_qst', $upload_no_of_qst)
+                    ->where('no_of_qst', $no_of_qst)
+                    ->where('course', $course)
+                    ->where('question_no', $nextQuestionNo)
+                    ->first();
+    
+                if (!$question) {
+                    return redirect()->route('question-view', ['questionId' => $id])->with('error', 'Next question not found.');
+                }            
+    
+                return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
+            'questionSetting'));
+            } else {
+                //----Update Current Question --------------------------------
+                $questionUpdate = Question::where('exam_type', $exam_type)
                 ->where('exam_category', $exam_category)
                 ->where('exam_mode', $exam_mode)
                 ->where('department', $department)
@@ -432,35 +494,90 @@ class QuestionController extends Controller
                 ->where('upload_no_of_qst', $upload_no_of_qst)
                 ->where('no_of_qst', $no_of_qst)
                 ->where('course', $course)
-                ->where('question_no', $nextQuestionNo)
+                ->where('question_no', $currentQuestionNo)
                 ->first();
-
-            if (!$question) {
-                return redirect()->route('question-view')->with('error', 'Next question not found.');
-            }            
-
-            return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
-        'questionSetting'));
-        } else {
-            //----Update Current Question --------------------------------
-            $questionUpdate = Question::where('exam_type', $exam_type)
-            ->where('exam_category', $exam_category)
-            ->where('exam_mode', $exam_mode)
-            ->where('department', $department)
-            ->where('level', $level)
-            ->where('semester', $semester)
-            ->where('session1', $session1)
-            ->where('upload_no_of_qst', $upload_no_of_qst)
-            ->where('no_of_qst', $no_of_qst)
-            ->where('course', $course)
-            ->where('question_no', $currentQuestionNo)
-            ->first();
-
-            $questionUpdate->update([
-                'question' => $question ,
-                'answer' => $answer,
-            ]);
-            return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
+    
+                $questionUpdate->update([
+                    'question' => $question ,
+                    'answer' => $answer,
+                ]);
+                return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
+            }
+        }
+        elseif($examViewType == 'Single-Page') {
+            if ($currentQuestionNo < $upload_no_of_qst) { 
+            
+                //----Update Current Question --------------------------------
+                $questionUpdate = QuestionSingle::where('exam_type', $exam_type)
+                ->where('exam_category', $exam_category)
+                ->where('exam_mode', $exam_mode)
+                ->where('department', $department)
+                ->where('level', $level)
+                ->where('semester', $semester)
+                ->where('session1', $session1)
+                ->where('course', $course)
+                ->where('upload_no_of_qst', $upload_no_of_qst)
+                ->where('no_of_qst', $no_of_qst)
+                ->where('question_no', $currentQuestionNo)
+                ->first();
+    
+                $questionUpdate->update([
+                    'question' => $question,
+                    'answer' => $answer,
+                    'option_a' => Session::get('option_a'),
+                    'option_b' => Session::get('option_b'),
+                    'option_c' => Session::get('option_c'),
+                    'option_d' => Session::get('option_d'),
+                ]);
+    
+                // Increment question number
+                $nextQuestionNo = $currentQuestionNo + 1;
+    
+                // Retrieve next question
+                $question = QuestionSingle::where('exam_type', $exam_type)
+                    ->where('exam_category', $exam_category)
+                    ->where('exam_mode', $exam_mode)
+                    ->where('department', $department)
+                    ->where('level', $level)
+                    ->where('semester', $semester)
+                    ->where('session1', $session1)
+                    ->where('upload_no_of_qst', $upload_no_of_qst)
+                    ->where('no_of_qst', $no_of_qst)
+                    ->where('course', $course)
+                    ->where('question_no', $nextQuestionNo)
+                    ->first();
+    
+                if (!$question) {
+                    return redirect()->route('question-view', ['questionId' => $id])->with('error', 'Next question not found.');
+                }            
+    
+                return view('questions.question-view-single', compact('question','softwareVersion', 'collegeSetup',
+            'questionSetting'));
+            } else {
+                //----Update Current Question --------------------------------
+                $questionUpdate = QuestionSingle::where('exam_type', $exam_type)
+                ->where('exam_category', $exam_category)
+                ->where('exam_mode', $exam_mode)
+                ->where('department', $department)
+                ->where('level', $level)
+                ->where('semester', $semester)
+                ->where('session1', $session1)
+                ->where('upload_no_of_qst', $upload_no_of_qst)
+                ->where('no_of_qst', $no_of_qst)
+                ->where('course', $course)
+                ->where('question_no', $currentQuestionNo)
+                ->first();
+    
+                $questionUpdate->update([
+                    'question' => $question,
+                    'answer' => $answer,
+                    'option_a' => Session::get('option_a'),
+                    'option_b' => Session::get('option_b'),
+                    'option_c' => Session::get('option_c'),
+                    'option_d' => Session::get('option_d'),
+                ]);
+                return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You have reached the last question.');
+            }
         }
     }
 
@@ -527,7 +644,7 @@ class QuestionController extends Controller
                     ->first();
     
                 if (!$question) {
-                    return redirect()->route('question-view')->with('error', 'Previous question not found.');
+                    return redirect()->route('question-view', ['questionId' => $id])->with('error', 'Previous question not found.');
                 }
     
                 return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
@@ -598,14 +715,14 @@ class QuestionController extends Controller
                     ->first();
     
                 if (!$question) {
-                    return redirect()->route('question-view')->with('error', 'Previous question not found.');
+                    return redirect()->route('question-view', ['questionId' => $id])->with('error', 'Previous question not found.');
                 }
     
                 return view('questions.question-view-single', compact('question','softwareVersion', 'collegeSetup',
                 'questionSetting'));
             } else {
                 //----Update Current Question --------------------------------
-                $questionUpdate = Question::where('exam_type', $exam_type)
+                $questionUpdate = QuestionSingle::where('exam_type', $exam_type)
                 ->where('exam_category', $exam_category)
                 ->where('exam_mode', $exam_mode)
                 ->where('department', $department)
@@ -626,7 +743,7 @@ class QuestionController extends Controller
                     'option_c' => Session::get('option_c'),
                     'option_d' => Session::get('option_d'),
                 ]);
-                return redirect()->route('question-view-single', ['questionId' => $id])->with('error', 'You are already at the first question.');
+                return redirect()->route('question-view', ['questionId' => $id])->with('error', 'You are already at the first question.');
             }
         }
 
@@ -654,8 +771,10 @@ class QuestionController extends Controller
         $currentQuestionNo = $validatedData['qst_search'];
         $course = $questionSetting->course;
         $semester = $questionSetting->semester;
+        $examViewType = $questionSetting->exam_view_type;
 
-        // Retrieve search question
+        if($examViewType == 'Multi-Page'){
+             // Retrieve search question
         $question = Question::where('exam_type', $exam_type)
         ->where('exam_category', $exam_category)
         ->where('exam_mode', $exam_mode)
@@ -678,6 +797,33 @@ class QuestionController extends Controller
 
         return view('questions.question-view', compact('question','softwareVersion', 'collegeSetup',
         'questionSetting'));        
+        }
+        elseif($examViewType == 'Single-Page'){
+             // Retrieve search question
+        $question = QuestionSingle::where('exam_type', $exam_type)
+        ->where('exam_category', $exam_category)
+        ->where('exam_mode', $exam_mode)
+        ->where('department', $department)
+        ->where('level', $level)
+        ->where('semester', $semester)
+        ->where('session1', $session1)
+        ->where('upload_no_of_qst', $upload_no_of_qst)
+        ->where('no_of_qst', $no_of_qst)
+        ->where('course', $course)
+        ->where('question_no', $currentQuestionNo)
+        ->first();
+
+        if (!$question) {           
+            return redirect()->route('question-view', [
+                'id' => $id,
+                // 'currentQuestionNo' => $currentQuestionNo
+            ])->with('error', 'Search question not found.');
+        }
+
+        return view('questions.question-view-single', compact('question','softwareVersion', 'collegeSetup',
+        'questionSetting'));        
+        }
+       
     }
 
     public function questionSettingSearch(Request $request)
