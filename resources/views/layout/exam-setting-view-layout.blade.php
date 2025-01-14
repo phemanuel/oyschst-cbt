@@ -233,6 +233,7 @@
                   <th>Course</th>
                   <th>Level</th>
                   <th>Semester</th>
+                  <th>Exam View Type</th>
                   <th>Exam Mode</th>
                   <th>Exam Type</th>
                   <th>Exam Date</th>
@@ -253,6 +254,7 @@
                     <td>{{$rs->course}}</td>
                     <td>{{ $rs->level }}</td>
                     <td>{{ $rs->semester }}</td>
+                    <td>{{ $rs->exam_view_type }}</td>
                     <td>{{ $rs->exam_mode }}</td>
                     <td>{{ $rs->exam_type }}</td>
                     <td>{{ $rs->exam_date }}</td>

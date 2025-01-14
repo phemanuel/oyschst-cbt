@@ -222,13 +222,19 @@
                                 <img id="question-image" src="{{ asset('questions/') }}/{{$questionImage}}" alt="questionImage" width="1200" height="250">
                             @endif
                             <tr>
-                                <td colspan="3"><p id="current-question" style="font-size: 34px">{!!$currentQuestion!!}</p></td>
+                                <td colspan="3"><p id="current-question" >{!!$currentQuestion->question!!}</p></td>
                             </tr>
                             <tr>
-                                <td width="82%">
-                                <h5><strong><label for="grade-input">Answer:</label></strong></h5>
-                                    <textarea id="editor1" name="answer" rows="10" cols="80">{{$currentAnswer}}</textarea>
-                                </td>
+                                <td><input type="radio" name="option_a" id="option_a" value="A" />{!! $currentQuestion->option_a !!}</td>
+                            </tr>
+                            <tr>
+                                <td><input type="radio" name="option_b" id="option_b" value="B" />{!! $currentQuestion->option_b !!}</td>
+                            </tr>
+                            <tr>
+                                <td><input type="radio" name="option_c" id="option_c" value="C" />{!! $currentQuestion->option_c !!}</td>
+                            </tr>
+                            <tr>
+                                <td><input type="radio" name="option_d" id="option_d" value="D" />{!! $currentQuestion->option_d !!}</td>
                             </tr>
                         </table>                    
                     </div>

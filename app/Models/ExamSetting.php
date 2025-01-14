@@ -42,5 +42,6 @@ class ExamSetting extends Model
         'check_result',
         'exam_date',
         'lock_status',
+        'exam_view_type',
     ];
 }

@@ -886,6 +886,7 @@ class QuestionController extends Controller
                     'check_result' => $questionSetting->check_result,
                     'exam_date' => $questionSetting->exam_date,
                     'lock_status' => $questionSetting->lock_status,
+                    'exam_view_type' => $questionSetting->exam_view_type,
                 ]);
         } else {
             // Create a new exam setting with the provided variables
@@ -904,6 +905,7 @@ class QuestionController extends Controller
                 'check_result' => $questionSetting->check_result,
                 'time_limit' => 10,
                 'lock_status' => $questionSetting->lock_status,
+                'exam_view_type' => $questionSetting->exam_view_type,
             ]);
         }
 

@@ -7,6 +7,7 @@ use App\Models\StudentAdmission;
 use App\Models\User;
 use App\Models\Department;
 use App\Models\Question;
+use App\Models\QuestionSingle;
 use App\Models\AcademicSession;
 use App\Models\SoftwareVersion;
 use App\Models\ExamType;
@@ -73,17 +74,35 @@ class ExamController extends Controller
             ->where('level', $studentData->level)
             ->first(); 
             
-            // Check if the question for current exam setting is available
+            $examViewType = $examSetting->exam_view_type;
+
+            if($examViewType == 'Multi-Page'){
+                // Check if the question for current exam setting is available
             $existingQuestion = Question::where('exam_type', $examSetting->exam_type)
-                                                ->where('exam_category', $examSetting->exam_category)
-                                                ->where('exam_mode', $examSetting->exam_mode)
-                                                ->where('department', $examSetting->department)
-                                                ->where('level', $examSetting->level)
-                                                ->where('semester', $examSetting->semester)
-                                                ->where('session1', $examSetting->session1)
-                                                ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
-                                                ->where('no_of_qst', $examSetting->no_of_qst)
-                                                ->first();
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('session1', $examSetting->session1)
+            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+            ->where('no_of_qst', $examSetting->no_of_qst)
+            ->first();
+            }
+            elseif($examViewType == 'Single-Page'){
+                // Check if the question for current exam setting is available
+            $existingQuestion = QuestionSingle::where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('session1', $examSetting->session1)
+            ->where('upload_no_of_qst', $examSetting->upload_no_of_qst)
+            ->where('no_of_qst', $examSetting->no_of_qst)
+            ->first();
+            }
+            
 
             if(!$existingQuestion){
                 return redirect()->back()->with('error', 'Question is unavailable.');
@@ -303,7 +322,8 @@ class ExamController extends Controller
             $examMode = $examSetting->exam_mode;
             $examType = $examSetting->exam_type;            
             $session1 = $examSetting->session1;  
-            $semester = $examSetting->semester;                     
+            $semester = $examSetting->semester;  
+            $examViewType = $examSetting->exam_view_type;                    
 
             // Generate a random set of numbers representing the questions
             $questionNumbers = range(1, $uploadNoOfQuestions);
@@ -2012,23 +2032,58 @@ class ExamController extends Controller
         $examSetting = ExamSetting::where('department', $studentData->department)
                         ->where('level', $studentData->level)
                         ->first(); 
+        $examViewType= $examSetting->exam_view_type;
 
         $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
-            ->where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
-            ->where('noofquestion', $examSetting->no_of_qst)
-            ->first();
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();  
+            
+        $currentQuestion = QuestionSingle::where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('no_of_qst', $examSetting->no_of_qst)
+                        ->where('semester', $examSetting->semester)
+                        ->where('question_no', $cbtEvaluation->A1)
+                        ->first();
 
         $pageNo = 1;
+        $currentQuestionNo = 1;
+        $currentQuestionType = $currentQuestion->question_type;
         $studentMin = $cbtEvaluation->minute;
-        return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+
+        if($examViewType == 'Multi-Page'){
+            return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
         'examSetting','pageNo','studentMin'));
+        }
+        elseif($examViewType == 'Single-Page'){
+            return view('student.pages.cbt-single-page', compact('collegeSetup', 'softwareVersion', 'studentData',
+        'examSetting','pageNo','studentMin','studentAnswer','currentQuestion','currentQuestionNo','currentQuestionType'));
+        }
+        
 
     }
 

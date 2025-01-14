@@ -32,6 +32,7 @@ return new class extends Migration
             $table->integer('duration');
             $table->date('exam_date');
             $table->integer('lock_status');
+            $table->string('exam_view_type');
             $table->timestamps();
         });
     }
