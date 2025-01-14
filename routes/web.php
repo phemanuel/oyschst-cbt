@@ -236,7 +236,9 @@ Route::get('/', function () {
         Route::get('question-theory-upload', [QuestionController::class, 'questionTheoryUpload'])
         ->name('question-theory-upload');
         Route::get('download-question-csv', [QuestionController::class, 'downloadQuestionCsv'])
-        ->name('download-question-csv');  
+        ->name('download-question-csv'); 
+        Route::get('download-question-single-csv', [QuestionController::class, 'downloadQuestionSingleCsv'])
+        ->name('download-question-single-csv');  
         Route::get('download-question-theory-csv', [QuestionController::class, 'downloadQuestionTheoryCsv'])
         ->name('download-question-theory-csv');       
         Route::get('question-edit/{questionId}', [QuestionController::class, 'questionEdit'])

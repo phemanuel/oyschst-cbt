@@ -273,6 +273,27 @@
                                             {{$question->question}}
                     </textarea>
                     <hr>
+                    <table width="100%">
+                        <tr>
+                            <td><strong>Option A</strong></td>
+                            <td>&nbsp;</td>
+                            <td><strong>Option B</strong></td>
+                            <td>&nbsp;</td>
+                            <td><strong>Option C</strong></td>
+                            <td>&nbsp;</td>
+                            <td><strong>Option D</strong></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="form-control" name="option_a" value="{{ strip_tags($question->option_a) }}"></td>
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="option_b" value="{{ strip_tags($question->option_b) }}"></td>
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="option_c" value="{{ strip_tags($question->option_c) }}"></td>
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="option_d" value="{{ strip_tags($question->option_d) }}"></td>
+                        </tr>
+                    </table>
+                    <hr>
                     <p><strong>Correct Answer :</strong> 
                     <select name="answer" id="" class="form-control">
                         <option value="A" {{ $question->answer == 'A' ? 'selected' : '' }}>A</option>

@@ -25,5 +25,6 @@ class QuestionSetting extends Model
         'check_result',
         'semester',
         'lock_status',
+        'exam_view_type',
     ];
 }

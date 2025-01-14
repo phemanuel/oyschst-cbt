@@ -466,12 +466,22 @@
               @csrf              
               <div class="box-body">  
               <div class="form-group">
+                  <label for="exampleInputEmail1">Exam View Type</label>
+                  <select name="exam_view_type" id="" class="form-control">                  
+                  <option value="Multi-Page">Multi-Page</option>
+                  <option value="Single-Page">Single-Page</option>
+                  </select>
+                </div>             
+                @error('exam_view_type')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+               <div class="form-group">
                   <label for="exampleInputEmail1">Academic Session</label>
                   <select name="session1" id="" class="form-control">
                   <!-- <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                   -->
                   @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
+                  <option value="{{$rd->session1}}">{{$rd->session1}}</option>
+                  @endforeach
                   </select>
                 </div>             
                 @error('session1')
@@ -696,6 +706,8 @@
                 Here's how the process typically works:
                 </p>
                   <ul>
+                  <li><u>Exam View Type</u>  refers to whether you want Multi-Page view (10 questions per page) or 
+                  Single-Page view(1 question per page).</li>
                     <li> Select the necessary criteria.</li>
                     <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
                       upload.</li>
@@ -703,7 +715,10 @@
                         access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
                       is 100, you can decide to test the students on 50 questions only, the application pick different question from 
                     the 100 questions.</li>
-                    <li> Load the CSV file <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template here.</a></li>
+                    <li> Load the CSV file <br>
+                    <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template(Multi-Page) here.</a><br><br>
+                    <a class="btn btn-primary" href="{{route('download-question-single-csv')}}">You can download a sample template(Single-Page) here.</a>
+                    </li>
                     <li> Click on Start Import.</li>
                     <li> This will upload all the questions for the specified no of questions.</li>
                     <li> You can start editing the questions as desired.</li>

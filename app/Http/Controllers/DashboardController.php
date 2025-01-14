@@ -247,7 +247,7 @@ class DashboardController extends Controller
                 'edit_change_course' => 'nullable|boolean',
                 'user_create' => 'nullable|boolean',
                 'create_user_create' => 'nullable|boolean',
-                'edit_user_create' => 'nullable|boolean',
+                'edit_user_create' => 'nullable|boolean', 
                 'status_user_create' => 'nullable|boolean',
                 'college_setup' => 'nullable|boolean',
                 'create_college_setup' => 'nullable|boolean',

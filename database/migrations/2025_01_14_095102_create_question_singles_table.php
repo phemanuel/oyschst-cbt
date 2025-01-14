@@ -11,23 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('question_settings', function (Blueprint $table) {
+        Schema::create('question_singles', function (Blueprint $table) {
             $table->id();
+            $table->integer('question_no');
+            $table->integer('no_of_qst');
             $table->string('session1');
             $table->string('department');
             $table->integer('upload_no_of_qst');
-            $table->integer('no_of_qst');
             $table->string('level');
-            $table->integer('duration');
             $table->string('exam_type');
             $table->string('exam_category');
-            $table->enum('exam_status',['Active','Inactive']);
             $table->string('exam_mode');
-            $table->date('exam_date');
+            $table->string('question_type');
+            $table->string('answer');
+            $table->text('question');
+            $table->string('graphic');
             $table->string('course');
             $table->string('semester');
-            $table->integer('lock_status');
-            $table->string('exam_view_type');
+            $table->string('option_a');
+            $table->string('option_b');
+            $table->string('option_c');
+            $table->string('option_d');
             $table->timestamps();
         });
     }
@@ -37,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('question_settings');
+        Schema::dropIfExists('question_singles');
     }
 };
