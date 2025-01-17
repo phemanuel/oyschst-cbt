@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="{{asset('student/vendors/iconfonts/font-awesome/css/all.min.css')}}">
   <link rel="stylesheet" href="{{asset('student/vendors/css/vendor.bundle.base.css')}}">
   <link rel="stylesheet" href="{{asset('student/vendors/css/vendor.bundle.addons.css')}}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- endinject -->
   <!-- plugin css for this page -->
   <!-- End plugin css for this page -->
@@ -137,7 +138,33 @@
         background-color: #ffc107; /* Yellow for active */
         color: #000;
     }
-</style>
+
+    </style>
+    <style>
+        .question-btn {
+    position: relative;
+    padding-right: 30px; /* Adjust padding for icon */
+}
+
+.tick-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 16px;
+    color: white;
+    display: none; /* Hidden by default */
+}
+
+.question-btn.attempted .tick-icon {
+    display: inline-block; /* Show the tick icon when the question is attempted */
+}
+
+.question-btn.attempted {
+    background-color: #4CAF50; /* Green for attempted */
+    color: white;
+}
+
+    </style>
 </head>
 <body class="sidebar-fixed">
   <div class="container-scroller">
@@ -270,16 +297,18 @@
         <div class="card-body">
         <form action="" class="answer-form" data-question-number="1">
             <!-- Buttons for each question -->
-        <div id="question-buttons" class="d-flex flex-wrap gap-2 mb-4" data-admission-no="{{ $studentData->admission_no }}">
-            @for ($i = 1; $i <= $examSetting->no_of_qst; $i++)
-                <button 
-                    type="button" 
-                    class="btn btn-primary question-btn {{ $i === 1 ? 'active' : '' }}" 
-                    data-question-number="{{ $i }}">
-                    {{ $i }}
-                </button>
-            @endfor
-        </div>
+            <div id="question-buttons" class="d-flex flex-wrap gap-2 mb-4" data-admission-no="{{ $studentData->admission_no }}">
+                @for ($i = 1; $i <= $examSetting->no_of_qst; $i++)
+                    <button 
+                        type="button" 
+                        class="btn btn-primary question-btn {{ $i === 1 ? 'active' : '' }}" 
+                        data-question-number="{{ $i }}">
+                        <span class="question-number">{{ $i }}</span>
+                        <!-- Tick icon overlay (initially hidden) -->
+                        <i class="fa fa-check tick-icon"></i>
+                    </button>
+                @endfor
+            </div>
         <hr>
         <h4 class="card-title">
             <strong>Question <span id="current-question-number">1</span> of {{$examSetting->no_of_qst}}</strong>
@@ -289,36 +318,33 @@
             <div id="current-question"></div> <!-- This is where the question content will be inserted -->
         </div>
 
-            <table class="options-container">
-                <tr class="options-row">
-                    <td>
-                        <!-- <span>(A)</span> -->
-                        <input type="radio" name="option" id="option_a" value="A" />
-                        <label for="option_a"></label>
-                    </td>
-                </tr>
-                <tr class="options-row">
-                    <td>
-                        <!-- <span>(B)</span> -->
-                        <input type="radio" name="option" id="option_b" value="B" />
-                        <label for="option_b"></label>
-                    </td>
-                </tr>
-                <tr class="options-row">
-                    <td>
-                        <!-- <span>(C)</span> -->
-                        <input type="radio" name="option" id="option_c" value="C" />
-                        <label for="option_c"></label>
-                    </td>
-                </tr>
-                <tr class="options-row">
-                    <td>
-                        <!-- <span>(D)</span> -->
-                        <input type="radio" name="option" id="option_d" value="D" />
-                        <label for="option_d"></label>
-                    </td>
-                </tr>
-            </table>     
+        <table class="options-container">
+            <tr class="options-row">
+                <td>
+                    <input type="radio" name="option" id="option_a" value="A" />
+                    <label for="option_a"></label>
+                </td>
+            </tr>
+            <tr class="options-row">
+                <td>
+                    <input type="radio" name="option" id="option_b" value="B" />
+                    <label for="option_b"></label>
+                </td>
+            </tr>
+            <tr class="options-row">
+                <td>
+                    <input type="radio" name="option" id="option_c" value="C" />
+                    <label for="option_c"></label>
+                </td>
+            </tr>
+            <tr class="options-row">
+                <td>
+                    <input type="radio" name="option" id="option_d" value="D" />
+                    <label for="option_d"></label>
+                </td>
+            </tr>
+        </table>
+    
     </form>
         
         </div>                
@@ -449,6 +475,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Assuming the admission_no is stored in a data attribute or globally available
     const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
 
+    // Object to keep track of attempted questions
+    const attemptedQuestions = new Set();
+
     // Function to clear the current question and options
     const clearQuestion = () => {
         currentQuestionEl.innerHTML = ''; // Clear the question
@@ -471,7 +500,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 optionLabels.C.innerHTML = data.option_c;
                 optionLabels.D.innerHTML = data.option_d;
 
-                // Mark button as attempted after loading
+                // Mark the previously selected option (if any)
+                const answerSelected = data.answerSelected; // 'A', 'B', 'C', or 'D'
+                if (answerSelected) {
+                    optionInputs[answerSelected].checked = true; // Check the radio button for the selected answer
+                }
+
+                // Mark button as attempted if an answer has been selected for the question
+                if (answerSelected !== null) {
+                    attemptedQuestions.add(questionNumber); // Add to attempted set
+                    const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                    if (activeButton) {
+                        activeButton.classList.add('attempted'); // Add 'attempted' class to mark the question
+                    }
+                }
+
+                // Mark button as active after loading
                 buttons.forEach(btn => btn.classList.remove('active'));
                 const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
                 if (activeButton) activeButton.classList.add('active');
@@ -512,6 +556,13 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 console.log('Option saved successfully');
+
+                // Mark the question as attempted after saving the answer
+                attemptedQuestions.add(questionNumber); // Add the question number to the attempted set
+                const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('attempted'); // Add 'attempted' class to mark the question
+                }
             })
             .catch(error => console.error('Error saving option:', error));
         });
@@ -520,6 +571,161 @@ document.addEventListener('DOMContentLoaded', function () {
     // Automatically load the first question on page load
     const firstQuestionNumber = buttons[0].getAttribute('data-question-number');
     loadQuestion(firstQuestionNumber);  // Load the first question
+});
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.question-btn');
+    const currentQuestionNumberEl = document.getElementById('current-question-number');
+    const currentQuestionEl = document.getElementById('current-question');
+    const optionLabels = {
+        A: document.querySelector('label[for="option_a"]'),
+        B: document.querySelector('label[for="option_b"]'),
+        C: document.querySelector('label[for="option_c"]'),
+        D: document.querySelector('label[for="option_d"]'),
+    };
+    const optionInputs = {
+        A: document.getElementById('option_a'),
+        B: document.getElementById('option_b'),
+        C: document.getElementById('option_c'),
+        D: document.getElementById('option_d'),
+    };
+
+    const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
+
+    // Object to keep track of attempted questions
+    const attemptedQuestions = new Set();
+
+    // Function to clear the current question and options
+    const clearQuestion = () => {
+        currentQuestionEl.innerHTML = '';
+        Object.values(optionLabels).forEach(label => label.innerHTML = '');
+        Object.values(optionInputs).forEach(input => input.checked = false);
+    };
+
+    // Fetch and display the question
+    const loadQuestion = (questionNumber) => {
+        clearQuestion(); // Clear the current question before loading the new one
+
+        fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
+            .then(response => response.json())
+            .then(data => {
+                currentQuestionNumberEl.textContent = questionNumber;
+                currentQuestionEl.innerHTML = data.question;
+                optionLabels.A.innerHTML = data.option_a;
+                optionLabels.B.innerHTML = data.option_b;
+                optionLabels.C.innerHTML = data.option_c;
+                optionLabels.D.innerHTML = data.option_d;
+
+                const answerSelected = data.answerSelected;
+                if (answerSelected) {
+                    optionInputs[answerSelected].checked = true;
+                }
+
+                if (answerSelected !== null) {
+                    attemptedQuestions.add(questionNumber);
+                    const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                    if (activeButton) {
+                        activeButton.classList.add('attempted');
+                    }
+                }
+
+                buttons.forEach(btn => btn.classList.remove('active'));
+                const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                if (activeButton) activeButton.classList.add('active');
+
+                updateNavButtonsState(questionNumber); // Update the state of the navigation buttons
+            })
+            .catch(error => {
+                console.error('Error fetching question:', error);
+                currentQuestionEl.innerHTML = 'Failed to load question. Please try again later.';
+            });
+    };
+
+    // Update navigation buttons' state based on the current question number
+    const updateNavButtonsState = (currentQuestionNumber) => {
+        const totalQuestions = buttons.length;
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+
+        // Disable/enable prev button
+        if (currentQuestionNumber <= 1) {
+            prevButton.disabled = true;
+        } else {
+            prevButton.disabled = false;
+        }
+
+        // Disable/enable next button
+        if (currentQuestionNumber >= totalQuestions) {
+            nextButton.disabled = true;
+        } else {
+            nextButton.disabled = false;
+        }
+    };
+
+    // Handle the option selection event
+    Object.values(optionInputs).forEach(input => {
+        input.addEventListener('change', function () {
+            const selectedOption = this.value;
+            const questionNumber = currentQuestionNumberEl.textContent;
+
+            fetch('/save-single-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    question_number: questionNumber,
+                    selected_option: selectedOption,
+                    admission_no: admissionNo
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Option saved successfully');
+                attemptedQuestions.add(questionNumber);
+                const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('attempted');
+                }
+            })
+            .catch(error => console.error('Error saving option:', error));
+        });
+    });
+
+    // Handle the question button click event
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const questionNumber = this.getAttribute('data-question-number');
+            loadQuestion(questionNumber);
+        });
+    });
+
+    // Handle the previous and next button click events
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+
+    prevButton.addEventListener('click', () => {
+        let currentQuestionNumber = parseInt(currentQuestionNumberEl.textContent, 10);
+        if (currentQuestionNumber > 1) {
+            loadQuestion(currentQuestionNumber - 1);
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        let currentQuestionNumber = parseInt(currentQuestionNumberEl.textContent, 10);
+        const totalQuestions = buttons.length;
+        if (currentQuestionNumber < totalQuestions) {
+            loadQuestion(currentQuestionNumber + 1);
+        }
+    });
+
+    // Automatically load the first question on page load
+    const firstQuestionNumber = buttons[0].getAttribute('data-question-number');
+    loadQuestion(firstQuestionNumber);
 });
 
 </script>

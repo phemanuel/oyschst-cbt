@@ -2202,11 +2202,72 @@ class ExamController extends Controller
         // Return question details (uncomment when needed)
         return response()->json([           
             'question' => $question->question,
-            'answerSelected' => $answerSelected,
+            'answerSelected' => $answerSelected ? $answerSelected : null,
             'option_a' => $question->option_a,
             'option_b' => $question->option_b,
             'option_c' => $question->option_c,
             'option_d' => $question->option_d,
+        ]);
+    }
+
+    public function saveSingleAnswer(Request $request)
+    {
+        $admissionNo = $request->input('admission_no');
+        $questionNo = $request->input('question_number');
+        $selectedOption = $request->input('selected_option');
+
+        // Log the received data
+        \Log::info('Fetching question', [
+            'selected_option' => $selectedOption,
+            'question_number' => $questionNo,
+            'admission_no' => $admissionNo
+        ]);
+
+        // Get student data
+        $studentData = StudentAdmission::where('admission_no', $admissionNo)->first();
+
+        // If no student found, return an error response
+        if (!$studentData) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        // Get the exam setting for the student
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                                ->where('level', $studentData->level)
+                                ->first();
+
+        // If no exam setting found, return an error response
+        if (!$examSetting) {
+            return response()->json(['message' => 'Exam settings not found'], 404);
+        }
+
+        // Get the student answer record for the exam
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                                    ->where('session1', $examSetting->session1)
+                                    ->where('department', $studentData->department)
+                                    ->where('level', $studentData->level)
+                                    ->where('semester', $examSetting->semester)
+                                    ->where('course', $examSetting->course)
+                                    ->where('exam_mode', $examSetting->exam_mode)
+                                    ->where('exam_type', $examSetting->exam_type)
+                                    ->where('exam_category', $examSetting->exam_category)
+                                    ->where('noofquestion', $examSetting->no_of_qst)
+                                    ->first();
+
+        // If no student answer found, return an error response
+        if (!$studentAnswer) {
+            return response()->json(['message' => 'Student answer record not found'], 404);
+        }
+
+        // Dynamically set the answer for the question
+        $answerValue = 'OK' . $questionNo;
+        $studentAnswer->$answerValue = $selectedOption;
+
+        // Save the student answer
+        $studentAnswer->save();
+
+        return response()->json([
+            'message' => 'Answer saved successfully',
         ]);
     }
 
