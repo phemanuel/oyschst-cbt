@@ -85,6 +85,59 @@
         border-radius: 5px; /* Rounded corners */
     }
 </style>
+<style>
+    .options-row {
+        display: flex;
+        align-items: center; /* Align radio button and text vertically */
+        padding: 12px 0; /* Add spacing between rows */
+    }
+
+    .options-row span {
+        font-weight: bold;
+        font-size: 25px; /* Increase font size for (A)-(D) */
+        margin-right: 15px; /* Space between (A)-(D) and the radio button */
+    }
+
+    .options-row input[type="radio"] {
+        width: 20px; /* Increase the size of the radio button */
+        height: 20px;
+        margin-right: 15px; /* Space between radio button and the answer text */
+    }
+
+    .options-row label {
+        font-size: 18px; /* Increase the font size of the answer text */
+    }
+
+    .options-container {
+        width: 100%; /* Full width for the table */
+        margin: 0 auto; /* Center the table within its parent */
+    }
+
+    .options-container td {
+        padding: 8px 0; /* Add padding for better spacing */
+    }
+    
+</style>
+<style>
+    .options-container {
+        width: 100%;
+    }
+    .options-row td {
+        padding: 10px 0;
+    }
+    .question-btn {
+        margin-right: 8px; /* Space between buttons */
+        margin-bottom: 8px; /* Space between rows */
+    }
+    .question-btn.attempted {
+        background-color: #28a745; /* Green for attempted */
+        color: #fff;
+    }
+    .question-btn.active {
+        background-color: #ffc107; /* Yellow for active */
+        color: #000;
+    }
+</style>
 </head>
 <body class="sidebar-fixed">
   <div class="container-scroller">
@@ -208,52 +261,83 @@
           <!-- question-Loaded -->
           <div class="row">         
           <div id="questions-container">
-    <!-- This will be populated with questions dynamically -->
-    <form class="answer-form" data-question-number="{{$currentQuestionNo}}">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <strong>Question {{$currentQuestionNo}} of {{$examSetting->no_of_qst}}</strong>
-                    </h4>
-                    <div class="table-responsive">
-                        <table class="table" width="100%">
-                            @if($currentQuestionType === 'text-image')
-                                <img id="question-image" src="{{ asset('questions/') }}/{{$questionImage}}" alt="questionImage" width="1200" height="250">
-                            @endif
-                            <tr>
-                                <td colspan="3"><p id="current-question" >{!!$currentQuestion->question!!}</p></td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="option_a" id="option_a" value="A" />{!! $currentQuestion->option_a !!}</td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="option_b" id="option_b" value="B" />{!! $currentQuestion->option_b !!}</td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="option_c" id="option_c" value="C" />{!! $currentQuestion->option_c !!}</td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="option_d" id="option_d" value="D" />{!! $currentQuestion->option_d !!}</td>
-                            </tr>
-                        </table>                    
-                    </div>
-                </div>                
-            </div>
-        </div>
-    </form>
+    <!-- This will be populated with questions dynamically -->   
+
 </div>
+
 <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-<input type="hidden" id="hidden-currentQuestionNo" value="{{$currentQuestionNo}}">
-<button id="prev-button" class="btn btn-success">Previous Question</button>&nbsp;&nbsp;
-<button id="next-button" class="btn btn-info">Next Question</button>
-</div>                
-            </div>
+    <div class="card">
+        <div class="card-body">
+        <form action="" class="answer-form" data-question-number="1">
+            <!-- Buttons for each question -->
+        <div id="question-buttons" class="d-flex flex-wrap gap-2 mb-4" data-admission-no="{{ $studentData->admission_no }}">
+            @for ($i = 1; $i <= $examSetting->no_of_qst; $i++)
+                <button 
+                    type="button" 
+                    class="btn btn-primary question-btn {{ $i === 1 ? 'active' : '' }}" 
+                    data-question-number="{{ $i }}">
+                    {{ $i }}
+                </button>
+            @endfor
+        </div>
+        <hr>
+        <h4 class="card-title">
+            <strong>Question <span id="current-question-number">1</span> of {{$examSetting->no_of_qst}}</strong>
+        </h4>     
+            
+        <div class="question-container">    
+            <div id="current-question"></div> <!-- This is where the question content will be inserted -->
         </div>
 
-          </div>
+            <table class="options-container">
+                <tr class="options-row">
+                    <td>
+                        <!-- <span>(A)</span> -->
+                        <input type="radio" name="option" id="option_a" value="A" />
+                        <label for="option_a"></label>
+                    </td>
+                </tr>
+                <tr class="options-row">
+                    <td>
+                        <!-- <span>(B)</span> -->
+                        <input type="radio" name="option" id="option_b" value="B" />
+                        <label for="option_b"></label>
+                    </td>
+                </tr>
+                <tr class="options-row">
+                    <td>
+                        <!-- <span>(C)</span> -->
+                        <input type="radio" name="option" id="option_c" value="C" />
+                        <label for="option_c"></label>
+                    </td>
+                </tr>
+                <tr class="options-row">
+                    <td>
+                        <!-- <span>(D)</span> -->
+                        <input type="radio" name="option" id="option_d" value="D" />
+                        <label for="option_d"></label>
+                    </td>
+                </tr>
+            </table>     
+    </form>
+        
+        </div>                
+    </div>
+</div>
+
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <input type="hidden" id="hidden-currentQuestionNo" value="{{$currentQuestionNo}}">
+            <div class="d-flex justify-content-between">
+                <button id="prev-button" class="btn btn-success">Previous Question</button>
+                <button id="next-button" class="btn btn-info">Next Question</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
 
           
           <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
@@ -297,6 +381,7 @@
 
   <!-- Time counter -->
   <script>
+     "use strict";
         let duration = {{ $studentMin }}; // Duration in seconds
         let remainingTime = duration;
 
@@ -312,13 +397,13 @@
                     clearInterval(interval);
                     alert("Time is up!");
                     // Redirect the user after the alert is dismissed
-                    window.location.href = "{{ route('cbt-theory-submit', ['id' => $studentData->id]) }}";
+                    window.location.href = "{{ route('cbt-submit', ['id' => $studentData->id]) }}";
                 }
             }, 1000);
         }
 
         function saveRemainingTime(remainingMinutes) {
-            fetch('/update-remaining-time-theory/{{ $studentData->id }}', {
+            fetch('/update-remaining-time/{{ $studentData->id }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -341,100 +426,107 @@
 
         startTimer();
     </script>
+
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    function initializeCKEditor() {
-        // Check if an instance of CKEditor exists and destroy it if it does
-        if (CKEDITOR.instances.editor1) {
-            CKEDITOR.instances.editor1.destroy(true);
-        }
-        // Initialize CKEditor
-        CKEDITOR.replace('editor1');
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.question-btn');
+    const currentQuestionNumberEl = document.getElementById('current-question-number');
+    const currentQuestionEl = document.getElementById('current-question');
+    const optionLabels = {
+        A: document.querySelector('label[for="option_a"]'),
+        B: document.querySelector('label[for="option_b"]'),
+        C: document.querySelector('label[for="option_c"]'),
+        D: document.querySelector('label[for="option_d"]'),
+    };
+    const optionInputs = {
+        A: document.getElementById('option_a'),
+        B: document.getElementById('option_b'),
+        C: document.getElementById('option_c'),
+        D: document.getElementById('option_d'),
+    };
 
-    function saveAnswerAndNavigate(direction) {
-        let formData = {
-            _token: '{{ csrf_token() }}',
-            answer: CKEDITOR.instances.editor1.getData(),
-            currentQuestionNo: $('#hidden-currentQuestionNo').val(),
-            direction: direction
-        };
+    // Assuming the admission_no is stored in a data attribute or globally available
+    const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
 
-        $.ajax({
-            url: "{{ route('save-answer', ['id' => $studentData->id]) }}",
-            method: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.error) {
-                    alert(response.error);
-                } else {
-                    // Render the new question
-                    renderQuestion(response);
+    // Function to clear the current question and options
+    const clearQuestion = () => {
+        currentQuestionEl.innerHTML = ''; // Clear the question
+        Object.values(optionLabels).forEach(label => label.innerHTML = ''); // Clear the option labels
+        Object.values(optionInputs).forEach(input => input.checked = false); // Uncheck the options
+    };
 
-                    // Reinitialize CKEditor for the new content
-                    initializeCKEditor();
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
+    // Fetch and display the question
+    const loadQuestion = (questionNumber) => {
+        clearQuestion(); // Clear the current question before loading the new one
+
+        // Fetch question data with admission_no
+        fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
+            .then(response => response.json())
+            .then(data => {
+                currentQuestionNumberEl.textContent = questionNumber;
+                currentQuestionEl.innerHTML = data.question;
+                optionLabels.A.innerHTML = data.option_a;
+                optionLabels.B.innerHTML = data.option_b;
+                optionLabels.C.innerHTML = data.option_c;
+                optionLabels.D.innerHTML = data.option_d;
+
+                // Mark button as attempted after loading
+                buttons.forEach(btn => btn.classList.remove('active'));
+                const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                if (activeButton) activeButton.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error fetching question:', error);
+                currentQuestionEl.innerHTML = 'Failed to load question. Please try again later.';
+            });
+    };
+
+    // Handle the button click event
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const questionNumber = this.getAttribute('data-question-number');
+            loadQuestion(questionNumber);  // Load the selected question
         });
-    }
-
-    function renderQuestion(response) {
-        // Clear the current content
-        $('#questions-container').empty();
-
-        // Build the new question HTML
-        let questionHtml = `
-            <form class="answer-form" data-question-number="${response.currentQuestionNo}">
-                <div class="col-12 grid-margin">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <strong>Question ${response.currentQuestionNo} of ${response.totalQuestions}</strong>
-                            </h4>
-                            <div class="table-responsive">
-                                <table class="table" width="100%">
-                                    ${response.currentQuestionType === 'text-image' ? `<img id="question-image" src="${response.questionImage}" alt="questionImage" width="1200" height="250">` : ''}
-                                    <tr>
-                                        <td colspan="3"><p id="current-question" style="font-size: 34px">${response.currentQuestion}</p></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="82%">
-                                        <h5><strong><label for="grade-input">Answer:</label></strong></h5>
-                                            <textarea id="editor1" name="answer" rows="10" cols="80">${response.currentAnswer}</textarea>
-                                        </td>
-                                    </tr>
-                                </table>                    
-                            </div>
-                        </div>                
-                    </div>
-                </div>
-            </form>
-        `;
-
-        // Append the new question HTML
-        $('#questions-container').append(questionHtml);
-        $('#hidden-currentQuestionNo').val(response.currentQuestionNo);
-    }
-
-    document.getElementById('next-button').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
-        saveAnswerAndNavigate('next');
     });
 
-    document.getElementById('prev-button').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
-        saveAnswerAndNavigate('prev');
+    // Handle the option selection event
+    Object.values(optionInputs).forEach(input => {
+        input.addEventListener('change', function () {
+            const selectedOption = this.value;  // Get the selected option (A, B, C, D)
+            const questionNumber = currentQuestionNumberEl.textContent;  // Get the current question number
+
+            // Send the selected option to the backend
+            fetch('/save-single-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    question_number: questionNumber,
+                    selected_option: selectedOption,
+                    admission_no: admissionNo  // Pass the admission_no along with the other data
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Option saved successfully');
+            })
+            .catch(error => console.error('Error saving option:', error));
+        });
     });
 
-    // Initialize CKEditor on initial page load
-    initializeCKEditor();
+    // Automatically load the first question on page load
+    const firstQuestionNumber = buttons[0].getAttribute('data-question-number');
+    loadQuestion(firstQuestionNumber);  // Load the first question
 });
 
 </script>
+
+
+
+
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <script src="{{ asset('student/js/jquery-3.5.1.min.js') }}"></script>
 

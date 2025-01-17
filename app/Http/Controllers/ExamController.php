@@ -2134,4 +2134,81 @@ class ExamController extends Controller
 
     }
 
+    public function getSingleQuestion($questionNumber)
+    {
+        
+
+        // Retrieve the admission_no from the query string
+        $admissionNo = request()->query('admission_no');
+
+        // Log the admission_no and questionNumber
+        \Log::info('Fetching question', [
+            'admission_no' => $admissionNo,
+            'question_number' => $questionNumber
+        ]);
+        //---Get the student programme, level and semester--
+        $studentData = StudentAdmission::where('admission_no', $admissionNo)->first();
+        //---Get the exam setting for the student        
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->first();
+        //--- Get the question no for the given question number
+        $value = 'A' . $questionNumber;       
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $examSetting->department)
+                        ->where('level', $examSetting->level)
+                        ->where('semester', $examSetting->semester)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)
+                        ->first();
+            
+        $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
+                        ->where('session1', $examSetting->session1)
+                        ->where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->where('semester', $examSetting->semester)
+                        ->where('course', $examSetting->course)
+                        ->where('exam_mode', $examSetting->exam_mode)
+                        ->where('exam_type', $examSetting->exam_type)
+                        ->where('exam_category', $examSetting->exam_category)
+                        ->where('noofquestion' , $examSetting->no_of_qst)                        
+                        ->first();  
+        
+        
+        $questionNo = $cbtEvaluation->$value ;
+        // Fetch the question (uncomment when needed)
+        $question = QuestionSingle::where('session1', $examSetting->session1)
+        ->where('department', $studentData->department)
+        ->where('level', $studentData->level)
+        ->where('course', $examSetting->course)
+        ->where('exam_mode', $examSetting->exam_mode)
+        ->where('exam_type', $examSetting->exam_type)
+        ->where('exam_category', $examSetting->exam_category)
+        ->where('no_of_qst', $examSetting->no_of_qst)
+        ->where('semester', $examSetting->semester)
+        ->where('question_no', $questionNo)
+        ->first();
+
+        if (!$question) {
+            return response()->json(['error' => 'Question not found'], 404);
+        }
+
+        $answerValue = 'OK' . $questionNumber;    
+        $answerSelected = $studentAnswer->$answerValue;
+        // Return question details (uncomment when needed)
+        return response()->json([           
+            'question' => $question->question,
+            'answerSelected' => $answerSelected,
+            'option_a' => $question->option_a,
+            'option_b' => $question->option_b,
+            'option_c' => $question->option_c,
+            'option_d' => $question->option_d,
+        ]);
+    }
+
+
 }

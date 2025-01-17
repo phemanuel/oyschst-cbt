@@ -90,6 +90,11 @@ Route::get('/', function () {
     ->name('fetch-questions');
     Route::post('update-answers/{id}/{pageNo}', [ExamController::class, 'updateAnswersForPage'])
     ->name('update-answers');
+    // ----Single Questions
+    Route::get('get-question/{questionNumber}', [ExamController::class, 'getSingleQuestion'])
+    ->name('get-question');
+    Route::get('save-single-answer', [ExamController::class, 'saveSingleAnswer'])
+    ->name('save-single-answer');
     //--Submit Test
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');
