@@ -379,7 +379,7 @@
                           <p>Are you sure you want to submit.</p>
                         </div>
                         <div class="modal-footer">
-                          <a href="{{route('cbt-theory-submit', ['id' => $studentData->id])}}"  class="btn btn-success">Yes</a>
+                          <a href="{{route('cbt-submit', ['id' => $studentData->id])}}"  class="btn btn-success">Yes</a>
                           <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
                         </div>
                       </div>

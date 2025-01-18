@@ -413,7 +413,9 @@ class ExamController extends Controller
                 'noofquestion' => $noOfQuestions,
                 
             ]);
-            //----Save answers for all the questions ----                   
+            
+            if($examSetting->exam_view_type == 'Multi-Page'){
+                //----Save answers for all the questions ----                   
             foreach ($randomizedQuestions as $index => $questionNumber) {
                 // Retrieve answer for the current question number and exam mode
                 $answer = Question::where('question_no', $questionNumber)
@@ -436,6 +438,32 @@ class ExamController extends Controller
 
             // Save the changes in CbtEvaluation1 model
             $student1->save();
+            }
+            elseif($examSetting->exam_view_type == 'Single-Page'){
+                //----Save answers for all the questions ----                   
+            foreach ($randomizedQuestions as $index => $questionNumber) {
+                // Retrieve answer for the current question number and exam mode
+                $answer = QuestionSingle::where('question_no', $questionNumber)
+                    ->where('exam_mode', $examMode)
+                    ->where('exam_type', $examType)
+                    ->where('exam_category', $examCategory)
+                    ->where('department', $department)
+                    ->where('level', $level)
+                    ->where('semester', $semester)
+                    ->where('course', $course)
+                    ->where('no_of_qst', $noOfQuestions)
+                    ->value('answer');
+
+                // If answer is found, save it in the corresponding field in CbtEvaluation1 model
+                if ($answer !== null) {
+                    $field = 'OK' . ($index + 1); // Generate field name like OK1, OK2, OK3, etc.
+                    $student1->{$field} = $answer;
+                }
+            }
+
+            // Save the changes in CbtEvaluation1 model
+            $student1->save();
+            }
 
             $studentDataExist2 = CbtEvaluation2::where('studentno', $studentData->admission_no)
             ->where('exam_mode', $examMode)
