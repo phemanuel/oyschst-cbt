@@ -8,6 +8,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamTheoryController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AIController;
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ Route::get('/', function () {
     //     ->name('password.update');
 
     // Home route
-    Route::get('/', [AuthController::class, 'login'])->name('home');
+    Route::get('/', [AuthController::class, 'home'])->name('home');
     // Login and signup routes
     Route::get('user-login', [AuthController::class, 'login'])->name('login');
     Route::post('user-login', [AuthController::class, 'loginAction'])->name('login.action');
@@ -49,9 +50,19 @@ Route::get('/', function () {
 
     //--User routes
     Route::group(['middleware' => ['student.auth']], function () {
-       //-----Dashboard routes-----
+       //-----Dashboard routes-----       
+    Route::get('student/dashboard/{id}', [DashboardController::class, 'indexStudent'])
+    ->name('student-dashboard'); 
+    Route::get('student/report/{id}', [ReportController::class, 'studentReport'])
+    ->name('student-report'); 
     Route::get('user-dashboard/{id}', [DashboardController::class, 'index'])
     ->name('dashboard');
+    Route::get('student/course/material/{id}', [DashboardController::class, 'courseMaterial'])
+    ->name('student-course-material'); 
+    Route::get('course/material/{id}/{studentId}', [DashboardController::class, 'courseMaterialView'])
+    ->name('course-material');
+    Route::get('student/cbt/{id}', [DashboardController::class, 'studentCbt'])
+    ->name('student-cbt'); 
     // ->middleware(StudentAuth::class);  
     //----Computer Based Test--------
     Route::post('cbt/{id}', [ExamController::class, 'cbtCheck'])
@@ -82,7 +93,28 @@ Route::get('/', function () {
     Route::get('cbt/{id}/page9', [ExamController::class, 'cbtPage9'])
     ->name('cbt-page9');
     Route::get('cbt/{id}/page10', [ExamController::class, 'cbtPage10'])
-    ->name('cbt-page10');        
+    ->name('cbt-page10');     
+    //----Exam Sheet
+    Route::get('exam-sheet/{id}/Page1', [ReportController::class, 'examSheetPage01'])
+        ->name('exam-sheet-page01');
+        Route::get('exam-sheet/{id}/Page2', [ReportController::class, 'examSheetPage02'])
+        ->name('exam-sheet-page02');
+        Route::get('exam-sheet/{id}/Page3', [ReportController::class, 'examSheetPage03'])
+        ->name('exam-sheet-page03');
+        Route::get('exam-sheet/{id}/Page4', [ReportController::class, 'examSheetPage04'])
+        ->name('exam-sheet-page04');
+        Route::get('exam-sheet/{id}/Page5', [ReportController::class, 'examSheetPage05'])
+        ->name('exam-sheet-page05');
+        Route::get('exam-sheet/{id}/Page6', [ReportController::class, 'examSheetPage06'])
+        ->name('exam-sheet-page06');
+        Route::get('exam-sheet/{id}/Page7', [ReportController::class, 'examSheetPage07'])
+        ->name('exam-sheet-page07');
+        Route::get('exam-sheet/{id}/Page8', [ReportController::class, 'examSheetPage08'])
+        ->name('exam-sheet-page08');
+        Route::get('exam-sheet/{id}/Page9', [ReportController::class, 'examSheetPage09'])
+        ->name('exam-sheet-page09');
+        Route::get('exam-sheet/{id}/Page10', [ReportController::class, 'examSheetPage010'])
+        ->name('exam-sheet-page010');
     //----Update Answers---
     Route::get('fetch-answers/{id}/{pageNo}', [ExamController::class, 'fetchAnswers'])
     ->name('fetch-answers');
@@ -130,6 +162,7 @@ Route::get('/', function () {
     Route::post('signup', [AuthController::class, 'signupAction'])->name('signup.action');    
     // Logout route
     Route::get('student-logout', [AuthController::class, 'studentLogout'])->name('student-logout'); 
+    
     });
 
     //----Admin routes--
@@ -340,25 +373,25 @@ Route::get('/', function () {
         //------
         Route::post('report-search', [ReportController::class, 'reportSearch'])
         ->name('report-search');
-        Route::get('exam-sheet/{id}/Page1', [ReportController::class, 'examSheetPage1'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page1', [ReportController::class, 'examSheetPage1'])
         ->name('exam-sheet-page1');
-        Route::get('exam-sheet/{id}/Page2', [ReportController::class, 'examSheetPage2'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page2', [ReportController::class, 'examSheetPage2'])
         ->name('exam-sheet-page2');
-        Route::get('exam-sheet/{id}/Page3', [ReportController::class, 'examSheetPage3'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page3', [ReportController::class, 'examSheetPage3'])
         ->name('exam-sheet-page3');
-        Route::get('exam-sheet/{id}/Page4', [ReportController::class, 'examSheetPage4'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page4', [ReportController::class, 'examSheetPage4'])
         ->name('exam-sheet-page4');
-        Route::get('exam-sheet/{id}/Page5', [ReportController::class, 'examSheetPage5'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page5', [ReportController::class, 'examSheetPage5'])
         ->name('exam-sheet-page5');
-        Route::get('exam-sheet/{id}/Page6', [ReportController::class, 'examSheetPage6'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page6', [ReportController::class, 'examSheetPage6'])
         ->name('exam-sheet-page6');
-        Route::get('exam-sheet/{id}/Page7', [ReportController::class, 'examSheetPage7'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page7', [ReportController::class, 'examSheetPage7'])
         ->name('exam-sheet-page7');
-        Route::get('exam-sheet/{id}/Page8', [ReportController::class, 'examSheetPage8'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page8', [ReportController::class, 'examSheetPage8'])
         ->name('exam-sheet-page8');
-        Route::get('exam-sheet/{id}/Page9', [ReportController::class, 'examSheetPage9'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page9', [ReportController::class, 'examSheetPage9'])
         ->name('exam-sheet-page9');
-        Route::get('exam-sheet/{id}/Page10', [ReportController::class, 'examSheetPage10'])
+        Route::get('exam-sheet/{examViewType}/{id}/Page10', [ReportController::class, 'examSheetPage10'])
         ->name('exam-sheet-page10');
         Route::get('student-result/{id}', [ReportController::class, 'studentResult'])
         ->name('student-result');
@@ -366,6 +399,8 @@ Route::get('/', function () {
         ->name('result-search'); 
         Route::get('/exam-dates', [DashboardController::class, 'getExamDates'])
         ->name('exam-dates');
+        Route::get('student/exam-dates', [DashboardController::class, 'getStudentExamDates'])
+        ->name('student-exam-dates');
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 
@@ -383,6 +418,18 @@ Route::get('/', function () {
         ->name('activate-user');  
         Route::post('user-search', [DashboardController::class, 'userSearch'])
         ->name('user-search');   
+        Route::get('material/', [MaterialController::class, 'index'])
+        ->name('material');  
+        Route::get('material/add', [MaterialController::class, 'addMaterial'])
+        ->name('material-add');  
+        Route::post('material/add', [MaterialController::class, 'storeMaterial'])
+        ->name('material-store'); 
+        Route::get('material/edit/{id}', [MaterialController::class, 'editMaterial'])
+        ->name('material-edit');
+        Route::get('material/delete/{id}', [MaterialController::class, 'deleteMaterial'])
+        ->name('material-delete');
+        Route::put('material/update/{id}', [MaterialController::class, 'updateMaterial'])
+        ->name('material-update');        
         
         Route::post('lock-exam/{id}', [DashboardController::class, 'lockExam'])
         ->name('lock-exam');   

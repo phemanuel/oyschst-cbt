@@ -179,7 +179,7 @@
             </span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student</span>
             <span class="pull-right-container">
@@ -218,7 +218,7 @@
             </span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('report')}}">
             <i class="fa fa-folder"></i> <span>Report</span>
             <span class="pull-right-container">
@@ -266,70 +266,70 @@
               <div class="card">
                 <div class="card-body">
                   @if($noOfQst == 10)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>                  
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>                  
                   @elseif($noOfQst == 20)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>                  
+                    <a href="{{route('exam-sheet-page1' , ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>                  
                   @elseif($noOfQst == 30)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheett-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>  
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheett-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>  
                   @elseif($noOfQst == 40)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>   
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>   
                   @elseif($noOfQst == 50)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['id' => $qstData->id])}}" class="btn btn-success">41-50</a>  
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>  
                   @elseif($noOfQst == 60)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page6', ['id' => $qstData->id])}}" class="btn btn-success">51-60</a>  
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>  
                   @elseif($noOfQst == 70)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page7', ['id' => $qstData->id])}}" class="btn btn-success">61-70</a>   
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>   
                   @elseif($noOfQst == 80)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page7', ['id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page8', ['id' => $qstData->id])}}" class="btn btn-success">71-80</a> 
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
+                    <a href="{{route('exam-sheet-page8', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">71-80</a> 
                   @elseif($noOfQst == 90)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page7', ['id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page8', ['id' => $qstData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page9', ['id' => $qstData->id])}}" class="btn btn-success">81-90</a>   
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
+                    <a href="{{route('exam-sheet-page8', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;  
+                    <a href="{{route('exam-sheet-page9', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">81-90</a>   
                   @elseif($noOfQst == 100)
-                    <a href="{{route('exam-sheet-page1', ['id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page7', ['id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page8', ['id' => $qstData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page9', ['id' => $qstData->id])}}" class="btn btn-success">81-90</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page10', ['id' => $qstData->id])}}" class="btn btn-success">91-100</a> 
+                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
+                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
+                    <a href="{{route('exam-sheet-page8', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;
+                    <a href="{{route('exam-sheet-page9', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">81-90</a>&nbsp; &nbsp;  
+                    <a href="{{route('exam-sheet-page10', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">91-100</a> 
                        
                   @endif                  
                 </div>
