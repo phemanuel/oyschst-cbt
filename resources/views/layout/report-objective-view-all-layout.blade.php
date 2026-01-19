@@ -241,20 +241,13 @@
               <h3 class="box-title"></h3>
              
               <div class="box-tools">
-              <form action="{{ route('result-search') }}" method="post" class="form-inline">
-                @csrf
-                <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
-
-                    <div class="input-group-btn">
-                    <button type="submit" class="btn btn-success">Search</button>
-                    </div>
-                </div>
-            </form>
+                  <div class="input-group input-group-sm" style="width: 200px;">
+                      <input type="text" id="search-student" class="form-control pull-right" placeholder="Search by Matric No or Name">
+                  </div>
               </div>
               <hr>
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive no-padding">             
               <table class="table table-hover">
                 <tr>
                   <th>ID</th>
@@ -286,7 +279,7 @@
                     @elseif($rs->examstatus == 2)
                     <td>Completed</td>
                     @endif                 
-                    <td> <a class="label label-primary" href="{{route('exam-sheet-page1', ['id' => $rs->id])}}" target="_blank">Exam Sheet</a>  
+                    <td> <a class="label label-primary" href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , id' => $rs->id])}}" target="_blank">Exam Sheet</a>  
                     <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}" target="_blank">Print Result</a>                   
                 </td>
                 </tr>
@@ -541,6 +534,25 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+
+    $('#search-student').on('keyup', function() {
+        var query = $(this).val();
+
+        $.ajax({
+            url: "{{ route('result-search-ajax') }}",
+            method: "GET",
+            data: { query: query },
+            success: function(response) {
+                $('#student-table').html(response);
+            }
+        });
+    });
+
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

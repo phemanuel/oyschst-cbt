@@ -89,6 +89,7 @@ class ReportController extends Controller
 
         $questionSetting = QuestionSetting::where('id', $id)->first();
         $examViewType = $questionSetting->exam_view_type;
+        $questionId = $id;
 
         // Join TheoryAnswer with StudentAdmission to get picturename
         $student = CbtEvaluation::where('cbt_evaluations.session1', $questionSetting->session1) 
@@ -111,7 +112,7 @@ class ReportController extends Controller
         }
 
         return view('dashboard.report-objective-view', compact('softwareVersion','collegeSetup',
-        'student','examViewType'));
+        'student','examViewType','questionId'));
     }
 
     public function filter(Request $request)
@@ -173,6 +174,44 @@ class ReportController extends Controller
         }
 
         return view('dashboard.result-search', compact('softwareVersion','collegeSetup','student'));
+    }
+
+    public function searchAjax(Request $request)
+    {
+        $searchTerm = $request->query('query');
+        $questionId = $request->query('question_id'); // get it from AJAX
+
+        // Get the question settings
+        $questionSetting = QuestionSetting::find($questionId);
+        if (!$questionSetting) {
+            return response()->json(['error' => 'Invalid question ID'], 400);
+        }
+
+        $examViewType = $questionSetting->exam_view_type;
+
+        // Filter students based on the question settings + search term
+        $student = CbtEvaluation::query()
+            ->where('cbt_evaluations.session1', $questionSetting->session1)
+            ->where('cbt_evaluations.department', $questionSetting->department)
+            ->where('cbt_evaluations.level', $questionSetting->level)
+            ->where('cbt_evaluations.semester', $questionSetting->semester)
+            ->where('cbt_evaluations.course', $questionSetting->course)
+            ->where('cbt_evaluations.exam_mode', $questionSetting->exam_mode)
+            ->where('cbt_evaluations.exam_type', $questionSetting->exam_type)
+            ->where('cbt_evaluations.exam_category', $questionSetting->exam_category)
+            ->where('cbt_evaluations.noofquestion', $questionSetting->no_of_qst)
+            ->where('examstatus', 2)
+            ->when($searchTerm, function ($q) use ($searchTerm) {
+                $q->where(function ($query) use ($searchTerm) {
+                    $query->where('studentno', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('studentname', 'LIKE', "%{$searchTerm}%");
+                });
+            })
+            ->orderBy('studentname')
+            ->paginate(20);
+
+        // Return the table partial with examViewType
+        return view('partials.student-result-table', compact('student', 'examViewType'))->render();
     }
 
     public function reportSearch(Request $request)

@@ -353,6 +353,8 @@ Route::get('/', function () {
         ->name('report-objective-view-all');
         Route::get('report-objective-csv/{id}', [ReportController::class, 'reportObjCsv'])
         ->name('report-objective-csv');
+        Route::get('/result-search-ajax', [ReportController::class, 'searchAjax'])
+        ->name('result-search-ajax');
 
         //-----Theory
         Route::get('report-theory', [ReportController::class, 'reportTheory'])

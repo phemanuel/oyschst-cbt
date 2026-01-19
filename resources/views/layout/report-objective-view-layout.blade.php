@@ -241,67 +241,17 @@
               <h3 class="box-title"></h3>
              
               <div class="box-tools">
-              <form action="{{ route('result-search') }}" method="post" class="form-inline">
-                @csrf
-                <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="search" class="form-control pull-right" placeholder="Search">
-
-                    <div class="input-group-btn">
-                    <button type="submit" class="btn btn-success">Search</button>
-                    </div>
-                </div>
-            </form>
+                  <div class="input-group input-group-sm" style="width: 200px;">
+                      <input type="text" id="search-student" class="form-control pull-right" placeholder="Search by Matric No or Name">
+                  </div>
               </div>
               <hr>
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tr>
-                  <th>ID</th>
-                  <th>Avatar</th>
-                  <th>Reg/Matric No</th>
-                  <th>Name</th>
-                  <th>Programme(1st Choice)</th>
-                  <th>Programme(2nd Choice)</th>
-                  <th>Level</th>
-                  <th>State</th>
-                  <th>Exam Type</th>
-                  <th>No of Qst</th>
-                  <th>Score</th>
-                  <th>Exam Status</th>
-                  <th>Actions</th>
-                </tr>
-                @if ($student->count() > 0)
-                @foreach ($student as $key => $rs)
-                <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->picture_name . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
-                    <td>{{$rs->studentno}}</td>
-                    <td>{{ $rs->studentname }}</td>
-                    <td>{{ $rs->department }}</td>
-                    <td>{{ $rs->department1 }}</td>
-                    <td>{{ $rs->level }}</td>
-                    <td>{{ $rs->state}}</td>
-                    <td>{{ $rs->exam_type }}</td>
-                    <td>{{ $rs->noofquestion }}</td>                    
-                    <td>{{ $rs->correct }}</td>   
-                    @if($rs->examstatus == 1)
-                    <td>Not Completed</td>
-                    @elseif($rs->examstatus == 2)
-                    <td>Completed</td>
-                    @endif                 
-                    <td> <a class="label label-primary" href="{{route('exam-sheet-page1', ['id' => $rs->id])}}" target="_blank">Exam Sheet</a>  
-                    <a class="label label-success" href="{{route('student-result', ['id' => $rs->id])}}" target="_blank">Print Result</a>                   
-                </td>
-                </tr>
-                @endforeach
-                @else
-		<tr>
-			<td colspan="8">Results not available.</td>
-		</tr>
-        @endif
-              </table>
-              {{ $student->links() }}
+            <div class="box-body table-responsive no-padding">              
+              <div id="student-table">
+                  @include('partials.student-result-table', ['student' => $student])
+                  <input type="hidden" id="question-id" value="{{ $questionId }}">
+              </div>              
             </div>
             <!-- /.box-body -->
           </div>
@@ -545,6 +495,47 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+
+    // Grab the question ID from the hidden input
+    var questionId = $('#question-id').val();
+
+    function fetchStudents(query, page = 1) {
+        $.ajax({
+            url: "{{ route('result-search-ajax') }}",
+            method: "GET",
+            data: { 
+                query: query,
+                page: page,
+                question_id: questionId // pass the questionId here
+            },
+            success: function(response) {
+                $('#student-table').html(response);
+            },
+            error: function(xhr) {
+                console.log("AJAX error:", xhr.responseText);
+            }
+        });
+    }
+
+    // Real-time search
+    $('#search-student').on('keyup', function() {
+        var query = $(this).val();
+        fetchStudents(query);
+    });
+
+    // AJAX pagination
+    $(document).on('click', '#student-table .pagination a', function(e) {
+        e.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        var query = $('#search-student').val();
+        fetchStudents(query, page);
+    });
+
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
