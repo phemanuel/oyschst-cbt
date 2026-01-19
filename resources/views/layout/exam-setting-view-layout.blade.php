@@ -225,7 +225,19 @@
               <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
+              <div class="row mb-3">
+                  <div class="col-md-4">
+                      <input type="text" id="searchProgramme" class="form-control" placeholder="Search Programme">
+                  </div>
+                  <div class="col-md-4">
+                      <input type="text" id="searchExamType" class="form-control" placeholder="Search Exam Type">
+                  </div>
+                  <div class="col-md-4">
+                      <input type="text" id="searchLevel" class="form-control" placeholder="Search Level">
+                  </div>
+              </div>
               <table class="table table-hover">
+                <thead>
                 <tr>
                   <th>ID</th>
                   <th>Academic Session</th>
@@ -241,13 +253,19 @@
                   <th>No of Questions(Student)</th>
                   <th>Duration</th>
                   <th>Check Result</th>
-                  <th>Status</th>
-                  <th>Created On</th>
+                  <th>Status</th>                  
                   <th>Actions</th>
+                  <th>Created On</th>
                 </tr>
+                </thead>
                 @if ($examSetting->count() > 0)
+                <tbody>
                 @foreach ($examSetting as $key => $rs)
-                <tr>
+                <tr
+                class="student-row"
+                data-programme="{{ strtolower($rs->department) }}"
+                data-examtype="{{ strtolower($rs->exam_type) }}"
+                data-level="{{ strtolower($rs->level) }}">
                     <td>{{ $key + 1 }}</td>                    
                     <td>{{$rs->session1}}</td>
                     <td>{{ $rs->department }}</td>
@@ -266,22 +284,23 @@
                     @else
                     <td>NO</td>
                     @endif
-                    <td>{{ $rs->exam_status }} </td>
-                    <td>{{$rs->created_at}}</td>
+                    <td>{{ $rs->exam_status }} </td>                   
                     <td> 
                       
                       <a class="label label-success" href="{{route('exam-setting-edit', ['id' => $rs->id])}}">Edit</a>
                      
                     </td>
+                     <td>{{$rs->created_at}}</td>
                 </tr>
                 @endforeach
+  </tbody>
                 @else
 		<tr>
 			<td colspan="8">Exams not available.</td>
 		</tr>
         @endif
               </table>
-              {{ $examSetting->links() }}
+              
             </div>
             <!-- /.box-body -->
           </div>
@@ -495,6 +514,41 @@
 </div>
 <!-- ./wrapper -->
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const programmeInput = document.getElementById('searchProgramme');
+    const examTypeInput = document.getElementById('searchExamType');
+    const levelInput = document.getElementById('searchLevel');
+    const rows = document.querySelectorAll('.student-row');
+
+    function filterTable() {
+        const programme = programmeInput.value.toLowerCase();
+        const examType = examTypeInput.value.toLowerCase();
+        const level = levelInput.value.toLowerCase();
+
+        rows.forEach(row => {
+            const rowProgramme = row.dataset.programme;
+            const rowExamType = row.dataset.examtype;
+            const rowLevel = row.dataset.level;
+
+            const matchProgramme = rowProgramme.includes(programme);
+            const matchExamType = rowExamType.includes(examType);
+            const matchLevel = rowLevel.includes(level);
+
+            if (matchProgramme && matchExamType && matchLevel) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    programmeInput.addEventListener('keyup', filterTable);
+    examTypeInput.addEventListener('keyup', filterTable);
+    levelInput.addEventListener('keyup', filterTable);
+});
+</script>
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->

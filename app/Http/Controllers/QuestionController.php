@@ -61,7 +61,7 @@ class QuestionController extends Controller
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
                             ->orderBy('exam_status', 'asc')
                             ->orderBy('created_at', 'asc')
-                            ->Paginate(20);        
+                            ->get();        
 
         return view('questions.question-obj-upload', compact('softwareVersion','collegeSetup','questionSetting'));
     }

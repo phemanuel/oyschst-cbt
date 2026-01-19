@@ -142,9 +142,9 @@ class StudentController extends Controller
 
             // Fetch student admission
             $checkAdmission = StudentAdmission::where('admission_no', $admission_no)->first();
-            $examSetting = ExamSetting::where('department', $checkAdmission->department)
-            ->where('level', $checkAdmission->level)
-            ->first();
+            // $examSetting = ExamSetting::where('department', $checkAdmission->department)
+            // ->where('level', $checkAdmission->level)
+            // ->first();
 
             // Check if student is found
             if (!$checkAdmission) {
@@ -233,24 +233,24 @@ class StudentController extends Controller
     {
         try {
             // Validate the request data as needed
-            $validatedData = $request->validate([                
-                'login_status' => 'required|integer',  
-                //'exam_status' => 'required|integer',              
-            ]);
+            // $validatedData = $request->validate([                
+            //     'login_status' => 'required|integer',  
+            //     //'exam_status' => 'required|integer',              
+            // ]);
 
-            // Retrieve the user skill based on the $id
+            // Retrieve the user  based on the $id
             $changeStatus = StudentAdmission::findOrFail($id);
-            $examSetting = ExamSetting::where('department', $changeStatus->department)
-            ->where('level', $changeStatus->level)
-            ->first();
+            // $examSetting = ExamSetting::where('department', $changeStatus->department)
+            // ->where('level', $changeStatus->level)
+            // ->first();
             $admission_no = $changeStatus->admission_no;
             
             if(!$changeStatus){
                 return redirect()->back()->with('error', 'Student no cannot be found.');
             }
-            // Update the user skill attributes based on the request data
+            // Update the user login status
             $changeStatus->update([
-                'login_status' => $validatedData['login_status'],                
+                'login_status' => 0,                
             ]);         
 
             // Redirect to the user's skill list or another appropriate page
@@ -293,7 +293,7 @@ class StudentController extends Controller
             }
 
             $examStatus->update([
-                'examstatus' => $validatedData['exam_status'],                
+                'examstatus' => 1,                
             ]);
 
             // Redirect to the user's skill list or another appropriate page
@@ -317,9 +317,36 @@ class StudentController extends Controller
 
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $student = StudentAdmission::Paginate(20);
-        return view('dashboard.student', compact('softwareVersion','collegeSetup','student'));
+        $students = StudentAdmission::paginate(20);
+        return view('dashboard.student', compact('softwareVersion','collegeSetup','students'));
     }
+
+    public function search(Request $request)
+    {
+        $query = StudentAdmission::query();
+
+        if ($request->filled('matricno')) {
+            $query->where('admission_no', 'like', '%' . $request->matricno . '%');
+        }
+
+        if ($request->filled('programme')) {
+            $query->where('department', 'like', '%' . $request->programme . '%');
+        }
+
+        if ($request->filled('level')) {
+            $query->where('level', 'like', '%' . $request->level . '%');
+        }
+
+        $students = $query->orderBy('admission_no')->paginate(20);
+
+        if ($request->ajax()) {
+            // Return the rendered partial view for AJAX
+            return view('partials.student-table', compact('students'))->render();
+        }
+
+        return view('students-layout', compact('students'));
+    }
+
 
     public function studentCreate()
     {
@@ -399,12 +426,12 @@ class StudentController extends Controller
         }
     }
 
-    public function search(Request $request)
-    {
-        $searchTerm = $request->input('search');
+    // public function search(Request $request)
+    // {
+    //     $searchTerm = $request->input('search');
 
-        return redirect()->route('search-list', ['searchTerm' => $searchTerm]);
-    }
+    //     return redirect()->route('search-list', ['searchTerm' => $searchTerm]);
+    // }
 
     public function searchList($searchTerm)
     {
@@ -434,7 +461,7 @@ class StudentController extends Controller
         $class = CbtClass::orderBy('level')->get();
         $dept = Department::orderBy('department')->get();
         $acad_sessions = AcademicSession::orderBy('session1')->get();      
-        $studentData = StudentAdmission::where('id', $id)->get();
+        $studentData = StudentAdmission::where('id', $id)->first();
 
         if(!$studentData){
             return redirect()->route('student')->with('error', 'A problem ocurred while processing student data.');

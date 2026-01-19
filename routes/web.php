@@ -40,7 +40,8 @@ Route::get('/', function () {
     //     ->name('password.update');
 
     // Home route
-    Route::get('/', [AuthController::class, 'home'])->name('home');
+    Route::get('/', [AuthController::class, 'login'])->name('login');
+    // Route::get('/', [AuthController::class, 'home'])->name('home');
     // Login and signup routes
     Route::get('user-login', [AuthController::class, 'login'])->name('login');
     Route::post('user-login', [AuthController::class, 'loginAction'])->name('login.action');
@@ -188,6 +189,8 @@ Route::get('/', function () {
         //--student list        
         Route::get('student-list', [StudentController::class, 'student'])
         ->name('student-list');
+        Route::get('/students/search', [StudentController::class, 'search'])
+        ->name('students.search');
         Route::get('student-create', [StudentController::class, 'studentCreate'])
         ->name('student-create');
         Route::post('student-create', [StudentController::class, 'studentCreateAction'])
@@ -342,6 +345,8 @@ Route::get('/', function () {
         //----Objective
         Route::get('report-objective', [ReportController::class, 'reportObjective'])
         ->name('report-objective');
+        Route::get('/report-objective-filter', [ReportController::class, 'filter'])
+        ->name('report-objective-filter');
         Route::get('report-objective-view/{id}', [ReportController::class, 'reportObjectiveView'])
         ->name('report-objective-view');
         Route::post('report-objective-view/result', [ReportController::class, 'reportObjectiveViewAll'])

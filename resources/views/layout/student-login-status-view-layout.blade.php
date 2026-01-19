@@ -258,10 +258,10 @@
                   <label for="exampleInputEmail1">Programme</label>
                   <p>{{$checkAdmission->department}}</p>
                 </div>   
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Login Status</label>
                   <input type="text" name="login_status" class="form-control" value="{{$checkAdmission->login_status}}">
-                </div>             
+                </div>              -->
                 @error('login_status')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -272,7 +272,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Reset</button>
               </div>
             </form>
            

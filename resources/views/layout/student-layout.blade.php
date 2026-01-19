@@ -250,7 +250,7 @@
               <h3 class="box-title"></h3>
               
               <div class="box-tools">
-              <form action="{{ route('search') }}" method="post" class="form-inline">
+              <!-- <form action="{{ route('search') }}" method="post" class="form-inline">
                 @csrf
                 <div class="input-group input-group-sm" style="width: 300px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
@@ -259,7 +259,7 @@
                     <button type="submit" class="btn btn-success">Search</button>
                     </div>
                 </div>
-            </form>
+            </form> -->
               </div>
               <hr>
               @if(session('success'))
@@ -272,51 +272,29 @@
 						</div>
 						@endif
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tr>
-                  <th>ID</th>
-                  <th>Avatar</th>
-                  <th>Reg/Matric No</th>
-                  <th>Name</th>
-                  <th>Programme(1st Choice)</th>
-                  <th>Programme(2nd Choice)</th>
-                  <th>Level</th>
-                  <th>Phone No</th>
-                  <th>State</th>
-                  <th>Login Status</th>
-                  <th>Actions</th>                  
-                </tr>
-                @if ($student->count() > 0)
-                @foreach ($student as $key => $rs)
-                <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td><img src="{{asset('uploads/'. $rs->picture_name . '.jpg')}}" alt="" width="50" height="50" class="img-circle"></td>
-                    <td>{{$rs->admission_no}}</td>
-                    <td>{{ $rs->surname . " " . $rs->first_name . " " . $rs->other_name }}</td>
-                    <td>{{ $rs->department }}</td>
-                    <td>{{ $rs->department1 }}</td>
-                    <td>{{ $rs->level }}</td>
-                    <td>{{ $rs->phone_no }}</td>
-                    <td>{{ $rs->state }}</td>
-                    @if ($rs->login_status == '0')
-                    <td><span class="label label-danger">{{ $rs->login_status }}</span></td>
-                    @elseif ($rs->login_status == '1')
-                    <td><span class="label label-success">{{ $rs->login_status }}</span></td>
-                    @endif
-                    <td> <a class="label label-primary" href="{{route('student-edit.action', ['id' => $rs->id])}}">Edit</a>
-                    <a class="label label-danger" href="{{route('student-delete.action', ['id' => $rs->id])}}">Delete</a>                    
-                </td>
-                <td></td>
-                </tr>
-                @endforeach
-                @else
-		<tr>
-			<td colspan="8">Students not available.</td>
-		</tr>
-        @endif
-              </table>
-              {{ $student->links() }}
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="text" id="searchMatricNo" class="form-control" placeholder="Search by Matric No">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="searchProgramme" class="form-control" placeholder="Search by Programme">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="searchLevel" class="form-control" placeholder="Search by Level">
+                </div>
+            </div>
+
+            <div id="student-table" style="position: relative;">
+                <div id="table-loader" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+                @include('partials.student-table', ['students' => $students])
+            </div>
+              
+              
             </div>
             <!-- /.box-body -->
           </div>
@@ -560,6 +538,56 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const matricInput = document.getElementById('searchMatricNo');
+    const programmeInput = document.getElementById('searchProgramme');
+    const levelInput = document.getElementById('searchLevel');
+    const tableContainer = document.getElementById('student-table');
+    const loader = document.getElementById('table-loader');
+
+    function fetchStudents(url = '/students/search') {
+        const params = new URLSearchParams({
+            matricno: matricInput.value,
+            programme: programmeInput.value,
+            level: levelInput.value,
+        });
+
+        loader.style.display = 'block'; // show loader
+
+        fetch(`${url}?${params.toString()}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.text())
+        .then(html => {
+            tableContainer.innerHTML = html;
+            attachPaginationLinks();
+        })
+        .catch(err => console.error(err))
+        .finally(() => loader.style.display = 'none'); // hide loader
+    }
+
+    function attachPaginationLinks() {
+        const links = tableContainer.querySelectorAll('.pagination a');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                fetchStudents(this.href);
+            });
+        });
+    }
+
+    // Trigger search on typing
+    [matricInput, programmeInput, levelInput].forEach(input => {
+        input.addEventListener('keyup', () => fetchStudents());
+    });
+
+    // Attach pagination on initial load
+    attachPaginationLinks();
+
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

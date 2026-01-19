@@ -238,22 +238,45 @@
                 @csrf
                 <table width="70%" cellpadding="3" cellspacing="3">
   <h3><strong>Check all result.</strong></h3>
-                  <tr>
-                  <td>Academic Session</td>
-                  <td><select name="session1" id="" class="form-control">                                
-                  @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
-                  </select></td>
-                    <td>&nbsp;&nbsp;&nbsp;Exam Type</td>
-                    <td> <select name="exam_type" id="" class="form-control">                  
-                  @foreach($examType as $rd)
-				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
-				@endforeach
-                  </select></td>   
-                    <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><button type="submit" class="btn btn-info">Check Result</button></td>                 
-                  </tr>
+                  <div class="row mb-3">
+    <div class="col-md-3">
+        <label>Academic Session</label>
+        <select name="session1" id="filter-session" class="form-control">
+            <option value="">All</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label>Programme</label>
+        <select name="department" id="filter-department" class="form-control">
+            <option value="">All</option>
+            @foreach($dept as $rd)
+                <option value="{{ $rd->department }}">{{ $rd->department }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label>Level</label>
+        <select name="level" id="filter-level" class="form-control">
+            <option value="">All</option>
+            @foreach($class as $rd)
+                <option value="{{ $rd->level }}">{{ $rd->level }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label>Exam Type</label>
+        <select name="exam_type" id="filter-examtype" class="form-control">
+            <option value="">All</option>
+            @foreach($examType as $rd)
+                <option value="{{ $rd->exam_type }}">{{ $rd->exam_type }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
                 </table>
               </form>
               <div class="box-tools">
@@ -265,7 +288,7 @@
               <div class="box-header">
               <h3 class="box-title"></h3>
               <div class="box-tools">
-              <form action="{{ route('report-search') }}" method="post" class="form-inline">
+              <!-- <form action="{{ route('report-search') }}" method="post" class="form-inline">
                 @csrf
                 <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
@@ -274,61 +297,17 @@
                     <button type="submit" class="btn btn-success">Search</button>
                     </div>
                 </div>
-            </form>
+            </form> -->
               </div>
   </div>
              
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tr>
-                  <th>ID</th>
-                  <th>Academic Session</th>
-                  <th>Programme</th>
-                  <th>Course</th>
-                  <th>Level</th>
-                  <th>Semester</th>
-                  <th>Exam Mode</th>
-                  <th>Exam Type</th>
-                  <th>Exam Date</th>
-                  <th>No of Questions</th>
-                  <th>Duration</th>
-                  <th>Status</th>
-                  <th>Created On</th>
-                  <th>Actions</th>
-                </tr>
-                @if ($questionSetting->count() > 0)
-                @foreach ($questionSetting as $key => $rs)
-                <tr>
-                    <td>{{ $key + 1 }}</td>                    
-                    <td>{{$rs->session1}}</td>
-                    <td>{{ $rs->department }}</td>
-                    <td>{{$rs->course}}</td>
-                    <td>{{ $rs->level }}</td>
-                    <td>{{ $rs->semester }}</td>
-                    <td>{{ $rs->exam_mode }}</td>
-                    <td>{{ $rs->exam_type }}</td>
-                    <td>{{ $rs->exam_date }}</td>
-                    <td>{{ $rs->no_of_qst }}</td>
-                    <td>{{ $rs->duration }}</td>                    
-                    <td>{{ $rs->exam_status }}                    
-                    </td>                                       
-                    <td>{{$rs->created_at}}</td>
-                    <td>                     
-                      <a class="label label-success" href="{{route('report-objective-view', ['id' => $rs->id])}}">Check Result</a>
-                     </td>
-                    <td> 
-                    <a class="label label-info" href="{{route('report-objective-csv', ['id' => $rs->id])}}">Export CSV</a>
-                    </td>
-                </tr>
-                @endforeach
-                @else
-		<tr>
-			<td colspan="8">Questions not available.</td>
-		</tr>
-        @endif
-              </table>
-              {{ $questionSetting->links() }}
+
+            <div id="question-settings-table">
+                @include('partials.question-settings-table', ['questionSetting' => $questionSetting])
+            </div>
+              
             </div>
             <!-- /.box-body -->
           </div>
@@ -541,6 +520,54 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
+
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+
+    function fetchFilteredData() {
+        var session1 = $('#filter-session').val();
+        var department = $('#filter-department').val();
+        var level = $('#filter-level').val();
+        var exam_type = $('#filter-examtype').val();
+
+        $.ajax({
+            url: "{{ route('report-objective-filter') }}",
+            method: "GET",
+            data: {
+                session1: session1,
+                department: department,
+                level: level,
+                exam_type: exam_type
+            },
+            success: function(response) {
+                $('#question-settings-table').html(response);
+            }
+        });
+    }
+
+    $('#filter-session, #filter-department, #filter-level, #filter-examtype').on('change', fetchFilteredData);
+
+});
+</script>
+
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

@@ -278,14 +278,11 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror 
               <div class="form-group">
-                  <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="session1" id="" class="form-control">
-                  <!-- <option value="{{old('session1')}}">{{old('session1')}}</option>                   -->
-                  @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
+                  <label>Academic Session</label>
+                  <select name="session1" id="filter-session" class="form-control">
+                      <!-- <option value="">All</option> -->
                   </select>
-                </div>             
+              </div>
                 @error('session1')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -360,7 +357,7 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1">Total No of questions to upload</label>
                   <select name="upload_no_of_qst" class="form-control">
-                  <option value="10" selected>10</option>
+                 <option value="10" selected>10</option>
                   <option value="20">20</option>
                   <option value="30">30</option>
                   <option value="40">40</option>
@@ -370,14 +367,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
-                  <option value="20">150</option>
-                  <option value="30">200</option>
-                  <option value="40">250</option>
-                  <option value="50">300</option>
-                  <option value="60">350</option>
-                  <option value="70">400</option>
-                  <option value="80">450</option>
-                  <option value="90">500</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="250">250</option>
+                  <option value="300">300</option>
+                  <option value="350">350</option>
+                  <option value="400">400</option>
+                  <option value="450">450</option>
+                  <option value="500">500</option>
                 </select>
                 </div>             
                 @error('upload_no_of_qst')
@@ -396,14 +393,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
-                  <option value="20">150</option>
+                  <!-- <option value="20">150</option>
                   <option value="30">200</option>
                   <option value="40">250</option>
                   <option value="50">300</option>
                   <option value="60">350</option>
                   <option value="70">400</option>
                   <option value="80">450</option>
-                  <option value="90">500</option>
+                  <option value="90">500</option> -->
                 </select>
                 </div>             
                 @error('no_of_qst')
@@ -486,14 +483,11 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                <div class="form-group">
-                  <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="session1" id="" class="form-control">
-                  <!-- <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                   -->
-                  @foreach($acad_sessions as $rd)
-                  <option value="{{$rd->session1}}">{{$rd->session1}}</option>
-                  @endforeach
+                  <label>Academic Session</label>
+                  <select name="session1" id="filter-session1" class="form-control">
+                      
                   </select>
-                </div>             
+              </div>             
                 @error('session1')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -578,14 +572,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
-                  <option value="20">150</option>
-                  <option value="30">200</option>
-                  <option value="40">250</option>
-                  <option value="50">300</option>
-                  <option value="60">350</option>
-                  <option value="70">400</option>
-                  <option value="80">450</option>
-                  <option value="90">500</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="250">250</option>
+                  <option value="300">300</option>
+                  <option value="350">350</option>
+                  <option value="400">400</option>
+                  <option value="450">450</option>
+                  <option value="500">500</option>
                 </select>
                 </div>             
                 @error('upload_no_of_qst')
@@ -604,14 +598,14 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
-                  <option value="20">150</option>
+                  <!-- <option value="20">150</option>
                   <option value="30">200</option>
                   <option value="40">250</option>
                   <option value="50">300</option>
                   <option value="60">350</option>
                   <option value="70">400</option>
                   <option value="80">450</option>
-                  <option value="90">500</option>
+                  <option value="90">500</option> -->
                 </select>
                 </div>             
                 @error('no_of_qst')
@@ -948,7 +942,41 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
 
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session1');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
+
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
+</script>
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('dashboard/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>

@@ -126,7 +126,7 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('exam-setting')}}">
             <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
@@ -171,7 +171,7 @@
             </span>
           </a>          
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('admin-setup')}}">
             <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
@@ -209,8 +209,9 @@
         Exam Setting        
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
-        <li class="active">Exam Setting</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>  
+        <li><a href="{{route('admin-setup')}}"> Admin Setup</a></li>      
+        <li class="active">Exam Type</li>
       </ol>
     </section>
 
@@ -223,7 +224,7 @@
           <div class="box box-primary">
             <div class="box-header with-border">
             <h3 class="box-title">Add exam types.</h3>
-            <p align="right"><a href="{{route('exam-setting')}}" class="btn btn-success">Back to exam settings</a></p>
+            <!-- <p align="right"><a href="{{route('exam-setting')}}" class="btn btn-success">Back to exam settings</a></p> -->
               
             </div>
             @if(session('success'))

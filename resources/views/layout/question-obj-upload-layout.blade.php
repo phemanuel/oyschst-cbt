@@ -245,7 +245,7 @@
               <div class="box-header">
               <h3 class="box-title"></h3>
               <div class="box-tools">
-              <form action="{{ route('question-setting-search') }}" method="post" class="form-inline">
+              <!-- <form action="{{ route('question-setting-search') }}" method="post" class="form-inline">
                 @csrf
                 <div class="input-group input-group-sm" style="width: 300px;">
                     <input type="text" name="search" class="form-control pull-right" placeholder="Search">
@@ -254,15 +254,27 @@
                     <button type="submit" class="btn btn-success">Search</button>
                     </div>
                 </div>
-            </form>
+            </form> -->
               </div>
   </div>
              
             <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
+            <div class="row mb-3">
+                  <div class="col-md-4">
+                      <input type="text" id="searchProgramme" class="form-control" placeholder="Search Programme">
+                  </div>
+                  <div class="col-md-4">
+                      <input type="text" id="searchExamType" class="form-control" placeholder="Search Exam Type">
+                  </div>
+                  <div class="col-md-4">
+                      <input type="text" id="searchLevel" class="form-control" placeholder="Search Level">
+                  </div>
+              </div>
+              <div class="table-responsive">
               <table class="table table-hover">
+                <thead>
                 <tr>
-                  <th>ID</th>
+                  <!-- <th>ID</th> -->
                   <th>Academic Session</th>
                   <th>Programme</th>
                   <th>Course</th>
@@ -275,16 +287,22 @@
                   <th>Total No of Questions</th>
                   <th>No of Questions(Student)</th>
                   <th>Duration</th>
-                  <th>Check Result</th>
-                  <th>Created On</th>
+                  <th>Check Result</th>                  
                   <th>Lock/Unlock Exam</th>
                   <th>Status</th>                  
-                  <th>Actions</th>                  
+                  <th>Actions</th>    
+                  <th>Created On</th>              
                 </tr>
+              </thead>
+ 
                 @if ($questionSetting->count() > 0)
+                 <tbody>
                 @foreach ($questionSetting as $key => $rs)
-                <tr>
-                    <td>{{ $key + 1 }}</td>                    
+                <tr class="student-row"
+                data-programme="{{ strtolower($rs->department) }}"
+                data-examtype="{{ strtolower($rs->exam_type) }}"
+                data-level="{{ strtolower($rs->level) }}">
+                    <!-- <td>{{ $key + 1 }}</td>                     -->
                     <td>{{$rs->session1}}</td>
                     <td>{{ $rs->department }}</td>
                     <td>{{$rs->course}}</td>
@@ -301,8 +319,7 @@
                     <td>YES</td>
                     @else
                     <td>NO</td>
-                    @endif
-                    <td>{{$rs->created_at}}</td>
+                    @endif                    
                     @if($rs->lock_status == 1)
                       <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-success" data-id="{{ $rs->id }}">
         Unlock
@@ -323,16 +340,19 @@
                       
                       <a class="label label-success" href="{{route('question-view', ['questionId' => $rs->id])}}">Edit</a>
                      
-                    </td>                    
+                    </td> 
+                    <td>{{$rs->created_at}}</td>                   
                 </tr>              
                 @endforeach
+</tbody>
                 @else
-		<tr>
-			<td colspan="8">Questions not available.</td>
-		</tr>
+                <tr>
+                  <td colspan="8">Questions not available.</td>
+                </tr>
         @endif
+          
               </table>
-              {{ $questionSetting->links() }}
+             </div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -628,6 +648,44 @@
         });
     });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const programmeInput = document.getElementById('searchProgramme');
+    const examTypeInput = document.getElementById('searchExamType');
+    const levelInput = document.getElementById('searchLevel');
+    const rows = document.querySelectorAll('.student-row');
+
+    function filterTable() {
+        const programme = programmeInput.value.toLowerCase();
+        const examType = examTypeInput.value.toLowerCase();
+        const level = levelInput.value.toLowerCase();
+
+        rows.forEach(row => {
+            const rowProgramme = row.dataset.programme;
+            const rowExamType = row.dataset.examtype;
+            const rowLevel = row.dataset.level;
+
+            const matchProgramme = rowProgramme.includes(programme);
+            const matchExamType = rowExamType.includes(examType);
+            const matchLevel = rowLevel.includes(level);
+
+            if (matchProgramme && matchExamType && matchLevel) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    programmeInput.addEventListener('keyup', filterTable);
+    examTypeInput.addEventListener('keyup', filterTable);
+    levelInput.addEventListener('keyup', filterTable);
+});
+</script>
+
+
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->

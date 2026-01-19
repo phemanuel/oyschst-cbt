@@ -258,10 +258,10 @@
                   <label for="exampleInputEmail1">Programme</label>
                   <p>{{$checkAdmission->department}}</p>
                 </div>   
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Exam Status</label>
                   <input type="text" name="exam_status" class="form-control" value="{{$checkExamData->examstatus}}">
-                </div>             
+                </div>              -->
                 @error('login_status')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror

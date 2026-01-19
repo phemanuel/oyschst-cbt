@@ -69,7 +69,7 @@ class DashboardController extends Controller
 
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
-        $examSetting = ExamSetting::paginate(20);        
+        $examSetting = ExamSetting::All();        
         
         return view('dashboard.exam-setting-view', compact('softwareVersion','examSetting', 'collegeSetup'));
     }

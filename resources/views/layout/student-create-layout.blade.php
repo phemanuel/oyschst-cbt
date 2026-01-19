@@ -143,7 +143,7 @@
         </li>
         <li class="active">
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -241,15 +241,12 @@
             <form role="form" action="{{route('student-create.action')}}" method="post" enctype="multipart/form-data">
               @csrf              
               <div class="box-body">  
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="session1" id="" class="form-control">
-                  <option value="{{old('session1')}}" selected>{{old('session1')}}</option>                  
-                  @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
-                  </select>
-                </div>             
+               <div class="form-group">               
+                    <label>Academic Session</label>
+                    <select name="session1" id="filter-session" class="form-control">
+                        <!-- <option value="">All</option> -->
+                    </select>
+                </div>                      
                 @error('session1')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -562,6 +559,23 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
+
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

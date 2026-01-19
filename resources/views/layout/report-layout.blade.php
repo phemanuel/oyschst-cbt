@@ -259,7 +259,13 @@
               <ul class="nav nav-stacked">
                 <li><a href="#">Theory questions are open-ended and require you to explain concepts, principles, or theories in your own words. 
                   They assess your depth of understanding and ability to articulate complex ideas.</a></li>
-                <li><a href="{{route('report-theory')}}" class="btn bg-navy margin">Check Result/Grading</a></li>
+                <!-- Under development notice -->
+                    <li>
+                      <a href="#" style="color:#d9534f; font-weight:600;">
+                        ⚠ Theory Question Upload section is currently under development.
+                      </a>
+                    </li>
+                <!-- <li><a href="{{route('report-theory')}}" class="btn bg-navy margin">Check Result/Grading</a></li> -->
                 
               </ul>
             </div>
@@ -283,7 +289,13 @@
               <ul class="nav nav-stacked">
                 <li><a href="#">Fill in the gap questions require you to complete a sentence or phrase with the missing word or words. 
                   They assess your understanding of specific concepts by prompting you to recall and apply knowledge. </a></li>
-                <li><a href="{{route('report-fill-gap')}}" class="btn bg-purple margin">Check Result/Grading</a></li>
+                <!-- Under development notice -->
+                    <li>
+                      <a href="#" style="color:#d9534f; font-weight:600;">
+                        ⚠ Fill-In-The-Gap Question Upload section is currently under development.
+                      </a>
+                    </li>
+                <!-- <li><a href="{{route('report-fill-gap')}}" class="btn bg-purple margin">Check Result/Grading</a></li> -->
                 
               </ul>
             </div>

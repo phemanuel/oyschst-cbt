@@ -65,11 +65,13 @@ class ReportController extends Controller
         ->orderBy('created_at', 'desc')
         ->Paginate(20);
         $acad_sessions = AcademicSession::orderBy('session1')->get();
+        $class = CbtClass::orderBy('level')->get();
+        $dept = Department::orderBy('department')->get();
         $examType = ExamType::orderBy('exam_type')->get();
 
 
         return view('dashboard.report-objective', compact('softwareVersion','collegeSetup', 
-        'questionSetting','acad_sessions','examType'));
+        'questionSetting','acad_sessions','examType','class','dept'));
     }
     
 
@@ -111,6 +113,29 @@ class ReportController extends Controller
         return view('dashboard.report-objective-view', compact('softwareVersion','collegeSetup',
         'student','examViewType'));
     }
+
+    public function filter(Request $request)
+    {
+        $query = QuestionSetting::query();
+
+        if($request->session1) {
+            $query->where('session1', $request->session1);
+        }
+        if($request->department) {
+            $query->where('department', $request->department);
+        }
+        if($request->level) {
+            $query->where('level', $request->level);
+        }
+        if($request->exam_type) {
+            $query->where('exam_type', $request->exam_type);
+        }
+
+        $questionSetting = $query->orderBy('created_at', 'desc')->get();
+
+        return view('partials.question-settings-table', compact('questionSetting'));
+    }
+
     
     public function studentResult($id)
     {
@@ -3897,48 +3922,84 @@ class ReportController extends Controller
 
     public function saveScore(Request $request, $qstId, $id)
     {
-        $studentData = TheoryAnswer::findOrFail($id);
-        $examSetting = ExamSetting::where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->first(); 
-        
-        $grade = $request->input('grade');
-        $currentQuestionNo = $request->input('currentQuestionNo');
-        $direction = $request->input('direction');
-        $totalQuestions = $examSetting->no_of_qst;        
+        try {
+            Log::info('saveScore invoked', [
+                'student_id' => $id,
+                'question_id' => $qstId,
+                'request_data' => $request->all()
+            ]);
 
-        $studentData->update([            
-            'score'.$currentQuestionNo => $grade,
-        ]);
+            $studentData = TheoryAnswer::findOrFail($id);
 
-        if ($direction === 'next') {
-            $currentQuestionNo++;
-            if ($currentQuestionNo > $totalQuestions) {
-                return response()->json(['error' => 'You have reached the end of the questions.']);
+            $examSetting = ExamSetting::where('department', $studentData->department)
+                ->where('level', $studentData->level)
+                ->first();
+
+            if (!$examSetting) {
+                Log::warning('ExamSetting not found', [
+                    'department' => $studentData->department,
+                    'level' => $studentData->level
+                ]);
+                return response()->json(['error' => 'Exam setting not found.'], 404);
             }
-        } else {
-            $currentQuestionNo--;
-            if ($currentQuestionNo < 1) {
-                return response()->json(['error' => 'You are at the beginning of the questions.']);
+
+            $grade = $request->input('grade');
+            $currentQuestionNo = $request->input('currentQuestionNo');
+            $direction = $request->input('direction');
+            $totalQuestions = $examSetting->no_of_qst;
+
+            Log::info('Updating score', [
+                'score_field' => 'score' . $currentQuestionNo,
+                'grade' => $grade
+            ]);
+
+            $studentData->update([
+                'score' . $currentQuestionNo => $grade,
+            ]);
+
+            if ($direction === 'next') {
+                $currentQuestionNo++;
+                if ($currentQuestionNo > $totalQuestions) {
+                    Log::info('End of questions reached', ['currentQuestionNo' => $currentQuestionNo]);
+                    return response()->json(['error' => 'You have reached the end of the questions.']);
+                }
+            } else {
+                $currentQuestionNo--;
+                if ($currentQuestionNo < 1) {
+                    Log::info('Start of questions reached', ['currentQuestionNo' => $currentQuestionNo]);
+                    return response()->json(['error' => 'You are at the beginning of the questions.']);
+                }
             }
+
+            $question = $studentData;
+            $currentQuestion = $question->{'Q' . $currentQuestionNo};
+            $currentAnswer = $question->{'ANS' . $currentQuestionNo};
+            $currentGrade = $question->{'score' . $currentQuestionNo};
+            $currentQuestionType = $question->{'QT' . $currentQuestionNo};
+            $questionImage = $currentQuestionType === 'text-image' ? asset('questions/' . $question->graphic) : '';
+
+            Log::info('Returning next question', [
+                'currentQuestionNo' => $currentQuestionNo,
+                'currentQuestionType' => $currentQuestionType
+            ]);
+
+            return response()->json([
+                'currentQuestionNo' => $currentQuestionNo,
+                'currentQuestion' => $currentQuestion,
+                'currentAnswer' => $currentAnswer,
+                'currentGrade' => $currentGrade,
+                'currentQuestionType' => $currentQuestionType,
+                'questionImage' => $questionImage,
+                'totalQuestions' => $totalQuestions
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error in saveScore', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => 'An unexpected error occurred.'], 500);
         }
-
-        $question = $studentData;
-        $currentQuestion = $question->{'Q' . $currentQuestionNo};  
-        $currentAnswer = $question->{'ANS' . $currentQuestionNo};  
-        $currentGrade = $question->{'score' . $currentQuestionNo}; 
-        $currentQuestionType = $question->{'QT' . $currentQuestionNo};
-        $questionImage = $currentQuestionType === 'text-image' ? asset('questions/'.$question->graphic) : '';
-
-        return response()->json([
-            'currentQuestionNo' => $currentQuestionNo,
-            'currentQuestion' => $currentQuestion,
-            'currentAnswer' => $currentAnswer,
-            'currentGrade' => $currentGrade,
-            'currentQuestionType' => $currentQuestionType,
-            'questionImage' => $questionImage,
-            'totalQuestions' => $totalQuestions
-        ]);
     }
 
     public function grading($qstId, $id)

@@ -171,7 +171,7 @@
             </span>
           </a>          
         </li>
-        <li>
+        <li class="active">
           <a href="{{route('admin-setup')}}">
             <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">

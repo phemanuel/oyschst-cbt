@@ -210,7 +210,8 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Admin Setup</li>
+        <li><a href="{{route('admin-setup')}}">Admin Setup</a></li>
+        <li class="active">Exam Type</li>
       </ol>
     </section>
 
@@ -343,11 +344,43 @@
           </div>
           <!--/.direct-chat -->
         </div>
-        <!-- /.col -->
+        <!-- /.col -->        
 
       </div>
       <!-- /.row -->
-  
+  <div class="row">
+      <div class="col-md-3">
+          <!-- DIRECT CHAT PRIMARY -->
+          <div class="box box-primary direct-chat direct-chat-warning">
+            <div class="box-header with-border">
+              <h3 class="box-title"><strong>Create Exam Types</strong></h3>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">  
+            <div class="direct-chat-msg right">            
+            <div class="direct-chat-text">
+                    This module helps you to setup the following: <br>
+                    - Different exam types in the college (e.g Entrance, Semester).
+                  </div>
+  </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+              <form action="#" method="post">
+                <div class="input-group">                  
+                        <a href="{{route('exam-type')}}" class="btn btn-warning btn-flat">Create Exam Type</a>
+                      </span>
+                </div>
+              </form>
+            </div>
+            <!-- /.box-footer-->
+          </div>
+          <!--/.direct-chat -->
+        </div>
+        <!-- /.col -->
+
+</div>
     
     </section>
     <!-- /.content -->

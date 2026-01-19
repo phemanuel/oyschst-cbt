@@ -143,7 +143,7 @@
         </li>
         <li class="active">
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -237,117 +237,147 @@
 						</div>
 						@endif	
             <!-- /.box-header -->
-            <!-- form start -->
-            @foreach($studentData as $rt)
-            <form role="form" action="{{route('student-edit.action', ['id' => $rt->id])}}" method="post" enctype="multipart/form-data">
-              @csrf 
-              @method('PUT')             
-              <div class="box-body">  
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Academic Session</label>
-                  <select name="session1" id="" class="form-control">
-                  <option value="{{$rt->session1}}" selected>{{$rt->session1}}</option>                  
-                  @foreach($acad_sessions as $rd)
-				<option value="{{$rd->session1}}">{{$rd->session1}}</option>
-				@endforeach
-                  </select>
-                </div>             
-                @error('session1')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Reg/Matric No</label>
-                  <input type="text" name="admission_no" class="form-control" value="{{$rt->admission_no}}">
-                </div>             
-                @error('admission_no')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror            
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Surname</label>
-                  <input type="text" name="surname" class="form-control" value="{{$rt->surname}}">
-                </div>             
-                @error('surname')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">First Name</label>
-                  <input type="text" name="first_name" class="form-control" value="{{$rt->first_name}}">
-                </div>             
-                @error('first_name')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Other Name</label>
-                  <input type="text" name="other_name" class="form-control" value="{{$rt->other_name}}">
-                </div>             
-                @error('other_name')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Programme</label>
-                  <select name="department" class="form-control">
-                  <option value="{{$rt->department}}" selected>{{$rt->department}}</option>                  
-                  @foreach($dept as $rd)
-				<option value="{{$rd->department}}">{{$rd->department}}</option>
-				@endforeach
-                  </select>
-                </div>             
-                @error('department')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Level</label>
-                  <select name="level" id="" class="form-control">
-                  <option value="{{$rt->level}}" selected>{{$rt->level}}</option>                  
-                  @foreach($class as $rd)
-				<option value="{{$rd->class}}">{{$rd->class}}</option>
-				@endforeach
-                  </select>
-                </div>             
-                @error('level')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Phone No</label>
-                  <input type="text" name="phone_no" class="form-control" value="{{$rt->phone_no}}">
-                </div>             
-                @error('phone_no')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Gender</label>
-                  <select name="sex" id="" class="form-control">
-                  <option value="{{$rt->sex}}" selected>{{$rt->sex}}</option> 
-                  <option value="Male" selected>Male</option> 
-                  <option value="Female">Female</option> 
-                  </select>
-                </div>             
-                @error('sex')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">State</label>
-                  <input type="text" name="state" class="form-control" value="{{$rt->state}}">
-                </div>             
-                @error('state')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Student Avatar</label>
-                  <input type="file" name="file"  class="form-control" />
-                </div>             
-                @error('file')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror 
-                <img src="{{asset('uploads/'. $rt->picture_name. '.jpg')}}" alt="" width="50" height="50">
-              </div>
-              <!-- /.box-body -->
+            <!-- form start -->            
+            <form role="form" action="{{ route('student-edit.action', ['id' => $studentData->id]) }}" method="post" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
-              </div>
-            </form>
-            @endforeach
+    <div class="box-body">
+
+        {{-- Academic Session --}}
+        <div class="form-group">
+            <label for="session1">Academic Session</label>
+            <select name="session1" id="session1" class="form-control @error('session1') is-invalid @enderror">
+                @foreach($acad_sessions as $rd)
+                    <option value="{{ $rd->session1 }}" {{ $rd->session1 == $studentData->session1 ? 'selected' : '' }}>
+                        {{ $rd->session1 }}
+                    </option>
+                @endforeach
+            </select>
+            @error('session1')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Reg/Matric No --}}
+        <div class="form-group">
+            <label for="admission_no">Reg/Matric No</label>
+            <input type="text" name="admission_no" id="admission_no" class="form-control @error('admission_no') is-invalid @enderror" value="{{ $studentData->admission_no }}">
+            @error('admission_no')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Surname --}}
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input type="text" name="surname" id="surname" class="form-control @error('surname') is-invalid @enderror" value="{{ $studentData->surname }}">
+            @error('surname')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- First Name --}}
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" id="first_name" class="form-control @error('first_name') is-invalid @enderror" value="{{ $studentData->first_name }}">
+            @error('first_name')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Other Name --}}
+        <div class="form-group">
+            <label for="other_name">Other Name</label>
+            <input type="text" name="other_name" id="other_name" class="form-control @error('other_name') is-invalid @enderror" value="{{ $studentData->other_name }}">
+            @error('other_name')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Department --}}
+        <div class="form-group">
+            <label for="department">Programme</label>
+            <select name="department" id="department" class="form-control @error('department') is-invalid @enderror">
+                @foreach($dept as $rd)
+                    <option value="{{ $rd->department }}" {{ $rd->department == $studentData->department ? 'selected' : '' }}>
+                        {{ $rd->department }}
+                    </option>
+                @endforeach
+            </select>
+            @error('department')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Level --}}
+        <div class="form-group">
+            <label for="level">Level</label>
+            <select name="level" id="level" class="form-control @error('level') is-invalid @enderror">
+                @foreach($class as $rd)
+                    <option value="{{ $rd->level }}" {{ $rd->level == $studentData->level ? 'selected' : '' }}>
+                        {{ $rd->level }}
+                    </option>
+                @endforeach
+            </select>
+            @error('level')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Phone No --}}
+        <div class="form-group">
+            <label for="phone_no">Phone No</label>
+            <input type="text" name="phone_no" id="phone_no" class="form-control @error('phone_no') is-invalid @enderror" value="{{ $studentData->phone_no }}">
+            @error('phone_no')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Gender --}}
+        <div class="form-group">
+            <label for="sex">Gender</label>
+            <select name="sex" id="sex" class="form-control @error('sex') is-invalid @enderror">
+                <option value="Male" {{ $studentData->sex == 'Male' ? 'selected' : '' }}>Male</option>
+                <option value="Female" {{ $studentData->sex == 'Female' ? 'selected' : '' }}>Female</option>
+            </select>
+            @error('sex')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- State --}}
+        <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" name="state" id="state" class="form-control @error('state') is-invalid @enderror" value="{{ $studentData->state }}">
+            @error('state')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Avatar --}}
+        <div class="form-group">
+            <label for="file">Student Avatar</label>
+            <input type="file" name="file" id="file" class="form-control @error('file') is-invalid @enderror">
+            @error('file')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
+
+        @if($studentData->picture_name)
+            <div class="mb-3">
+                <img src="{{ asset('uploads/' . $studentData->picture_name . '.jpg') }}" alt="Student Avatar" width="50" height="50">
+            </div>
+        @endif
+
+    </div>
+
+    <div class="box-footer">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>
+
+           
           </div>
           <!-- /.box -->
 
