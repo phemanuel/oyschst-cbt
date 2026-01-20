@@ -40,6 +40,25 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style>
+.panel {
+    transition: all 0.3s;
+}
+
+.panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.panel-heading i {
+    margin-right: 6px;
+}
+
+.panel-body ul li {
+    padding: 4px 0;
+    font-size: 13px;
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -221,33 +240,50 @@
       <div class="row">
         <div class="col-md-3">
           <!-- DIRECT CHAT PRIMARY -->
-          <div class="box box-primary direct-chat direct-chat-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title"><strong>College Setup</strong></h3>
-
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">  
-            <div class="direct-chat-msg right">            
-            <div class="direct-chat-text">
-                    This module helps you to setup the following: <br>
-                    - College Name. <br>
-                    - College Logo.<br>
-                    - College Email Address. <br>
-                    - College Phone Number.
-                  </div>
-  </div>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <form action="#" method="post">
-                <div class="input-group">                  
-                        <a href="{{route('college-setup')}}" class="btn btn-primary btn-flat">College Setup</a>
-                      </span>
+          <div class="panel panel-primary" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+                <div class="panel-heading" style="font-size:16px; font-weight:bold;">
+                    <i class="fa fa-university"></i> College Setup
                 </div>
-              </form>
+
+                <div class="panel-body">
+                    <p><strong>This module helps you set up the following:</strong></p>
+                    <ul class="list-unstyled" style="margin-left: 15px;">
+                        <li><i class="fa fa-check-circle text-success"></i> College Name</li>
+                        <li><i class="fa fa-check-circle text-success"></i> College Logo</li>
+                        <li><i class="fa fa-check-circle text-success"></i> College Email Address</li>
+                        <li><i class="fa fa-check-circle text-success"></i> College Phone Number</li>
+                    </ul>
+                </div>
+
+                <div class="panel-footer text-right">
+                    <a href="{{ route('college-setup') }}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-cogs"></i> Go to College Setup
+                    </a>
+                </div>
             </div>
-            <!-- /.box-footer-->
+          <!--/.direct-chat -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-3">
+          <!-- DIRECT CHAT PRIMARY -->
+          <div class="panel panel-success" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+              <div class="panel-heading" style="font-size:16px; font-weight:bold;">
+                  <i class="fa fa-plus-circle"></i> Create Programme
+              </div>
+
+              <div class="panel-body">
+                  <p><strong>This module helps you to create:</strong></p>
+                  <ul class="list-unstyled" style="margin-left: 15px;">
+                      <li><i class="fa fa-check-circle text-success"></i> Programmes in the college</li>
+                  </ul>
+              </div>
+
+              <div class="panel-footer text-right">
+                  <a href="{{ route('add-department') }}" class="btn btn-success btn-sm">
+                      <i class="fa fa-plus"></i> Create Programme
+                  </a>
+              </div>
           </div>
           <!--/.direct-chat -->
         </div>
@@ -255,93 +291,48 @@
 
         <div class="col-md-3">
           <!-- DIRECT CHAT PRIMARY -->
-          <div class="box box-primary direct-chat direct-chat-success">
-            <div class="box-header with-border">
-              <h3 class="box-title"><strong>Create Programme</strong></h3>
+          <div class="panel panel-warning" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <div class="panel-heading" style="font-size:16px; font-weight:bold;">
+        <i class="fa fa-university"></i> Create Class/Level
+    </div>
 
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">  
-            <div class="direct-chat-msg right">            
-            <div class="direct-chat-text">
-                    This module helps you to create: <br>
-                    - Programmes in the college.                    
-                  </div>
-  </div>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <form action="#" method="post">
-                <div class="input-group">                  
-                        <a href="{{route('add-department')}}" class="btn btn-success btn-flat">Create Programme</a>
-                      </span>
-                </div>
-              </form>
-            </div>
-            <!-- /.box-footer-->
-          </div>
+    <div class="panel-body">
+        <p><strong>This module helps you to setup the following:</strong></p>
+        <ul class="list-unstyled" style="margin-left: 15px;">
+            <li><i class="fa fa-check-circle text-warning"></i> Classes/Levels in the college</li>
+        </ul>
+    </div>
+
+    <div class="panel-footer text-right">
+        <a href="{{ route('add-class') }}" class="btn btn-warning btn-sm">
+            <i class="fa fa-plus"></i> Create Class/Level
+        </a>
+    </div>
+</div>
           <!--/.direct-chat -->
         </div>
         <!-- /.col -->
 
         <div class="col-md-3">
           <!-- DIRECT CHAT PRIMARY -->
-          <div class="box box-primary direct-chat direct-chat-warning">
-            <div class="box-header with-border">
-              <h3 class="box-title"><strong>Create Class/Level</strong></h3>
+          <div class="panel panel-danger" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <div class="panel-heading" style="font-size:16px; font-weight:bold;">
+        <i class="fa fa-book"></i> Create Subject/Course
+    </div>
 
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">  
-            <div class="direct-chat-msg right">            
-            <div class="direct-chat-text">
-                    This module helps you to setup the following: <br>
-                    - Classes/Level in the college.
-                  </div>
-  </div>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <form action="#" method="post">
-                <div class="input-group">                  
-                        <a href="{{route('add-class')}}" class="btn btn-warning btn-flat">Create Class/Level</a>
-                      </span>
-                </div>
-              </form>
-            </div>
-            <!-- /.box-footer-->
-          </div>
-          <!--/.direct-chat -->
-        </div>
-        <!-- /.col -->
+    <div class="panel-body">
+        <p><strong>This module helps you to setup the following:</strong></p>
+        <ul class="list-unstyled" style="margin-left: 15px;">
+            <li><i class="fa fa-check-circle text-danger"></i> Subjects/Courses in the college</li>
+        </ul>
+    </div>
 
-        <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="box box-primary direct-chat direct-chat-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title"><strong>Create Subject/Course</strong></h3>
-
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">  
-            <div class="direct-chat-msg right">            
-            <div class="direct-chat-text">
-                    This module helps you to setup the following: <br>
-                    - Classes/Level in the college.
-                  </div>
-  </div>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <form action="#" method="post">
-                <div class="input-group">                  
-                        <a href="{{route('add-subject')}}" class="btn btn-danger btn-flat">Create Subject/Course</a>
-                      </span>
-                </div>
-              </form>
-            </div>
-            <!-- /.box-footer-->
-          </div>
+    <div class="panel-footer text-right" >
+        <a href="{{ route('add-subject') }}" class="btn btn-danger btn-sm">
+            <i class="fa fa-plus"></i> Create Subject/Course
+        </a>
+    </div>
+</div>
           <!--/.direct-chat -->
         </div>
         <!-- /.col -->        
@@ -351,31 +342,50 @@
   <div class="row">
       <div class="col-md-3">
           <!-- DIRECT CHAT PRIMARY -->
-          <div class="box box-primary direct-chat direct-chat-warning">
-            <div class="box-header with-border">
-              <h3 class="box-title"><strong>Create Exam Types</strong></h3>
+          <div class="panel" style="background-color:#6f42c1; color:white; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <div class="panel-heading" style="font-size:16px; font-weight:bold;">
+        <i class="fa fa-pencil-square-o"></i> Create Exam Types
+    </div>
 
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">  
-            <div class="direct-chat-msg right">            
-            <div class="direct-chat-text">
-                    This module helps you to setup the following: <br>
-                    - Different exam types in the college (e.g Entrance, Semester).
-                  </div>
-  </div>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <form action="#" method="post">
-                <div class="input-group">                  
-                        <a href="{{route('exam-type')}}" class="btn btn-warning btn-flat">Create Exam Type</a>
-                      </span>
-                </div>
-              </form>
-            </div>
-            <!-- /.box-footer-->
-          </div>
+    <div class="panel-body" style="background-color: #f8f9fa; color: #333;">
+        <p><strong>This module helps you to setup the following:</strong></p>
+        <ul class="list-unstyled" style="margin-left: 15px;">
+            <li><i class="fa fa-check-circle text-purple"></i> Different exam types in the college (e.g Entrance, Semester)</li>
+        </ul>
+    </div>
+
+    <div class="panel-footer text-right" style="border-top:none;">
+    <a href="{{ route('exam-type') }}" class="btn btn-purple btn-sm" 
+       style="background-color:#563d7c; border:none; color:white;">
+        <i class="fa fa-plus"></i> Create Exam Type
+    </a>
+</div>
+</div>
+          <!--/.direct-chat -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-3">
+          <!-- DIRECT CHAT PRIMARY -->
+          <div class="panel" style="background-color:#000; color:white; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+    <div class="panel-heading" style="font-size:16px; font-weight:bold; background-color:#111;">
+        <i class="fa fa-pencil-square-o"></i> Migrate Student
+    </div>
+
+    <div class="panel-body" style="background-color:#FFFFFF; color:#000000;">
+        <p><strong>This module helps you to setup the following:</strong></p>
+        <ul class="list-unstyled" style="margin-left: 15px;">
+            <li><i class="fa fa-check-circle text-dark"></i> Migrate students from the next level (e.g 100 -> 200, NDI -> NDII)</li>
+        </ul>
+    </div>
+
+    <div class="panel-footer text-right" style="border-top:none; background-color:#111;">
+        <a href="#" class="btn btn-sm" 
+           style="background-color:#333; border:none; color:white;">
+            <i class="fa fa-plus"></i> Migrate
+        </a>
+    </div>
+</div>
           <!--/.direct-chat -->
         </div>
         <!-- /.col -->

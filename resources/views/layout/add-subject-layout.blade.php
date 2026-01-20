@@ -221,7 +221,7 @@
       <div class="col-md-6">
           <div class="box box-success">
             <div class="box-header with-border">
-            <h3 class="box-title">Add Subject/Course.</h3>           
+            <!-- <h3 class="box-title">Add Subject/Course.</h3>            -->
               
             </div>
             @if(session('success-subject'))
@@ -268,7 +268,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add</button>
               </div>                     
                 <!-- Display the available departments   -->
                 <table class="table table-striped">

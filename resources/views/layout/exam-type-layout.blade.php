@@ -206,7 +206,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Exam Setting        
+        Exam Type       
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>  
@@ -223,7 +223,7 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Add exam types.</h3>
+            <!-- <h3 class="box-title">Add exam types.</h3> -->
             <!-- <p align="right"><a href="{{route('exam-setting')}}" class="btn btn-success">Back to exam settings</a></p> -->
               
             </div>
@@ -246,7 +246,7 @@
                   <input type="text" name="exam_type" class="form-control">
                 </div>  
                 <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add</button>
               </div>           
                 
                 <!-- Display the available departments   -->

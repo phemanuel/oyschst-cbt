@@ -40,6 +40,66 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+.back-btn {
+    background-color: #28a745;      /* brighter green */
+    color: #fff;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 6px;             /* slightly rounded corners */
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.back-btn:hover {
+    background-color: #218838;      /* darker green on hover */
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+</style>
+<style>
+/* Table Styling */
+.table-bordered {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.table-bordered th,
+.table-bordered td {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.checkbox-inline input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+/* Box Shadow for Form */
+.box-body {
+    background: #fdfdfd;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Submit Button Hover */
+.btn-success {
+    transition: all 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #28a745;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -143,7 +203,7 @@
         </li>
         <li>
           <a href="{{route('student-list')}}">
-            <i class="fa fa-book"></i> <span>Student</span>
+            <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -223,8 +283,10 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-            <h3 class="box-title">Create a  user.</h3>
-            <p align="right"><a href="{{route('users')}}" class="btn btn-success">Back to User List</a></p>
+            <!-- <h3 class="box-title">Create a  user.</h3> -->
+            <p align="right"><a href="{{ route('users') }}" class="btn btn-success btn-sm back-btn">
+                <i class="fa fa-arrow-left"></i> Back to User List
+            </a></p>
               
             </div>
             @if(session('success'))
@@ -241,148 +303,171 @@
             <form role="form" action="{{ route('add-user.action') }}" method="post">
     @csrf
     <div class="box-body">
+
+        <!-- User Info Section -->
         <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+            <label for="name"><strong>Name</strong></label>
+            <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Enter full name">
             @error('name')
-                <span class="invalid-feedback">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+
         <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+            <label for="email"><strong>Email Address</strong></label>
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Enter email">
             @error('email')
-                <span class="invalid-feedback">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+
         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" class="form-control">
+            <label for="password"><strong>Password</strong></label>
+            <input type="password" name="password" class="form-control" placeholder="Enter password">
             @error('password')
-                <span class="invalid-feedback">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+
         <div class="form-group">
-            <label for="password_confirmation">Confirm Password</label>
-            <input type="password" name="password_confirmation" class="form-control">
+            <label for="password_confirmation"><strong>Confirm Password</strong></label>
+            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm password">
         </div>
+
         <hr>
-        <h4><u><strong>User Roles and Permission</strong></u></h4>
-        <p>Note: You have to give access to a module, before any other permission.</p>
+        <h4 class="text-primary"><u>User Roles and Permissions</u></h4>
+        <p class="text-muted small">Note: You have to give access to a module before any other permission.</p>
+
+        <!-- Roles & Permissions Table -->
         <div class="form-group">
-            <table class="table table-bordered" width="100%" cellpadding="3" cellspacing="3">
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Exam Setting</strong><br />
-                                <input type="checkbox" name="exam_setting" value="1"> Access Module<br />
+            <table class="table table-bordered table-striped table-condensed">
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Exam Setting</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="exam_setting" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="edit_exam_setting" value="1"> Edit
                             </label>
-                        </div>
-                        @error('exam_setting')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Question Bank</strong><br />
-                                <input type="checkbox" name="qst_bank" value="1"> Access Module<br />
-                                <input type="checkbox" name="create_question_bank" value="1"> Create<br />
+                            @error('exam_setting')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </td>
+                        <td>
+                            <strong>Question Bank</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="qst_bank" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="create_question_bank" value="1"> Create
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="edit_question_bank" value="1"> Edit
                             </label>
-                        </div>
-                        @error('qst_bank')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Student List/Upload</strong><br />
-                                <input type="checkbox" name="std_list" value="1"> Access Module<br />
-                                <input type="checkbox" name="create_std_list" value="1"> Create<br />
-                                <input type="checkbox" name="edit_std_list" value="1"> Edit<br />
+                            @error('qst_bank')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Student List/Upload</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="std_list" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="create_std_list" value="1"> Create
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="edit_std_list" value="1"> Edit
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="delete_std_list" value="1"> Delete
                             </label>
-                        </div>
-                        @error('std_list')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Student Login/Exam Status</strong><br />
-                                <input type="checkbox" name="std_login_status" value="1"> Access Module<br />
+                        </td>
+                        <td>
+                            <strong>Student Login/Exam Status</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="std_login_status" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="edit_std_login_status" value="1"> Edit
                             </label>
-                        </div>
-                        @error('std_login_status')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Change Course</strong><br />
-                                <input type="checkbox" name="change_course" value="1"> Access Module<br />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Change Course</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="change_course" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="edit_change_course" value="1"> Edit
                             </label>
-                        </div>
-                        @error('change_course')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Users</strong><br />
-                                <input type="checkbox" name="user_create" value="1"> Access Module<br />
-                                <input type="checkbox" name="create_user_create" value="1"> Create<br />
-                                <input type="checkbox" name="edit_user_create" value="1"> Edit<br />
+                        </td>
+                        <td>
+                            <strong>Users</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="user_create" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="create_user_create" value="1"> Create
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="edit_user_create" value="1"> Edit
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="status_user_create" value="1"> Activate/Deactivate
                             </label>
-                        </div>
-                        @error('user_create')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>College Setup</strong><br />
-                                <input type="checkbox" name="college_setup" value="1"> Access Module<br />
-                                <input type="checkbox" name="create_college_setup" value="1"> Create<br />
-                                <input type="checkbox" name="edit_college_setup" value="1"> Edit<br />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>College Setup</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="college_setup" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="create_college_setup" value="1"> Create
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="edit_college_setup" value="1"> Edit
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="delete_college_setup" value="1"> Delete
                             </label>
-                        </div>
-                        @error('college_setup')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td>
-                        <div class="checkbox">
-                            <label><strong>Report</strong><br />
-                                <input type="checkbox" name="report" value="1"> Access Module<br />
-                                <input type="checkbox" name="check_report" value="1"> Check Result<br />
-                                <input type="checkbox" name="export_report" value="1"> Export Report<br />
+                        </td>
+                        <td>
+                            <strong>Report</strong><br>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="report" value="1"> Access Module
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="check_report" value="1"> Check Result
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="export_report" value="1"> Export Report
+                            </label>
+                            <label class="checkbox-inline">
                                 <input type="checkbox" name="grading_report" value="1"> Grading Report
                             </label>
-                        </div>
-                        @error('report')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
-    <!-- /.box-body -->
 
+    <!-- Submit Button -->
     <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Add User</button>
+        <button type="submit" class="btn btn-success btn-lg">
+            <i class="fa fa-user-plus"></i> Add User
+        </button>
     </div>
 </form>
 

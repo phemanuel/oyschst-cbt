@@ -455,7 +455,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary start-import-btn" 
+                <button type="submit" class="btn btn-success start-import-btn" 
         style="border-radius: 4px; 
                padding: 8px 20px; 
                font-size: 15px; 
@@ -685,7 +685,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary start-import-btn" 
+                <button type="submit" class="btn btn-success start-import-btn" 
         style="border-radius: 4px; 
                padding: 8px 20px; 
                font-size: 15px; 
