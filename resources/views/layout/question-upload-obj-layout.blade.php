@@ -55,6 +55,20 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style>
+.info-btn:hover {
+    background-color: #31b0d5; /* slightly darker on hover */
+    transform: translateY(-1px); /* subtle lift effect */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+</style>
+<style>
+.start-import-btn:hover {
+    background-color: #0056b3; /* slightly darker on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -242,12 +256,23 @@
             <table width="100%">
 <tr>
                   <td width="88%"><h3 class="box-title">Upload single question at a time.</h3></td>
-    <td width="12%"><p align="right"><a href="{{route('question')}}" class="btn btn-success">Back to Questions</a></p></td>
+    <td width="12%"><p align="right"><a href="{{ route('question') }}" class="btn btn-success" style="margin-top: 10px;">
+    <i class="fa fa-arrow-left"></i> Back to Questions
+</a></p></td>
   </tr>
                 <tr>
-                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-success">
-                Get more Info about this module
-              </button></td>
+                  <td><button type="button" class="btn btn-sm info-btn" 
+        data-toggle="modal" data-target="#modal-success" 
+        style="border-radius: 4px; 
+               padding: 6px 14px; 
+               background-color: #5bc0de; /* light blue */
+               color: #fff; /* white text */
+               font-size: 14px; /* slightly larger */
+               font-weight: bold;
+               border: none; 
+               transition: all 0.3s;">
+    <i class="fa fa-info-circle"></i> Get more info about this module
+</button></td>
                   <td></td>
                 </tr>
               </table>
@@ -269,9 +294,9 @@
               <div class="box-body"> 
               <div class="form-group">
                   <label for="exampleInputEmail1">Exam View Type</label>
-                  <select name="exam_view_type" id="" class="form-control">                  
-                  <option value="Multi-Page">Multi-Page</option>
-                  <option value="Single-Page">Single-Page</option>
+                  <select name="exam_view_type" id="" class="form-control"> 
+                    <option value="Single-Page">Single-Page</option>                 
+                  <option value="Multi-Page">Multi-Page</option>                  
                   </select>
                 </div>             
                 @error('exam_view_type')
@@ -430,7 +455,15 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Start Upload</button>
+                <button type="submit" class="btn btn-primary start-import-btn" 
+        style="border-radius: 4px; 
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-upload"></i> Start Upload
+</button>
               </div>
             </form>
           </div>
@@ -448,12 +481,23 @@
             <table width="100%">
 <tr>
                   <td width="88%"><h3 class="box-title">Import all Questions.(CSV format)</h3></td>
-    <td width="12%"><p align="right"><a href="{{route('question')}}" class="btn btn-success">Back to Questions</a></p></td>
+    <td width="12%"><p align="right"><a href="{{ route('question') }}" class="btn btn-success" style="margin-top: 10px;">
+    <i class="fa fa-arrow-left"></i> Back to Questions
+</a></p></td>
   </tr>
                 <tr>
-                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-success1">
-                Get more Info about this module
-              </button></td>
+                  <td><button type="button" class="btn btn-sm info-btn" 
+        data-toggle="modal" data-target="#modal-success1" 
+        style="border-radius: 4px; 
+               padding: 6px 14px; 
+               background-color: #5bc0de; /* light blue */
+               color: #fff; /* white text */
+               font-size: 14px; /* slightly larger */
+               font-weight: bold;
+               border: none; 
+               transition: all 0.3s;">
+    <i class="fa fa-info-circle"></i> Get more info about this module
+</button></td>
                   <td></td>
                 </tr>
               </table>
@@ -475,8 +519,8 @@
               <div class="form-group">
                   <label for="exampleInputEmail1">Exam View Type</label>
                   <select name="exam_view_type" id="" class="form-control">                  
-                  <option value="Multi-Page">Multi-Page</option>
-                  <option value="Single-Page">Single-Page</option>
+                  <option value="Single-Page">Single-Page</option>                 
+                  <option value="Multi-Page">Multi-Page</option> 
                   </select>
                 </div>             
                 @error('exam_view_type')
@@ -641,7 +685,15 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Start Import</button>
+                <button type="submit" class="btn btn-primary start-import-btn" 
+        style="border-radius: 4px; 
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-upload"></i> Start Import
+</button>
               </div>
             </form>
           </div>

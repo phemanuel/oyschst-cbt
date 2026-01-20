@@ -236,48 +236,95 @@
               <h3 class="box-title"></h3>
               <form action="{{route('report-objective-view-all')}}" method="post">
                 @csrf
-                <table width="70%" cellpadding="3" cellspacing="3">
-  <h3><strong>Check all result.</strong></h3>
-                  <div class="row mb-3">
-    <div class="col-md-3">
-        <label>Academic Session</label>
-        <select name="session1" id="filter-session" class="form-control">
-            <option value="">All</option>
-        </select>
-    </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h4>
+                          <i class="fa fa-filter text-primary"></i> Filter Exam Results
+                      </h4>
+                      <small class="text-muted">Select filters to refine the results. Leave blank to show all.</small>
+                  </div>
+                  <div class="panel-body">
+                      <div class="row">
 
-    <div class="col-md-3">
-        <label>Programme</label>
-        <select name="department" id="filter-department" class="form-control">
-            <option value="">All</option>
-            @foreach($dept as $rd)
-                <option value="{{ $rd->department }}">{{ $rd->department }}</option>
-            @endforeach
-        </select>
-    </div>
+                          <!-- Academic Session -->
+                          <div class="col-md-3 mb-2">
+                              <label class="text-primary">
+                                  <i class="fa fa-calendar"></i> Academic Session
+                              </label>
+                              <div class="input-group">
+                                  <span class="input-group-addon bg-primary text-white">
+                                      <i class="fa fa-search"></i>
+                                  </span>                                 
+                  <select name="session1" id="filter-session1" class="form-control"></select>
+              
+                              </div>
+                          </div>
 
-    <div class="col-md-2">
-        <label>Level</label>
-        <select name="level" id="filter-level" class="form-control">
-            <option value="">All</option>
-            @foreach($class as $rd)
-                <option value="{{ $rd->level }}">{{ $rd->level }}</option>
-            @endforeach
-        </select>
-    </div>
+                          <!-- Programme -->
+                          <div class="col-md-3 mb-2">
+                              <label class="text-success">
+                                  <i class="fa fa-graduation-cap"></i> Programme
+                              </label>
+                              <div class="input-group">
+                                  <span class="input-group-addon bg-success text-white">
+                                      <i class="fa fa-search"></i>
+                                  </span>
+                                  <select name="department" id="filter-department" class="form-control">
+                                      <option value="">All</option>
+                                      @foreach($dept as $rd)
+                                          <option value="{{ $rd->department }}">{{ $rd->department }}</option>
+                                      @endforeach
+                                  </select>
+                              </div>
+                          </div>
 
-    <div class="col-md-2">
-        <label>Exam Type</label>
-        <select name="exam_type" id="filter-examtype" class="form-control">
-            <option value="">All</option>
-            @foreach($examType as $rd)
-                <option value="{{ $rd->exam_type }}">{{ $rd->exam_type }}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
+                          <!-- Level -->
+                          <div class="col-md-2 mb-2">
+                              <label class="text-warning">
+                                  <i class="fa fa-line-chart"></i> Level
+                              </label>
+                              <div class="input-group">
+                                  <span class="input-group-addon bg-warning text-white">
+                                      <i class="fa fa-search"></i>
+                                  </span>
+                                  <select name="level" id="filter-level" class="form-control">
+                                      <option value="">All</option>
+                                      @foreach($class as $rd)
+                                          <option value="{{ $rd->level }}">{{ $rd->level }}</option>
+                                      @endforeach
+                                  </select>
+                              </div>
+                          </div>
 
-                </table>
+                          <!-- Exam Type -->
+                          <div class="col-md-2 mb-2">
+                              <label class="text-danger">
+                                  <i class="fa fa-file-text"></i> Exam Type
+                              </label>
+                              <div class="input-group">
+                                  <span class="input-group-addon bg-danger text-white">
+                                      <i class="fa fa-search"></i>
+                                  </span>
+                                  <select name="exam_type" id="filter-examtype" class="form-control">
+                                      <option value="">All</option>
+                                      @foreach($examType as $rd)
+                                          <option value="{{ $rd->exam_type }}">{{ $rd->exam_type }}</option>
+                                      @endforeach
+                                  </select>
+                              </div>
+                          </div>
+
+                      </div>
+
+                      <!-- Clear Filters Button -->
+                      <div class="text-right mt-2">
+                          <button class="btn btn-xs btn-danger" id="clearFiltersExam">
+                              <i class="fa fa-times-circle"></i> Clear Filters
+                          </button>
+                      </div>
+                  </div>
+              </div>
+
               </form>
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -563,11 +610,43 @@ $(document).ready(function(){
         });
     }
 
+    // Trigger AJAX when filters change
     $('#filter-session, #filter-department, #filter-level, #filter-examtype').on('change', fetchFilteredData);
+
+    // Clear Filters Button
+    $('#clearFiltersExam').on('click', function(e) {
+        e.preventDefault();
+
+        // Reset all selects to default
+        $('#filter-session').val('');
+        $('#filter-department').val('');
+        $('#filter-level').val('');
+        $('#filter-examtype').val('');
+
+        // Fetch data with all filters cleared
+        fetchFilteredData();
+    });
 
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session1');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
+
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

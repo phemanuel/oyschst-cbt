@@ -46,7 +46,115 @@
     font-weight: bold;
 }
 </style>
+<style>
+.create-user-btn:hover {
+    background-color: #4cae4c; /* slightly darker green on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+</style>
 
+<style>
+/* Responsive wrapper for wide tables */
+.table-responsive-custom {
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+/* Table styling */
+.table-bordered {
+    border: 1px solid #ddd;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #ddd;
+    vertical-align: middle;
+    text-align: center;
+    padding: 6px 8px;
+}
+
+.table-bordered th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.table-bordered tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+.table-bordered tr:hover td {
+    background-color: #e6f7ff;
+}
+
+/* Badge for user status */
+.badge-status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-active {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-inactive {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Action buttons */
+.label {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    min-width: 70px;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.label-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.label-primary:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
+
+.label-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.label-success:hover {
+    background-color: #1e7e34;
+    text-decoration: none;
+}
+
+.label-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.label-danger:hover {
+    background-color: #a71d2a;
+    text-decoration: none;
+}
+
+/* Icons in table */
+.table img {
+    width: 18px;
+    height: 18px;
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -228,18 +336,23 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
-              <a href="{{route('add-user')}}" class="btn btn-primary">Create User</a>             
+              <a href="{{ route('add-user') }}" class="btn btn-success create-user-btn" 
+                  style="border-radius: 4px; /* rectangle shape */
+                          padding: 8px 20px; 
+                          font-size: 15px; 
+                          font-weight: bold; 
+                          box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+                          transition: all 0.3s;">
+                    <i class="fa fa-user-plus"></i> Create User
+                </a>            
               <div class="box-tools">
-              <form action="{{ route('user-search') }}" method="post" class="form-inline">
-                @csrf
-                <div class="input-group input-group-sm" style="width: 300px;">
-                    <input type="text" name="search" class="form-control pull-right" placeholder="Name or Email">
-
-                    <div class="input-group-btn">
-                    <button type="submit" class="btn btn-success">Search</button>
-                    </div>
-                </div>
-            </form>
+              <div style="margin-bottom: 15px; text-align: right;">
+                  <div class="input-group" style="width: 250px; display: inline-block;">
+                      <input type="text" id="admin-search" class="form-control input-sm" 
+                            placeholder="Search by Admin Name" style="border-radius: 4px; padding: 6px 12px;">
+                      
+                  </div>
+              </div>
               </div>
               <div class="box-header">
               <h3 class="box-title"></h3>             
@@ -257,7 +370,7 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
             <table width="100%" class="table table-bordered">
-<tr>           
+                <tr>           
                       <th>&nbsp;</th> 
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
@@ -308,12 +421,24 @@
                         <td>Access Module</td>
                         <td>@if($rd->report == 1) <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18" /> @elseif($rd->report == 0) <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18" /> @endif </td>
                         <td rowspan="4">{{$rd->created_at}}</td>
-                        <td rowspan="4"><a href="{{route('edit-user', ['id' => $rd->id])}}"  class="label label-primary" >Edit</a>                      </td>
+                        <td rowspan="4">
+                <a href="{{ route('edit-user', ['id'=>$rd->id]) }}" class="label label-primary">
+                    <i class="fa fa-pencil"></i> Edit
+                </a>
+            </td>
                       @if($rd->user_status == 'Active')
-                      <td rowspan="4"><a class="label label-danger" href="{{route('deactivate-user', ['id' => $rd->id])}}">Deactivate</a></td>
-                      @elseif($rd->user_status == 'Inactive')
-                      <td rowspan="4"><a class="label label-success" href="{{route('activate-user', ['id' => $rd->id])}}">Activate</a></td>
-                      @endif                      </tr>
+            <td rowspan="4">
+                <a href="{{ route('deactivate-user', ['id'=>$rd->id]) }}" class="label label-danger">
+                    <i class="fa fa-times"></i> Deactivate
+                </a>
+            </td>
+            @else
+            <td rowspan="4">
+                <a href="{{ route('activate-user', ['id'=>$rd->id]) }}" class="label label-success">
+                    <i class="fa fa-check"></i> Activate
+                </a>
+            </td>
+            @endif                     </tr>
                       <tr>
                         <td>Edit</td>
                         <td>@if($rd->edit_exam_setting == 1) <img src="{{asset('dashboard/dist/img/success.png')}}" alt="" width="18" height="18" /> @elseif($rd->edit_exam_setting == 0) <img src="{{asset('dashboard/dist/img/failed.png')}}" alt="" width="18" height="18" /> @endif </td>
@@ -591,6 +716,30 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('admin-search');
+    const table = document.querySelector('.table.table-bordered');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function() {
+        const filter = this.value.toLowerCase();
+
+        // Skip the header rows
+        for (let i = 2; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            if (cells.length > 1) {
+                const adminName = cells[1].textContent.toLowerCase(); // Admin Name column
+                if (adminName.indexOf(filter) > -1) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+    });
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

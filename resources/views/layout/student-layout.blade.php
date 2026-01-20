@@ -52,6 +52,74 @@
       background: transparent !important;
     }
   </style>
+
+  <style>
+    /* Gradient style for primary button */
+    .btn-primary.btn-gradient {
+        background: linear-gradient(135deg, #007bff, #0056b3); /* Blue gradient */
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary.btn-gradient:hover {
+        background: linear-gradient(135deg, #0056b3, #007bff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-primary.btn-gradient i {
+        margin-right: 6px;
+    }
+</style>
+
+<style>
+    /* Gradient style for info button */
+    .btn-info.btn-gradient {
+        background: linear-gradient(135deg, #17a2b8, #138496); /* Teal/blue gradient */
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-info.btn-gradient:hover {
+        background: linear-gradient(135deg, #138496, #17a2b8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-info.btn-gradient i {
+        margin-right: 6px;
+    }
+</style>
+
+<style>
+    /* Custom label hover effect */
+    .custom-label {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .custom-label:hover {
+        text-decoration: none;
+        opacity: 0.85;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .custom-label i {
+        margin-right: 5px;
+    }
+</style>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -222,7 +290,7 @@
     <section class="content-header">
       <h1>
         Student 
-       <small><h4>(Note: You can search for a student by Surname or Admission No)</h4></small>        
+       <small><h4>(Note: You can search for a student by Surname or Matric/Reg No)</h4></small>        
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
@@ -237,12 +305,14 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
-              <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a>
+              <a href="{{ route('student-create') }}" class="btn btn-primary btn-gradient shadow-sm">
+                  <i class="fa fa-user-plus"></i> Create Student
+              </a>
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-success">
-                Import all Students
-              </button>
+                <button type="button" class="btn btn-info btn-gradient shadow-sm" data-toggle="modal" data-target="#modal-success">
+                    <i class="fa fa-upload"></i> Import All Students
+                </button>
                 </div>
               </div>
               
@@ -272,17 +342,82 @@
 						</div>
 						@endif
             <!-- /.box-header -->
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <input type="text" id="searchMatricNo" class="form-control" placeholder="Search by Matric No">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" id="searchProgramme" class="form-control" placeholder="Search by Programme">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" id="searchLevel" class="form-control" placeholder="Search by Level">
-                </div>
-            </div>
+            <div class="panel panel-default shadow-sm mb-4">
+              <div class="panel-heading bg-light">
+                  <h5 class="panel-title text-dark">
+                      <i class="fa fa-filter text-primary"></i> Search Students
+                  </h5>
+                  <small class="text-muted">Filter students by Matric No, Programme, or Level</small>
+              </div>
+
+              <div class="panel-body">
+                  <div class="row">
+
+                      <!-- Matric No -->
+                      <div class="col-md-3 mb-2">
+                          <label class="font-weight-bold text-info">
+                              <i class="fa fa-id-card"></i> Matric No
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-info text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input 
+                                  type="text" 
+                                  id="searchMatricNo" 
+                                  class="form-control" 
+                                  placeholder="e.g. 20251001">
+                          </div>
+                      </div>
+
+                      <!-- Programme -->
+                      <div class="col-md-3 mb-2">
+                          <label class="font-weight-bold text-primary">
+                              <i class="fa fa-graduation-cap"></i> Programme
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-primary text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input 
+                                  type="text" 
+                                  id="searchProgramme" 
+                                  class="form-control" 
+                                  placeholder="e.g. Community Health">
+                          </div>
+                      </div>
+
+                      <!-- Level -->
+                      <div class="col-md-3 mb-2">
+                          <label class="font-weight-bold text-warning">
+                              <i class="fa fa-line-chart"></i> Level
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-warning text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input 
+                                  type="text" 
+                                  id="searchLevel" 
+                                  class="form-control" 
+                                  placeholder="e.g. 100, 200">
+                          </div>
+                      </div>
+
+                      <!-- Clear Filters Button -->
+                      <div class="col-md-3 mb-2">
+                          <label class="hidden-xs">&nbsp;</label>
+                          <div class="input-group">
+                              <button class="btn btn-danger btn-block" id="clearFiltersStudent">
+                                  <i class="fa fa-times-circle"></i> Clear Filters
+                              </button>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+
 
             <div id="student-table" style="position: relative;">
                 <div id="table-loader" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
@@ -544,6 +679,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const matricInput = document.getElementById('searchMatricNo');
     const programmeInput = document.getElementById('searchProgramme');
     const levelInput = document.getElementById('searchLevel');
+    const clearBtn = document.getElementById('clearFiltersStudent'); // Clear button
     const tableContainer = document.getElementById('student-table');
     const loader = document.getElementById('table-loader');
 
@@ -583,11 +719,20 @@ document.addEventListener('DOMContentLoaded', function () {
         input.addEventListener('keyup', () => fetchStudents());
     });
 
+    // Clear filters button
+    clearBtn.addEventListener('click', function () {
+        matricInput.value = '';
+        programmeInput.value = '';
+        levelInput.value = '';
+        fetchStudents(); // reload full table
+    });
+
     // Attach pagination on initial load
     attachPaginationLinks();
 
 });
 </script>
+
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

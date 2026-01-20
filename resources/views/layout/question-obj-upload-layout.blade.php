@@ -40,6 +40,89 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style>
+    /* Gradient and hover for danger button */
+    .btn-danger.btn-gradient {
+        background: linear-gradient(135deg, #dc3545, #c82333); /* Bootstrap danger colors */
+        border: none;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-danger.btn-gradient:hover {
+        background: linear-gradient(135deg, #c82333, #dc3545);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    /* Gradient and hover for success button */
+    .btn-success.btn-gradient {
+        background: linear-gradient(135deg, #28a745, #218838);
+        border: none;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-success.btn-gradient:hover {
+        background: linear-gradient(135deg, #218838, #28a745);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    /* Icon spacing */
+    .btn-gradient i {
+        margin-right: 5px;
+    }
+</style>
+
+<style>
+    /* Gradient style for info button */
+    .btn-info.btn-gradient {
+        background: linear-gradient(135deg, #28a745, #20c997); /* Green to teal */
+        border: none;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .btn-info.btn-gradient:hover {
+        background: linear-gradient(135deg, #20c997, #28a745);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-info.btn-gradient i {
+        margin-right: 6px;
+    }
+</style>
+<style>
+    /* Gradient for label */
+    .label-gradient {
+        background: linear-gradient(135deg, #28a745, #218838);
+        color: #fff;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .label-gradient:hover {
+        background: linear-gradient(135deg, #218838, #28a745);
+        text-decoration: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+    /* Icon spacing */
+    .label-gradient i {
+        margin-right: 5px;
+    }
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -238,7 +321,9 @@
               <!-- <a href="{{route('student-create')}}" class="btn btn-primary">Create Student</a> -->
               <div class="box-tools">                
                 <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="{{route('question-upload-obj')}}" class="btn btn-info">Upload Question</a>
+                <a href="{{ route('question-upload-obj') }}" class="btn btn-info btn-gradient shadow-sm">
+                    <i class="fa fa-upload"></i> Upload Question
+                </a>
                 </div>
               </div>
               <hr>
@@ -259,22 +344,90 @@
   </div>
              
             <!-- /.box-header -->
-            <div class="row mb-3">
-                  <div class="col-md-4">
-                      <input type="text" id="searchProgramme" class="form-control" placeholder="Search Programme">
-                  </div>
-                  <div class="col-md-4">
-                      <input type="text" id="searchExamType" class="form-control" placeholder="Search Exam Type">
-                  </div>
-                  <div class="col-md-4">
-                      <input type="text" id="searchLevel" class="form-control" placeholder="Search Level">
-                  </div>
-              </div>
+            <div class="panel panel-default mb-4">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <i class="fa fa-search text-primary"></i>Filter Question Settings
+                    </h4>
+                    <small class="text-muted">
+                        Type to filter results in real time
+                    </small>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+
+                        <!-- Programme -->
+                        <div class="col-md-4">
+                            <label class="text-primary">
+                                <i class="fa fa-graduation-cap"></i> Programme
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    id="searchProgramme"
+                                    class="form-control"
+                                    placeholder="Search Programme">
+                            </div>
+                        </div>
+
+                        <!-- Exam Type -->
+                        <div class="col-md-4">
+                            <label class="text-success">
+                                <i class="fa fa-file-text"></i> Exam Type
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    id="searchExamType"
+                                    class="form-control"
+                                    placeholder="Search Exam Type">
+                            </div>
+                        </div>
+
+                        <!-- Level -->
+                        <div class="col-md-4">
+                            <label class="text-warning">
+                                <i class="fa fa-line-chart"></i> Level
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    id="searchLevel"
+                                    class="form-control"
+                                    placeholder="Search Level">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="text-right">
+                        <button class="btn btn-xs btn-danger" id="clearFilters">
+                            <i class="fa fa-times-circle"></i> Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
               <div class="table-responsive">
               <table class="table table-hover">
                 <thead>
                 <tr>
                   <!-- <th>ID</th> -->
+                  <th>Actions</th>
+                  <th>Lock/Unlock Exam</th>
+                  <th>Status</th> 
                   <th>Academic Session</th>
                   <th>Programme</th>
                   <th>Course</th>
@@ -287,10 +440,7 @@
                   <th>Total No of Questions</th>
                   <th>No of Questions(Student)</th>
                   <th>Duration</th>
-                  <th>Check Result</th>                  
-                  <th>Lock/Unlock Exam</th>
-                  <th>Status</th>                  
-                  <th>Actions</th>    
+                  <th>Check Result</th>
                   <th>Created On</th>              
                 </tr>
               </thead>
@@ -302,6 +452,41 @@
                 data-programme="{{ strtolower($rs->department) }}"
                 data-examtype="{{ strtolower($rs->exam_type) }}"
                 data-level="{{ strtolower($rs->level) }}">
+                <td> <a class="label label-success label-gradient" 
+                  href="{{ route('question-view', ['questionId' => $rs->id]) }}">
+                  <i class="fa fa-edit"></i> Edit
+                </a>
+                </td> 
+                @if($rs->lock_status == 1)
+                    <td>
+                        <button type="button" 
+                                class="btn btn-danger btn-gradient shadow-sm" 
+                                data-toggle="modal" 
+                                data-target="#modal-success" 
+                                data-id="{{ $rs->id }}">
+                            <i class="fa fa-unlock-alt"></i> Unlock
+                        </button>
+                    </td>
+                    @elseif($rs->lock_status == 0)
+                    <td>
+                        <button type="button" 
+                                class="btn btn-success btn-gradient shadow-sm" 
+                                data-toggle="modal" 
+                                data-target="#modal-success1" 
+                                data-id="{{ $rs->id }}">
+                            <i class="fa fa-lock"></i> Lock
+                        </button>
+                    </td>
+                    @endif
+         
+                    <td>{{ $rs->exam_status }}
+                    @if ($rs->exam_status == 'Inactive')  
+                    <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>
+                    @elseif ($rs->exam_status == 'Active')
+                    <!-- <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a> -->
+                    @endif 
+                    </td> 
+
                     <!-- <td>{{ $key + 1 }}</td>                     -->
                     <td>{{$rs->session1}}</td>
                     <td>{{ $rs->department }}</td>
@@ -319,28 +504,7 @@
                     <td>YES</td>
                     @else
                     <td>NO</td>
-                    @endif                    
-                    @if($rs->lock_status == 1)
-                      <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-success" data-id="{{ $rs->id }}">
-        Unlock
-    </button></td>
-                      @elseif($rs->lock_status == 0)
-                      <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-success1" data-id="{{ $rs->id }}">
-        Lock
-    </button></td>
-                      @endif            
-                    <td>{{ $rs->exam_status }}
-                    @if ($rs->exam_status == 'Inactive')  
-                    <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>
-                    @elseif ($rs->exam_status == 'Active')
-                    <!-- <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a> -->
-                    @endif 
-                    </td> 
-                    <td> 
-                      
-                      <a class="label label-success" href="{{route('question-view', ['questionId' => $rs->id])}}">Edit</a>
-                     
-                    </td> 
+                    @endif  
                     <td>{{$rs->created_at}}</td>                   
                 </tr>              
                 @endforeach
@@ -656,6 +820,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const examTypeInput = document.getElementById('searchExamType');
     const levelInput = document.getElementById('searchLevel');
     const rows = document.querySelectorAll('.student-row');
+    const clearBtn = document.getElementById('clearFilters'); // Clear button
 
     function filterTable() {
         const programme = programmeInput.value.toLowerCase();
@@ -663,9 +828,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const level = levelInput.value.toLowerCase();
 
         rows.forEach(row => {
-            const rowProgramme = row.dataset.programme;
-            const rowExamType = row.dataset.examtype;
-            const rowLevel = row.dataset.level;
+            const rowProgramme = row.dataset.programme.toLowerCase();
+            const rowExamType = row.dataset.examtype.toLowerCase();
+            const rowLevel = row.dataset.level.toLowerCase();
 
             const matchProgramme = rowProgramme.includes(programme);
             const matchExamType = rowExamType.includes(examType);
@@ -679,11 +844,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Live filtering
     programmeInput.addEventListener('keyup', filterTable);
     examTypeInput.addEventListener('keyup', filterTable);
     levelInput.addEventListener('keyup', filterTable);
+
+    // Clear filters button
+    clearBtn.addEventListener('click', function () {
+        programmeInput.value = '';
+        examTypeInput.value = '';
+        levelInput.value = '';
+        filterTable(); // Restore all rows
+    });
+
 });
 </script>
+
+
 
 
 <!-- jQuery 3 -->

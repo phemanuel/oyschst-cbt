@@ -36,10 +36,16 @@
                         <span class="label label-success">1</span>
                     @endif
                 </td>
-                <td>
-                    <a class="label label-primary" href="{{ route('student-edit.action', ['id' => $rs->id]) }}">Edit</a>
-                    <a class="label label-danger" href="{{ route('student-delete.action', ['id' => $rs->id]) }}">Delete</a>
+                <td style="display: flex; gap: 5px;">
+                    <a class="label label-primary custom-label" href="{{ route('student-edit.action', ['id' => $rs->id]) }}">
+                        <i class="fa fa-pencil"></i> Edit
+                    </a>
+
+                    <a class="label label-danger custom-label" href="{{ route('student-delete.action', ['id' => $rs->id]) }}" onclick="return confirm('Are you sure you want to delete this student?');">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
                 </td>
+
             </tr>
         @empty
             <tr>

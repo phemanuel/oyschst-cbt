@@ -40,6 +40,21 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+.change-course-btn:hover {
+    background-color: #004085; /* slightly darker blue on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+</style>
+<style>
+.add-program-btn:hover {
+    background-color: #4cae4c; /* slightly darker green on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -223,7 +238,17 @@
           <div class="box box-primary">
             <div class="box-header with-border">
             <h3 class="box-title">Change the course of a student.</h3>
-            <p align="right"><a href="{{route('add-course')}}" class="btn btn-success">Add Programme</a></p>
+            <p style="text-align: right;">
+                <a href="{{ route('add-course') }}" class="btn btn-success add-program-btn" 
+                  style="border-radius: 4px; /* rectangle shape */
+                          padding: 8px 20px; 
+                          font-size: 15px; 
+                          font-weight: bold; 
+                          box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+                          transition: all 0.3s;">
+                    <i class="fa fa-plus"></i> Add Programme
+                </a>
+            </p>
               
             </div>
             @if(session('success'))
@@ -276,7 +301,15 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Change</button>
+                <button type="submit" class="btn btn-primary change-course-btn" 
+        style="border-radius: 4px; /* rectangle shape */
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-exchange"></i> Change Course
+</button>
               </div>
             </form>
             @endforeach

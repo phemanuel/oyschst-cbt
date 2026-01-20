@@ -40,6 +40,21 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+.proceed-btn:hover {
+    background-color: #4cae4c; /* slightly darker green on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+</style>
+<style>
+.reset-btn:hover {
+    background-color: #004085; /* slightly darker blue on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -252,7 +267,15 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Proceed</button>
+                <button type="submit" class="btn btn-success proceed-btn" 
+        style="border-radius: 4px; /* rectangle shape */
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-arrow-right"></i> Proceed
+</button>
               </div>
             </form>
           </div>
@@ -298,7 +321,15 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Proceed</button>
+                <button type="submit" class="btn btn-success proceed-btn" 
+        style="border-radius: 4px; /* rectangle shape */
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-arrow-right"></i> Proceed
+</button>
               </div>
             </form>
           </div>
@@ -325,7 +356,15 @@
             <!-- /.box-header -->
             <!-- form start -->            
               <div class="box-footer">
-                <a href="{{route('login-status-all')}}" class="btn btn-primary">Reset Login Status for all Student</a>
+                <a href="{{ route('login-status-all') }}" class="btn btn-success reset-btn" 
+   style="border-radius: 4px; /* rectangle shape */
+          padding: 8px 20px; 
+          font-size: 15px; 
+          font-weight: bold; 
+          box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+          transition: all 0.3s;">
+    <i class="fa fa-refresh"></i> Reset Login Status for All Students
+</a>
               </div>            
           </div>
           <!-- /.box -->        

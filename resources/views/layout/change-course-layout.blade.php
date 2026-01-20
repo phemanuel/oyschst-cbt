@@ -251,7 +251,15 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Proceed</button>
+                <button type="submit" class="btn btn-success proceed-btn" 
+        style="border-radius: 4px; /* rectangle shape */
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-arrow-right"></i> Proceed
+</button>
               </div>
             </form>
           </div>

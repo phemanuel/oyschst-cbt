@@ -40,6 +40,49 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style>
+    /* Optional gradient and hover effect */
+    .btn-gradient {
+        background: linear-gradient(135deg, #4a90e2, #357ab7);
+        border: none;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #357ab7, #4a90e2);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+    }
+
+    .btn-gradient i {
+        margin-right: 5px;
+    }
+</style>
+
+<style>
+    /* Custom label hover effect */
+    .custom-label {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .custom-label:hover {
+        text-decoration: none;
+        opacity: 0.85;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .custom-label i {
+        margin-right: 5px;
+    }
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -221,21 +264,79 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"></h3>
-              <a href="{{route('exam-type')}}" class="btn btn-primary">Create Exam Type</a>
+              <a href="{{ route('exam-type') }}" class="btn btn-primary btn-gradient shadow-sm">
+                  <i class="fa fa-plus-circle"></i> Create Exam Type
+              </a>
               <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-              <div class="row mb-3">
-                  <div class="col-md-4">
-                      <input type="text" id="searchProgramme" class="form-control" placeholder="Search Programme">
+                <div class="panel panel-default mb-4">
+              <div class="panel-heading">
+                  <h4 class="panel-title">
+                      <i class="fa fa-filter text-primary"></i> Filter Exam Settings
+                  </h4>
+                  <small class="text-muted">
+                      Search results update automatically as you type
+                  </small>
+              </div>
+
+              <div class="panel-body">
+                  <div class="row">
+
+                      <!-- Programme -->
+                      <div class="col-md-4">
+                          <label class="text-primary">
+                              <i class="fa fa-graduation-cap"></i> Programme
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-primary text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input type="text" id="searchProgramme" class="form-control"
+                                    placeholder="e.g. Community Health">
+                          </div>
+                      </div>
+
+                      <!-- Exam Type -->
+                      <div class="col-md-4">
+                          <label class="text-success">
+                              <i class="fa fa-file-text"></i> Exam Type
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-success text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input type="text" id="searchExamType" class="form-control"
+                                    placeholder="e.g. Entrance, Weeding-out">
+                          </div>
+                      </div>
+
+                      <!-- Level -->
+                      <div class="col-md-4">
+                          <label class="text-warning">
+                              <i class="fa fa-signal"></i> Level
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-warning text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input type="text" id="searchLevel" class="form-control"
+                                    placeholder="e.g. 100, 200">
+                          </div>
+                      </div>
+
                   </div>
-                  <div class="col-md-4">
-                      <input type="text" id="searchExamType" class="form-control" placeholder="Search Exam Type">
-                  </div>
-                  <div class="col-md-4">
-                      <input type="text" id="searchLevel" class="form-control" placeholder="Search Level">
+
+                  <div class="text-right" style="margin-top:15px;">
+                      <button class="btn btn-danger btn-sm" id="clearFilters">
+                          <i class="fa fa-times-circle"></i> Clear Filters
+                      </button>
                   </div>
               </div>
+          </div>
+
+
+
               <table class="table table-hover">
                 <thead>
                 <tr>
@@ -287,7 +388,8 @@
                     <td>{{ $rs->exam_status }} </td>                   
                     <td> 
                       
-                      <a class="label label-success" href="{{route('exam-setting-edit', ['id' => $rs->id])}}">Edit</a>
+                      <a class="label label-primary custom-label" href="{{route('exam-setting-edit', ['id' => $rs->id])}}">
+                        <i class="fa fa-pencil"></i>Edit</a>
                      
                     </td>
                      <td>{{$rs->created_at}}</td>
@@ -521,6 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const examTypeInput = document.getElementById('searchExamType');
     const levelInput = document.getElementById('searchLevel');
     const rows = document.querySelectorAll('.student-row');
+    const clearBtn = document.getElementById('clearFilters'); // Clear button
 
     function filterTable() {
         const programme = programmeInput.value.toLowerCase();
@@ -528,9 +631,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const level = levelInput.value.toLowerCase();
 
         rows.forEach(row => {
-            const rowProgramme = row.dataset.programme;
-            const rowExamType = row.dataset.examtype;
-            const rowLevel = row.dataset.level;
+            const rowProgramme = row.dataset.programme.toLowerCase();
+            const rowExamType = row.dataset.examtype.toLowerCase();
+            const rowLevel = row.dataset.level.toLowerCase();
 
             const matchProgramme = rowProgramme.includes(programme);
             const matchExamType = rowExamType.includes(examType);
@@ -544,9 +647,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Live filtering
     programmeInput.addEventListener('keyup', filterTable);
     examTypeInput.addEventListener('keyup', filterTable);
     levelInput.addEventListener('keyup', filterTable);
+
+    // Clear filters button
+    clearBtn.addEventListener('click', function () {
+        programmeInput.value = '';
+        examTypeInput.value = '';
+        levelInput.value = '';
+        filterTable(); // Restore all rows
+    });
+
 });
 </script>
 <!-- jQuery 3 -->
