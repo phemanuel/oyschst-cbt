@@ -165,6 +165,16 @@
 }
 
     </style>
+    <script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script src="{{ asset('js/mathjax/tex-mml-chtml.js') }}"></script>
+   <!-- <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
 </head>
 <body class="sidebar-fixed">
   <div class="container-scroller">
@@ -454,7 +464,14 @@
     </script>
 
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
-<script>
+
+<!-- Question rendering -->
+<!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script> -->
+
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll('.question-btn');
     const currentQuestionNumberEl = document.getElementById('current-question-number');
@@ -472,152 +489,38 @@ document.addEventListener('DOMContentLoaded', function () {
         D: document.getElementById('option_d'),
     };
 
-    // Assuming the admission_no is stored in a data attribute or globally available
     const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
-
-    // Object to keep track of attempted questions
     const attemptedQuestions = new Set();
 
-    // Function to clear the current question and options
-    const clearQuestion = () => {
-        currentQuestionEl.innerHTML = ''; // Clear the question
-        Object.values(optionLabels).forEach(label => label.innerHTML = ''); // Clear the option labels
-        Object.values(optionInputs).forEach(input => input.checked = false); // Uncheck the options
-    };
-
-    // Fetch and display the question
-    const loadQuestion = (questionNumber) => {
-        clearQuestion(); // Clear the current question before loading the new one
-
-        // Fetch question data with admission_no
-        fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
-            .then(response => response.json())
-            .then(data => {
-                currentQuestionNumberEl.textContent = questionNumber;
-                currentQuestionEl.innerHTML = data.question;
-                optionLabels.A.innerHTML = data.option_a;
-                optionLabels.B.innerHTML = data.option_b;
-                optionLabels.C.innerHTML = data.option_c;
-                optionLabels.D.innerHTML = data.option_d;
-
-                // Mark the previously selected option (if any)
-                const answerSelected = data.answerSelected; // 'A', 'B', 'C', or 'D'
-                if (answerSelected) {
-                    optionInputs[answerSelected].checked = true; // Check the radio button for the selected answer
-                }
-
-                // Mark button as attempted if an answer has been selected for the question
-                if (answerSelected !== null) {
-                    attemptedQuestions.add(questionNumber); // Add to attempted set
-                    const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                    if (activeButton) {
-                        activeButton.classList.add('attempted'); // Add 'attempted' class to mark the question
-                    }
-                }
-
-                // Mark button as active after loading
-                buttons.forEach(btn => btn.classList.remove('active'));
-                const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                if (activeButton) activeButton.classList.add('active');
-            })
-            .catch(error => {
-                console.error('Error fetching question:', error);
-                currentQuestionEl.innerHTML = 'Failed to load question. Please try again later.';
-            });
-    };
-
-    // Handle the button click event
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            const questionNumber = this.getAttribute('data-question-number');
-            loadQuestion(questionNumber);  // Load the selected question
-        });
-    });
-
-    // Handle the option selection event
-    Object.values(optionInputs).forEach(input => {
-        input.addEventListener('change', function () {
-            const selectedOption = this.value;  // Get the selected option (A, B, C, D)
-            const questionNumber = currentQuestionNumberEl.textContent;  // Get the current question number
-
-            // Send the selected option to the backend
-            fetch('/save-single-answer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    question_number: questionNumber,
-                    selected_option: selectedOption,
-                    admission_no: admissionNo  // Pass the admission_no along with the other data
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Option saved successfully');
-
-                // Mark the question as attempted after saving the answer
-                attemptedQuestions.add(questionNumber); // Add the question number to the attempted set
-                const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                if (activeButton) {
-                    activeButton.classList.add('attempted'); // Add 'attempted' class to mark the question
-                }
-            })
-            .catch(error => console.error('Error saving option:', error));
-        });
-    });
-
-    // Automatically load the first question on page load
-    const firstQuestionNumber = buttons[0].getAttribute('data-question-number');
-    loadQuestion(firstQuestionNumber);  // Load the first question
-});
-
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const buttons = document.querySelectorAll('.question-btn');
-    const currentQuestionNumberEl = document.getElementById('current-question-number');
-    const currentQuestionEl = document.getElementById('current-question');
-    const optionLabels = {
-        A: document.querySelector('label[for="option_a"]'),
-        B: document.querySelector('label[for="option_b"]'),
-        C: document.querySelector('label[for="option_c"]'),
-        D: document.querySelector('label[for="option_d"]'),
-    };
-    const optionInputs = {
-        A: document.getElementById('option_a'),
-        B: document.getElementById('option_b'),
-        C: document.getElementById('option_c'),
-        D: document.getElementById('option_d'),
-    };
-
-    const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
-
-    // Object to keep track of attempted questions
-    const attemptedQuestions = new Set();
-
-    // Function to clear the current question and options
     const clearQuestion = () => {
         currentQuestionEl.innerHTML = '';
         Object.values(optionLabels).forEach(label => label.innerHTML = '');
         Object.values(optionInputs).forEach(input => input.checked = false);
     };
 
-    // Fetch and display the question
+    const renderMath = () => {
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    };
+
     const loadQuestion = (questionNumber) => {
-        clearQuestion(); // Clear the current question before loading the new one
+        clearQuestion();
 
         fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
             .then(response => response.json())
             .then(data => {
                 currentQuestionNumberEl.textContent = questionNumber;
+
+                // Insert question and options
                 currentQuestionEl.innerHTML = data.question;
                 optionLabels.A.innerHTML = data.option_a;
                 optionLabels.B.innerHTML = data.option_b;
                 optionLabels.C.innerHTML = data.option_c;
                 optionLabels.D.innerHTML = data.option_d;
+
+                // Render LaTeX in question and options
+                renderMath();
 
                 const answerSelected = data.answerSelected;
                 if (answerSelected) {
@@ -627,16 +530,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (answerSelected !== null) {
                     attemptedQuestions.add(questionNumber);
                     const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                    if (activeButton) {
-                        activeButton.classList.add('attempted');
-                    }
+                    if (activeButton) activeButton.classList.add('attempted');
                 }
 
                 buttons.forEach(btn => btn.classList.remove('active'));
                 const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
                 if (activeButton) activeButton.classList.add('active');
-
-                updateNavButtonsState(questionNumber); // Update the state of the navigation buttons
             })
             .catch(error => {
                 console.error('Error fetching question:', error);
@@ -644,28 +543,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     };
 
-    // Update navigation buttons' state based on the current question number
-    const updateNavButtonsState = (currentQuestionNumber) => {
-        const totalQuestions = buttons.length;
-        const prevButton = document.getElementById('prev-button');
-        const nextButton = document.getElementById('next-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const questionNumber = this.getAttribute('data-question-number');
+            loadQuestion(questionNumber);
+        });
+    });
 
-        // Disable/enable prev button
-        if (currentQuestionNumber <= 1) {
-            prevButton.disabled = true;
-        } else {
-            prevButton.disabled = false;
-        }
-
-        // Disable/enable next button
-        if (currentQuestionNumber >= totalQuestions) {
-            nextButton.disabled = true;
-        } else {
-            nextButton.disabled = false;
-        }
-    };
-
-    // Handle the option selection event
     Object.values(optionInputs).forEach(input => {
         input.addEventListener('change', function () {
             const selectedOption = this.value;
@@ -685,49 +569,168 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Option saved successfully');
                 attemptedQuestions.add(questionNumber);
                 const activeButton = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                if (activeButton) {
-                    activeButton.classList.add('attempted');
-                }
+                if (activeButton) activeButton.classList.add('attempted');
             })
             .catch(error => console.error('Error saving option:', error));
         });
     });
 
-    // Handle the question button click event
+    const firstQuestionNumber = buttons[0].getAttribute('data-question-number');
+    loadQuestion(firstQuestionNumber);
+});
+</script> -->
+
+<!-- Question Rendering -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.question-btn');
+    const currentQuestionNumberEl = document.getElementById('current-question-number');
+    const currentQuestionEl = document.getElementById('current-question');
+
+    const optionLabels = {
+        A: document.querySelector('label[for="option_a"]'),
+        B: document.querySelector('label[for="option_b"]'),
+        C: document.querySelector('label[for="option_c"]'),
+        D: document.querySelector('label[for="option_d"]'),
+    };
+
+    const optionInputs = {
+        A: document.getElementById('option_a'),
+        B: document.getElementById('option_b'),
+        C: document.getElementById('option_c'),
+        D: document.getElementById('option_d'),
+    };
+
+    const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
+
+    // Keep track of attempted questions
+    const attemptedQuestions = new Set();
+
+    // Clear current question and options
+    const clearQuestion = () => {
+        currentQuestionEl.innerHTML = '';
+        Object.values(optionLabels).forEach(label => label.innerHTML = '');
+        Object.values(optionInputs).forEach(input => input.checked = false);
+    };
+
+    // Load a question by number
+    const loadQuestion = (questionNumber) => {
+        clearQuestion();
+
+        fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
+            .then(response => response.json())
+            .then(data => {
+                currentQuestionNumberEl.textContent = questionNumber;
+
+                // Insert question and options
+                currentQuestionEl.innerHTML = data.question;
+                optionLabels.A.innerHTML = data.option_a;
+                optionLabels.B.innerHTML = data.option_b;
+                optionLabels.C.innerHTML = data.option_c;
+                optionLabels.D.innerHTML = data.option_d;
+
+                // Render LaTeX using MathJax
+                if (window.MathJax) {
+                    MathJax.typesetPromise([
+                        currentQuestionEl,
+                        optionLabels.A,
+                        optionLabels.B,
+                        optionLabels.C,
+                        optionLabels.D
+                    ]).catch(err => console.error('MathJax typeset error:', err.message));
+                }
+
+                // Mark previously selected option
+                const answerSelected = data.answerSelected;
+                if (answerSelected) {
+                    optionInputs[answerSelected].checked = true;
+                }
+
+                // Mark attempted
+                if (answerSelected !== null) {
+                    attemptedQuestions.add(questionNumber);
+                    const btn = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                    if (btn) btn.classList.add('attempted');
+                }
+
+                // Highlight active button
+                buttons.forEach(btn => btn.classList.remove('active'));
+                const activeBtn = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+                if (activeBtn) activeBtn.classList.add('active');
+
+                updateNavButtonsState(parseInt(questionNumber));
+            })
+            .catch(err => {
+                console.error('Error fetching question:', err);
+                currentQuestionEl.innerHTML = 'Failed to load question. Please try again later.';
+            });
+    };
+
+    // Save selected answer
+    const saveAnswer = (questionNumber, selectedOption) => {
+        fetch('/save-single-answer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                question_number: questionNumber,
+                selected_option: selectedOption,
+                admission_no: admissionNo
+            })
+        })
+        .then(response => response.json())
+        .then(() => {
+            attemptedQuestions.add(questionNumber);
+            const btn = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
+            if (btn) btn.classList.add('attempted');
+        })
+        .catch(err => console.error('Error saving answer:', err));
+    };
+
+    // Handle option selection
+    Object.values(optionInputs).forEach(input => {
+        input.addEventListener('change', function () {
+            const selectedOption = this.value;
+            const questionNumber = currentQuestionNumberEl.textContent;
+            saveAnswer(questionNumber, selectedOption);
+        });
+    });
+
+    // Handle question button clicks
     buttons.forEach(button => {
         button.addEventListener('click', function () {
-            const questionNumber = this.getAttribute('data-question-number');
+            const questionNumber = this.dataset.questionNumber;
             loadQuestion(questionNumber);
         });
     });
 
-    // Handle the previous and next button click events
+    // Previous / Next navigation
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
 
+    const updateNavButtonsState = (current) => {
+        const total = buttons.length;
+        prevButton.disabled = current <= 1;
+        nextButton.disabled = current >= total;
+    };
+
     prevButton.addEventListener('click', () => {
-        let currentQuestionNumber = parseInt(currentQuestionNumberEl.textContent, 10);
-        if (currentQuestionNumber > 1) {
-            loadQuestion(currentQuestionNumber - 1);
-        }
+        const current = parseInt(currentQuestionNumberEl.textContent);
+        if (current > 1) loadQuestion(current - 1);
     });
 
     nextButton.addEventListener('click', () => {
-        let currentQuestionNumber = parseInt(currentQuestionNumberEl.textContent, 10);
-        const totalQuestions = buttons.length;
-        if (currentQuestionNumber < totalQuestions) {
-            loadQuestion(currentQuestionNumber + 1);
-        }
+        const current = parseInt(currentQuestionNumberEl.textContent);
+        if (current < buttons.length) loadQuestion(current + 1);
     });
 
-    // Automatically load the first question on page load
-    const firstQuestionNumber = buttons[0].getAttribute('data-question-number');
-    loadQuestion(firstQuestionNumber);
+    // Load first question on page load
+    loadQuestion(buttons[0].dataset.questionNumber);
 });
-
 </script>
 
 

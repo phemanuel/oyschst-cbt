@@ -304,14 +304,48 @@
                     <table width="100%">                    
                       
   <tr>
-    <td width="8%"><button type="submit" name="action" value="previous" class="btn btn-primary">Previous</button></td>
-    <td width="75%"><button type="submit" name="action" value="next" class="btn btn-info">Next</button></td>
-    <td width="7%">&nbsp;</td>
-    <td width="10%"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal-2">
-                    Add Image</button></td>
-                    <td width="10%"><a href="" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal-3">
-                   Delete Image</a></td>
-  </tr>
+    <td colspan="6" style="padding-top:10px;">
+        <div style="display:flex; gap:10px; justify-content:flex-start;">
+            
+            <button type="submit" name="action" value="previous"
+                class="btn btn-primary btn-sm"
+                style="min-width:110px;">
+                <i class="fa fa-arrow-left"></i> Previous
+            </button>
+
+            <button type="submit" name="action" value="next"
+                class="btn btn-info btn-sm"
+                style="min-width:110px;">
+                Next <i class="fa fa-arrow-right"></i>
+            </button>
+
+            <button type="button"
+                class="btn btn-warning btn-sm"
+                style="min-width:110px;"
+                onclick="previewQuestion()">
+                <i class="fa fa-eye"></i> Preview
+            </button>
+
+            <button type="button"
+                class="btn btn-success btn-sm"
+                style="min-width:110px;"
+                data-toggle="modal"
+                data-target="#exampleModal-2">
+                <i class="fa fa-image"></i> Add Image
+            </button>
+
+            <button type="button"
+                class="btn btn-danger btn-sm"
+                style="min-width:110px;"
+                data-toggle="modal"
+                data-target="#exampleModal-3">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+
+        </div>
+    </td>
+</tr>
+
                                            </table>
                   
 
@@ -329,6 +363,42 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+  <div class="modal fade" id="questionPreviewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background:#000;color:#fff;">
+                <button type="button" class="close" data-dismiss="modal" style="color:#fff;">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eye"></i> Question Preview
+                </h4>
+            </div>
+
+            <div class="modal-body" style="background:#fff;color:#000;">
+                <div id="preview-question" style="font-size:20px;"></div>
+
+                <hr>
+
+                <ol type="A" style="font-size:18px;">
+                    <li id="preview-a"></li>
+                    <li id="preview-b"></li>
+                    <li id="preview-c"></li>
+                    <li id="preview-d"></li>
+                </ol>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
   <form action="{{route('question-image-upload', ['id' => $questionSetting->id])}}" method="post" enctype="multipart/form-data">
     @csrf
   <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
@@ -581,6 +651,45 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: { fontCache: 'global' }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<script>
+function previewQuestion() {
+
+    // Get CKEditor content (RAW HTML with math)
+    var questionHtml = CKEDITOR.instances.editor1.getData();
+
+    // Get options
+    var optionA = document.querySelector('input[name="option_a"]').value;
+    var optionB = document.querySelector('input[name="option_b"]').value;
+    var optionC = document.querySelector('input[name="option_c"]').value;
+    var optionD = document.querySelector('input[name="option_d"]').value;
+
+    // Inject into preview modal
+    document.getElementById('preview-question').innerHTML = questionHtml;
+    document.getElementById('preview-a').innerHTML = optionA;
+    document.getElementById('preview-b').innerHTML = optionB;
+    document.getElementById('preview-c').innerHTML = optionC;
+    document.getElementById('preview-d').innerHTML = optionD;
+
+    // Open modal
+    $('#questionPreviewModal').modal('show');
+
+    // Re-render MathJax
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+}
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
