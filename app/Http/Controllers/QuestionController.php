@@ -60,8 +60,8 @@ class QuestionController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
-                            ->orderBy('exam_status', 'asc')
-                            ->orderBy('created_at', 'asc')
+                            // ->orderBy('exam_status', 'desc')
+                            ->orderBy('created_at', 'desc')
                             ->get();        
 
         return view('questions.question-obj-upload', compact('softwareVersion','collegeSetup','questionSetting'));
@@ -307,7 +307,7 @@ class QuestionController extends Controller
     
             $action = $request->input('action');     
             $question = $request->input('question');
-            $formattedQuestion = '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>';
+            $formattedQuestion =  $question;
             $answer = $request->input('answer');
             $currentQuestionNo = $request->input('currentQuestionNo');
             // Store question and answer data in the session   
@@ -328,14 +328,14 @@ class QuestionController extends Controller
             ]);       
     
             $action = $request->input('action');  
-            $question = strip_tags($request->input('question')); 
-            $formattedQuestion = '<p style="font-size: 24px; font-family: Arial;">' . $question . '</p>';
+            $question = $request->input('question'); 
+            $formattedQuestion = preg_replace('/^<p>(.*)<\/p>$/i', '$1', trim($question));;
             // $question = $request->input('question');
             $answer = $request->input('answer'); 
-            $formattedOptionA = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_a') . '</p>';
-            $formattedOptionB = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_b') . '</p>';
-            $formattedOptionC = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_c') . '</p>';
-            $formattedOptionD = '<p style="font-size: 20px; font-family: Arial;">' . $request->input('option_d') . '</p>';           
+            $formattedOptionA = $request->input('option_a') ;
+            $formattedOptionB = $request->input('option_b') ;
+            $formattedOptionC = $request->input('option_c') ;
+            $formattedOptionD = $request->input('option_d') ;           
             $currentQuestionNo = $request->input('currentQuestionNo');
             // Store question and answer data in the session   
             Session::put('question', $formattedQuestion);
