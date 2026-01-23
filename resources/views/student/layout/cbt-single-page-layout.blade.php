@@ -165,6 +165,175 @@
 }
 
     </style>
+    <style>
+/* Sidebar panel styling */
+.exam-details-panel {
+    border-left: 4px solid #098c1f; /* subtle blue accent */
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin: 10px;
+}
+
+/* Panel heading styling */
+.exam-details-panel .panel-heading {
+    font-size: 16px;
+    padding: 10px 12px;
+}
+
+/* Sidebar icon sizing */
+.exam-details-panel .sidebar-icon {
+    font-size: 18px; /* bigger for sidebar */
+    margin-right: 5px;
+}
+
+/* Body background for readability */
+.exam-details-panel .panel-body {
+    background-color: #f9f9f9;
+    padding: 10px 12px;
+}
+
+/* Definition list adjustments */
+.dl-vertical dt {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+
+.dl-vertical dd {
+    margin-left: 0;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 14px;
+}    
+</style>
+<style>
+    /* Navbar background */
+.cbt-navbar {
+  background-color: #28a745; /* green background */
+  color: #fff;
+  border-bottom: 2px solid #1e7e34; /* darker green border */
+}
+
+/* Logo section */
+.logo-section {
+  background-color: #218838; /* slightly darker green for contrast */
+  padding: 0 15px;
+}
+
+/* Timer button */
+.timer-btn {
+  background-color: #453a07; /* gold accent */
+  color: #000;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  min-width: 100px;
+}
+
+/* Student info text */
+.navbar-info .bold-text-font {
+  color: #fff;
+  font-size: 13px;
+  margin: 0 10px;
+}
+
+/* Submit button */
+.submit-btn {
+  background-color: #453a07; /* teal for contrast */
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 5px 12px;
+}
+
+/* Hamburger icon color */
+.navbar-toggler .fas {
+  color: #fff;
+}
+
+</style>
+<style>
+    /* Panel heading */
+.question-card .panel-heading {
+    font-size: 18px;           /* bigger text */
+    font-weight: bold;
+    color: #fff;               /* white text for contrast */
+    background-color: #393202; /* match button palette or slightly darker */
+    padding: 12px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    text-align: center;
+}
+
+/* Add space between heading and buttons */
+.question-card .panel-body {
+    padding: 15px;
+}
+
+/* Buttons wrapper */
+#question-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;  /* spacing between buttons */
+    justify-content: center;
+    margin-top: 10px;  /* space below heading */
+}
+
+/* Question buttons */
+.question-btn {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; 
+    background-color: #474204; /* existing color */
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover effect */
+.question-btn:hover {
+    background-color: #5a4b00;
+    cursor: pointer;
+}
+
+/* Active question */
+.question-btn.active {
+    border: 3px solid #2f2402; /* gold highlight */
+}
+
+/* Tick icon INSIDE button */
+.tick-icon {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 12px;
+    color: #e8ebe8; /* green tick */
+    display: none;
+}
+
+/* Show tick when answered */
+.question-btn.answered .tick-icon {
+    display: block;
+    animation: tick-pop 0.3s ease-in-out;
+}
+
+/* Tick pop animation */
+@keyframes tick-pop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+</style>
+
     <script>
 window.MathJax = {
     tex: {
@@ -179,111 +348,172 @@ window.MathJax = {
 <body class="sidebar-fixed">
   <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a>
-        <!-- <a  href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" width="50" height="50"/></a> -->
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-stretch">
-      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-          <span class="fas fa-bars"></span>
-        </button>
-      <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item d-none d-lg-flex">
-            <a class="nav-link" href="#">            
-              <span class="btn btn-primary"><strong><p class="bold-text-min">Time Left</p> <p><span class="bold-text-min" id="timer"></span> </p></strong></span>
-            </a>
-          </li>
-        </ul>
-        <ul class="navbar-nav">        
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Student No: {{$studentData->admission_no}}</p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Student Name: {{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}</p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Programme: {{ $studentData->department}} </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">Level: {{ $studentData->level}} </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">{{ $examSetting->no_of_qst}} Questions </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-          <strong><p class="bold-text-font">{{ $examSetting->duration}} Mins </p></strong>
-          </li>
-          <li class="nav-item nav-search d-none d-md-flex">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-2">
-                    Submit Test</button>
-          </li>
-        </ul>
-        
-        
-      </div>
-      
-    </nav>
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar cbt-navbar">
+  <!-- Logo Section -->
+  <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center logo-section">
+    <a href="#">
+      <img src="{{ asset($collegeSetup->avatar) }}" alt="logo" width="50" height="50"/>
+    </a>
+  </div>
+
+  <!-- Menu / Info Section -->
+  <div class="navbar-menu-wrapper d-flex align-items-stretch">
+    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+      <span class="fas fa-bars"></span>
+    </button>
+
+    <!-- Timer -->
+    <ul class="navbar-nav navbar-nav-right">
+      <li class="nav-item d-none d-lg-flex">
+        <a class="nav-link" href="#">            
+          <span class="btn timer-btn">
+            <strong>
+              <p class="bold-text-min">Time Left</p>
+              <p><span class="bold-text-min" id="timer"></span></p>
+            </strong>
+          </span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Student & Exam Info -->
+ <ul class="navbar-nav navbar-info" style="list-style: none; padding: 0; margin: 0 0 15px 0; width: 100%; background-color: #3b3407; border-radius: 6px; overflow: hidden;">
+
+    <!-- Student No -->
+    <li style="padding: 12px 15px; text-align: center; border-bottom: 1px solid #fff;">
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #ecf0f1;">Student No</div>
+        <div style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #fff;">
+            {{ $studentData->admission_no }}
+        </div>
+    </li>
+
+    <!-- Student Name -->
+    <li style="padding: 12px 15px; text-align: center; border-bottom: 1px solid #fff;">
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #ecf0f1;">Name</div>
+        <div style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #fff;">
+            {{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}
+        </div>
+    </li>
+
+    <!-- Programme -->
+    <li style="padding: 12px 15px; text-align: center; border-bottom: 1px solid #fff;">
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #ecf0f1;">Programme</div>
+        <div style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #fff;">
+            {{ $studentData->department }}
+        </div>
+    </li>
+
+    <!-- Level -->
+    <li style="padding: 12px 15px; text-align: center; border-bottom: 1px solid #fff;">
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #ecf0f1;">Level</div>
+        <div style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #fff;">
+            {{ $studentData->level }}
+        </div>
+    </li>
+
+    <!-- Questions -->
+    <li style="padding: 12px 15px; text-align: center; border-bottom: 1px solid #fff;">
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #ecf0f1;">Questions</div>
+        <div style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #fff;">
+            {{ $examSetting->no_of_qst }}
+        </div>
+    </li>
+
+    <!-- Duration -->
+    <li style="padding: 12px 15px; text-align: center;">
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #ecf0f1;">Duration</div>
+        <div style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #fff;">
+            {{ $examSetting->duration }} Mins
+        </div>
+    </li>
+
+</ul>
+
+<!-- Submit Test Button (separate, right-aligned, with spacing) -->
+<div style="text-align: right; margin-top: 5px; margin-left: 10px;">
+    <button type="button" class="btn btn-warning" style="background-color: #3b3407; color: #FFFFFF; font-weight: bold; border-radius: 4px; min-width: 150px;" data-toggle="modal" data-target="#exampleModal-2">
+        Submit Test
+    </button>
+</div>
+
+
+  </div>
+</nav>
+
     <!-- partial -->
     
     <div class="container-fluid page-body-wrapper">      
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item nav-profile">
-           
-          </li>
-        <hr>
-        <li class="nav-item">
-              <span class="bold-text-font-menu">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                Exam Details&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;</span>           
-          </li>
-          <hr>
-          <table class="table">
-            <tr>
-                <td><p class="bold-text-font-menu">Academic Session:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
-            </tr>
-            <tr>
-            <td><p class="bold-text-font-menu">Exam Type:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->exam_type}}</p></td>
-            </tr>            
-            <tr>
-                <td><p class="bold-text-font-menu">Semester:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->semester}}</p></td>
-            </tr>
-            <tr>
-                <td><p class="bold-text-font-menu">Course:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
-            </tr>
-            <!-- @if($examSetting->exam_category == 'SEMESTER-EXAM')
-            <tr>
-                <td><p class="bold-text-font-menu">Semester:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->session1}}</p></td>
-            </tr>
-            <tr>
-                <td><p class="bold-text-font-menu">Course:</p></td>
-                <td><p class="bold-text-font-menu">{{$examSetting->course}}</p></td>
-            </tr>
-            @else
+    <ul class="nav">
+        <li class="nav-item nav-profile">
+            <!-- optional profile info -->
+        </li>
 
-            @endif -->
-            
-          </table>
-        </ul>
-      </nav>
+        <hr>
+        <li>
+            <div class="panel panel-default exam-details-panel">
+                    <table class="table">
+                        <tr> 
+                            <td>
+                                <h4 class="page-title" style="
+                                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                    font-size: 16px; 
+                                    font-weight: 600; 
+                                    color: #2b2902; 
+                                    display: flex; 
+                                    align-items: center;
+                                    gap: 8px;
+                                    margin: 0;
+                                ">
+                                    <i class="fa fa-question-circle" style="color: #28a745; font-size:18px;"></i>
+                                    Read questions carefully and answer appropriately.
+                                </h4>
+                            </td>
+                            <!-- Optional button -->
+                            <!-- <td> 
+                                <button type="button" name="{{$pageNo}}" id="{{$pageNo}}" class="btn btn-info">Load Answers</button>
+                            </td> -->
+                        </tr>
+
+                    </table>
+                </div>
+        </li>
+        <li>
+            <div class="panel panel-default exam-details-panel">
+                <div class="panel-heading">
+                    <strong style="display: flex; align-items: center; gap: 6px; font-size: 16px; color: #1c1d1f;">
+                        <span class="glyphicon glyphicon-info-sign" style="color: #28a745; font-size: 18px;"></span>
+                        <i class="fa fa-book" style="color: #0a932f; font-size: 16px;"></i>
+                        Exam Details
+                    </strong>
+
+                </div>
+
+                <div class="panel-body">
+                    <dl class="dl-vertical">
+                        <dt>Academic Session:</dt>
+                        <dd>{{ $examSetting->session1 }}</dd>
+
+                        <dt>Exam Type:</dt>
+                        <dd>{{ $examSetting->exam_type }}</dd>
+
+                        <dt>Semester:</dt>
+                        <dd>{{ $examSetting->semester }}</dd>
+
+                        <dt>Course:</dt>
+                        <dd>{{ $examSetting->course }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>
+
       <!-- partial -->
       <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-           
-            <table class="table">
-                <tr>
-                    <td> <h3 class="page-title">Computer Based Test - Read questions carefully and answer appropriately.</h3></td>
-                    <!-- <td> <button type="button" name="{{$pageNo}}" id="{{$pageNo}}"  class="btn btn-info">Load Answers</button></td> -->
-                </tr>
-            </table>            
-          </div>          
+        <div class="content-wrapper">          
+          
           <div>
           @if(session('success'))
 						<div class="alert alert-success">
@@ -296,84 +526,116 @@ window.MathJax = {
 						@endif	
           </div>
           <!-- question-Loaded -->
-          <div class="row">         
-          <div id="questions-container">
-    <!-- This will be populated with questions dynamically -->   
+          <div class="row d-flex">
+    <!-- Left Column: Question & Options -->
+<div class="col-md-8 d-flex">
+    <div class="card flex-fill d-flex flex-column" style="max-height:90%; overflow-y:auto;">
+        <div class="card-body d-flex flex-column" style="padding-bottom:0;">
+            <form action="" class="answer-form" data-question-number="1">
+                <!-- Question Header -->
+                <h4 class="card-title mb-3">
+                    <strong>Question <span id="current-question-number">1</span> of {{ $examSetting->no_of_qst }}</strong>
+                </h4>     
 
-</div>
+                <!-- Question Container -->
+                <div class="question-container mb-3" style="padding:15px; font-size:30px; background-color:#f9f9f9; border-radius:4px;">
+                    <div id="current-question"></div>
+                </div>
 
-<div class="col-12 grid-margin">
-    <div class="card">
-        <div class="card-body">
-        <form action="" class="answer-form" data-question-number="1">
-            <!-- Buttons for each question -->
-            <div id="question-buttons" class="d-flex flex-wrap gap-2 mb-4" data-admission-no="{{ $studentData->admission_no }}">
-                @for ($i = 1; $i <= $examSetting->no_of_qst; $i++)
-                    <button 
-                        type="button" 
-                        class="btn btn-primary question-btn {{ $i === 1 ? 'active' : '' }}" 
-                        data-question-number="{{ $i }}">
-                        <span class="question-number">{{ $i }}</span>
-                        <!-- Tick icon overlay (initially hidden) -->
-                        <i class="fa fa-check tick-icon"></i>
-                    </button>
-                @endfor
-            </div>
-        <hr>
-        <h4 class="card-title">
-            <strong>Question <span id="current-question-number">1</span> of {{$examSetting->no_of_qst}}</strong>
-        </h4>     
-            
-        <div class="question-container">    
-            <div id="current-question"></div> <!-- This is where the question content will be inserted -->
+                <!-- Options Table -->
+                <table class="options-container w-100" style="border-collapse: collapse;">
+                    @foreach(['A','B','C','D'] as $opt)
+                    <tr class="options-row" style="height:40px;">
+                        <td style="padding:4px 8px;">
+                            <input type="radio" name="option" id="option_{{ strtolower($opt) }}" value="{{ $opt }}" />
+                            <label for="option_{{ strtolower($opt) }}" style="margin-left:6px; font-size:18px; cursor:pointer;">
+                                <i class="fa fa-circle-o me-1"></i> Option {{ $opt }}
+                            </label>
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+
+            </form>
         </div>
 
-        <table class="options-container">
-            <tr class="options-row">
-                <td>
-                    <input type="radio" name="option" id="option_a" value="A" />
-                    <label for="option_a"></label>
-                </td>
-            </tr>
-            <tr class="options-row">
-                <td>
-                    <input type="radio" name="option" id="option_b" value="B" />
-                    <label for="option_b"></label>
-                </td>
-            </tr>
-            <tr class="options-row">
-                <td>
-                    <input type="radio" name="option" id="option_c" value="C" />
-                    <label for="option_c"></label>
-                </td>
-            </tr>
-            <tr class="options-row">
-                <td>
-                    <input type="radio" name="option" id="option_d" value="D" />
-                    <label for="option_d"></label>
-                </td>
-            </tr>
-        </table>
-    
-    </form>
-        
-        </div>                
-    </div>
-</div>
+        <!-- Previous / Next Buttons in a separate footer card -->
+        <div class="card mt-2" style="background-color:#f0f0f0; border-radius:6px; margin:8px;">
+            <div class="card-body d-flex justify-content-between p-2">
+                <button id="prev-button" class="btn d-flex align-items-center" 
+                        style="background-color:#3b3407; color:#fff; font-weight:bold; gap:5px; border-radius:6px;">
+                    <i class="fa fa-arrow-left"></i> Previous
+                </button>
 
-<div class="col-12 grid-margin">
-    <div class="card">
-        <div class="card-body">
-            <input type="hidden" id="hidden-currentQuestionNo" value="{{$currentQuestionNo}}">
-            <div class="d-flex justify-content-between">
-                <button id="prev-button" class="btn btn-success">Previous Question</button>
-                <button id="next-button" class="btn btn-info">Next Question</button>
+                <button id="next-button" class="btn d-flex align-items-center" 
+                        style="background-color:#28a745; color:#fff; font-weight:bold; gap:5px; border-radius:6px;">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+
+
+    <!-- Right Column: Question Navigation -->
+    <div class="col-md-4 d-flex">
+        <div class="card flex-fill d-flex flex-column" style="max-height:90%;">
+            <!-- Sticky Header -->
+            <div class="card-header text-center" 
+                 style="font-weight:bold; font-size:16px; background-color:#3b3407; color:#fff; position:sticky; top:0; z-index:10; border-radius:6px 6px 0 0;">
+                Question Navigation
+            </div>
+
+            <!-- Scrollable Buttons -->
+            <div class="card-body flex-fill" style="padding:10px; overflow-y:auto;">
+               <div id="question-buttons" class="question-buttons-wrapper" 
+                    data-admission-no="{{ $studentData->admission_no }}" 
+                    style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+
+                    @for ($i = 1; $i <= $examSetting->no_of_qst; $i++)
+                        <button type="button" 
+                                class="btn question-btn {{ $i === 1 ? 'active' : '' }}" 
+                                data-question-number="{{ $i }}"
+                                style="
+                                    position:relative;
+                                    width:50px; 
+                                    height:50px; 
+                                    border-radius:50%; 
+                                    background-color:#474204; 
+                                    color:#fff; 
+                                    font-weight:bold; 
+                                    font-size:16px; 
+                                    border:none; 
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    transition: all 0.2s;
+                                ">
+                            <span class="question-number">{{ $i }}</span>
+                            <!-- Tick icon in top-right corner -->
+                            <i class="fa fa-check tick-icon" 
+                            style="
+                                position:absolute; 
+                                top:10px; 
+                                right:10px; 
+                                color:#fff; 
+                                display:none; 
+                                font-size:14px;
+                            "></i>
+                        </button>
+                    @endfor
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
           
           <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
@@ -584,7 +846,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!-- Question Rendering -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll('.question-btn');
     const currentQuestionNumberEl = document.getElementById('current-question-number');
     const currentQuestionEl = document.getElementById('current-question');
@@ -608,88 +870,85 @@ document.addEventListener('DOMContentLoaded', function () {
     // Keep track of attempted questions
     const attemptedQuestions = new Set();
 
-    // Clear current question and options
     const clearQuestion = () => {
         currentQuestionEl.innerHTML = '';
         Object.values(optionLabels).forEach(label => label.innerHTML = '');
         Object.values(optionInputs).forEach(input => input.checked = false);
     };
 
-    // Load a question by number
+    const updateButtonStates = (activeNumber) => {
+        buttons.forEach(btn => {
+            const btnNumber = parseInt(btn.dataset.questionNumber);
+            const tick = btn.querySelector('.tick-icon');
+
+            // Reset
+            btn.style.backgroundColor = '#474204'; // default
+            btn.style.color = '#fff';
+            btn.classList.remove('active');
+
+            // Active question
+            if (btnNumber === activeNumber) {
+                btn.style.backgroundColor = '#28a745';
+                btn.style.color = '#fff';
+                btn.classList.add('active');
+            }
+
+            // Attempted question
+            if (attemptedQuestions.has(btnNumber)) {
+                if (tick) tick.style.display = 'block';
+            } else {
+                if (tick) tick.style.display = 'none';
+            }
+        });
+    };
+
     const loadQuestion = (questionNumber) => {
         clearQuestion();
 
         fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 currentQuestionNumberEl.textContent = questionNumber;
 
-                // Insert question and options
-                // currentQuestionEl.innerHTML = data.question;
-                // Render question based on type
+                // Render question
                 if (data.questionType === 'text') {
                     currentQuestionEl.innerHTML = data.question;
-
-                    // Render LaTeX if text
-                    if (window.MathJax) {
-                        MathJax.typesetPromise([currentQuestionEl]).catch(err =>
-                            console.error('MathJax error:', err.message)
-                        );
-                    }
-
+                    if (window.MathJax) MathJax.typesetPromise([currentQuestionEl]);
                 } else if (data.questionType === 'text-image') {
                     const img = document.createElement('img');
-                    img.src = `/questions/${data.graphic}`; 
+                    img.src = `/questions/${data.graphic}`;
                     img.alt = 'Question Image';
                     img.classList.add('img-fluid', 'mb-3');
                     img.style.maxWidth = '100%';
-
                     currentQuestionEl.innerHTML = '';
                     currentQuestionEl.appendChild(img);
                 }
+
+                // Set options
                 optionLabels.A.innerHTML = data.option_a;
                 optionLabels.B.innerHTML = data.option_b;
                 optionLabels.C.innerHTML = data.option_c;
                 optionLabels.D.innerHTML = data.option_d;
 
-                // Render LaTeX using MathJax
-                if (window.MathJax) {
-                    MathJax.typesetPromise([
-                        currentQuestionEl,
-                        optionLabels.A,
-                        optionLabels.B,
-                        optionLabels.C,
-                        optionLabels.D
-                    ]).catch(err => console.error('MathJax typeset error:', err.message));
+                if (window.MathJax) MathJax.typesetPromise([currentQuestionEl, optionLabels.A, optionLabels.B, optionLabels.C, optionLabels.D]);
+
+                // Mark selected answer
+                if (data.answerSelected) {
+                    optionInputs[data.answerSelected].checked = true;
+                    attemptedQuestions.add(parseInt(questionNumber));
                 }
 
-                // Mark previously selected option
-                const answerSelected = data.answerSelected;
-                if (answerSelected) {
-                    optionInputs[answerSelected].checked = true;
-                }
-
-                // Mark attempted
-                if (answerSelected !== null) {
-                    attemptedQuestions.add(questionNumber);
-                    const btn = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                    if (btn) btn.classList.add('attempted');
-                }
-
-                // Highlight active button
-                buttons.forEach(btn => btn.classList.remove('active'));
-                const activeBtn = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-                if (activeBtn) activeBtn.classList.add('active');
+                // Update button styles
+                updateButtonStates(parseInt(questionNumber));
 
                 updateNavButtonsState(parseInt(questionNumber));
             })
             .catch(err => {
-                console.error('Error fetching question:', err);
-                currentQuestionEl.innerHTML = 'Failed to load question. Please try again later.';
+                console.error(err);
+                currentQuestionEl.innerHTML = 'Failed to load question.';
             });
     };
 
-    // Save selected answer
     const saveAnswer = (questionNumber, selectedOption) => {
         fetch('/save-single-answer', {
             method: 'POST',
@@ -702,34 +961,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 selected_option: selectedOption,
                 admission_no: admissionNo
             })
-        })
-        .then(response => response.json())
+        }).then(res => res.json())
         .then(() => {
-            attemptedQuestions.add(questionNumber);
-            const btn = document.querySelector(`.question-btn[data-question-number="${questionNumber}"]`);
-            if (btn) btn.classList.add('attempted');
-        })
-        .catch(err => console.error('Error saving answer:', err));
+            attemptedQuestions.add(parseInt(questionNumber));
+            updateButtonStates(parseInt(questionNumber));
+        }).catch(err => console.error(err));
     };
 
-    // Handle option selection
+    // Option change event
     Object.values(optionInputs).forEach(input => {
         input.addEventListener('change', function () {
             const selectedOption = this.value;
-            const questionNumber = currentQuestionNumberEl.textContent;
+            const questionNumber = parseInt(currentQuestionNumberEl.textContent);
             saveAnswer(questionNumber, selectedOption);
         });
     });
 
-    // Handle question button clicks
+    // Question buttons click
     buttons.forEach(button => {
         button.addEventListener('click', function () {
-            const questionNumber = this.dataset.questionNumber;
+            const questionNumber = parseInt(this.dataset.questionNumber);
             loadQuestion(questionNumber);
         });
     });
 
-    // Previous / Next navigation
+    // Prev/Next buttons
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
 
@@ -749,9 +1005,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (current < buttons.length) loadQuestion(current + 1);
     });
 
-    // Load first question on page load
-    loadQuestion(buttons[0].dataset.questionNumber);
+    // Initial load
+    loadQuestion(parseInt(buttons[0].dataset.questionNumber));
 });
+
 </script>
 
 
