@@ -128,6 +128,8 @@ Route::get('/', function () {
     ->name('get-question');
     Route::post('save-single-answer', [ExamController::class, 'saveSingleAnswer'])
     ->name('save-single-answer');
+    Route::get('/get-attempted-questions', [ExamController::class, 'getAttemptedQuestions'])
+    ->name('get-attempted-questions');
     //--Submit Test
     Route::get('cbt/{id}/submit', [ExamController::class, 'cbtSubmit'])
     ->name('cbt-submit');

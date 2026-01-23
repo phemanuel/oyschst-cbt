@@ -116,180 +116,127 @@
       </div>
     </nav>
     <div class="container-fluid page-body-wrapper">
-      <div class="main-panel">
+    <div class="main-panel">
         <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title">
-              Computer Based Test - Result.
-            </h3>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('login')}}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Computer Based Test</li>
-              </ol>
-            </nav>
-          </div>
-          <!-- <div>
-          @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
-          </div> -->
-          <div class="alert alert-success">
-							<p>You have successfully completed the test.</strong>.</p>
-						</div>
-            <div class="box-tools">
-                @if($examSetting->check_result === 1)
-                <div class="input-group input-group-sm" style="width: 150px;">
-                <a href="#" onclick="window.print();" class="btn btn-info" >Print Slip</a>
+            <!-- Page Header -->
+            <div class="page-header mb-4">
+                <!-- <h3 class="page-title">Computer Based Test - Result</h3> -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Computer Based Test</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- Completion Message -->
+            <!-- <div class="alert alert-success text-center">
+                <strong>You have successfully completed the test!</strong>
+            </div> -->            
+
+            <!-- Result Card -->
+            @if($examSetting->check_result == 1)
+            <div class="card shadow-sm mb-4" style="max-width: 900px; margin: 0 auto;">
+                <div class="card-body">
+                    <!-- College Logo and Name -->
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                        <img src="{{ asset($collegeSetup->avatar) }}" alt="College Logo" style="height:80px;" class="mr-3">
+                        <h2 class="mb-0 text-center">{{ $collegeSetup->name }}</h2>
+                    </div>
+
+                    <!-- Result Title -->
+                    <h5 class="text-center text-uppercase mb-4">
+                        {{ $cbtEvaluation->session1 }} {{ $cbtEvaluation->exam_type }} Result Confirmation Slip
+                    </h5>
+
+                    <div class="row mb-4">
+                        <!-- Student Photo -->
+                        <div class="col-md-3 text-center">
+                            <img src="{{ asset('uploads/' . $cbtEvaluation->studentno . '.jpg') }}" 
+                                 alt="Student Photo" class="img-fluid rounded" style="max-height: 140px;">
+                        </div>
+
+                        <!-- Student Info -->
+                        <div class="col-md-9">
+                            <table class="table table-borderless table-sm mb-0">
+                                <tr>
+                                    <th>Examination Date:</th>
+                                    <td>{{ \Carbon\Carbon::parse($cbtEvaluation->examdate)->format('F j, Y') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Student Name:</th>
+                                    <td>{{ $cbtEvaluation->studentname }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Student No:</th>
+                                    <td>{{ $cbtEvaluation->studentno }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Programme:</th>
+                                    <td>{{ $cbtEvaluation->department }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Level:</th>
+                                    <td>{{ $cbtEvaluation->level }}</td>
+                                </tr>
+                                @if($cbtEvaluation->exam_category == 'SEMESTER')
+                                <tr>
+                                    <th>Semester:</th>
+                                    <td>{{ $cbtEvaluation->semester }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Course:</th>
+                                    <td>{{ $cbtEvaluation->course }}</td>
+                                </tr>
+                                @endif
+                                <tr>
+                                    <th>Academic Session:</th>
+                                    <td>{{ $cbtEvaluation->session1 }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Questions:</th>
+                                    <td>{{ $cbtEvaluation->noofquestion }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Score:</th>
+                                    <td>{{ $cbtEvaluation->correct }}</td>
+                                </tr>
+                            </table>                            
+
+                            @if($cbtEvaluation->exam_type == 'ENTRANCE')
+                            <p class="mt-3 text-center"><i>Check your Portal for Cut-off mark and interview date.</i></p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Signature -->
+                    <div class="text-center mt-4">
+                        <img src="{{ asset('college/signature.jpg') }}" alt="Signature" width="210">
+                    </div>
                 </div>
-                @else
-
-                @endif
-              </div>
-              <hr>
-            <div class="row"> 
-           @if($examSetting->check_result == 1)
-           <table width="60%" border="0" align="center" cellpadding="4" cellspacing="5">
-<tr>
-                <td colspan="2">&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="93"><img src="{{asset($collegeSetup->avatar)}}" alt="College logo"></td>
-              <td width="465"><h1><div align="center"><strong>{{$collegeSetup->name}}</strong> </div></h1> </td>
-  </tr>
-  <tr>
-                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            </tr>
-            
-            <tr>
-                <td colspan="2" align="center"><p class="bold-font-text">{{$cbtEvaluation->session1}} {{$cbtEvaluation->exam_type}} RESULT CONFIRMATION SLIP</p> </td>
-            </tr>
-             <tr>
-                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
-                <tr>
-                    <td width="348">&nbsp;</td>
-                    <td width="116"><img name="" src="{{asset('uploads/'. $cbtEvaluation->studentno . '.jpg')}}" width="94" height="102" alt="" /></td>
-                </tr> 
-                </table></td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="2"><table width="100%" border="0" align="center" cellpadding="3" cellspacing="3">
-                <tr>
-                    <td width="173"><span class="style8"><p class="bold-font-text">Examination Date:</p></span></td>
-                  <td width="301"><p class="bold-font">{{ \Carbon\Carbon::parse($cbtEvaluation->examdate)->format('F j, Y') }}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Student Name:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->studentname}}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Student No</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->studentno}}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Programme:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->department}}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Level:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->level}}</p></td>
-                </tr>
-                @if($cbtEvaluation->exam_category == 'SEMESTER')
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Semester:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->semester}}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Course:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->course}}</p></td>
-                </tr>
-                @else
-
-                @endif
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Academic Session:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->session1}}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Total No of Questions:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->noofquestion}}</p></td>
-                </tr>
-                <tr>
-                    <td><span class="style8"><p class="bold-font-text">Score:</p></span></td>
-                  <td><p class="bold-font">{{$cbtEvaluation->correct}}</p></td>
-                </tr>
-              </table></td>
-            </tr>
-            <tr>
-                <td colspan="2">&nbsp;</td>
-            </tr>
-            @if($cbtEvaluation->exam_type == 'ENTRANCE')
-            <tr>
-                <td colspan="2"><span class="style10"><p class="bold-font-text"><i>Note: Check your Portal to know the Cut off mark and the interview date.</i> </p></span></td>
-            </tr>
+            </div>
             @else
-            
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h4>You have successfully completed the test. <strong>Exit the Computer Based Test</strong>.</h4>
+                </div>
+            </div>
             @endif
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            @if($cbtEvaluation->exam_type == 'ENTRANCE')
-            <tr>
-              <td colspan="2" align="center"><img src="{{asset('college/signature.jpg')}}" alt="" width="210" height="81"></td>
-            </tr>
-            @elseif($cbtEvaluation->exam_type == 'WEEDING-OUT')
-            <tr>
-              <td colspan="2" align="center"><img src="{{asset('college/signature.jpg')}}" alt="" width="210" height="81"></td>
-            </tr>
-            @else
 
-            @endif
-            </table>
-           @else
-           <table class="table">                       
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-                              <td><h2>You have successfully completed the test, <strong>Exit the Computer based test</strong>.</h2></td>
-                          </label>
-												</div>	
-                        </tr>        
-                    </table>
-            
-           @endif
-<hr>
-            
-          </div>   
-<div>
+            <!-- Exit and Print Buttons Responsive -->
+            <div class="d-flex flex-column flex-md-row justify-content-center mt-4" style="gap: 10px;">
+                <!-- Exit Button -->
+                <a href="{{ route('student-logout') }}" class="btn btn-success btn-lg">Exit Computer Based Test</a>
 
-<table width="100%">
-  <tr>
-    <td></td>
-    <td><p><form action="" method="post">
-                      @csrf
-                      <div class="form-check">
-													<label class="form-check-label">
-                          <a href="{{route('student-logout')}}" class="btn btn-success btn-block">Exit Computer Based Test</a>                            
-													</label>
-												</div> 
-                    </form></p></td>
-    <td></td>
-  </tr>
-</table>
-</div>
+                <!-- Print Button -->
+                @if($examSetting->check_result === 1)
+                    <a href="#" onclick="window.print();" class="btn btn-info btn-lg">Print Slip</a>
+                @endif
+            </div>
+                    </div>
+                </div>
+            </div>
+
         
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">

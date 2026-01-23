@@ -493,13 +493,13 @@ window.MathJax = {
                 <div class="panel-body">
                     <dl class="dl-vertical">
                         <dt>Academic Session:</dt>
-                        <dd>{{ $examSetting->session1 }}</dd>
-
-                        <dt>Exam Type:</dt>
-                        <dd>{{ $examSetting->exam_type }}</dd>
+                        <dd>{{ $examSetting->session1 }}</dd>                        
 
                         <dt>Semester:</dt>
                         <dd>{{ $examSetting->semester }}</dd>
+
+                        <dt>Exam Type:</dt>
+                        <dd>{{ $examSetting->exam_type }}</dd>
 
                         <dt>Course:</dt>
                         <dd>{{ $examSetting->course }}</dd>
@@ -507,6 +507,48 @@ window.MathJax = {
                 </div>
             </div>
         </li>
+
+        <li>
+    <!-- Attempted Questions Counter -->
+        <li>
+            <div class="panel panel-default exam-details-panel">
+                <table class="table" style="margin-bottom:0;">
+                    <tr> 
+                        <td>
+                            <h4 id="attempted-counter" class="page-title" style="
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                font-size: 16px; 
+                                font-weight: 600; 
+                                color: #2b2902; 
+                                display: flex; 
+                                align-items: center;
+                                gap: 8px;
+                                margin: 0;
+                                transition: background-color 0.3s, color 0.3s;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                            ">
+                                <i class="fa fa-tasks" style="color: #28a745; font-size:18px;"></i>
+                                You have attempted 0 out of {{ $examSetting->no_of_qst }} questions
+                            </h4>
+
+                            <!-- Progress Bar -->
+                            <!-- <div class="progress" style="height: 12px; margin-top:5px; border-radius:6px; background-color:#e0e0e0;">
+                                <div id="attempted-progress" class="progress-bar" role="progressbar" style="
+                                    width: 0%;
+                                    background-color: #28a745;
+                                    border-radius:6px;
+                                    transition: width 0.3s ease;
+                                "></div> -->
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+
+
+
     </ul>
 </nav>
 
@@ -663,12 +705,18 @@ window.MathJax = {
     
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2020 - <?php echo date('Y') ; ?> <a href="{{$collegeSetup->web_url}}" target="_blank">{{$collegeSetup->name}}</a>. </span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Version : {{$softwareVersion->version}} </span>
-          </div>
+        <footer class="footer" style="background-color: #ffffff; padding: 10px 20px;">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                    Copyright © 2020 - <?php echo date('Y'); ?> 
+                    <a href="{{$collegeSetup->web_url}}" target="_blank">{{$collegeSetup->name}}</a>.
+                </span>
+                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+                    Version : {{$softwareVersion->version}}
+                </span>
+            </div>
         </footer>
+
         <!-- partial -->
       </div>
       <!-- main-panel ends -->
@@ -846,10 +894,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!-- Question Rendering -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll('.question-btn');
     const currentQuestionNumberEl = document.getElementById('current-question-number');
     const currentQuestionEl = document.getElementById('current-question');
+    const attemptedCounterEl = document.getElementById('attempted-counter');
 
     const optionLabels = {
         A: document.querySelector('label[for="option_a"]'),
@@ -866,23 +915,43 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const admissionNo = document.getElementById('question-buttons').dataset.admissionNo;
-
-    // Keep track of attempted questions
+    const totalQuestions = {{ $examSetting->no_of_qst }};
     const attemptedQuestions = new Set();
 
+    // ===============================
+    // Fetch attempted questions from DB
+    // ===============================
+    fetch(`/get-attempted-questions?admission_no=${admissionNo}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log("Fetched attempted questions:", data);
+            if (Array.isArray(data)) {
+                data.forEach(qNum => attemptedQuestions.add(qNum));
+                updateAttemptedCounter();
+                updateButtonStates(parseInt(buttons[0].dataset.questionNumber)); // first question active
+            }
+        })
+        .catch(err => console.error('Error fetching attempted questions:', err));
+
+    // ===============================
+    // Clear question and options
+    // ===============================
     const clearQuestion = () => {
         currentQuestionEl.innerHTML = '';
         Object.values(optionLabels).forEach(label => label.innerHTML = '');
         Object.values(optionInputs).forEach(input => input.checked = false);
     };
 
+    // ===============================
+    // Update button states and ticks
+    // ===============================
     const updateButtonStates = (activeNumber) => {
         buttons.forEach(btn => {
             const btnNumber = parseInt(btn.dataset.questionNumber);
             const tick = btn.querySelector('.tick-icon');
 
             // Reset
-            btn.style.backgroundColor = '#474204'; // default
+            btn.style.backgroundColor = '#474204';
             btn.style.color = '#fff';
             btn.classList.remove('active');
 
@@ -893,15 +962,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 btn.classList.add('active');
             }
 
-            // Attempted question
+            // Attempted questions
             if (attemptedQuestions.has(btnNumber)) {
-                if (tick) tick.style.display = 'block';
+                if (tick) {
+                    tick.style.display = 'block';
+                    tick.style.color = '#fff';
+                }
             } else {
                 if (tick) tick.style.display = 'none';
             }
         });
     };
 
+    // ===============================
+    // Update attempted counter
+    // ===============================
+    const updateAttemptedCounter = () => {
+        attemptedCounterEl.innerHTML = `
+            <i class="fa fa-tasks" style="color: #28a745; font-size:18px;"></i>
+            You have attempted ${attemptedQuestions.size} out of ${totalQuestions} questions
+        `;
+        
+    };
+
+    // ===============================
+    // Load a question
+    // ===============================
     const loadQuestion = (questionNumber) => {
         clearQuestion();
 
@@ -930,17 +1016,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 optionLabels.C.innerHTML = data.option_c;
                 optionLabels.D.innerHTML = data.option_d;
 
-                if (window.MathJax) MathJax.typesetPromise([currentQuestionEl, optionLabels.A, optionLabels.B, optionLabels.C, optionLabels.D]);
+                if (window.MathJax) MathJax.typesetPromise([
+                    currentQuestionEl, optionLabels.A, optionLabels.B, optionLabels.C, optionLabels.D
+                ]);
 
-                // Mark selected answer
+                // Mark previously selected answer
                 if (data.answerSelected) {
                     optionInputs[data.answerSelected].checked = true;
                     attemptedQuestions.add(parseInt(questionNumber));
                 }
 
-                // Update button styles
                 updateButtonStates(parseInt(questionNumber));
-
+                updateAttemptedCounter();
                 updateNavButtonsState(parseInt(questionNumber));
             })
             .catch(err => {
@@ -949,6 +1036,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     };
 
+    // ===============================
+    // Save answer
+    // ===============================
     const saveAnswer = (questionNumber, selectedOption) => {
         fetch('/save-single-answer', {
             method: 'POST',
@@ -961,14 +1051,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 selected_option: selectedOption,
                 admission_no: admissionNo
             })
-        }).then(res => res.json())
+        })
+        .then(res => res.json())
         .then(() => {
             attemptedQuestions.add(parseInt(questionNumber));
             updateButtonStates(parseInt(questionNumber));
-        }).catch(err => console.error(err));
+            updateAttemptedCounter();
+        })
+        .catch(err => console.error(err));
     };
 
+    // ===============================
     // Option change event
+    // ===============================
     Object.values(optionInputs).forEach(input => {
         input.addEventListener('change', function () {
             const selectedOption = this.value;
@@ -977,7 +1072,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ===============================
     // Question buttons click
+    // ===============================
     buttons.forEach(button => {
         button.addEventListener('click', function () {
             const questionNumber = parseInt(this.dataset.questionNumber);
@@ -985,14 +1082,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ===============================
     // Prev/Next buttons
+    // ===============================
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
 
     const updateNavButtonsState = (current) => {
-        const total = buttons.length;
         prevButton.disabled = current <= 1;
-        nextButton.disabled = current >= total;
+        nextButton.disabled = current >= totalQuestions;
     };
 
     prevButton.addEventListener('click', () => {
@@ -1002,15 +1100,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     nextButton.addEventListener('click', () => {
         const current = parseInt(currentQuestionNumberEl.textContent);
-        if (current < buttons.length) loadQuestion(current + 1);
+        if (current < totalQuestions) loadQuestion(current + 1);
     });
 
+    // ===============================
     // Initial load
+    // ===============================
     loadQuestion(parseInt(buttons[0].dataset.questionNumber));
 });
-
 </script>
-
 
 
 

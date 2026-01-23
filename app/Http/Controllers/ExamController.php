@@ -29,6 +29,7 @@ use App\Models\CbtEvaluation2;
 use Carbon\Carbon;
 use App\Models\TheoryQuestion;
 use App\Models\TheoryAnswer;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -2218,6 +2219,57 @@ class ExamController extends Controller
             'option_d' => $question->option_d,
         ], 200, ['Content-Type' => 'application/json; charset=utf-8']);
     }
+
+    public function getAttemptedQuestions(Request $request)
+    {
+        $admissionNo = $request->query('admission_no');
+
+        $studentData = StudentAdmission::where('admission_no', $admissionNo)->firstOrFail();
+
+        $examSetting = ExamSetting::where('department', $studentData->department)
+                        ->where('level', $studentData->level)
+                        ->firstOrFail();
+
+        if (!$admissionNo) {
+            return response()->json([], 400);
+        }
+
+        // Fetch the student's record from cbtEvaluation2
+        $record = DB::table('cbt_evaluation2')
+            ->where('studentno', $admissionNo)
+                            ->where('session1', $examSetting->session1)
+                            ->where('department', $studentData->department)
+                            ->where('level', $studentData->level)
+                            ->where('semester', $examSetting->semester)
+                            ->where('course', $examSetting->course)
+                            ->where('exam_mode', $examSetting->exam_mode)
+                            ->where('exam_type', $examSetting->exam_type)
+                            ->where('exam_category', $examSetting->exam_category)
+                            ->where('noofquestion', $examSetting->no_of_qst)
+                            ->first();
+
+        if (!$record) {
+            return response()->json([]);
+        }
+
+        // Define question columns dynamically (A1-A50)
+        $questionColumns = [];
+        for ($i = 1; $i <= $examSetting->no_of_qst; $i++) {
+            $questionColumns[] = 'OK' . $i;
+        }
+
+        $attemptedQuestions = [];
+
+        foreach ($questionColumns as $index => $col) {
+            if (!empty($record->$col)) {
+                // Store question numbers starting from 1
+                $attemptedQuestions[] = $index + 1;
+            }
+        }
+
+        return response()->json($attemptedQuestions);
+    }
+
 
 
     public function saveSingleAnswer(Request $request)
