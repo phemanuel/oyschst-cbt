@@ -364,9 +364,10 @@ class QuestionController extends Controller
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $questionSetting = QuestionSetting::where('id', $id)->first();       
+        $questionSetting = QuestionSetting::where('id', $id)->first();        
         
-        //--get variables
+        
+        // //--get variables
         $exam_type = $questionSetting->exam_type;
         $exam_category = $questionSetting->exam_category;
         $exam_mode = $questionSetting->exam_mode;
@@ -377,10 +378,19 @@ class QuestionController extends Controller
         $level = $questionSetting->level;
         $semester = $questionSetting->semester;
         $course = $questionSetting->course;
+        $examViewType = $questionSetting->exam_view_type;
         $currentQuestionNo = $request->input('currentQuestionNo');
 
-        //----Update Current Question --------------------------------
-        $questionUpdate = Question::where('exam_type', $exam_type)
+        if ($examViewType === 'Multi-Page') {
+        $questionModel = Question::class;
+        } elseif ($examViewType === 'Single-Page') {
+            $questionModel = QuestionSingle::class;
+        } else {
+            return back()->with('error', 'Invalid exam view type.');
+        }
+
+        
+        $questionUpdate = $questionModel::where('exam_type', $exam_type)
         ->where('exam_category', $exam_category)
         ->where('exam_mode', $exam_mode)
         ->where('department', $department)
@@ -392,16 +402,45 @@ class QuestionController extends Controller
         ->where('no_of_qst', $no_of_qst)
         ->where('question_no', $currentQuestionNo)
         ->first();
-
         
+
         //Handle file upload
         if ($request->hasFile('file')) {
-            $image = $request->file('file');
-            $imageName = now()->timestamp . "_OBJ_" . $currentQuestionNo . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('questions'), $imageName);            
 
+            if (!$questionUpdate) {
+                return redirect()->back()
+                    ->with('error', 'Question record not found for this question number.');
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Delete old image if it exists
+            |--------------------------------------------------------------------------
+            */
+            if (!empty($questionUpdate->graphic)) {
+                $oldImagePath = public_path('questions/' . $questionUpdate->graphic);
+
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Upload new image
+            |--------------------------------------------------------------------------
+            */
+            $image = $request->file('file');
+            $imageName = time() . '_QST_OBJ_' . $currentQuestionNo . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('questions'), $imageName);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update question record
+            |--------------------------------------------------------------------------
+            */
             $questionUpdate->update([
-                'question_type' => "text-image",
+                'question_type' => 'text-image',
                 'graphic' => $imageName,
             ]);
             

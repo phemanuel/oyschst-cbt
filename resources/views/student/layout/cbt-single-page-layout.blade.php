@@ -625,7 +625,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentQuestionNumberEl.textContent = questionNumber;
 
                 // Insert question and options
-                currentQuestionEl.innerHTML = data.question;
+                // currentQuestionEl.innerHTML = data.question;
+                // Render question based on type
+                if (data.questionType === 'text') {
+                    currentQuestionEl.innerHTML = data.question;
+
+                    // Render LaTeX if text
+                    if (window.MathJax) {
+                        MathJax.typesetPromise([currentQuestionEl]).catch(err =>
+                            console.error('MathJax error:', err.message)
+                        );
+                    }
+
+                } else if (data.questionType === 'text-image') {
+                    const img = document.createElement('img');
+                    img.src = `/questions/${data.graphic}`; 
+                    img.alt = 'Question Image';
+                    img.classList.add('img-fluid', 'mb-3');
+                    img.style.maxWidth = '100%';
+
+                    currentQuestionEl.innerHTML = '';
+                    currentQuestionEl.appendChild(img);
+                }
                 optionLabels.A.innerHTML = data.option_a;
                 optionLabels.B.innerHTML = data.option_b;
                 optionLabels.C.innerHTML = data.option_c;

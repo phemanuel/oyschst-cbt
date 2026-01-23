@@ -265,10 +265,36 @@
               @if($question->question_type == 'text-image')
               <strong><p>Image:</p></strong>
               <img src="{{asset('questions/' . $question->graphic)}}" alt="questionImage" width="1200" height="250">
+              <table width="100%">
+                        <tr>
+                            <td><strong>Option A</strong></td>
+                            <td>&nbsp;</td>
+                            <td><strong>Option B</strong></td>
+                            <td>&nbsp;</td>
+                            <td><strong>Option C</strong></td>
+                            <td>&nbsp;</td>
+                            <td><strong>Option D</strong></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="form-control" name="option_a" value="{{ strip_tags($question->option_a) }}"></td>
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="option_b" value="{{ strip_tags($question->option_b) }}"></td>
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="option_c" value="{{ strip_tags($question->option_c) }}"></td>
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="option_d" value="{{ strip_tags($question->option_d) }}"></td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <p><strong>Correct Answer :</strong> 
+                    <select name="answer" id="" class="form-control">
+                        <option value="A" {{ $question->answer == 'A' ? 'selected' : '' }}>A</option>
+                        <option value="B" {{ $question->answer == 'B' ? 'selected' : '' }}>B</option>
+                        <option value="C" {{ $question->answer == 'C' ? 'selected' : '' }}>C</option>
+                        <option value="D" {{ $question->answer == 'D' ? 'selected' : '' }}>D</option>
+                    </select></p>
               @else
-
-              @endif
-                 <strong><p>Question:</p></strong> 
+                <strong><p>Question:</p></strong> 
                     <textarea id="editor1" name="question" rows="10" cols="80">
                                             {{$question->question}}
                     </textarea>
@@ -301,6 +327,8 @@
                         <option value="C" {{ $question->answer == 'C' ? 'selected' : '' }}>C</option>
                         <option value="D" {{ $question->answer == 'D' ? 'selected' : '' }}>D</option>
                     </select></p>
+              @endif
+                 
                     <table width="100%">                    
                       
   <tr>

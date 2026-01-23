@@ -2208,7 +2208,9 @@ class ExamController extends Controller
         $answerSelected = $studentAnswer->$answerValue ?? null;
 
         return response()->json([
-            'question' => $question->question,       // HTML content with <p>, <br> etc.
+            'question' => $question->question,  
+            'questionType' => $question->question_type,
+            'graphic' => $question->graphic,
             'answerSelected' => $answerSelected,     // 'A', 'B', 'C', 'D' or null
             'option_a' => $question->option_a,
             'option_b' => $question->option_b,
