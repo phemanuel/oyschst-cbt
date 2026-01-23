@@ -41,6 +41,187 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link rel="stylesheet" href="{{ asset('css/tooltipster.bundle.min.css') }}" />
+
+<style>
+  .admin-box {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.admin-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+.admin-box .inner h3 {
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.admin-box .inner p {
+    font-size: 15px;
+    opacity: 0.95;
+}
+
+.admin-box .icon {
+    font-size: 70px;
+    opacity: 0.25;
+    top: 10px;
+}
+
+.admin-box .small-box-footer {
+    background: rgba(0,0,0,0.15);
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+    transition: background 0.2s ease;
+}
+
+.admin-box .small-box-footer:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+</style>
+<style>
+  .students-box {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.students-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+.students-box .inner h3 {
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.students-box .inner p {
+    font-size: 15px;
+    opacity: 0.95;
+}
+
+.students-box .icon {
+    font-size: 70px;
+    opacity: 0.25;
+    top: 10px;
+}
+
+.students-box .small-box-footer {
+    background: rgba(0,0,0,0.15);
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+    transition: background 0.2s ease;
+}
+
+.students-box .small-box-footer:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+</style>
+<style>
+  .questions-box {
+    background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.questions-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+.questions-box .inner h3 {
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.questions-box .inner p {
+    font-size: 15px;
+    opacity: 0.95;
+}
+
+.questions-box .icon {
+    font-size: 70px;
+    opacity: 0.25;
+    top: 10px;
+}
+
+.questions-box .small-box-footer {
+    background: rgba(0,0,0,0.15);
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+    transition: background 0.2s ease;
+}
+
+.questions-box .small-box-footer:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+</style>
+<style>
+  .programmes-box {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.programmes-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+.programmes-box .inner h3 {
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.programmes-box .inner p {
+    font-size: 15px;
+    opacity: 0.95;
+}
+
+.programmes-box .icon {
+    font-size: 70px;
+    opacity: 0.25;
+    top: 10px;
+}
+
+.programmes-box .small-box-footer {
+    background: rgba(0,0,0,0.18);
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+    transition: background 0.2s ease;
+}
+
+.programmes-box .small-box-footer:hover {
+    background: rgba(0,0,0,0.28);
+}
+
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -225,64 +406,76 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3>{{$users->count()}}</h3>
+            <div class="small-box admin-box">
+                <div class="inner">
+                    <h3>{{ $users->count() }}</h3>
+                    <p>Admin Users</p>
+                </div>
 
-              <p>Admin Users</p>
+                <div class="icon">
+                    <i class="fa fa-users-cog"></i>
+                </div>
+
+                <a href="{{ route('users') }}" class="small-box-footer">
+                    Manage Admins <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="{{route('users')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
         </div>
+
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>{{$students->count()}}<sup style="font-size: 20px"></sup></h3>
+            <div class="small-box students-box">
+                <div class="inner">
+                    <h3>{{ $students->count() }}</h3>
+                    <p>Students</p>
+                </div>
 
-              <p>Students</p>
+                <div class="icon">
+                    <i class="fa fa-user-graduate"></i>
+                </div>
+
+                <a href="{{ route('student-list') }}" class="small-box-footer">
+                    View Students <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="{{route('student-list')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
         </div>
+
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>{{$questions->count()}}</h3>
+            <div class="small-box questions-box">
+                <div class="inner">
+                    <h3>{{ $questions->count() }}</h3>
+                    <p>Questions</p>
+                </div>
 
-              <p>Questions</p>
+                <div class="icon">
+                    <i class="fa fa-question"></i>
+                </div>
+
+                <a href="{{ route('question') }}" class="small-box-footer">
+                    Manage Questions <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="{{route('question')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
         </div>
+
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{$departments->count()}}</h3>
+            <div class="small-box programmes-box">
+                <div class="inner">
+                    <h3>{{ $departments->count() }}</h3>
+                    <p>Programmes</p>
+                </div>
 
-              <p>Programmes</p>
+                <div class="icon">
+                    <i class="fa fa-sitemap"></i>
+                </div>
+
+                <a href="{{ route('college-setup') }}" class="small-box-footer">
+                    Manage Programmes <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="{{route('college-setup')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
         </div>
+
         <!-- ./col -->
       </div>
       <!-- /.row -->
