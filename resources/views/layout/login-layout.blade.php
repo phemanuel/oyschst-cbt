@@ -79,54 +79,88 @@
 							{{ session('error') }}
 						</div>
 						@endif	
-        <form id="start-cbt-form" method="post" action="{{route('login.action')}}">
-			@csrf
-			<p align="center"><img src="{{asset($collegeSetup->avatar)}}" alt=""></p> 
-			<hr>
-          <div class="form-group">
-            <strong><label class="label">Reg/Matric No</label></strong>
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Reg/Matric No" name="admission_no">
-              <div class="input-group-append">
+        <form id="start-cbt-form" method="post" action="{{ route('login.action') }}" class="p-4">
+    @csrf
+
+    <!-- Logo -->
+    <div class="text-center mb-3">
+        <img 
+            src="{{ asset($collegeSetup->avatar) }}" 
+            alt="School Logo" 
+            style="max-width: 120px;"
+            class="img-fluid"
+        >
+    </div>
+
+    <hr>
+
+    <!-- Reg / Matric Number -->
+    <div class="form-group mb-3">
+        <label class="font-weight-bold">Reg / Matric No</label>
+        <div class="input-group">
+            <input 
+                type="text" 
+                class="form-control @error('admission_no') is-invalid @enderror" 
+                placeholder="Enter your Reg/Matric No"
+                name="admission_no"
+                value="{{ old('admission_no') }}"
+            >
+            <div class="input-group-append">
                 <span class="input-group-text">
-                  <i class="mdi mdi-check-circle-outline"></i>
+                    <i class="mdi mdi-account-outline"></i>
                 </span>
-              </div>
             </div>
-          </div>
-          @error('admission_no')
-									<span class="invalid-feedback">{{ $message }}</span>
-									@enderror
-          <div class="form-group">
-            <strong><label class="label">Programme</label></strong>
-            <div class="input-group">
-              <select name="department" id="" class="form-control input-font-size-12">
-				@foreach($dept as $rs)
-				<option value="{{$rs->department}}">{{$rs->department}}</option>
-				@endforeach
-			  </select>
-              <div class="input-group-append">
+        </div>
+        @error('admission_no')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <!-- Programme -->
+    <div class="form-group mb-4">
+        <label class="font-weight-bold">Programme</label>
+        <div class="input-group">
+            <select 
+                name="department" 
+                class="form-control @error('department') is-invalid @enderror"
+            >
+                <option value="">-- Select Programme --</option>
+                @foreach($dept as $rs)
+                    <option value="{{ $rs->department }}">
+                        {{ $rs->department }}
+                    </option>
+                @endforeach
+            </select>
+            <div class="input-group-append">
                 <span class="input-group-text">
-                  <i class="mdi mdi-check-circle-outline"></i>
+                    <i class="mdi mdi-school-outline"></i>
                 </span>
-              </div>
             </div>
-          </div>
-          @error('department')
-									<span class="invalid-feedback">{{ $message }}</span>
-									@enderror
-          <div class="form-group">
-            <button class="btn btn-success submit-btn btn-block" id="start-cbt-button">Login</button>
-          </div>
-          
-          <div class="form-group">
-            <!-- preload user information -->
-          </div>
-          <div class="text-block text-center my-3">
-            <span class="text-small font-weight-semibold">© 2020 - <?php echo date('Y') ?> {{$collegeSetup->name}}.</span>
-            
-          </div>
-        </form>
+        </div>
+        @error('department')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group mb-4">
+        <button 
+            type="submit" 
+            class="btn btn-success btn-block py-2 font-weight-bold"
+            id="start-cbt-button"
+        >
+            Login
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-4">
+        <small class="text-muted">
+            © 2020 - {{ date('Y') }} {{ $collegeSetup->name }}
+        </small>
+    </div>
+</form>
+
       </div>     
       
     </div>

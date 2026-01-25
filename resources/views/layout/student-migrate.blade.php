@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>@yield('pageTitle')</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="shortcut icon" href="{{ asset('/favicon.png') }}">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -28,200 +30,98 @@
   <link rel="stylesheet" href="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.css')}}">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/fullcalendar/dist/fullcalendar.min.css')}}">
-  <link rel="stylesheet" href="{{asset('dashboard/bower_components/fullcalendar/dist/fullcalendar.print.min.css')}}" media="print">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
 
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
+
+  <style>
+    /* Gradient style for primary button */
+    .btn-primary.btn-gradient {
+        background: linear-gradient(135deg, #007bff, #0056b3); /* Blue gradient */
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary.btn-gradient:hover {
+        background: linear-gradient(135deg, #0056b3, #007bff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-primary.btn-gradient i {
+        margin-right: 6px;
+    }
+</style>
+
+<style>
+    /* Gradient style for info button */
+    .btn-info.btn-gradient {
+        background: linear-gradient(135deg, #17a2b8, #138496); /* Teal/blue gradient */
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-info.btn-gradient:hover {
+        background: linear-gradient(135deg, #138496, #17a2b8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-info.btn-gradient i {
+        margin-right: 6px;
+    }
+</style>
+
+<style>
+    /* Custom label hover effect */
+    .custom-label {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .custom-label:hover {
+        text-decoration: none;
+        opacity: 0.85;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .custom-label i {
+        margin-right: 5px;
+    }
+</style>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-  <link rel="stylesheet" href="{{ asset('css/tooltipster.bundle.min.css') }}" />
-
-<style>
-  .admin-box {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
-    color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    overflow: hidden;
-}
-
-.admin-box:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-.admin-box .inner h3 {
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.admin-box .inner p {
-    font-size: 15px;
-    opacity: 0.95;
-}
-
-.admin-box .icon {
-    font-size: 70px;
-    opacity: 0.25;
-    top: 10px;
-}
-
-.admin-box .small-box-footer {
-    background: rgba(0,0,0,0.15);
-    color: #fff;
-    font-weight: 500;
-    padding: 10px;
-    transition: background 0.2s ease;
-}
-
-.admin-box .small-box-footer:hover {
-    background: rgba(0,0,0,0.25);
-}
-
-</style>
-<style>
-  .students-box {
-    background: linear-gradient(135deg, #28a745, #1e7e34);
-    color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    overflow: hidden;
-}
-
-.students-box:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-.students-box .inner h3 {
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.students-box .inner p {
-    font-size: 15px;
-    opacity: 0.95;
-}
-
-.students-box .icon {
-    font-size: 70px;
-    opacity: 0.25;
-    top: 10px;
-}
-
-.students-box .small-box-footer {
-    background: rgba(0,0,0,0.15);
-    color: #fff;
-    font-weight: 500;
-    padding: 10px;
-    transition: background 0.2s ease;
-}
-
-.students-box .small-box-footer:hover {
-    background: rgba(0,0,0,0.25);
-}
-
-</style>
-<style>
-  .questions-box {
-    background: linear-gradient(135deg, #f1c40f, #d4ac0d);
-    color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    overflow: hidden;
-}
-
-.questions-box:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-.questions-box .inner h3 {
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.questions-box .inner p {
-    font-size: 15px;
-    opacity: 0.95;
-}
-
-.questions-box .icon {
-    font-size: 70px;
-    opacity: 0.25;
-    top: 10px;
-}
-
-.questions-box .small-box-footer {
-    background: rgba(0,0,0,0.15);
-    color: #fff;
-    font-weight: 500;
-    padding: 10px;
-    transition: background 0.2s ease;
-}
-
-.questions-box .small-box-footer:hover {
-    background: rgba(0,0,0,0.25);
-}
-
-</style>
-<style>
-  .programmes-box {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    overflow: hidden;
-}
-
-.programmes-box:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-.programmes-box .inner h3 {
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.programmes-box .inner p {
-    font-size: 15px;
-    opacity: 0.95;
-}
-
-.programmes-box .icon {
-    font-size: 70px;
-    opacity: 0.25;
-    top: 10px;
-}
-
-.programmes-box .small-box-footer {
-    background: rgba(0,0,0,0.18);
-    color: #fff;
-    font-weight: 500;
-    padding: 10px;
-    transition: background 0.2s ease;
-}
-
-.programmes-box .small-box-footer:hover {
-    background: rgba(0,0,0,0.28);
-}
-
-</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -239,6 +139,9 @@
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </a>
 
       <div class="navbar-custom-menu">
@@ -297,7 +200,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         
-        <li class="active">
+        <li>
           <a href="{{route('admin-dashboard')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <span class="pull-right-container">
@@ -307,7 +210,7 @@
         </li>
         <li>
           <a href="{{route('exam-setting')}}">
-            <i class="fa fa-th"></i> <span>Exam Setting</span> 
+            <i class="fa fa-th"></i> <span>Exam Setting</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -319,7 +222,8 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li>
+        <li class="active">
           <a href="{{route('student-list')}}">
             <i class="fa fa-book"></i> <span>Student List/Upload</span>
             <span class="pull-right-container">
@@ -385,152 +289,115 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard        
+        Student Migration
+       <!-- <small><h4>(Note: You can search for a student by Surname or Matric/Reg No)</h4></small>         -->
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li> 
+        <li><a href="{{route('admin-setup')}}"></i> Admin Setup</a></li>               
+        <li class="active">Student Migration</li>
       </ol>
     </section>
-    @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
+
     <!-- Main content -->
     <section class="content">
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box admin-box">
-                <div class="inner">
-                    <h3>{{ $users->count() }}</h3>
-                    <p>Admin Users</p>
-                </div>
-
-                <div class="icon">
-                    <i class="fa fa-users-cog"></i>
-                </div>
-
-                <a href="{{ route('users') }}" class="small-box-footer">
-                    Manage Admins <i class="fa fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box students-box">
-                <div class="inner">
-                    <h3>{{ $students->count() }}</h3>
-                    <p>Students</p>
-                </div>
-
-                <div class="icon">
-                    <i class="fa fa-user-graduate"></i>
-                </div>
-
-                <a href="{{ route('student-list') }}" class="small-box-footer">
-                    View Students <i class="fa fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box questions-box">
-                <div class="inner">
-                    <h3>{{ $questions->count() }}</h3>
-                    <p>Questions</p>
-                </div>
-
-                <div class="icon">
-                    <i class="fa fa-question"></i>
-                </div>
-
-                <a href="{{ route('question') }}" class="small-box-footer">
-                    Manage Questions <i class="fa fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box programmes-box">
-                <div class="inner">
-                    <h3>{{ $departments->count() }}</h3>
-                    <p>Programmes</p>
-                </div>
-
-                <div class="icon">
-                    <i class="fa fa-sitemap"></i>
-                </div>
-
-                <a href="{{ route('college-setup') }}" class="small-box-footer">
-                    Manage Programmes <i class="fa fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
-
-     <!-- Main content -->
-     <section class="content">
     <div class="row">
+        <div class="col-xs-12">
 
-        <!-- Sidebar: Current Exam Dates -->
-        <div class="col-md-3">
-            <div class="card shadow-sm mb-3 border-0" style="background: linear-gradient(135deg, #6C5B7B, #355C7D); color: #fff;">
-                <div class="card-header bg-transparent border-0">
-                    <h5 class="mb-0">
-                        <i class="mdi mdi-calendar-check"></i> Current Exam Dates
-                    </h5>
+            <!-- Page Card -->
+            <div class="box box-primary shadow-sm">
+
+                <!-- Header -->
+                <div class="box-header with-border d-flex align-items-center justify-content-between">
+                    <div>
+                        <h3 class="box-title">
+                            <i class="fa fa-random text-primary"></i>
+                            Student Level Migration
+                        </h3>
+                        <p class="text-muted mb-0">
+                            Promote students to their next academic level based on programme duration.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="box-tools d-flex gap-2">
+                        <form action="{{ route('students-migrate.action') }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button class="btn btn-success">
+                                <i class="fa fa-arrow-up"></i> Migrate Students
+                            </button>
+                        </form>
+
+                        <form action="{{ route('students-reset') }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button class="btn btn-danger"
+                                onclick="return confirm('This will undo all migrations. Continue?')">
+                                <i class="fa fa-undo"></i> Reset Migration
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body p-2" style="max-height: 400px; overflow-y: auto;">
-                    <div id="external-events">
-                        <!-- Example placeholder events -->
-                        <div class="external-event p-2 rounded mb-2" style="background-color: #F67280; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer;">
-                            Math 101 - 25 Jan 2026
+
+                <!-- Body -->
+                <div class="box-body">
+
+                    {{-- Alerts --}}
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            <i class="fa fa-check-circle"></i> {{ session('success') }}
                         </div>
-                        <div class="external-event p-2 rounded mb-2" style="background-color: #C06C84; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer;">
-                            Physics 201 - 28 Jan 2026
+                    @elseif(session('error'))
+                        <div class="alert alert-danger">
+                            <i class="fa fa-times-circle"></i> {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <!-- Info Panel -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <i class="fa fa-info-circle"></i> How Migration Works
+                            </h4>
+                        </div>
+                        <div class="panel-body">
+
+                            <p class="mb-2">
+                                This process automatically promotes students based on their programme:
+                            </p>
+
+                            <ul class="list-unstyled">
+                                <li><i class="fa fa-check text-success"></i> 100 → 200 → GRAD (2 years)</li>
+                                <li><i class="fa fa-check text-success"></i> 100 → 200 → 300 → GRAD (3 years)</li>
+                                <li><i class="fa fa-check text-success"></i> NDI → NDII → GRAD</li>
+                                <li><i class="fa fa-check text-success"></i> HNDI → HNDII → GRAD</li>
+                            </ul>
+
+                            <hr>
+
+                            <div class="alert alert-warning mb-0">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <strong>Important:</strong>
+                                Always confirm the migration before proceeding.
+                                You can reset the migration if a mistake occurs.
+                            </div>
+
                         </div>
                     </div>
-                    <small class="d-block mt-2 text-white-50">
-                        Drag events onto the calendar if needed.
-                    </small>
+
                 </div>
+                <!-- /.box-body -->
+
             </div>
+            <!-- /.box -->
+
         </div>
-
-
-        <!-- Calendar -->
-        <div class="col-md-9">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">
-                        <i class="mdi mdi-calendar-month"></i> Exam Calendar
-                    </h3>
-                </div>
-                <div class="card-body p-2">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </section>
 
     <!-- /.content -->
   </div>
+
+  
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -734,6 +601,66 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const matricInput = document.getElementById('searchMatricNo');
+    const programmeInput = document.getElementById('searchProgramme');
+    const levelInput = document.getElementById('searchLevel');
+    const clearBtn = document.getElementById('clearFiltersStudent'); // Clear button
+    const tableContainer = document.getElementById('student-table');
+    const loader = document.getElementById('table-loader');
+
+    function fetchStudents(url = '/students/search') {
+        const params = new URLSearchParams({
+            matricno: matricInput.value,
+            programme: programmeInput.value,
+            level: levelInput.value,
+        });
+
+        loader.style.display = 'block'; // show loader
+
+        fetch(`${url}?${params.toString()}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.text())
+        .then(html => {
+            tableContainer.innerHTML = html;
+            attachPaginationLinks();
+        })
+        .catch(err => console.error(err))
+        .finally(() => loader.style.display = 'none'); // hide loader
+    }
+
+    function attachPaginationLinks() {
+        const links = tableContainer.querySelectorAll('.pagination a');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                fetchStudents(this.href);
+            });
+        });
+    }
+
+    // Trigger search on typing
+    [matricInput, programmeInput, levelInput].forEach(input => {
+        input.addEventListener('keyup', () => fetchStudents());
+    });
+
+    // Clear filters button
+    clearBtn.addEventListener('click', function () {
+        matricInput.value = '';
+        programmeInput.value = '';
+        levelInput.value = '';
+        fetchStudents(); // reload full table
+    });
+
+    // Attach pagination on initial load
+    attachPaginationLinks();
+
+});
+</script>
+
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
@@ -772,125 +699,5 @@
 <script src="{{asset('dashboard/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
-<!-- fullCalendar -->
-<script src="{{asset('dashboard/bower_components/moment/moment.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/fullcalendar/dist/fullcalendar.min.js')}}"></script>
-<!-- Page specific script -->
-
-<script>
-  $(function () {
-
-    function fetchExamDates() {
-        return $.ajax({
-            url: '/exam-dates',
-            method: 'GET',
-            dataType: 'json'
-        });
-    }
-
-    fetchExamDates().done(function(examDates) {
-
-        // Sort upcoming exams: nearest date first
-        examDates.sort((a, b) => new Date(a.start) - new Date(b.start));
-
-        // Pastel / modern gradient colors
-        const colors = ['#FF6B6B', '#6BCB77', '#4D96FF', '#FFD93D', '#845EC2', '#FF9671'];
-
-        // Sidebar: clear previous events
-        const $sidebar = $('#external-events');
-        $sidebar.empty();
-
-        examDates.forEach((event, index) => {
-            // Assign pastel colors and ensure FullCalendar uses them
-            const color = colors[index % colors.length];
-            event.backgroundColor = color;
-            event.borderColor = color;
-
-            const $eventDiv = $(`
-                <div class="external-event list-group-item mb-2 rounded" 
-                     style="background-color: ${color}; color:#fff; cursor:pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <strong>${event.title}</strong>
-                    <br>
-                    <small>${moment(event.start).format('DD MMM YYYY')}</small>
-                </div>
-            `);
-            $sidebar.append($eventDiv);
-
-            // Make events draggable
-            $eventDiv.data('eventObject', event);
-            $eventDiv.draggable({
-                zIndex: 999,
-                revert: true,
-                revertDuration: 0
-            });
-
-            // Tooltipster for sidebar events
-            $eventDiv.tooltipster({
-                content: `<strong>${event.title}</strong><br>${event.description || ''}`,
-                theme: 'tooltipster-light',
-                interactive: true,
-                delay: 100
-            });
-        });
-
-        // Initialize FullCalendar
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            buttonText: {
-                today: 'Today',
-                month: 'Month',
-                week: 'Week',
-                day: 'Day'
-            },
-            events: examDates,
-            editable: true,
-            droppable: true,
-            height: 550,
-            fixedWeekCount: false,
-            weekNumbers: false,
-            navLinks: true,
-            defaultView: 'month',
-            eventRender: function(event, element) {
-                // Force pastel color and tooltip
-                element.css({
-                    'background-color': event.backgroundColor,
-                    'border-color': event.borderColor,
-                    'color': '#fff'
-                });
-
-                element.tooltipster({
-                    content: `<div><strong>${event.title}</strong><br>${event.description || ''}</div>`,
-                    theme: 'tooltipster-light',
-                    interactive: true,
-                    delay: 100
-                });
-            },
-            drop: function(date, allDay) {
-                var originalEventObject = $(this).data('eventObject');
-                var copiedEventObject = $.extend({}, originalEventObject);
-                copiedEventObject.start = date;
-                copiedEventObject.allDay = allDay;
-                copiedEventObject.backgroundColor = $(this).css('background-color');
-                copiedEventObject.borderColor = $(this).css('border-color');
-                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-                if ($('#drop-remove').is(':checked')) {
-                    $(this).remove();
-                }
-            }
-        });
-
-    }).fail(function() {
-        alert('Failed to fetch exam dates.');
-    });
-
-});
-
-</script>
-<script src="{{ asset('js/tooltipster.bundle.min.js') }}"></script>
 </body>
 </html>

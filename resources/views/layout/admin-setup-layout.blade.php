@@ -375,12 +375,12 @@
     <div class="panel-body" style="background-color:#FFFFFF; color:#000000;">
         <p><strong>This module helps you to setup the following:</strong></p>
         <ul class="list-unstyled" style="margin-left: 15px;">
-            <li><i class="fa fa-check-circle text-dark"></i> Migrate students from the next level (e.g 100 -> 200, NDI -> NDII)</li>
+            <li><i class="fa fa-check-circle text-dark"></i> Migrate students to the next level (e.g 100 -> 200, NDI -> NDII)</li>
         </ul>
     </div>
 
     <div class="panel-footer text-right" style="border-top:none; background-color:#111;">
-        <a href="#" class="btn btn-sm" 
+        <a href="{{route('student-migrate')}}" class="btn btn-sm" 
            style="background-color:#333; border:none; color:white;">
             <i class="fa fa-plus"></i> Migrate
         </a>

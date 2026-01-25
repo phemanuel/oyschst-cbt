@@ -235,6 +235,12 @@ Route::get('/', function () {
         ->name('search'); 
         Route::get('search-list/{searchTerm}', [StudentController::class, 'searchList'])
         ->name('search-list'); 
+        Route::get('students/migrate', [StudentController::class, 'studentMigrate'])
+        ->name('student-migrate');
+        Route::post('/students/migrate', [StudentController::class, 'migrateStudents'])
+        ->name('students-migrate.action');
+        Route::post('/students/reset-migration', [StudentController::class, 'resetMigration'])
+        ->name('students-reset');
         //---Add programmes
         Route::get('add-department', [DashboardController::class, 'addDepartment'])
         ->name('add-department');
@@ -409,7 +415,7 @@ Route::get('/', function () {
         Route::get('/exam-dates', [DashboardController::class, 'getExamDates'])
         ->name('exam-dates');
         Route::get('student/exam-dates', [DashboardController::class, 'getStudentExamDates'])
-        ->name('student-exam-dates');
+        ->name('student-exam-dates');        
         //--create users
         Route::get('users', [DashboardController::class, 'Users'])
         ->name('users'); 

@@ -660,5 +660,108 @@ class StudentController extends Controller
         return redirect()->route('login-status')->with('success-all', 'Login status reset successful.');
     }
 
+    public function studentMigrate()
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_college_setup;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            access STUDENT MIGRATION module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        
+        return view('layout.student-migrate', compact( 'softwareVersion','collegeSetup' ));
+        
+    }  
+
+    public function migrateStudents()
+    {        
+        // Fetch all students
+        $students = DB::table('student_admissions')->get();
+
+        foreach ($students as $student) {
+
+            // Fetch programme info
+            $programme = DB::table('course_study_all')
+                ->where('department', $student->department)
+                ->first();
+
+            if (!$programme) {
+                continue;
+            }
+
+            $currentLevel = $student->level;
+            $startLevel   = $programme->start_level;
+            $duration     = (int) $programme->duration;
+
+            $nextLevel = $this->getNextLevel(
+                $currentLevel,
+                $startLevel,
+                $duration
+            );
+
+            // Skip if no change
+            if ($nextLevel === null) {
+                continue;
+            }
+
+            DB::table('student_admissions')
+                ->where('id', $student->id)
+                ->update([
+                    'previous_level' => $currentLevel, // store previous level
+                    'level'      => $nextLevel,
+                ]);
+        }
+
+        return back()->with('success', 'Students migrated successfully');
+    }
+
+    /**
+     * Reset students back to previous level
+     */
+    public function resetMigration()
+    {
+        DB::table('student_admissions')
+            ->whereNotNull('previous_level')
+            ->update([
+                'level' => DB::raw('previous_level'),
+                'previous_level' => null,
+            ]);
+
+        return back()->with('success', 'Student migration reset successfully');
+    }
+
+    /**
+     * Determine next level
+     */
+    private function getNextLevel($currentLevel, $startLevel, $duration)
+    {
+        // Numeric levels (100, 200, 300 ...)
+        if (is_numeric($currentLevel)) {
+
+            $endLevel = $startLevel + (($duration - 1) * 100);
+
+            if ($currentLevel < $endLevel) {
+                return $currentLevel + 100;
+            }
+
+            if ($currentLevel == $endLevel) {
+                return 'GRAD';
+            }
+        }
+
+        // ND / HND cases
+        $map = [
+            'NDI'  => 'NDII',
+            'NDII' => 'GRAD',
+            'HNDI' => 'HNDII',
+            'HNDII'=> 'GRAD',
+        ];
+
+        return $map[$currentLevel] ?? null;
+    }
+
     
 }
