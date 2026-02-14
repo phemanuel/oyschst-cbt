@@ -31,7 +31,34 @@
                 <td>{{ $rs->duration }}</td>
                 <td>{{ $rs->exam_status }}</td>
                 <td>{{ $rs->created_at }}</td>
-                <td><a class="label label-success" href="{{ route('report-objective-view', ['id' => $rs->id]) }}">Check Result</a></td>
+                <td style="text-align:center; position:relative;">
+
+                    <div class="result-btn-wrapper">
+
+                        {{-- Action Button --}}
+                        <a href="{{ $rs->submitted_results > 0 
+                                ? route('report-objective-view', ['id' => $rs->id]) 
+                                : '#' }}"
+                        class="label label-success result-btn
+                                {{ $rs->submitted_results == 0 ? 'disabled' : '' }}">
+                            <i class="fa fa-bar-chart"></i> Check Result
+                        </a>
+
+                        {{-- Small Ribbon Count --}}
+                        <span 
+    class="result-ribbon
+        {{ $rs->submitted_results == 0 ? 'bg-red' : '' }}
+        {{ $rs->submitted_results > 0 && $rs->submitted_results < 50 ? 'bg-blue' : '' }}
+        {{ $rs->submitted_results >= 50 ? 'bg-black' : '' }}"
+    data-count="{{ $rs->submitted_results }}"
+>
+    {{ $rs->submitted_results }}
+</span>
+
+                    </div>
+
+                </td>
+
                 <td><a class="label label-info" href="{{ route('report-objective-csv', ['id' => $rs->id]) }}">Export CSV</a></td>
             </tr>
         @endforeach
@@ -41,3 +68,4 @@
         </tr>
     @endif
 </table>
+{{$questionSetting->links()}}

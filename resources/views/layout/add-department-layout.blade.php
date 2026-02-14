@@ -244,10 +244,39 @@
               @csrf              
               <div class="box-body">              
                 <div class="form-group">
+                  <label for="exampleInputEmail1">Department Name</label>
+                  <input type="text" name="departmentName" class="form-control" value="{{old('departmentName')}}">
+                </div>             
+                @error('departmentName')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
                   <label for="exampleInputEmail1">Programme Name</label>
                   <input type="text" name="department" class="form-control" value="{{old('department')}}">
                 </div>             
-                @error('name')
+                @error('department')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Duration</label>
+                  <select name="duration" id="" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>             
+                @error('duration')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Start Level</label>
+                  <select name="startLevel" id="" class="form-control">
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                  </select>
+                </div>             
+                @error('startLevel')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
                 <div class="box-footer">
@@ -257,7 +286,10 @@
                 <table class="table table-striped">
                       <tr>           
                       <th>Sn</th> 
-                        <th>Programme</th>                        
+                        <th>Department</th>
+                         <th>Programme</th>
+                          <th>Duration</th>   
+                           <th>Start Level</th>                     
                         <th>Created On</th>  
                         <th>Actions</th>                     
                       </tr>
@@ -266,14 +298,17 @@
 			@foreach ($courses as $key => $rd)
                       <tr> 
                         <td>{{$key +1}}</td>                         
-                        <td>{{$rd->department}}</td>                        
+                        <td>{{$rd->dept}}</td>   
+                        <td>{{$rd->department}}</td> 
+                        <td>{{$rd->duration}}</td>   
+                        <td>{{$rd->start_level}}</td>                 
                         <td>{{$rd->created_at}}</td> 
                         <td><a class="label label-danger" href="{{route('delete-dept.action', ['id' => $rd->id])}}">Delete</a> </td>                       
                       </tr>  
                       @endforeach
 		@else
 		<tr>
-			<td colspan="8">Departments not available.</td>
+			<td colspan="8">Programmes not available.</td>
 		</tr>
 		@endif                                   
                     </table>

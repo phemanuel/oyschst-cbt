@@ -26,5 +26,6 @@ class QuestionSetting extends Model
         'semester',
         'lock_status',
         'exam_view_type',
+        'lock_id',
     ];
 }

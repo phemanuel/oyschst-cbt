@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\StudentAdmission;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\CourseStudyAll;
 use App\Models\Question;
 use App\Models\AcademicSession;
 use App\Models\SoftwareVersion;
@@ -227,6 +228,9 @@ class DashboardController extends Controller
 
     public function addUserAction(Request $request)
     {
+        // return response()->json([
+        //     'status' => 'Ok',
+        // ]);
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -258,7 +262,7 @@ class DashboardController extends Controller
                 'export_report' => 'nullable|boolean',
                 'grading_report' => 'nullable|boolean',
             ]);
-
+            
             $email_token = Str::random(40);            
 
             $user = User::create([
@@ -416,7 +420,8 @@ class DashboardController extends Controller
 
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
-        $courses = Department::paginate(9);
+        //$courses = Department::paginate(9);
+        $courses = CourseStudyAll::paginate(10);
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
         return view('dashboard.add-department', compact('courses', 'softwareVersion','collegeSetup',
@@ -718,10 +723,22 @@ class DashboardController extends Controller
         try {
             $validatedData = $request->validate([
                 'department' => 'required|string',
+                'departmentName' => 'required|string',
+                'duration' => 'required|integer',
+                'startLevel' => 'required|string',
             ]);       
-
+            
+            //--create programme in department table
             $dept = Department::create([
                 'department' => $validatedData['department'],                     
+            ]);
+
+            //--create programme in course_study_all table
+            $dept = CourseStudyAll::create([
+                'dept' => $validatedData['departmentName'],
+                'department' => $validatedData['department'],  
+                'duration' => $validatedData['duration'],    
+                'start_level' => $validatedData['startLevel'],              
             ]);
 
             return redirect()->route('add-department')->with('success-dept', 'Programme has been created successfully.');
@@ -748,6 +765,9 @@ class DashboardController extends Controller
         try {
             $dept = Department::findOrFail($id);
             $dept->delete();
+
+            $courseStudy = CourseStudyAll::where('department', $dept->department);
+            $courseStudy->delete();
 
             return redirect()->route('add-department')->with('success-dept', 'Programme deleted successfully.');
         } catch (\Exception $e) {
@@ -888,118 +908,142 @@ class DashboardController extends Controller
 
     public function lockExam(Request $request, $id)
     {
-        // Validate the request
         $request->validate([
             'user_password' => 'required|string',
         ]);
 
-        // Check if the provided password matches the logged-in user's password
-        if (Hash::check($request->user_password, Auth::user()->password)) {
-            // Proceed to lock the exam
-            $questionSetting = QuestionSetting::findOrFail($id);
-            $questionSetting->lock_status = 1;
-            $questionSetting->save();
+        $user = auth()->user();
 
-            $examSetting = ExamSetting::where('exam_type', $questionSetting->exam_type)
-                ->where('exam_category', $questionSetting->exam_category)
-                ->where('exam_mode', $questionSetting->exam_mode)
-                ->where('department', $questionSetting->department)
-                ->where('level', $questionSetting->level)
-                ->where('semester', $questionSetting->semester)
-                ->where('session1', $questionSetting->session1)
-                ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
-                ->where('no_of_qst', $questionSetting->no_of_qst)
-                ->first();
-
-            if (!$examSetting) {
-                // Redirect based on the exam type if no exam setting is found
-                $successMessage = 'Exam locked successfully.';
-                if ($questionSetting->exam_mode === 'OBJECTIVE') {
-                    return redirect()->route('question-obj-upload')->with('success', $successMessage);
-                } elseif ($questionSetting->exam_mode === 'THEORY') {
-                    return redirect()->route('question-theory-upload')->with('success', $successMessage);
-                } elseif ($questionSetting->exam_mode === 'FILL-IN-GAP') {
-                    // Replace 'question-fill-in-gap-upload' with the correct route if available
-                    //return redirect()->route('question-fill-in-gap-upload')->with('success', $successMessage);
-                }
-            } else {
-                // Lock the exam setting if found
-                $examSetting->lock_status = 1;
-                $examSetting->save();
-            }
-
-            // Redirect based on the exam type after locking
-            $successMessage = 'Exam locked successfully.';
-            if ($questionSetting->exam_mode === 'OBJECTIVE') {
-                return redirect()->route('question-obj-upload')->with('success', $successMessage);
-            } elseif ($questionSetting->exam_mode === 'THEORY') {
-                return redirect()->route('question-theory-upload')->with('success', $successMessage);
-            } elseif ($questionSetting->exam_mode === 'FILL-IN-GAP') {
-                // Replace 'question-fill-in-gap-upload' with the correct route if available
-                //return redirect()->route('question-fill-in-gap-upload')->with('success', $successMessage);
-            }
-        } else {
-            // If the password is incorrect, redirect back with an error message
-            return redirect()->back()->with('error', 'Invalid password. Please try again.');
+        // Verify password
+        if (!Hash::check($request->user_password, $user->password)) {
+            return back()->with('error', 'Invalid password. Please try again.');
         }
-    }
 
+        $questionSetting = QuestionSetting::findOrFail($id);
+
+        /*
+        |----------------------------------------------------------------------
+        | SECURITY CHECK: Only owner OR Superadmin can lock
+        |----------------------------------------------------------------------
+        */
+        $isOwner = $questionSetting->lock_id === $user->id;
+        $isSuperAdmin = $user->user_type === 'superadmin';
+
+        if (!$isOwner && !$isSuperAdmin) {
+            abort(403, 'You are not authorized to lock this exam.');
+        }
+
+        /*
+        |----------------------------------------------------------------------
+        | LOCK PROCESS
+        |----------------------------------------------------------------------
+        */
+
+        $questionSetting->update([
+            'lock_status' => 1,
+            'lock_id'     => $user->id, 
+        ]);
+
+        $examSetting = ExamSetting::where([
+            'exam_type'         => $questionSetting->exam_type,
+            'exam_category'     => $questionSetting->exam_category,
+            'exam_mode'         => $questionSetting->exam_mode,
+            'department'        => $questionSetting->department,
+            'level'             => $questionSetting->level,
+            'semester'          => $questionSetting->semester,
+            'session1'          => $questionSetting->session1,
+            'upload_no_of_qst'  => $questionSetting->upload_no_of_qst,
+            'no_of_qst'         => $questionSetting->no_of_qst,
+        ])->first();
+
+        if ($examSetting) {
+            $examSetting->update([
+                'lock_status' => 1,
+            ]);
+        }
+
+        return $this->redirectAfterLock($questionSetting->exam_mode, 'Exam locked successfully.');
+    }
 
     public function unlockExam(Request $request, $id)
     {
-        // Validate the request
         $request->validate([
             'user_password' => 'required|string',
         ]);
 
-        // Check if the provided password matches the logged-in user's password
-        if (Hash::check($request->user_password, Auth::user()->password)) {
-            // Proceed to unlock the exam
-            $questionSetting = QuestionSetting::findOrFail($id);
-            $questionSetting->lock_status = 0;  // Assuming 0 means unlocked
-            $questionSetting->save();
+        $user = auth()->user();
 
-            $examSetting = ExamSetting::where('exam_type', $questionSetting->exam_type)
-                ->where('exam_category', $questionSetting->exam_category)
-                ->where('exam_mode', $questionSetting->exam_mode)
-                ->where('department', $questionSetting->department)
-                ->where('level', $questionSetting->level)
-                ->where('semester', $questionSetting->semester)
-                ->where('session1', $questionSetting->session1)
-                ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
-                ->where('no_of_qst', $questionSetting->no_of_qst)
-                ->first();
+        // 1️⃣ Verify password
+        if (!Hash::check($request->user_password, $user->password)) {
+            return back()->with('error', 'Invalid password. Please try again.');
+        }
 
-            if (!$examSetting) {
-                // Redirect based on the exam type if no exam setting is found
-                $successMessage = 'Exam unlocked successfully.';
-                if ($questionSetting->exam_mode === 'OBJECTIVE') {
-                    return redirect()->route('question-obj-upload')->with('success', $successMessage);
-                } elseif ($questionSetting->exam_mode === 'THEORY') {
-                    return redirect()->route('question-theory-upload')->with('success', $successMessage);
-                } elseif ($questionSetting->exam_mode === 'FILL-IN-GAP') {
-                    // Replace 'question-fill-in-gap-upload' with the correct route if available
-                    //return redirect()->route('question-fill-in-gap-upload')->with('success', $successMessage);
-                }
-            } else {
-                // Unlock the exam setting if found
-                $examSetting->lock_status = 0;
-                $examSetting->save();
-            }
+        $questionSetting = QuestionSetting::findOrFail($id);
 
-            // Redirect based on the exam type after unlocking
-            $successMessage = 'Exam unlocked successfully.';
-            if ($questionSetting->exam_mode === 'OBJECTIVE') {
-                return redirect()->route('question-obj-upload')->with('success', $successMessage);
-            } elseif ($questionSetting->exam_mode === 'THEORY') {
-                return redirect()->route('question-theory-upload')->with('success', $successMessage);
-            } elseif ($questionSetting->exam_mode === 'FILL-IN-GAP') {
-                // Replace 'question-fill-in-gap-upload' with the correct route if available
-                //return redirect()->route('question-fill-in-gap-upload')->with('success', $successMessage);
-            }
-        } else {
-            // If the password is incorrect, redirect back with an error message
-            return redirect()->back()->with('error', 'Invalid password. Please try again.');
+        /*
+        |----------------------------------------------------------------------
+        | SECURITY CHECK: Only owner OR Superadmin can unlock
+        |----------------------------------------------------------------------
+        */
+        $isOwner = $questionSetting->lock_id === $user->id;
+        $isSuperAdmin = $user->user_type === 'superadmin';
+
+        if (!$isOwner && !$isSuperAdmin) {
+            abort(403, 'You are not authorized to unlock this exam.');
+        }
+
+        // If exam is already unlocked, just return
+        if ($questionSetting->lock_status == 0) {
+            return back()->with('info', 'Exam is already unlocked.');
+        }
+
+        /*
+        |----------------------------------------------------------------------
+        | UNLOCK PROCESS
+        |----------------------------------------------------------------------
+        */
+
+        $questionSetting->update([
+            'lock_status' => 0,
+            'lock_id'     => $user->id,
+        ]);
+
+        $examSetting = ExamSetting::where([
+            'exam_type'         => $questionSetting->exam_type,
+            'exam_category'     => $questionSetting->exam_category,
+            'exam_mode'         => $questionSetting->exam_mode,
+            'department'        => $questionSetting->department,
+            'level'             => $questionSetting->level,
+            'semester'          => $questionSetting->semester,
+            'session1'          => $questionSetting->session1,
+            'upload_no_of_qst'  => $questionSetting->upload_no_of_qst,
+            'no_of_qst'         => $questionSetting->no_of_qst,
+        ])->first();
+
+        if ($examSetting) {
+            $examSetting->update([
+                'lock_status' => 0,
+            ]);
+        }
+
+        return $this->redirectAfterLock($questionSetting->exam_mode, 'Exam unlocked successfully.');
+    }
+
+
+    private function redirectAfterLock($mode, $message)
+    {
+        switch ($mode) {
+            case 'OBJECTIVE':
+                return redirect()->route('question-obj-upload')->with('success', $message);
+
+            case 'THEORY':
+                return redirect()->route('question-theory-upload')->with('success', $message);
+
+            case 'FILL-IN-GAP':
+                return redirect()->route('question-fill-in-gap-upload')->with('success', $message);
+
+            default:
+                return back()->with('success', $message);
         }
     }
 

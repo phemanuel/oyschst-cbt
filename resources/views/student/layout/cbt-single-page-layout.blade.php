@@ -333,19 +333,53 @@
 }
 
 </style>
+<style>
+/* 10 minutes warning: deep orange with blinking */
+.blink-warning {
+    background-color: #ff9800; /* deep orange */
+    color: #fff;                /* text white */
+    font-weight: bold;
+    animation: blink-warning 1s infinite;
+}
 
-    <script>
-window.MathJax = {
-    tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-    },
-    svg: { fontCache: 'global' }
-};
-</script>
+/* 5 minutes danger: deep red with blinking */
+.blink-danger {
+    background-color: #d32f2f; /* deep red */
+    color: #fff;
+    font-weight: bold;
+    animation: blink-danger 1s infinite;
+}
+
+/* Blinking animations */
+@keyframes blink-warning {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+@keyframes blink-danger {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+
+</style>
+
+
+    <!-- MathJax Configuration -->
+<script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+
 <script src="{{ asset('js/mathjax/tex-mml-chtml.js') }}"></script>
    <!-- <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
 </head>
 <body class="sidebar-fixed">
+   
   <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar cbt-navbar">
@@ -451,6 +485,25 @@ window.MathJax = {
         </li>
 
         <hr>
+    <li>
+    <li>
+    <!-- Timer Warning Panel -->
+    <div id="time-warning" class="hidden panel panel-default exam-details-panel" style="
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    ">
+        <i id="time-warning-icon" class="fa fa-clock" style="font-size:18px;"></i>
+        <span id="time-warning-text"></span>
+    </div>
+</li>
+
         <li>
             <div class="panel panel-default exam-details-panel">
                     <table class="table">
@@ -726,52 +779,96 @@ window.MathJax = {
   <!-- container-scroller -->
 
   <!-- Time counter -->
-  <script>
-     "use strict";
-        let duration = {{ $studentMin }}; // Duration in seconds
-        let remainingTime = duration;
+<!-- Time counter -->
+<script>
+"use strict";
 
-        function startTimer() {
-            const interval = setInterval(() => {
-                if (remainingTime > 0) {
-                    remainingTime--;
-                    if (remainingTime % 60 === 0) {
-                        saveRemainingTime(Math.floor(remainingTime));
-                    }
-                    updateTimerDisplay(remainingTime);
-                } else {
-                    clearInterval(interval);
-                    alert("Time is up!");
-                    // Redirect the user after the alert is dismissed
-                    window.location.href = "{{ route('cbt-submit', ['id' => $studentData->id]) }}";
-                }
-            }, 1000);
+// Duration in seconds fetched from DB
+let duration = {{ $studentMin }}; 
+let remainingTime = duration;
+
+// Warning thresholds
+const tenMinLeft = 10 * 60; // 600 seconds
+const fiveMinLeft = 5 * 60;  // 300 seconds
+
+// Elements
+const timerEl = document.getElementById('timer');
+const warningDiv = document.getElementById('time-warning');
+const warningText = document.getElementById('time-warning-text');
+const icon = document.getElementById('time-warning-icon');
+
+// Start countdown
+function startTimer() {
+    // Immediately check warning in case remainingTime <= thresholds
+    updateTimerWarning(remainingTime);
+
+    const interval = setInterval(() => {
+        if (remainingTime > 0) {
+            remainingTime--;
+
+            // Save remaining time every full minute
+            if (remainingTime % 60 === 0) saveRemainingTime(Math.floor(remainingTime));
+
+            updateTimerDisplay(remainingTime);
+            updateTimerWarning(remainingTime);
+
+        } else {
+            clearInterval(interval);
+            alert("Time is up!");
+            window.location.href = "{{ route('cbt-submit', ['id' => $studentData->id]) }}";
         }
+    }, 1000);
+}
 
-        function saveRemainingTime(remainingMinutes) {
-            fetch('/update-remaining-time/{{ $studentData->id }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ remaining_time: remainingMinutes })
-            }).then(response => response.json())
-              .then(data => {
-                  if (!data.success) {
-                      console.error('Failed to save remaining time');
-                  }
-              });
-        }
+// Save remaining time to DB
+function saveRemainingTime(remainingMinutes) {
+    fetch('/update-remaining-time/{{ $studentData->id }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ remaining_time: remainingMinutes })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) console.error('Failed to save remaining time');
+    });
+}
 
-        function updateTimerDisplay(remainingTime) {
-            const minutes = Math.floor(remainingTime / 60);
-            const seconds = remainingTime % 60;
-            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-        }
+// Update timer display
+function updateTimerDisplay(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    timerEl.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+}
 
-        startTimer();
-    </script>
+// Update warning panel with blinking
+function updateTimerWarning(time) {
+    if (time <= fiveMinLeft) { // 5 minutes or less
+        warningDiv.classList.remove('hidden', 'warning', 'danger', 'blink-warning', 'blink-danger');
+        warningDiv.classList.add('danger', 'blink-danger'); // separate blink class
+        warningText.textContent = "🚨 Only less than 5 minutes remaining!";
+        icon.className = "fa fa-exclamation-triangle";
+
+    } else if (time <= tenMinLeft) { // 10 minutes or less
+        warningDiv.classList.remove('hidden', 'warning', 'danger', 'blink-warning', 'blink-danger');
+        warningDiv.classList.add('warning', 'blink-warning'); // separate blink class
+        warningText.textContent = "⏰ You have less than 10 minutes left!";
+        icon.className = "fa fa-clock";
+
+    } else {
+        warningDiv.classList.add('hidden');
+        warningDiv.classList.remove('warning', 'danger', 'blink-warning', 'blink-danger');
+    }
+}
+
+// Start the timer
+startTimer();
+</script>
+
+
+
 
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
 
@@ -986,20 +1083,23 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // ===============================
+    // ===============================
     // Load a question
     // ===============================
     const loadQuestion = (questionNumber) => {
         clearQuestion();
 
+        // Fetch question data
         fetch(`/get-question/${questionNumber}?admission_no=${admissionNo}`)
             .then(res => res.json())
             .then(data => {
                 currentQuestionNumberEl.textContent = questionNumber;
 
-                // Render question
+                // ===============================
+                // Render Question
+                // ===============================
                 if (data.questionType === 'text') {
-                    currentQuestionEl.innerHTML = data.question;
-                    if (window.MathJax) MathJax.typesetPromise([currentQuestionEl]);
+                    currentQuestionEl.innerHTML = data.question || '';
                 } else if (data.questionType === 'text-image') {
                     const img = document.createElement('img');
                     img.src = `/questions/${data.graphic}`;
@@ -1010,31 +1110,60 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentQuestionEl.appendChild(img);
                 }
 
-                // Set options
-                optionLabels.A.innerHTML = data.option_a;
-                optionLabels.B.innerHTML = data.option_b;
-                optionLabels.C.innerHTML = data.option_c;
-                optionLabels.D.innerHTML = data.option_d;
+                // ===============================
+                // Set Options (with safe defaults)
+                // ===============================
+                optionLabels.A.innerHTML = data.option_a || '';
+                optionLabels.B.innerHTML = data.option_b || '';
+                optionLabels.C.innerHTML = data.option_c || '';
+                optionLabels.D.innerHTML = data.option_d || '';
 
-                if (window.MathJax) MathJax.typesetPromise([
-                    currentQuestionEl, optionLabels.A, optionLabels.B, optionLabels.C, optionLabels.D
-                ]);
-
-                // Mark previously selected answer
-                if (data.answerSelected) {
-                    optionInputs[data.answerSelected].checked = true;
-                    attemptedQuestions.add(parseInt(questionNumber));
+                // ===============================
+                // Render MathJax (offline safe)
+                // ===============================
+                if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+                    MathJax.startup.promise.then(() => {
+                        try {
+                            MathJax.typeset([
+                                currentQuestionEl,
+                                optionLabels.A,
+                                optionLabels.B,
+                                optionLabels.C,
+                                optionLabels.D
+                            ]);
+                        } catch (err) {
+                            console.error('MathJax typeset error:', err);
+                        }
+                    }).catch(err => {
+                        console.error('MathJax startup promise error:', err);
+                    });
                 }
 
+                // ===============================
+                // Mark previously selected answer
+                // ===============================
+                if (data.answerSelected) {
+                    const ans = data.answerSelected.toUpperCase();
+                    if (optionInputs[ans]) {
+                        optionInputs[ans].checked = true;
+                        attemptedQuestions.add(parseInt(questionNumber));
+                    }
+                }
+
+                // ===============================
+                // Update UI state
+                // ===============================
                 updateButtonStates(parseInt(questionNumber));
                 updateAttemptedCounter();
                 updateNavButtonsState(parseInt(questionNumber));
+
             })
             .catch(err => {
-                console.error(err);
+                console.error('Question fetch error:', err);
                 currentQuestionEl.innerHTML = 'Failed to load question.';
             });
     };
+
 
     // ===============================
     // Save answer

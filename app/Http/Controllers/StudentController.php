@@ -25,6 +25,7 @@ use App\Models\QuestionSetting;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CbtEvaluation;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class StudentController extends Controller
 {
@@ -568,67 +569,136 @@ class StudentController extends Controller
     ));
     }
 
+
     public function studentImportAction(Request $request)
     {
-         //Validate the uploaded file
-        //  $validatedData = $request->validate([
-        //     'session1' => 'required|string',
-        //     'file' => 'required|mimetypes:text/csv,application/vnd.ms-excel,
-        //     application/octet-stream|max:10240',
+        // 1️⃣ Validate request
+        $request->validate([
+            'file'     => 'required|file|mimes:csv,xlsx,xls,txt',
+            'session1' => 'required|string',
+        ]);
 
-        // ]);
+        $file     = $request->file('file');
+        $session1 = $request->get('session1');
+        $filePath = $file->getRealPath();
 
-        // Process the uploaded Excel file
-        
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = $file->getRealPath();            
-            $session1 =  $request->get('session1');
+        $rows = [];
 
-            if (($handle = fopen($fileName, "r")) !== FALSE) {
-                $headers = fgetcsv($handle, 10000, ","); // Read headers
-                while (($column = fgetcsv($handle, 10000, ",")) !== FALSE) {
-                    $data = array_combine($headers, $column); // Combine headers with data
+        // 2️⃣ Read Excel or CSV file
+        try {
+            $spreadsheet = IOFactory::load($filePath);
+            $worksheet   = $spreadsheet->getActiveSheet();
+            $rows        = $worksheet->toArray(null, true, true, true); // preserve columns
+        } catch (\Throwable $e) {
+            Log::error('File read failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Unable to read uploaded file.');
+        }
 
-                    // Insert data into database
-                    DB::table('student_admissions')->insert([
-                        'admission_no' => $data['admission_no'],                    
-                        'surname' => $data['surname'],
-                        'first_name' => $data['first_name'],
-                        'other_name' => $data['other_name'],
-                        'department' => $data['department'],
-                        'department1' => $data['department1'],
-                        'phone_no' => $data['phone_no'],
-                        'phone_no1' => $data['phone_no'],
-                        'state' => $data['state'],
-                        'level' => $data['level'],
-                        'sex' => $data['sex'],
-                        'picture_name' => $data['picture_name'],
-                        'user_name' => $data['phone_no'],
-                        'password' => $data['phone_no'],
-                        'session1' => $session1,
-                        'user_type' => 'student',
-                        //'picture_name' => 'blank',
-                        'login_status' => 0,
-                        'login_attempts' => 0,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                    ]);
+        if (empty($rows)) {
+            return redirect()->back()->with('error', 'The file is empty.');
+        }
+
+        // 3️⃣ Extract headers (first row)
+        $headerRow = array_shift($rows);
+        $headers = array_map(fn($h) => strtolower(trim($h)), array_values($headerRow));
+
+        $expectedHeaders = [
+            'admission_no',
+            'surname',
+            'first_name',
+            'other_name',
+            'department',
+            'department1',
+            'phone_no',
+            'state',
+            'level',
+            'sex',
+        ];
+
+        // 4️⃣ Validate headers (order-independent)
+        if (array_diff($expectedHeaders, $headers) || array_diff($headers, $expectedHeaders)) {
+            return redirect()->back()->with(
+                'error',
+                'Invalid file headers. Expected exactly: ' . implode(', ', $expectedHeaders)
+            );
+        }
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($rows as $rowNumber => $row) {
+
+                $values = array_values($row);
+
+                if (count($values) !== count($headers)) {
+                    Log::warning("Row " . ($rowNumber + 2) . " skipped: column count mismatch");
+                    continue; // skip malformed row
                 }
-                fclose($handle);
-                // $type = "success";
-                // $message = "CSV Data Imported into the Database";
-                // Redirect back with success message
+
+                $data = array_combine($headers, $values);
+
+                if (empty($data['admission_no'])) {
+                    continue; // skip empty admission_no
+                }
+
+                // 5️⃣ Normalize admission number (remove slashes)
+                $normalizedAdmissionNo = $this->normalizeAdmissionNo($data['admission_no']);
+
+                // 6️⃣ Prevent duplicate
+                $exists = DB::table('student_admissions')
+                    ->where('admission_no', $normalizedAdmissionNo)
+                    ->where('department', trim($data['department']))
+                    ->exists();
+
+                if ($exists) {
+                    continue; // skip duplicates
+                }
+
+                // 7️⃣ Insert student
+                DB::table('student_admissions')->insert([
+                    'admission_no'   => $normalizedAdmissionNo,
+                    'surname'        => trim($data['surname']),
+                    'first_name'     => trim($data['first_name']),
+                    'other_name'     => trim($data['other_name']),
+                    'department'     => trim($data['department']),
+                    'department1'    => trim($data['department']),
+                    'phone_no'       => trim($data['phone_no']),
+                    'phone_no1'      => trim($data['phone_no']),
+                    'state'          => trim($data['state']),
+                    'level'          => trim($data['level']),
+                    'sex'            => trim($data['sex']),
+                    'picture_name'   => 'blank',
+                    'user_name'      => trim($data['phone_no']),
+                    'password'       => bcrypt(trim($data['phone_no'])),
+                    'session1'       => $session1,
+                    'user_type'      => 'student',
+                    'login_status'   => 0,
+                    'login_attempts' => 0,
+                    'created_at'     => now(),
+                    'updated_at'     => now(),
+                ]);
+            }
+
+            DB::commit();
             return redirect()->back()->with('success', 'Student list imported successfully.');
-            } else {
-                // Log or handle missing data
-            Log::warning('Missing data in row: ' . json_encode($row));
-            return redirect()->back()->with('error', 'Student list import not successful.');
-            }  
-        } else {
-           
-           return redirect()->back()->with('error', 'No file was uploaded.');
-        }  
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+            Log::error('Student import failed', ['error' => $e->getMessage()]);
+
+            return redirect()->back()->with(
+                'error',
+                'Student list import failed. Please check your file.'
+            );
+        }
+    }
+
+    private function normalizeAdmissionNo(string $admissionNo): string
+    {
+        return strtoupper(
+            preg_replace('/[^A-Z0-9]/i', '', trim($admissionNo))
+        );
     }
 
     public function downloadStudentCsv()

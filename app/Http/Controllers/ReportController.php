@@ -53,25 +53,48 @@ class ReportController extends Controller
     {
         //--Check for permission---
         $userStatus = auth()->user()->report;
-        if($userStatus == 0){
-            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
-            access REPORT module, contact the Administrator to grant access.');
+        if ($userStatus == 0) {
+            return redirect()->route('admin-dashboard')->with(
+                'error',
+                'You do not have permission to access REPORT module, contact the Administrator to grant access.'
+            );
         }
 
-
         $collegeSetup = CollegeSetup::first();
-        $softwareVersion = SoftwareVersion::first();        
+        $softwareVersion = SoftwareVersion::first();
+
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
-        ->orderBy('created_at', 'desc')
-        ->Paginate(20);
+            ->orderBy('created_at', 'desc')
+            ->addSelect([
+                'submitted_results' => CbtEvaluation::selectRaw('COUNT(*)')
+                    ->from('cbt_evaluations')
+                    ->whereColumn('cbt_evaluations.level', 'question_settings.level')
+                    ->whereColumn('cbt_evaluations.session1', 'question_settings.session1')
+                    ->whereColumn('cbt_evaluations.semester', 'question_settings.semester')
+                    ->whereColumn('cbt_evaluations.department', 'question_settings.department')
+                    ->whereColumn('cbt_evaluations.course', 'question_settings.course')
+                    ->where('cbt_evaluations.exam_mode', 'OBJECTIVE')
+                    ->where('cbt_evaluations.examstatus', 2)
+            ])
+            ->paginate(20);
+
         $acad_sessions = AcademicSession::orderBy('session1')->get();
         $class = CbtClass::orderBy('level')->get();
         $dept = Department::orderBy('department')->get();
         $examType = ExamType::orderBy('exam_type')->get();
 
-
-        return view('dashboard.report-objective', compact('softwareVersion','collegeSetup', 
-        'questionSetting','acad_sessions','examType','class','dept'));
+        return view(
+            'dashboard.report-objective',
+            compact(
+                'softwareVersion',
+                'collegeSetup',
+                'questionSetting',
+                'acad_sessions',
+                'examType',
+                'class',
+                'dept'
+            )
+        );
     }
     
 
@@ -132,7 +155,7 @@ class ReportController extends Controller
             $query->where('exam_type', $request->exam_type);
         }
 
-        $questionSetting = $query->orderBy('created_at', 'desc')->get();
+        $questionSetting = $query->orderBy('created_at', 'desc')->paginate(20);
 
         return view('partials.question-settings-table', compact('questionSetting'));
     }
@@ -3797,7 +3820,7 @@ class ReportController extends Controller
         }
 
         $date1 = date('d-m-Y');
-        $fileName = "{$session1}_{$exam_mode}_{$exam_type}_{$department}_{$date1}.csv";
+        $fileName = "{$session1}_{$exam_mode}_{$exam_type}_{$course}_{$department}_{$date1}.csv";
 
         // Create a callback function to generate the CSV data
         $callback = function() use ($rows, $columnNames) {

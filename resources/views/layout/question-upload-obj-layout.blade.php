@@ -480,7 +480,7 @@
             <div class="box-header with-border">
             <table width="100%">
 <tr>
-                  <td width="88%"><h3 class="box-title">Import all Questions.(CSV format)</h3></td>
+                  <td width="88%"><h3 class="box-title">Import all Questions.(Excel/CSV format)</h3></td>
     <td width="12%"><p align="right"><a href="{{ route('question') }}" class="btn btn-success" style="margin-top: 10px;">
     <i class="fa fa-arrow-left"></i> Back to Questions
 </a></p></td>

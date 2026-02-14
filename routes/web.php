@@ -41,6 +41,7 @@ Route::get('/', function () {
 
     // Home route
     Route::get('/', [AuthController::class, 'login'])->name('login');
+    Route::get('/test-blink', [AuthController::class, 'testBlink'])->name('test-blink');
     // Route::get('/', [AuthController::class, 'home'])->name('home');
     // Login and signup routes
     Route::get('user-login', [AuthController::class, 'login'])->name('login');
@@ -241,6 +242,10 @@ Route::get('/', function () {
         ->name('students-migrate.action');
         Route::post('/students/reset-migration', [StudentController::class, 'resetMigration'])
         ->name('students-reset');
+        Route::get('students/compute', [ExamController::class, 'studentComputeAll'])
+        ->name('student-compute-all');
+        Route::post('students/compute', [ExamController::class, 'studentComputeAllAction'])
+        ->name('student-compute-all.action');
         //---Add programmes
         Route::get('add-department', [DashboardController::class, 'addDepartment'])
         ->name('add-department');

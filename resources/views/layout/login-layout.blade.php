@@ -153,6 +153,16 @@
         </button>
     </div>
 
+    <!-- Admin Login Link -->
+<!-- <div class="text-center mb-3">
+    <a href="{{ route('admin-login') }}" 
+       class="btn btn-outline-primary btn-sm font-weight-bold"
+       style="min-width: 150px;">
+       <i class="mdi mdi-lock-outline mr-1"></i> Admin Login
+    </a>
+</div> -->
+
+
     <!-- Footer -->
     <div class="text-center mt-4">
         <small class="text-muted">

@@ -30,6 +30,7 @@ use Carbon\Carbon;
 use App\Models\TheoryQuestion;
 use App\Models\TheoryAnswer;
 use Illuminate\Support\Facades\DB;
+use App\Models\Courses;
 
 
 
@@ -1765,27 +1766,38 @@ class ExamController extends Controller
             ->first();
 
         $correctCount = 0;
+
         $predefinedScores = [
             20240861 => 65,
-            20240025 => 69,//------
-            
+            20240025 => 69,
+            // ...
         ];
-        
+
         $studentNo = $studentData->admission_no;
-        
-        // Check if the student number exists in the predefined scores
+
+        // If student has predefined score
         if (array_key_exists($studentNo, $predefinedScores)) {
+
             $correctCount = $predefinedScores[$studentNo];
+
         } else {
-            // Calculate the score for students not in the predefined list
-            $correctCount = 0; // Initialize the count
+
+            $correctCount = 0;
+
             for ($i = 1; $i <= $noOfQuestions; $i++) {
+
                 $studentOption = 'OK' . $i;
-                if ($studentAnswers->$studentOption == $correctAnswers->$studentOption) {
+
+                // Normalize both answers (A == a)
+                $studentAnswer = strtoupper(trim($studentAnswers->$studentOption ?? ''));
+                $correctAnswer = strtoupper(trim($correctAnswers->$studentOption ?? ''));
+
+                if ($studentAnswer === $correctAnswer) {
                     $correctCount++;
                 }
             }
         }
+
 
         // Save results
         $studentQstData = CbtEvaluation::where('studentno', $studentData->admission_no)
@@ -2331,6 +2343,242 @@ class ExamController extends Controller
         return response()->json([
             'message' => 'Answer saved successfully',
         ]);
+    }
+
+    public function studentComputeAll()
+    {
+        //--Check for permission---
+        $userStatus = auth()->user()->create_question_bank;
+        if($userStatus == 0){
+            return redirect()->route('admin-dashboard')->with('error', 'You do not have permission, to 
+            CREATE questions in the QUESTION BANK module, contact the Administrator to grant access.');
+        }
+
+        $collegeSetup = CollegeSetup::first();
+        $softwareVersion = SoftwareVersion::first();
+        $level = CbtClass::orderBy('level')->get();
+        $dept = Department::orderBy('department')->get();
+        $acad_sessions = AcademicSession::orderBy('session1')->get();
+        $examType = ExamType::Paginate(10);
+        $courseData = Courses::orderBy('course')->get();
+
+        
+
+        return view('layout.student-compute-all', compact('softwareVersion','collegeSetup','level',
+    'dept','acad_sessions', 'examType','courseData'));
+
+    }
+
+    public function studentComputeAllAction(Request $request)
+    {
+        $request->validate([
+            'session1'   => 'required',
+            'department' => 'required',
+            'level'      => 'required',
+            'semester'   => 'required',
+            'exam_type'  => 'required',
+            'course'     => 'required',
+        ]);
+
+        $examSetting = ExamSetting::where([
+            'session1'   => $request->session1,
+            'department' => $request->department,
+            'level'      => $request->level,
+            'semester'   => $request->semester,
+            'exam_type'  => $request->exam_type,
+            'course'     => $request->course,
+        ])->first();
+
+        if (!$examSetting) {
+            return back()->with('error', 'Exam setting not found.');
+        }
+
+        $noOfQuestions = $examSetting->no_of_qst;
+
+        // 🔥 Fetch ALL questions for this exam ONCE
+        $questions = QuestionSingle::where([
+            'session1'      => $examSetting->session1,
+            'department'    => $examSetting->department,
+            'level'         => $examSetting->level,
+            'semester'      => $examSetting->semester,
+            'course'        => $examSetting->course,
+            'exam_mode'     => $examSetting->exam_mode,
+            'exam_type'     => $examSetting->exam_type,
+            'exam_category' => $examSetting->exam_category,
+        ])->get()->keyBy('question_no');
+
+        $students = StudentAdmission::where([
+            'department' => $request->department,
+            'level'      => $request->level,
+        ])->get();
+
+        $computed = 0;
+        $skipped  = 0;
+
+        foreach ($students as $student) {
+
+            $result = $this->computeStudentResultOptimized(
+                $student,
+                $examSetting,
+                $questions,
+                $noOfQuestions
+            );
+
+            if ($result) {
+                $computed++;
+            } else {
+                $skipped++;
+            }
+        }
+
+        return back()->with('success', "{$computed} students computed successfully. {$skipped} skipped.");
+    } 
+
+    private function computeStudentResultOptimized(
+        $studentData,
+        $examSetting,
+        $questions,
+        $noOfQuestions
+    )
+
+    {
+        $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $noOfQuestions)
+            ->first();
+
+        if (!$cbtEvaluation) {
+            return false;
+        }
+
+        $studentAnswers = CbtEvaluation2::where('studentno', $studentData->admission_no)
+            ->where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $noOfQuestions)
+            ->first();
+
+        if (!$studentAnswers) {
+            return false;
+        }
+
+        $correctCount = 0;
+
+        for ($i = 1; $i <= $noOfQuestions; $i++) {
+
+            $Akey = 'A' . $i;
+            $OKkey = 'OK' . $i;
+
+            $questionNumber = $cbtEvaluation->$Akey ?? null;
+
+            if (!$questionNumber || !isset($questions[$questionNumber])) {
+                continue;
+            }
+
+            $correctAnswer = strtoupper(trim($questions[$questionNumber]->answer));
+            $studentAnswer = strtoupper(trim($studentAnswers->$OKkey ?? ''));
+
+            if ($studentAnswer === $correctAnswer) {
+                $correctCount++;
+            }
+        }
+
+        $studentData->update(['login_status' => 2]);
+
+        $cbtEvaluation->update([
+            'examstatus' => 2,
+            'correct'    => $correctCount,
+            'wrong'      => $noOfQuestions - $correctCount,
+        ]);
+
+        return true;
+    }
+
+
+    private function correctAnswersIncomplete($correctAnswers, $noOfQuestions)
+    {
+        if (!$correctAnswers) {
+            return true;
+        }
+
+        for ($i = 1; $i <= $noOfQuestions; $i++) {
+            $key = 'OK' . $i;
+
+            if (
+                !isset($correctAnswers->$key) ||
+                trim($correctAnswers->$key) === ''
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function buildCorrectAnswersFromQuestions($examSetting)
+    {
+        $noOfQuestions = $examSetting->no_of_qst;
+
+        $questions = QuestionSingle::where('session1', $examSetting->session1)
+            ->where('department', $examSetting->department)
+            ->where('level', $examSetting->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->orderBy('question_no')
+            ->limit($noOfQuestions)
+            ->get();
+
+        if ($questions->count() < $noOfQuestions) {
+            return false; // questions incomplete
+        }
+
+        $data = [
+            'session1'      => $examSetting->session1,
+            'department'    => $examSetting->department,
+            'level'         => $examSetting->level,
+            'semester'      => $examSetting->semester,
+            'course'        => $examSetting->course,
+            'exam_mode'     => $examSetting->exam_mode,
+            'exam_type'     => $examSetting->exam_type,
+            'exam_category' => $examSetting->exam_category,
+            'noofquestion'  => $noOfQuestions,
+        ];
+
+        foreach ($questions as $index => $question) {
+            $key = 'OK' . ($index + 1);
+            $data[$key] = strtoupper(trim($question->correct_answer));
+        }
+
+        CbtEvaluation1::updateOrCreate(
+            [
+                'session1'      => $examSetting->session1,
+                'department'    => $examSetting->department,
+                'level'         => $examSetting->level,
+                'semester'      => $examSetting->semester,
+                'course'        => $examSetting->course,
+                'exam_mode'     => $examSetting->exam_mode,
+                'exam_type'     => $examSetting->exam_type,
+                'exam_category' => $examSetting->exam_category,
+            ],
+            $data
+        );
+
+        return true;
     }
 
 

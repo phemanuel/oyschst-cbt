@@ -227,14 +227,23 @@
                 <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar" width="30" height="30">
               </div>
               <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Objective Questions</h3>
+              <h3 class="widget-user-username">Objective Result</h3>
               <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="#">Objective questions are multiple-choice questions where you select the correct answer from provided options. 
-                  They help test your knowledge by presenting clear choices.</li>
-                <li><a href="{{route('report-objective')}}" class="btn bg-olive margin">Check Result</a></li>
+                <li>
+                    <a href="#">
+                        Objective results display your performance based on your selected answers.
+                        Each correct response contributes to your total score, giving you a clear
+                        summary of how well you performed in the examination.
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('report-objective') }}" class="btn bg-olive margin">
+                        Check Result
+                    </a>
+                </li>
                 
               </ul>
             </div>
@@ -252,19 +261,25 @@
                 <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar">
               </div>
               <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Theory Questions</h3>
+              <h3 class="widget-user-username">Theory Result</h3>
               <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="#">Theory questions are open-ended and require you to explain concepts, principles, or theories in your own words. 
-                  They assess your depth of understanding and ability to articulate complex ideas.</a></li>
+                <li>
+                    <a href="#">
+                        Theory results reflect how well you expressed ideas, explained concepts,
+                        and demonstrated understanding through written responses.
+                        Scores are based on clarity, relevance, and depth of explanation.
+                    </a>
+                </li>
+
                 <!-- Under development notice -->
-                    <li>
-                      <a href="#" style="color:#d9534f; font-weight:600;">
-                        ⚠ Theory Question Upload section is currently under development.
-                      </a>
-                    </li>
+                <li>
+                    <a href="#" style="color:#d9534f; font-weight:600;">
+                        ⚠ Theory Result Processing module is currently under development.
+                    </a>
+                </li>
                 <!-- <li><a href="{{route('report-theory')}}" class="btn bg-navy margin">Check Result/Grading</a></li> -->
                 
               </ul>
@@ -282,19 +297,25 @@
                 <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar">
               </div>
               <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Fill in the Gaps Questions</h3>
+              <h3 class="widget-user-username">Fill in the Gaps Result</h3>
               <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="#">Fill in the gap questions require you to complete a sentence or phrase with the missing word or words. 
-                  They assess your understanding of specific concepts by prompting you to recall and apply knowledge. </a></li>
+                <li>
+                    <a href="#">
+                        Fill-in-the-Gap results show how accurately you recalled key terms,
+                        concepts, and facts by completing missing parts of statements.
+                        Scores reflect correctness and precision of responses.
+                    </a>
+                </li>
+
                 <!-- Under development notice -->
-                    <li>
-                      <a href="#" style="color:#d9534f; font-weight:600;">
-                        ⚠ Fill-In-The-Gap Question Upload section is currently under development.
-                      </a>
-                    </li>
+                <li>
+                    <a href="#" style="color:#d9534f; font-weight:600;">
+                        ⚠ Fill-in-the-Gap Result Processing module is currently under development.
+                    </a>
+                </li>
                 <!-- <li><a href="{{route('report-fill-gap')}}" class="btn bg-purple margin">Check Result/Grading</a></li> -->
                 
               </ul>

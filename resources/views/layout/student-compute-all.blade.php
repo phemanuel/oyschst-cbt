@@ -31,6 +31,21 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
 
+  <style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -41,22 +56,17 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <style>
-.panel {
-    transition: all 0.3s;
+.info-btn:hover {
+    background-color: #31b0d5; /* slightly darker on hover */
+    transform: translateY(-1px); /* subtle lift effect */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
-
-.panel:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.panel-heading i {
-    margin-right: 6px;
-}
-
-.panel-body ul li {
-    padding: 4px 0;
-    font-size: 13px;
+</style>
+<style>
+.start-import-btn:hover {
+    background-color: #0056b3; /* slightly darker on hover */
+    transform: translateY(-2px); /* subtle lift effect */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 }
 </style>
 </head>
@@ -152,7 +162,8 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-        </li> <li>
+        </li> 
+        <li class="active">
           <a href="{{route('question')}}">
             <i class="fa fa-share"></i> <span>Question Bank</span>
             <span class="pull-right-container">
@@ -190,7 +201,7 @@
             </span>
           </a>          
         </li>
-        <li class="active">
+        <li>
           <a href="{{route('admin-setup')}}">
             <i class="fa fa-table"></i> <span>Admin Setup</span>
             <span class="pull-right-container">
@@ -225,201 +236,248 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin Setup        
+        Result Computation     
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{route('admin-setup')}}">Admin Setup</a></li>
-        <li class="active">Exam Type</li>
+        <li><a href="{{route('admin-setup')}}">Admin Setup</a></li>        
+        <li class="active">Result Computation</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <!-- Direct Chat -->
       <div class="row">
-        <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel panel-primary" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-                <div class="panel-heading" style="font-size:16px; font-weight:bold;">
-                    <i class="fa fa-university"></i> College Setup
-                </div>
-
-                <div class="panel-body">
-                    <p><strong>This module helps you set up the following:</strong></p>
-                    <ul class="list-unstyled" style="margin-left: 15px;">
-                        <li><i class="fa fa-check-circle text-success"></i> College Name</li>
-                        <li><i class="fa fa-check-circle text-success"></i> College Logo</li>
-                        <li><i class="fa fa-check-circle text-success"></i> College Email Address</li>
-                        <li><i class="fa fa-check-circle text-success"></i> College Phone Number</li>
-                    </ul>
-                </div>
-
-                <div class="panel-footer text-right">
-                    <a href="{{ route('college-setup') }}" class="btn btn-primary btn-sm">
-                        <i class="fa fa-cogs"></i> Go to College Setup
-                    </a>
-                </div>
+        <!-- left column -->
+        <div class="col-md-6">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+            <table width="100%">
+<tr>
+                  <td width="88%"><h3 class="box-title">Compute all result for a programme at once.</h3></td>
+    <td width="12%"><p align="right"><a href="{{ route('admin-setup') }}" class="btn btn-success" style="margin-top: 10px;">
+    <i class="fa fa-arrow-left"></i> Back to Admin Setup
+</a></p></td>
+  </tr>
+                <tr>
+                  <!-- <td><button type="button" class="btn btn-sm info-btn" 
+        data-toggle="modal" data-target="#modal-success" 
+        style="border-radius: 4px; 
+               padding: 6px 14px; 
+               background-color: #5bc0de; /* light blue */
+               color: #fff; /* white text */
+               font-size: 14px; /* slightly larger */
+               font-weight: bold;
+               border: none; 
+               transition: all 0.3s;">
+    <i class="fa fa-info-circle"></i> Get more info about this module
+</button></td> -->
+                  <td></td>
+                </tr>
+              </table>
+              
             </div>
-          <!--/.direct-chat -->
-        </div>
-        <!-- /.col -->
-
-        <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel panel-success" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-              <div class="panel-heading" style="font-size:16px; font-weight:bold;">
-                  <i class="fa fa-plus-circle"></i> Create Programme
+            @if(session('success'))
+						<div class="alert alert-success">
+							{{ session('success') }}
+						</div>
+          @elseif(session('error'))
+						<div class="alert alert-danger">
+							{{ session('error') }}
+						</div>
+						@endif	
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" action="{{route('student-compute-all.action')}}" method="post" enctype="multipart/form-data">
+              @csrf              
+              <div class="box-body">               
+              <div class="form-group">
+                  <label>Academic Session</label>
+                  <select name="session1" id="filter-session" class="form-control">
+                      <!-- <option value="">All</option> -->
+                  </select>
               </div>
-
-              <div class="panel-body">
-                  <p><strong>This module helps you to create:</strong></p>
-                  <ul class="list-unstyled" style="margin-left: 15px;">
-                      <li><i class="fa fa-check-circle text-success"></i> Programmes in the college</li>
-                  </ul>
+                @error('session1')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Programme</label>
+                  <select name="department" class="form-control">
+                  <!-- <option value="{{old('department')}}" selected>{{old('department')}}</option>                   -->
+                  @foreach($dept as $rd)
+				<option value="{{$rd->department}}">{{$rd->department}}</option>
+				@endforeach
+                  </select>
+                </div>   
+                <p><a href="{{route('add-department')}}"><u> Create Programme</u> </a></p>          
+                @error('department')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Level</label>
+                  <select name="level" id="" class="form-control">
+                  <!-- <option value="{{old('level')}}" selected>{{old('level')}}</option>                   -->
+                  @foreach($level as $rd)
+				<option value="{{$rd->level}}">{{$rd->level}}</option>
+				@endforeach
+                  </select>
+                </div> 
+                <p><a href="{{route('add-class')}}"><u> Create Class/Level</u> </a></p>            
+                @error('level')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror      
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Semester</label>
+                  <select name="semester" id="" class="form-control">                   
+				<option value="First">First</option>
+				<option value="Second">Second</option>
+                  </select>
+                </div>          
+                
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Exam Type</label>
+                  <select name="exam_type" id="" class="form-control">
+                  <!-- <option value="{{old('exam_type')}}" selected>{{old('exam_type')}}</option>                   -->
+                  @foreach($examType as $rd)
+				<option value="{{$rd->exam_type}}">{{$rd->exam_type}}</option>
+				@endforeach
+                  </select>
+                </div>     
+                <p><a href="{{route('exam-type')}}"><u> Create Exam Type</u> </a></p>        
+                @error('exam_type')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Subject/Course</label>
+                  <select name="course" id="" class="form-control">                  
+                  @foreach($courseData as $rd)
+                  <option value="{{$rd->course}}">{{$rd->course}}</option>
+                  @endforeach
+                  </select>
+                </div>   
+                <p><a href="{{route('add-subject')}}"><u> Create Subject/Course</u> </a></p>         
+                @error('course')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
               </div>
+              <!-- /.box-body -->
 
-              <div class="panel-footer text-right">
-                  <a href="{{ route('add-department') }}" class="btn btn-success btn-sm">
-                      <i class="fa fa-plus"></i> Create Programme
-                  </a>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-success start-import-btn" 
+        style="border-radius: 4px; 
+               padding: 8px 20px; 
+               font-size: 15px; 
+               font-weight: bold; 
+               box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+               transition: all 0.3s;">
+    <i class="fa fa-upload"></i> Start Computation
+</button>
               </div>
+            </form>
           </div>
-          <!--/.direct-chat -->
+          <!-- /.box -->
+
         </div>
-        <!-- /.col -->
+        <!--/.col (left) -->
 
-        <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel panel-warning" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <div class="panel-heading" style="font-size:16px; font-weight:bold;">
-        <i class="fa fa-university"></i> Create Class/Level
-    </div>
+        
+<!-- left column -->
+<div class="col-md-6">
+          
 
-    <div class="panel-body">
-        <p><strong>This module helps you to setup the following:</strong></p>
-        <ul class="list-unstyled" style="margin-left: 15px;">
-            <li><i class="fa fa-check-circle text-warning"></i> Classes/Levels in the college</li>
-        </ul>
-    </div>
-
-    <div class="panel-footer text-right">
-        <a href="{{ route('add-class') }}" class="btn btn-warning btn-sm">
-            <i class="fa fa-plus"></i> Create Class/Level
-        </a>
-    </div>
-</div>
-          <!--/.direct-chat -->
         </div>
-        <!-- /.col -->
-
-        <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel panel-danger" style="border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <div class="panel-heading" style="font-size:16px; font-weight:bold;">
-        <i class="fa fa-book"></i> Create Subject/Course
-    </div>
-
-    <div class="panel-body">
-        <p><strong>This module helps you to setup the following:</strong></p>
-        <ul class="list-unstyled" style="margin-left: 15px;">
-            <li><i class="fa fa-check-circle text-danger"></i> Subjects/Courses in the college</li>
-        </ul>
-    </div>
-
-    <div class="panel-footer text-right" >
-        <a href="{{ route('add-subject') }}" class="btn btn-danger btn-sm">
-            <i class="fa fa-plus"></i> Create Subject/Course
-        </a>
-    </div>
-</div>
-          <!--/.direct-chat -->
+        <!--/.col (left) -->
+        <!-- right column -->
+        <div class="col-md-6">
+          
+          
         </div>
-        <!-- /.col -->        
-
+        <!--/.col (right) -->
       </div>
       <!-- /.row -->
-  <div class="row">
-      <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel" style="background-color:#6f42c1; color:white; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <div class="panel-heading" style="font-size:16px; font-weight:bold;">
-        <i class="fa fa-pencil-square-o"></i> Create Exam Types
-    </div>
-
-    <div class="panel-body" style="background-color: #f8f9fa; color: #333;">
-        <p><strong>This module helps you to setup the following:</strong></p>
-        <ul class="list-unstyled" style="margin-left: 15px;">
-            <li><i class="fa fa-check-circle text-purple"></i> Different exam types in the college (e.g Entrance, Semester)</li>
-        </ul>
-    </div>
-
-    <div class="panel-footer text-right" style="border-top:none;">
-    <a href="{{ route('exam-type') }}" class="btn btn-purple btn-sm" 
-       style="background-color:#563d7c; border:none; color:white;">
-        <i class="fa fa-plus"></i> Create Exam Type
-    </a>
-</div>
-</div>
-          <!--/.direct-chat -->
-        </div>
-        <!-- /.col -->
-
-        <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel" style="background-color:#000; color:white; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2);">
-    <div class="panel-heading" style="font-size:16px; font-weight:bold; background-color:#111;">
-        <i class="fa fa-pencil-square-o"></i> Migrate Student
-    </div>
-
-    <div class="panel-body" style="background-color:#FFFFFF; color:#000000;">
-        <p><strong>This module helps you to setup the following:</strong></p>
-        <ul class="list-unstyled" style="margin-left: 15px;">
-            <li><i class="fa fa-check-circle text-dark"></i> Migrate students to the next level (e.g 100 -> 200, NDI -> NDII)</li>
-        </ul>
-    </div>
-
-    <div class="panel-footer text-right" style="border-top:none; background-color:#111;">
-        <a href="{{route('student-migrate')}}" class="btn btn-sm" 
-           style="background-color:#333; border:none; color:white;">
-            <i class="fa fa-plus"></i> Migrate
-        </a>
-    </div>
-</div>
-          <!--/.direct-chat -->
-        </div>
-        <!-- /.col -->
-
-         <div class="col-md-3">
-          <!-- DIRECT CHAT PRIMARY -->
-          <div class="panel" style="background-color:#8F6B1E; color:white; border-radius:8px; box-shadow:0 2px 6px rgba(207, 175, 12, 0.2);">
-    <div class="panel-heading" style="font-size:16px; font-weight:bold; background-color:#111;">
-        <i class="fa fa-pencil-square-o"></i> Compute Student Result
-    </div>
-
-    <div class="panel-body" style="background-color:#FFFFFF; color:#000000;">
-        <p><strong>This module helps you to compute the following:</strong></p>
-        <ul class="list-unstyled" style="margin-left: 15px;">
-            <li><i class="fa fa-check-circle text-dark"></i> All kinds of Results</li>
-        </ul>
-    </div>
-
-    <div class="panel-footer text-right" style="border-top:none; background-color:#111;">
-        <a href="{{route('student-compute-all')}}" class="btn btn-sm" 
-           style="background-color:#333; border:none; color:white;">
-            <i class="fa fa-plus"></i> Compute
-        </a>
-    </div>
-</div>
-          <!--/.direct-chat -->
-        </div>
-        <!-- /.col -->
-
-</div>
-    
     </section>
     <!-- /.content -->
   </div>
+
+  <div class="modal modal-info fade" id="modal-success">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Upload Single Questions.</h4>
+              </div>
+              <div class="modal-body">
+                <p>Uploading questions one at a time is suitable when you want to manually review and input each question. 
+                  Here's how this process generally works:
+                </p>
+                  <ul>
+                    <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
+                    <li> Click on Start Upload.</li>
+                    <li> This will generate a dummy template for the specified no of questions.</li>
+                    <li> You can start editing the questions as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-outline">Save changes</button> -->
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal modal-info fade" id="modal-success1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import all questions.</h4>
+              </div>
+              <div class="modal-body">
+              <p>Importing questions from a CSV (Comma Separated Values) file is a convenient way to bulk upload questions into a system. 
+                Here's how the process typically works:
+                </p>
+                  <ul>
+                  <li><u>Exam View Type</u>  refers to whether you want Multi-Page view (10 questions per page) or 
+                  Single-Page view(1 question per page).</li>
+                    <li> Select the necessary criteria.</li>
+                    <li><u>Total No of Questions to upload</u>  refers to the number of questions you want to 
+                      upload.</li>
+                      <li><u>The No of question for student</u>  refers to how many question the student can 
+                        access out of the total number of questions uploaded. i.e If the total number of questions uploaded 
+                      is 100, you can decide to test the students on 50 questions only, the application pick different question from 
+                    the 100 questions.</li>
+                    <li> Load the CSV file <br>
+                    <a class="btn btn-success" href="{{route('download-question-csv')}}">You can download a sample template(Multi-Page) here.</a><br><br>
+                    <a class="btn btn-primary" href="{{route('download-question-single-csv')}}">You can download a sample template(Single-Page) here.</a>
+                    </li>
+                    <li> Click on Start Import.</li>
+                    <li> This will upload all the questions for the specified no of questions.</li>
+                    <li> You can start editing the questions as desired.</li>
+                  </ul> 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-outline">Save changes</button> -->
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -623,43 +681,157 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
-<!-- jQuery 3 -->
-<script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{asset('dashboard/bower_components/jquery-ui/jquery-ui.min.js')}}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button);
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
+
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('filter-session1');
+    var currentYear = new Date().getFullYear();
+    var numberOfSessions = 10; // last 10 sessions
+
+    for (var i = 0; i < numberOfSessions; i++) {
+        var startYear = currentYear - i;
+        var endYear = startYear + 1;
+        var sessionText = startYear + '/' + endYear;
+        var option = document.createElement('option');
+        option.value = sessionText;
+        option.text = sessionText;
+        select.appendChild(option);
+    }
+});
+</script>
+<script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('dashboard/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<!-- Morris.js charts -->
-<script src="{{asset('dashboard/bower_components/raphael/raphael.min.js')}}"></script>
-<script src="{{asset('dashboard/bower_components/morris.js/morris.min.js')}}"></script>
-<!-- Sparkline -->
-<script src="{{asset('dashboard/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script>
-<!-- jvectormap -->
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
-<script src="{{asset('dashboard/plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
-<!-- jQuery Knob Chart -->
-<script src="{{asset('dashboard/bower_components/jquery-knob/dist/jquery.knob.min.js')}}"></script>
-<!-- daterangepicker -->
+<!-- Select2 -->
+<script src="{{asset('dashboard/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+<!-- InputMask -->
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.js')}}"></script>
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.date.extensions.js')}}"></script>
+<script src="{{asset('dashboard/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
+<!-- date-range-picker -->
 <script src="{{asset('dashboard/bower_components/moment/min/moment.min.js')}}"></script>
 <script src="{{asset('dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
-<!-- datepicker -->
+<!-- bootstrap datepicker -->
 <script src="{{asset('dashboard/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="{{asset('dashboard/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
-<!-- Slimscroll -->
+<!-- bootstrap color picker -->
+<script src="{{asset('dashboard/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js')}}"></script>
+<!-- bootstrap time picker -->
+<script src="{{asset('dashboard/plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<!-- SlimScroll -->
 <script src="{{asset('dashboard/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
+<!-- iCheck 1.0.1 -->
+<script src="{{asset('dashboard/plugins/iCheck/icheck.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('dashboard/bower_components/fastclick/lib/fastclick.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('dashboard/dist/js/adminlte.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset('dashboard/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dashboard/dist/js/demo.js')}}"></script>
+<!-- Page script -->
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    //Timepicker
+    $('.timepicker').timepicker({
+      showInputs: false
+    })
+  })
+</script>
 </body>
 </html>

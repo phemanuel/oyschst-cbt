@@ -791,7 +791,7 @@
     fetchExamDates().done(function(examDates) {
 
         // Sort upcoming exams: nearest date first
-        examDates.sort((a, b) => new Date(a.start) - new Date(b.start));
+        examDates.sort((a, b) => new Date(b.start) - new Date(a.start));
 
         // Pastel / modern gradient colors
         const colors = ['#FF6B6B', '#6BCB77', '#4D96FF', '#FFD93D', '#845EC2', '#FF9671'];

@@ -30,6 +30,13 @@ class AuthController extends Controller
 
     }
 
+    public function testBlink()    
+    {   
+        
+        return view('test-blink');
+
+    }
+
     public function login()
     {
         $dept = Department::orderBy('department')->get();
@@ -57,8 +64,11 @@ class AuthController extends Controller
                 'department'   => 'required|string',
             ]);
 
-            // 2. Fetch student
-            $student = StudentAdmission::where('admission_no', $credentials['admission_no'])
+            $normalizedAdmissionNo = $this->normalizeAdmissionNo(
+                $credentials['admission_no']
+            );
+
+            $student = StudentAdmission::where('admission_no', $normalizedAdmissionNo)
                 ->where('department', $credentials['department'])
                 ->first();
 
@@ -125,6 +135,13 @@ class AuthController extends Controller
             return redirect()->back()
                 ->with('error', 'A system error occurred. Please contact the administrator.');
         }
+    }
+
+    private function normalizeAdmissionNo(string $admissionNo): string
+    {
+        return strtoupper(
+            preg_replace('/[^A-Z0-9]/i', '', trim($admissionNo))
+        );
     }
 
 

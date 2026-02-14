@@ -448,44 +448,81 @@
                 @if ($questionSetting->count() > 0)
                  <tbody>
                 @foreach ($questionSetting as $key => $rs)
-                <tr class="student-row"
-                data-programme="{{ strtolower($rs->department) }}"
-                data-examtype="{{ strtolower($rs->exam_type) }}"
-                data-level="{{ strtolower($rs->level) }}">
-                <td> <a class="label label-success label-gradient" 
-                  href="{{ route('question-view', ['questionId' => $rs->id]) }}">
-                  <i class="fa fa-edit"></i> Edit
-                </a>
-                </td> 
-                @if($rs->lock_status == 1)
+                @php
+                        $isOwner = auth()->id() == $rs->lock_id;
+                        $isSuperAdmin = auth()->user()->user_type == 'superadmin';
+                    @endphp 
                     <td>
-                        <button type="button" 
-                                class="btn btn-danger btn-gradient shadow-sm" 
-                                data-toggle="modal" 
-                                data-target="#modal-success" 
-                                data-id="{{ $rs->id }}">
-                            <i class="fa fa-unlock-alt"></i> Unlock
-                        </button>
-                    </td>
-                    @elseif($rs->lock_status == 0)
-                    <td>
-                        <button type="button" 
-                                class="btn btn-success btn-gradient shadow-sm" 
-                                data-toggle="modal" 
-                                data-target="#modal-success1" 
-                                data-id="{{ $rs->id }}">
-                            <i class="fa fa-lock"></i> Lock
-                        </button>
-                    </td>
+                        @if($isOwner || $isSuperAdmin)
+                            <!-- Editable -->
+                            <a class="btn btn-success btn-sm shadow-sm" 
+                              href="{{ route('question-view', ['questionId' => $rs->id]) }}">
+                              <i class="fa fa-edit"></i> Edit
+                            </a>
+                        @else
+                            <!-- Locked -->
+                            <button class="btn btn-secondary btn-sm shadow-sm" disabled 
+                                    title="Edit Question">
+                                <i class="fa fa-lock"></i> Edit
+                            </button>
+                        @endif
+                    </td>              
+
+                    @if($isOwner || $isSuperAdmin)
+
+                        @if($rs->lock_status == 1)
+                            <td>
+                                <button type="button" 
+                                        class="btn btn-danger btn-gradient shadow-sm lock-btn"
+                                        data-toggle="modal" 
+                                        data-target="#modal-success" 
+                                        data-id="{{ $rs->id }}">
+                                    <i class="fa fa-unlock-alt"></i> Unlock
+                                </button>
+                            </td>
+                        @elseif($rs->lock_status == 0)
+                            <td>
+                                <button type="button" 
+                                        class="btn btn-success btn-gradient shadow-sm lock-btn"
+                                        data-toggle="modal" 
+                                        data-target="#modal-success1" 
+                                        data-id="{{ $rs->id }}">
+                                    <i class="fa fa-lock"></i> Lock
+                                </button>
+                            </td>
+                        @endif
+
+                    @else
+                        <td>
+                            <span class="badge badge-secondary">
+                                Locked by another user
+                            </span>
+                        </td>
                     @endif
+
+
          
-                    <td>{{ $rs->exam_status }}
-                    @if ($rs->exam_status == 'Inactive')  
-                    <a class="label label-primary" href="{{route('question-enable', ['questionId' => $rs->id])}}">Enable Question</a>
-                    @elseif ($rs->exam_status == 'Active')
-                    <!-- <a class="label label-danger" href="{{route('question-enable', ['questionId' => $rs->id])}}">Disable Question</a> -->
-                    @endif 
-                    </td> 
+                    <td>
+                        {{ $rs->exam_status }}
+
+                        @if ($rs->exam_status == 'Inactive')
+                            @if($isOwner || $isSuperAdmin)
+                                <!-- Enabled for owner or superadmin -->
+                                <a class="btn btn-primary btn-sm shadow-sm" 
+                                  href="{{ route('question-enable', ['questionId' => $rs->id]) }}">
+                                    <i class="fa fa-check"></i> Enable Question
+                                </a>
+                            @else
+                                <!-- Disabled for others -->
+                                <button class="btn btn-secondary btn-sm shadow-sm" disabled 
+                                        title="Only owner or superadmin can enable">
+                                    <i class="fa fa-lock"></i> Enable Question
+                                </button>
+                            @endif
+                        @elseif ($rs->exam_status == 'Active')
+                            <!-- You can optionally show a disabled 'Disable' button here if needed -->
+                        @endif
+                    </td>
 
                     <!-- <td>{{ $key + 1 }}</td>                     -->
                     <td>{{$rs->session1}}</td>
@@ -791,27 +828,60 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('#modal-success').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var id = button.data('id'); // Extract info from data-* attributes
-            var form = $('#unlock-form'); // Find the form in the modal
-            var action = "{{ url('/unlock-exam') }}/" + id;
-            form.attr('action', action); // Set the action attribute
-        });
+document.addEventListener('DOMContentLoaded', function() {
+
+    $('#modal-success').on('show.bs.modal', function(event) {
+
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        var lockId = button.data('lock-id');
+        var authId = button.data('auth-id');
+        var userType = "{{ auth()->user()->user_type }}";
+
+        // Security check BEFORE modal opens
+        if (lockId != authId && userType !== 'superadmin') {
+            event.preventDefault(); // Stop modal
+            alert('You are not authorized to unlock this exam.');
+            return false;
+        }
+
+        // If authorized, continue normally
+        var form = $('#unlock-form');
+        var action = "{{ url('/unlock-exam') }}/" + id;
+        form.attr('action', action);
     });
+
+});
 </script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('#modal-success1').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var id = button.data('id'); // Extract info from data-* attributes
-            var form = $('#lock-form'); // Find the form in the modal
-            var action = "{{ url('/lock-exam') }}/" + id;
-            form.attr('action', action); // Set the action attribute
-        });
+document.addEventListener('DOMContentLoaded', function() {
+
+    $('#modal-success1').on('show.bs.modal', function(event) {
+
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        var lockId = button.data('lock-id');
+        var authId = button.data('auth-id');
+        var userType = "{{ auth()->user()->user_type }}";
+
+        // Security check BEFORE modal opens
+        if (lockId != authId && userType !== 'superadmin') {
+            event.preventDefault(); // Stop modal
+            alert('You are not authorized to lock this exam.');
+            return false;
+        }
+
+        // If authorized, continue normally
+        var form = $('#lock-form');
+        var action = "{{ url('/lock-exam') }}/" + id;
+        form.attr('action', action);
     });
+
+});
 </script>
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

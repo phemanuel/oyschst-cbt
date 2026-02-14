@@ -40,6 +40,55 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+.result-btn-wrapper{
+    position: relative;
+    display: inline-block;
+}
+
+.result-btn{
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.result-ribbon{
+    position: absolute;
+    top: -6px;
+    right: -12px;
+    min-width: 22px;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    animation: popIn 0.3s ease;
+}
+
+/* Colors */
+.bg-red{ background:#d9534f; }
+.bg-blue{ background:#0275d8; }
+.bg-green{ background:#5cb85c; }
+
+/* Disabled state */
+.result-btn.disabled{
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -646,6 +695,27 @@ document.addEventListener('DOMContentLoaded', function() {
         select.appendChild(option);
     }
 });
+</script>
+<script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.result-ribbon').forEach(badge => {
+        let target = parseInt(badge.dataset.count);
+        let current = 0;
+        let step = Math.max(1, Math.ceil(target / 15));
+
+        let interval = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                current = target;
+                clearInterval(interval);
+            }
+            badge.textContent = current;
+        }, 25);
+    });
+});
+</script>
+
 </script>
 
 <!-- jQuery 3 -->
