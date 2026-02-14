@@ -350,6 +350,12 @@
     animation: blink-danger 1s infinite;
 }
 
+.big-time {
+    font-size: 28px;
+    font-weight: 800;
+    padding: 0 6px;
+}
+
 /* Blinking animations */
 @keyframes blink-warning {
     0%, 50%, 100% { opacity: 1; }
@@ -848,13 +854,13 @@ function updateTimerWarning(time) {
     if (time <= fiveMinLeft) { // 5 minutes or less
         warningDiv.classList.remove('hidden', 'warning', 'danger', 'blink-warning', 'blink-danger');
         warningDiv.classList.add('danger', 'blink-danger'); // separate blink class
-        warningText.textContent = "🚨 Only less than 5 minutes remaining!";
+        warningText.innerHTML = 'Only less than <span class="big-time">5</span> minutes remaining!';
         icon.className = "fa fa-exclamation-triangle";
 
     } else if (time <= tenMinLeft) { // 10 minutes or less
         warningDiv.classList.remove('hidden', 'warning', 'danger', 'blink-warning', 'blink-danger');
         warningDiv.classList.add('warning', 'blink-warning'); // separate blink class
-        warningText.textContent = "⏰ You have less than 10 minutes left!";
+        warningText.innerHTML = 'You have less than <span class="big-time">10</span> minutes left!';
         icon.className = "fa fa-clock";
 
     } else {
