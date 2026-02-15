@@ -1104,17 +1104,45 @@ document.addEventListener('DOMContentLoaded', function () {
                 // ===============================
                 // Render Question
                 // ===============================
-                if (data.questionType === 'text') {
-                    currentQuestionEl.innerHTML = data.question || '';
-                } else if (data.questionType === 'text-image') {
-                    const img = document.createElement('img');
-                    img.src = `/questions/${data.graphic}`;
-                    img.alt = 'Question Image';
-                    img.classList.add('img-fluid', 'mb-3');
-                    img.style.maxWidth = '100%';
-                    currentQuestionEl.innerHTML = '';
-                    currentQuestionEl.appendChild(img);
-                }
+                // ===============================
+// ===============================
+if (data.questionType === 'text') {
+    // Only text question
+    currentQuestionEl.innerHTML = '';
+    if (data.question) {
+        const questionText = document.createElement('p');
+        questionText.textContent = data.question;
+        questionText.style.fontSize = '2.20rem'; // bigger font
+        questionText.style.fontWeight = '400'; // semi-bold
+        questionText.style.marginBottom = '0.5rem';
+        currentQuestionEl.appendChild(questionText);
+    }
+} else if (data.questionType === 'text-image') {
+    // Clear current content
+    currentQuestionEl.innerHTML = '';    
+
+    // Add question text first
+    if (data.question) {
+        const questionText = document.createElement('p');
+        questionText.textContent = data.question;
+        questionText.style.fontSize = '2.20rem'; // bigger font
+        questionText.style.fontWeight = '400'; // semi-bold
+        questionText.style.marginBottom = '0.5rem';
+        currentQuestionEl.appendChild(questionText);
+    }
+
+    // Add image
+    if (data.graphic) {
+        const img = document.createElement('img');
+        img.src = `/questions/${data.graphic}`;
+        img.alt = 'Question Image';
+        img.classList.add('img-fluid', 'mb-3');
+        img.style.maxWidth = '100%';
+        currentQuestionEl.appendChild(img);
+    }
+}
+
+
 
                 // ===============================
                 // Set Options (with safe defaults)

@@ -31,7 +31,71 @@
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-</head>
+<style>
+  .exam-info-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.info-box {
+    flex: 1;
+    min-width: 140px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.2;
+    transition: 0.3s ease;
+}
+
+.info-box span {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.info-box strong {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.info-box:hover {
+    transform: translateY(-3px);
+}
+
+/* Different Background Colors */
+.bg-course {
+    background: linear-gradient(135deg, #1e3c72, #5b7fbf);
+}
+
+.bg-session {
+    background: linear-gradient(135deg, #0b6d40, #38ef7d);
+}
+
+.bg-level {
+    background: linear-gradient(135deg, #392610, #75620d);
+    /* color: #222; */
+}
+
+.bg-type {
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+}
+
+.bg-mode {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+}
+
+.bg-category {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+
+</style>
+
+      </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -223,30 +287,56 @@
         <div class="col-md-12">
           <div class="box box-info">
             <div class="box-header">
-            <table width="100%" class="table table-hover">
-              <tr>
-                <td width="10%"><strong>Academic Session:</strong> </td>
-                <td width="29%">{{$question->session1}}</td>
-                <td><strong>Course/Subject</strong></td>
-                <td>{{$question->course}}</td>
-                <td width="16%"><strong>Exam Mode/Category:</strong> </td>
-                <td width="20%">{{$question->exam_mode}} / {{$question->exam_category}}</td>
-              </tr>
-              <tr>
-                <td><strong>Programme:</strong> </td>
-                <td>{{$question->department}}</td>
-                <td><strong>Level:</strong> </td>
-                <td>{{$question->level}}</td>
-                <td><strong>Exam Type:</strong> </td>
-                <td>{{$question->exam_type}}</td>
-              </tr>
-              
-            </table>
+            <div class="exam-header shadow-sm mb-4 p-4 rounded">  
+    
+
+                <div class="row g-3">
+                  <div class="col-12">
+                    <div class="exam-info-bar">             
+
+                          <div class="info-box bg-session">
+                              <span>Programme</span>
+                              <strong>{{ $question->department }}</strong>
+                          </div>
+
+                          <div class="info-box bg-category">
+                              <span>Academic Session</span>
+                              <strong>{{ $question->session1 }}</strong>
+                          </div>
+
+                          <div class="info-box bg-level">
+                              <span>Level</span>
+                              <strong>{{ $question->level }}</strong>
+                          </div>
+
+                          <div class="info-box bg-type">
+                              <span>Exam Type</span>
+                              <strong>{{ $question->exam_type }}</strong>
+                          </div>
+                          
+                          <div class="info-box bg-course">
+                              <span>Course</span>
+                              <strong>{{ $question->course }}</strong>
+                          </div>
+
+                          <div class="info-box bg-mode">
+                              <span>Mode</span>
+                              <strong>{{ $question->exam_mode }}</strong>
+                          </div>             
+
+                      </div>
+
+
+                </div>
+  </div>
+</div>
+
+
             <form action="{{route('question-search', ['id' => $questionSetting->id])}}" method="post">
               @csrf
             <table width="100%">
             <tr>
-                              <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->upload_no_of_qst}}</strong> </h3></td>
+                <td width="68%"><h3 align="left"><strong>Question {{$question->question_no}} of {{$question->upload_no_of_qst}}</strong> </h3></td>
                 <td width="9%">Question No: </td>
                 <td width="15%"><input type="text" name="qst_search" class="form-control"> </td>
                 <td width="8%"><button type="submit" class="btn btn-success">Search</button></td>
@@ -263,7 +353,11 @@
               @csrf
 
               @if($question->question_type == 'text-image')
-              <strong><p>Image:</p></strong>
+              <strong><p>Question:</p></strong> 
+                    <textarea id="editor1" name="question" rows="10" cols="80">
+                                            {{$question->question}}
+                    </textarea>
+                    <hr>
               <img src="{{asset('questions/' . $question->graphic)}}" alt="questionImage" width="1200" height="250">
               <table width="100%">
                         <tr>
@@ -367,7 +461,7 @@
                 style="min-width:110px;"
                 data-toggle="modal"
                 data-target="#exampleModal-3">
-                <i class="fa fa-trash"></i> Delete
+                <i class="fa fa-trash"></i> Delete Image
             </button>
 
         </div>

@@ -1585,6 +1585,55 @@ class QuestionController extends Controller
         }
     }
 
+    public function deleteObjImage(Request $request, $id)
+    {
+        $questionId = $request->input('questionId');
+        $questionNo = $request->input('questionNo');
+
+        $questionSetting = QuestionSetting::where('id', $questionId)->first();
+
+        // Fetch current question
+        $questionUpdate = QuestionSingle::where('exam_type', $questionSetting->exam_type)
+            ->where('exam_category', $questionSetting->exam_category)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('semester', $questionSetting->semester)
+            ->where('session1', $questionSetting->session1)
+            ->where('course', $questionSetting->course)
+            ->where('upload_no_of_qst', $questionSetting->upload_no_of_qst)
+            ->where('no_of_qst', $questionSetting->no_of_qst)
+            ->where('question_no', $questionNo)
+            ->first();
+
+        if (!$questionUpdate) {
+            return redirect()->route('question-view', ['questionId' => $questionId])
+                ->with('error', 'Question not found.');
+        }
+
+        // If question has no image
+        if ($questionUpdate->question_type === 'text' || empty($questionUpdate->graphic)) {
+            return redirect()->route('question-view', ['questionId' => $questionId])
+                ->with('error', 'There is no image to delete.');
+        }
+
+        // 🔥 Delete physical image file
+        $filePath = public_path('questions/' . $questionUpdate->graphic);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Update database
+        $questionUpdate->graphic = 'blank.jpg';
+        $questionUpdate->question_type = 'text';
+        $questionUpdate->save();
+
+        return redirect()->route('question-view', ['questionId' => $questionId])
+            ->with('success', 'Image deleted successfully.');
+    }
+
+
     public function deleteTheoryImage(Request $request, $id)
     {
         $collegeSetup = CollegeSetup::first();
