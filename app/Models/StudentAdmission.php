@@ -30,4 +30,14 @@ class StudentAdmission extends Model
         'password',
         'login_attempts',
     ];
+
+    public function examinerScores()
+    {
+        return $this->hasMany(ExaminerScore::class);
+    }
+
+    public function results()
+    {
+        return $this->hasMany(StationResult::class);
+    }
 }

@@ -330,6 +330,10 @@ class StudentController extends Controller
             $query->where('admission_no', 'like', '%' . $request->matricno . '%');
         }
 
+        if ($request->filled('studentname')) {
+            $query->where('surname', 'like', '%' . $request->studentname . '%');
+        }
+
         if ($request->filled('programme')) {
             $query->where('department', 'like', '%' . $request->programme . '%');
         }

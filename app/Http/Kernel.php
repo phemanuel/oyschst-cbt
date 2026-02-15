@@ -26,6 +26,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Other route middleware entries...
         'student.auth' => \App\Http\Middleware\StudentAuthentication::class,
+        'osce.access' => \App\Http\Middleware\OSCEAccess::class,
     ];
 
     /**

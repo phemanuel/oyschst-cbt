@@ -40,6 +40,50 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+.exam-card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.exam-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.exam-card-header {
+    padding: 18px;
+    color: #fff;
+}
+
+.exam-card-header h4 {
+    font-weight: 700;
+    margin: 0;
+    font-size: 16px;
+}
+
+.exam-card-body {
+    padding: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.exam-btn {
+    border-radius: 25px;
+    padding: 8px 18px;
+    font-weight: 600;
+}
+
+/* Deep Header Colors */
+.deep-green { background: #0f5132; }
+.deep-blue { background: #0a3d62; }
+.deep-black { background: #1c1c1c; }
+.deep-purple { background: #4a148c; }
+</style>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -216,118 +260,88 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+<section class="content">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-green">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar" width="30" height="30">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Objective Result</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li>
-                    <a href="#">
+
+        <!-- Objective Result -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-green text-center">
+                    <h4>Objective Result</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
                         Objective results display your performance based on your selected answers.
-                        Each correct response contributes to your total score, giving you a clear
-                        summary of how well you performed in the examination.
+                        Each correct response contributes to your total score, giving you a clear summary
+                        of how well you performed in the examination.
+                    </p>
+                    <a href="{{ route('report-objective') }}" 
+                       class="btn btn-success exam-btn">
+                        <i class="fa fa-chart-bar"></i> Check Result
                     </a>
-                </li>
-                <li>
-                    <a href="{{ route('report-objective') }}" class="btn bg-olive margin">
-                        Check Result
-                    </a>
-                </li>
-                
-              </ul>
+                </div>
             </div>
-          </div>
-          <!-- /.widget-user -->
         </div>
-        <!-- /.col -->
-        
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-black">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Theory Result</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
+
+        <!-- MCQ + Fill in the Gap Result -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-blue text-center">
+                    <h4>MCQ + Fill in the Gap Result</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
+                        Results for combined MCQ and Fill-in-the-Gap exams. Evaluate your knowledge
+                        comprehensively with scores from both types of questions.
+                    </p>
+                    <p class="text-danger font-weight-bold">
+                        ⚠ Currently under development
+                    </p>
+                </div>
             </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li>
-                    <a href="#">
+        </div>
+
+        <!-- Theory Result -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-black text-center">
+                    <h4>Theory Result</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
                         Theory results reflect how well you expressed ideas, explained concepts,
                         and demonstrated understanding through written responses.
-                        Scores are based on clarity, relevance, and depth of explanation.
-                    </a>
-                </li>
-
-                <!-- Under development notice -->
-                <li>
-                    <a href="#" style="color:#d9534f; font-weight:600;">
-                        ⚠ Theory Result Processing module is currently under development.
-                    </a>
-                </li>
-                <!-- <li><a href="{{route('report-theory')}}" class="btn bg-navy margin">Check Result/Grading</a></li> -->
-                
-              </ul>
+                    </p>
+                    <p class="text-danger font-weight-bold">
+                        ⚠ Currently under development
+                    </p>
+                </div>
             </div>
-          </div>
-          <!-- /.widget-user -->
         </div>
-        <!-- /.col -->
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-purple">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/resulticon.jpg')}}" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Fill in the Gaps Result</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li>
-                    <a href="#">
+
+        <!-- Fill in the Gap Result -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-purple text-center">
+                    <h4>Fill in the Gap Result</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
                         Fill-in-the-Gap results show how accurately you recalled key terms,
                         concepts, and facts by completing missing parts of statements.
-                        Scores reflect correctness and precision of responses.
-                    </a>
-                </li>
-
-                <!-- Under development notice -->
-                <li>
-                    <a href="#" style="color:#d9534f; font-weight:600;">
-                        ⚠ Fill-in-the-Gap Result Processing module is currently under development.
-                    </a>
-                </li>
-                <!-- <li><a href="{{route('report-fill-gap')}}" class="btn bg-purple margin">Check Result/Grading</a></li> -->
-                
-              </ul>
+                    </p>
+                    <p class="text-danger font-weight-bold">
+                        ⚠ Currently under development
+                    </p>
+                </div>
             </div>
-          </div>
-          <!-- /.widget-user -->
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
+
+    </div>
+</div>
+</section>
+
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">

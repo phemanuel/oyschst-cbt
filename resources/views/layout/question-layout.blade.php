@@ -40,6 +40,62 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<style>
+.exam-card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.exam-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.exam-card-header {
+    padding: 18px;
+    color: #fff;
+}
+
+.exam-card-header h4 {
+    font-weight: 700;
+    margin: 0;
+    font-size: 16px;
+}
+
+.exam-card-body {
+    padding: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.exam-btn {
+    border-radius: 25px;
+    padding: 8px 18px;
+    font-weight: 600;
+}
+
+/* Deep Header Colors */
+.deep-green {
+    background: #0f5132;   /* deep green */
+}
+
+.deep-blue {
+    background: #0a3d62;   /* deep blue */
+}
+
+.deep-black {
+    background: #1c1c1c;   /* deep black */
+}
+
+.deep-purple {
+    background: #4a148c;   /* deep purple */
+}
+</style>
+
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -215,99 +271,93 @@
       </ol>
     </section>
 
-    <!-- Main content -->
     <section class="content">
-    <div class="row">
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-green">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/uploadicon.png')}}" alt="User Avatar" width="30" height="30">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Objective Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Objective questions are multiple-choice questions where you select the correct answer from provided options. 
-                  They help test your knowledge by presenting clear choices.</li>
-                <li><a href="{{route('question-obj-upload')}}" class="btn bg-olive margin">Upload Questions</a></li>
-                
-              </ul>
-            </div>
-          </div>
-          <!-- /.widget-user -->
-        </div>
-        <!-- /.col -->
-        
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-black">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/uploadicon.png')}}" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Theory Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Theory questions are open-ended and require you to explain concepts, principles, or theories in your own words. 
-                  They assess your depth of understanding and ability to articulate complex ideas.</a></li>
+<div class="container-fluid">
 
-                  <!-- Under development notice -->
-                    <li>
-                      <a href="#" style="color:#d9534f; font-weight:600;">
-                        ⚠ Theory Question Upload section is currently under development.
-                      </a>
-                    </li>
-                
-                <!-- <li><a href="{{route('question-theory-upload')}}" class="btn bg-navy margin">Upload Questions</a></li> -->
-                
-              </ul>
+    <div class="row">
+
+        <!-- MCQ -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-green text-center">
+                    <h4>Multiple Choice Questions (MCQ)</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
+                        Objective questions where students select the correct answer 
+                        from multiple options.
+                    </p>
+                    <a href="{{route('question-obj-upload')}}" 
+                       class="btn btn-success exam-btn">
+                        <i class="fa fa-upload"></i> Upload Questions
+                    </a>
+                </div>
             </div>
-          </div>
-          <!-- /.widget-user -->
         </div>
-        <!-- /.col -->
-        <div class="col-md-4">
-          <!-- Widget: user widget style 1 -->
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-purple">
-              <div class="widget-user-image">
-                <img class="img-circle" src="{{asset('dashboard/dist/img/uploadicon.png')}}" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Fill in the Gaps Questions</h3>
-              <!-- <h5 class="widget-user-desc">Lead Developer</h5> -->
+
+        <!-- MCQ + Fill Gap -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-blue text-center">
+                    <h4>MCQ + Fill in the Gap</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
+                        Combination of multiple-choice and fill-in-the-gap questions 
+                        for deeper evaluation.
+                    </p>
+                    <!-- <a href="{{route('question-obj-upload')}}" 
+                       class="btn btn-primary exam-btn">
+                        <i class="fa fa-upload"></i> Upload Questions
+                    </a> -->
+                    <p class="text-danger font-weight-bold">
+                        ⚠ Under development
+                    </p>
+                </div>
             </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Fill in the gap questions require you to complete a sentence or phrase with the missing word or words. 
-                  They assess your understanding of specific concepts by prompting you to recall and apply knowledge. </a></li>
-                  <!-- Under development notice -->
-                    <li>
-                      <a href="#" style="color:#d9534f; font-weight:600;">
-                        ⚠ Fill-In-The-Gap Question Upload section is currently under development.
-                      </a>
-                    </li>
-                <!-- <li><a href="{{route('question-upload-fill-gap')}}" class="btn bg-purple margin">Upload Questions</a></li> -->
-                
-              </ul>
-            </div>
-          </div>
-          <!-- /.widget-user -->
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
+
+        <!-- Theory -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-black text-center">
+                    <h4>Theory Questions</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
+                        Open-ended questions requiring students to explain 
+                        concepts in detail.
+                    </p>
+                    <p class="text-danger font-weight-bold">
+                        ⚠ Under development
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fill Gap -->
+        <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card exam-card w-100">
+                <div class="exam-card-header deep-purple text-center">
+                    <h4>Fill in the Gap</h4>
+                </div>
+                <div class="exam-card-body text-center">
+                    <p>
+                        Students complete missing words to test recall 
+                        and understanding.
+                    </p>
+                    <p class="text-danger font-weight-bold">
+                        ⚠ Under development
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

@@ -370,6 +370,23 @@
                           </div>
                       </div>
 
+                      <!-- Student Name -->
+                      <div class="col-md-3 mb-2">
+                          <label class="font-weight-bold text-info">
+                              <i class="fa fa-id-card"></i> Student Name
+                          </label>
+                          <div class="input-group">
+                              <span class="input-group-addon bg-info text-white">
+                                  <i class="fa fa-search"></i>
+                              </span>
+                              <input 
+                                  type="text" 
+                                  id="searchStudentName" 
+                                  class="form-control" 
+                                  placeholder="e.g. Adeleke">
+                          </div>
+                      </div>
+
                       <!-- Programme -->
                       <div class="col-md-3 mb-2">
                           <label class="font-weight-bold text-primary">
@@ -677,6 +694,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const matricInput = document.getElementById('searchMatricNo');
+    const studentNameInput = document.getElementById('searchStudentName');
     const programmeInput = document.getElementById('searchProgramme');
     const levelInput = document.getElementById('searchLevel');
     const clearBtn = document.getElementById('clearFiltersStudent'); // Clear button
@@ -686,6 +704,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fetchStudents(url = '/students/search') {
         const params = new URLSearchParams({
             matricno: matricInput.value,
+            studentname: studentNameInput.value,
             programme: programmeInput.value,
             level: levelInput.value,
         });
@@ -715,13 +734,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Trigger search on typing
-    [matricInput, programmeInput, levelInput].forEach(input => {
+    [matricInput, studentNameInput, programmeInput, levelInput].forEach(input => {
         input.addEventListener('keyup', () => fetchStudents());
     });
 
     // Clear filters button
     clearBtn.addEventListener('click', function () {
         matricInput.value = '';
+        studentNameInput.value = '';
         programmeInput.value = '';
         levelInput.value = '';
         fetchStudents(); // reload full table

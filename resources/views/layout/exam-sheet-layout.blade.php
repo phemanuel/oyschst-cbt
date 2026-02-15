@@ -53,6 +53,12 @@
     }
   </style>
    <style>
+    .bold-font-qst {
+    /* font-weight: bold; */
+    font-size: 20px; /* increases font size, ~20px */
+    line-height: 1.5;
+}
+
     .bold-text {
     font-size: 18px;
     font-weight: bold;
@@ -248,7 +254,8 @@
         Exam Sheet              
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>        
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li> 
+        <li><a href="{{route('report-objective')}}">Report Objective</a></li>        
         <li class="active">Exam Sheet</li>
       </ol>
     </section>
@@ -264,440 +271,119 @@
               
               <div class="col-12 grid-margin">            
               <div class="card">
-                <div class="card-body">
-                  @if($noOfQst == 10)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>                  
-                  @elseif($noOfQst == 20)
-                    <a href="{{route('exam-sheet-page1' , ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>                  
-                  @elseif($noOfQst == 30)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheett-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>  
-                  @elseif($noOfQst == 40)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>   
-                  @elseif($noOfQst == 50)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>  
-                  @elseif($noOfQst == 60)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>  
-                  @elseif($noOfQst == 70)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>   
-                  @elseif($noOfQst == 80)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page8', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">71-80</a> 
-                  @elseif($noOfQst == 90)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page8', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page9', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">81-90</a>   
-                  @elseif($noOfQst == 100)
-                    <a href="{{route('exam-sheet-page1', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">1-10</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page2', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">11-20</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page3', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">21-30</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page4', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">31-40</a>&nbsp; &nbsp; 
-                    <a href="{{route('exam-sheet-page5', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">41-50</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page6', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">51-60</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page7', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">61-70</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page8', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">71-80</a>&nbsp; &nbsp;
-                    <a href="{{route('exam-sheet-page9', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">81-90</a>&nbsp; &nbsp;  
-                    <a href="{{route('exam-sheet-page10', ['examViewType' => $examViewType , 'id' => $qstData->id])}}" class="btn btn-success">91-100</a> 
-                       
-                  @endif                  
-                </div>
+                <div class="card mb-3 shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title">Student Info</h5>
+                      <p class="mb-1">
+                          <strong>Student No:</strong> {{ $studentAnswer->studentno }} |
+                          <strong>Name:</strong> {{ $studentAnswer->studentname }}
+                      </p>
+                      <p class="mb-0">
+                          <strong>Programme:</strong> {{ $studentAnswer->department }} |
+                          <strong>Course:</strong> {{ $studentAnswer->course }} |
+                          <strong>Level:</strong> {{ $studentAnswer->level }} |
+                          <strong>Semester:</strong> {{ $studentAnswer->semester }} |
+                          <strong>Session:</strong> {{ $studentAnswer->session1 }}
+                      </p>
+                  </div>
+
+                  <div class="card-body">
+                      <h6>Exam Sheet Pages:</h6>
+                      <div class="btn-group flex-wrap" role="group" aria-label="Exam pages">
+                          @php
+                              $pageSize = 10; // number of questions per page
+                              $totalPages = ceil($noOfQst / $pageSize);
+                          @endphp
+
+                          @for ($page = 1; $page <= $totalPages; $page++)
+                              @php
+                                  $start = ($page - 1) * $pageSize + 1;
+                                  $end = min($page * $pageSize, $noOfQst);
+                                  $routeName = 'exam-sheet-page' . $page;
+                              @endphp
+
+                              <a href="{{ route($routeName, ['examViewType' => $examViewType, 'id' => $qstData->id]) }}"
+                                class="btn btn-success mb-2 mr-2">
+                                  {{ $start }}-{{ $end }}
+                              </a>
+                          @endfor
+                      </div>
+                  </div>
+              </div>
+
             </div>
             </div>
               <hr>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-                <!-- begin card -->
-            <div class="col-12 grid-margin" id="question1">            
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q1'] }} </strong>
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table" width="100%">
-                    @if($question1->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question1->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question1->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a1']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a1']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>    
-                    <!-- qst2 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q2'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question2->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question2->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question2->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question2->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a2']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a2']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>   
-                    
-                    <!-- qst3 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q3'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question3->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question3->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question3->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question3->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a3']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a3']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>     
-                    
-                    <!-- qst4 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q4'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question4->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question4->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question4->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question4->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a4']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a4']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>  
-                    
-                    <!-- qst5 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q5'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question5->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question5->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question5->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question5->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a5']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a5']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>  
-                    
-                    <!-- qst6 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q6'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question6->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question6->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question6->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question6->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a6']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a6']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>  
-                    
-                    <!-- qst7 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q7'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question7->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question7->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question7->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question7->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a7']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a7']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>  
-                    
-                    <!-- qst8 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q8'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question8->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question8->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question8->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question8->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a8']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a8']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table> 
-                    
-                    <!-- qst9 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q9'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question9->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question9->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question9->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question9->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a9']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a9']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>  
-                    
-                    <!-- qst10 -->
-                    <h4 class="card-title"> 
-                    <strong>Question {{ $questionNo['q10'] }} </strong>
-                  </h4>
-                    <table class="table" width="100%">
-                    @if($question10->question_type == 'text-image')
-                      <tr>                        
-                      <img src="{{asset('questions/' . $question10->graphic)}}" alt="questionImage" width="1200" height="250">                        
-                      </tr>
-                      <tr>
-                        <td><p class="bold-font-qst">{!! $question10->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @else
-                      <tr>                        
-                        <td><p class="bold-font-qst">{!! $question10->question !!}</p></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      @endif
-                      <tr>
-                      <td width="82%">                      
-                        <p>
-                        <span class="bold-font-ans-std">Selected Answer:</span> 
-                        <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo['a10']} }}</span> | 
-                        <span class="bold-font-ans-cor">Correct Answer:</span> 
-                        <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo['a10']} }}</span>
-                        </p>
-                       
-                        </td>
-                        <td></td>
-                        <td></p></td>
-                    </table>     
+    <div class="col-12 grid-margin" id="question-section">            
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    @for ($i = 1; $i <= 10; $i++)
+                        @php
+                            $questionVar = ${"question" . $i}; // $question1, $question2, etc.
+                            $questionNoKey = "q$i";
+                            $answerKey = "a$i";
+                        @endphp
 
-                  </div>
-                </div>                
-              </div>
+                        <h4 class="card-title">
+                            <strong>Question {{ $questionNo[$questionNoKey] }}</strong>
+                        </h4>
+
+                        <table class="table" width="100%">
+                          @if($questionVar->question_type == 'text-image')
+                              <tr>
+                                  <td colspan="3">
+                                      <p class="bold-font-qst">{!! $questionVar->question !!}</p>
+                                      <hr>
+                                      <img src="{{ asset('questions/' . $questionVar->graphic) }}" 
+                                          alt="questionImage" 
+                                          class="img-fluid mb-2">
+                                  </td>
+                              </tr>
+                          @else
+                              <tr>
+                                  <td colspan="3">
+                                      <p class="bold-font-qst">{!! $questionVar->question !!}</p>
+                                  </td>
+                              </tr>
+                          @endif
+
+                          <!-- Display options -->
+                          <tr>
+                              <td colspan="3">
+                                  <ul class="list-unstyled mb-2">
+                                      <li><strong>A:</strong> {{ $questionVar->option_a }}</li>
+                                      <li><strong>B:</strong> {{ $questionVar->option_b }}</li>
+                                      <li><strong>C:</strong> {{ $questionVar->option_c }}</li>
+                                      <li><strong>D:</strong> {{ $questionVar->option_d }}</li>
+                                  </ul>
+                              </td>
+                          </tr>
+
+                          <!-- Selected & Correct Answer -->
+                          <tr>
+                              <td width="82%">
+                                  <p>
+                                      <span class="bold-font-ans-std">Selected Answer:</span> 
+                                      <span class="bold-font-ans-std">{{ $studentAnswer->{"OK" . $questionNo[$answerKey]} }}</span> | 
+                                      <span class="bold-font-ans-cor">Correct Answer:</span> 
+                                      <span class="bold-font-ans-cor">{{ $correctAnswer->{"OK" . $questionNo[$answerKey]} }}</span>
+                                  </p>
+                              </td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                      </table>
+
+                    @endfor
+                </div>
             </div>
-           <!-- end card -->
-            </div>
-            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
           </div>
           <!-- /.box -->
         </div>

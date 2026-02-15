@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('student_admissions', function (Blueprint $table) {
-            //
-             $table->string('previous_level')->nullable();
+        Schema::create('mcq_questions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('station_id')->constrained()->cascadeOnDelete();
+            $table->text('question');
+            $table->integer('mark')->default(1);
+            $table->timestamps();
         });
+
     }
 
     /**
@@ -22,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('student_admissions', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('mcq_questions');
     }
 };

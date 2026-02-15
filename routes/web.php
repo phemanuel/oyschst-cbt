@@ -10,6 +10,10 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamTheoryController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\AIController;
+use App\Http\Controllers\OSCEAuthController;
+use App\Http\Controllers\OSCEDashboardController;
+use App\Http\Controllers\StationController;
+/*
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -460,6 +464,43 @@ Route::get('/', function () {
         Route::post('unlock-exam/{id}', [DashboardController::class, 'unlockExam'])
         ->name('unlock-exam');          
   
+    });
+
+    Route::prefix('osce')->group(function () {
+
+        // Public OSCE home/login routes
+        Route::get('/', [OSCEAuthController::class, 'osceHome'])->name('osce-home');
+        Route::post('/student', [OSCEAuthController::class, 'studentLogin'])->name('student.login');
+        Route::post('/examiner', [OSCEAuthController::class, 'examinerLogin'])->name('examiner.login');
+
+        // Protected OSCE routes (middleware applied)
+        Route::middleware('osce.access')->group(function () {
+            // Example: dashboard after login
+            Route::get('/dashboard', [OSCEDashboardController::class, 'dashboard'])
+            ->name('osce.dashboard');
+            Route::get('/admin/profile', [OSCEDashboardController::class, 'adminProfile'])
+            ->name('admin.profile');            
+            Route::get('/admin/procedure', [OSCEDashboardController::class, 'adminProcedure'])
+            ->name('admin.procedures.index');
+            Route::get('/admin/mcq', [OSCEDashboardController::class, 'adminMcq'])
+            ->name('admin.mcqs.index');
+            Route::get('/admin/examiners', [OSCEDashboardController::class, 'adminExaminers'])
+            ->name('admin.examiners.index');
+            Route::get('/admin/student', [OSCEDashboardController::class, 'adminStudents'])
+            ->name('admin.students.index');
+            Route::get('/admin/results', [OSCEDashboardController::class, 'adminResults'])
+            ->name('admin.results.index');
+            // Stations route
+            Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
+            Route::get('/stations/create', [StationController::class, 'create'])->name('stations.create');
+            Route::post('/stations', [StationController::class, 'store'])->name('stations.store');
+            
+            Route::get('/admin/logout', [OSCEDashboardController::class, 'adminLogout'])
+            ->name('osce.logout');
+
+            // Other OSCE routes here
+            // Route::get('/station/{id}', ...);
+        });
     });
 
     Route::get('test-chatgpt', [AIController::class, 'testOpenAI'])
