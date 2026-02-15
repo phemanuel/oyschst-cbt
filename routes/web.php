@@ -13,6 +13,7 @@ use App\Http\Controllers\AIController;
 use App\Http\Controllers\OSCEAuthController;
 use App\Http\Controllers\OSCEDashboardController;
 use App\Http\Controllers\StationController;
+use App\Http\Controllers\ProcedureController;
 /*
 /*
 |--------------------------------------------------------------------------
@@ -479,9 +480,7 @@ Route::get('/', function () {
             Route::get('/dashboard', [OSCEDashboardController::class, 'dashboard'])
             ->name('osce.dashboard');
             Route::get('/admin/profile', [OSCEDashboardController::class, 'adminProfile'])
-            ->name('admin.profile');            
-            Route::get('/admin/procedure', [OSCEDashboardController::class, 'adminProcedure'])
-            ->name('admin.procedures.index');
+            ->name('admin.profile');  
             Route::get('/admin/mcq', [OSCEDashboardController::class, 'adminMcq'])
             ->name('admin.mcqs.index');
             Route::get('/admin/examiners', [OSCEDashboardController::class, 'adminExaminers'])
@@ -494,8 +493,16 @@ Route::get('/', function () {
             Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
             Route::get('/stations/create', [StationController::class, 'create'])->name('stations.create');
             Route::post('/stations', [StationController::class, 'store'])->name('stations.store');
-            
-            Route::get('/admin/logout', [OSCEDashboardController::class, 'adminLogout'])
+            Route::get('/stations/{station}/edit', [StationController::class, 'edit'])->name('stations.edit');
+            Route::put('/stations/{station}', [StationController::class, 'update'])->name('stations.update');
+            Route::delete('/stations/{station}', [StationController::class, 'destroy'])->name('stations.destroy');
+            // Procedure routes
+            Route::get('/procedures', [ProcedureController::class, 'index'])->name('procedures.index');
+            Route::post('/procedures', [ProcedureController::class, 'store'])->name('procedures.store');
+            Route::post('/procedures/{procedure}', [ProcedureController::class, 'update'])->name('procedures.update');
+            Route::delete('/procedures/{procedure}', [ProcedureController::class, 'destroy'])->name('procedures.destroy');
+
+            Route::get('/logout', [OSCEDashboardController::class, 'adminLogout'])
             ->name('osce.logout');
 
             // Other OSCE routes here

@@ -15,7 +15,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label>Station Title</label>
+                    <label>Station Name</label>
                     <input type="text" name="title"
                         class="form-control @error('title') is-invalid @enderror"
                         placeholder="e.g. Station 1 - Vital Signs">
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Practical Question</label>
+                    <label>Station Title</label>
                     <textarea name="practical_question"
                         class="form-control @error('practical_question') is-invalid @enderror"
                         rows="5"

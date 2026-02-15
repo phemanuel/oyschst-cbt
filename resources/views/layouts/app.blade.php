@@ -63,7 +63,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.procedures.index') }}">
+                            <a class="nav-link" href="{{ route('procedures.index') }}">
                                 <i class="mdi mdi-clipboard-list-outline mr-2"></i> Procedures
                             </a>
                         </li>
@@ -106,7 +106,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+     <script src="{{ asset('student/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('student/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     @stack('scripts')

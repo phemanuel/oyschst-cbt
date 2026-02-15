@@ -23,7 +23,7 @@
                 <div class="card-body text-center">
                     <h5 class="text-muted">Total Stations</h5>
                     <h2 class="font-weight-bold text-primary">
-                        0
+                        {{$stations->count()}}
                     </h2>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                 <div class="card-body text-center">
                     <h5 class="text-muted">Total Students</h5>
                     <h2 class="font-weight-bold text-success">
-                       0
+                        {{$students->count()}}
                     </h2>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <div class="card-body text-center">
                     <h5 class="text-muted">Total Examiners</h5>
                     <h2 class="font-weight-bold text-danger">
-                       0
+                        {{$users->count()}}
                     </h2>
                 </div>
             </div>
@@ -61,7 +61,7 @@
             Quick Actions
         </div>
         <div class="card-body">
-            <a href="#" class="btn btn-primary mr-2 mb-2">
+            <a href="{{route('stations.create')}}" class="btn btn-primary mr-2 mb-2">
                 Create Station
             </a>
             <a href="#" class="btn btn-success mr-2 mb-2">

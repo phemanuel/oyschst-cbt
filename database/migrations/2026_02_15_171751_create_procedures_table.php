@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('station_id'); // matches stations.id
             $table->string('name'); // Procedure name
             $table->text('description')->nullable(); // Optional details
-            $table->integer('marks')->default(0); // Marks for this procedure
+            $table->decimal('marks,3,1')->default(0); // Marks for this procedure
             $table->timestamps();
 
             $table->foreign('station_id')

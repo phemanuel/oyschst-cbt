@@ -11,6 +11,7 @@ use App\Models\Question;
 use App\Models\AcademicSession;
 use App\Models\SoftwareVersion;
 use App\Models\ExamType;
+use App\Models\Station;
 use App\Models\ExamSetting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -35,11 +36,22 @@ class OSCEDashboardController extends Controller
        $collegeSetup = CollegeSetup::first(); 
         $students = StudentAdmission::all();
         $users = User::all();
+        $stations = Station::all();
         $departments = Department::all();
         $questions = QuestionSetting::all();
         $softwareVersion = SoftwareVersion::first();
 
-        return view('osce.admin-dashboard', compact('students', 'users', 'departments', 'questions',
-    'softwareVersion', 'collegeSetup'));
+        return view('osce.admin-dashboard', compact('students', 'users', 'stations'));
+    }
+
+    public function adminLogout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/osce');
+
+
     }
 }
