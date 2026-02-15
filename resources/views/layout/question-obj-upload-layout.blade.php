@@ -871,7 +871,8 @@
   </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+ <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -1015,11 +1016,20 @@ console.log('Delete JS loaded!');  // <-- check this in browser console
                 location.reload();
             },
             error: function(xhr) {
-                console.error('AJAX error:', xhr);
-                alert('Error deleting question.');
-                $('#deleteConfirmBtn').prop('disabled', false);
-                $('#deleteProcessing').hide();
-            }
+              console.error('AJAX error:', xhr);
+
+              let errorMsg = 'Error deleting question.';
+              
+              // Check if server returned JSON with a message
+              if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMsg = xhr.responseJSON.message;
+              }
+
+              alert(errorMsg);
+              $('#deleteConfirmBtn').prop('disabled', false);
+              $('#deleteProcessing').hide();
+              location.reload();
+          }
         });
     });
 

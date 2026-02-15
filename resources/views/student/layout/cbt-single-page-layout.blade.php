@@ -630,7 +630,7 @@
           <div class="row d-flex">
     <!-- Left Column: Question & Options -->
 <div class="col-md-8 d-flex">
-    <div class="card flex-fill d-flex flex-column" style="max-height:90%; overflow-y:auto;">
+    <div class="card flex-fill d-flex flex-column" style="max-height:100%; overflow-y:auto;">
         <div class="card-body d-flex flex-column" style="padding-bottom:0;">
             <form action="" class="answer-form" data-question-number="1">
                 <!-- Question Header -->
@@ -681,7 +681,7 @@
 
     <!-- Right Column: Question Navigation -->
     <div class="col-md-4 d-flex">
-        <div class="card flex-fill d-flex flex-column" style="max-height:90%;">
+        <div class="card flex-fill d-flex flex-column" style="max-height:100%;">
             <!-- Sticky Header -->
             <div class="card-header text-center" 
                  style="font-weight:bold; font-size:16px; background-color:#3b3407; color:#fff; position:sticky; top:0; z-index:10; border-radius:6px 6px 0 0;">
