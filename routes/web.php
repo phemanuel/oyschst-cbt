@@ -325,7 +325,11 @@ Route::get('/', function () {
         Route::post('delete-obj-image/{id}', [QuestionController::class, 'deleteObjImage'])
         ->name('delete-obj-image');    
         Route::get('question-enable/{questionId}', [QuestionController::class, 'questionEnable'])
-        ->name('question-enable');    
+        ->name('question-enable');  
+        Route::post('/add-more-questions', [QuestionController::class, 'addMoreQuestions'])
+        ->name('add-more-questions');  
+        Route::post('/question-delete',[QuestionController::class, 'deleteExam'])
+        ->name('question-delete');
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
         ->name('question-upload-fill-gap');

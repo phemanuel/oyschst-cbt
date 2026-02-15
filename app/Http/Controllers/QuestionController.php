@@ -1634,6 +1634,176 @@ class QuestionController extends Controller
     }
 
 
+    public function addMoreQuestions(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'questionId' => 'required|integer|exists:question_settings,id',
+            'totalToAdd' => 'required|integer|min:10|max:100',
+            'totalAttempt' => 'required|integer|min:10|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        return DB::transaction(function () use ($request) {
+
+            $questionSetting = QuestionSetting::find($request->questionId);
+
+            $additionalUpload = (int)$request->totalToAdd;
+            $additionalAttempt = (int)$request->totalAttempt;
+
+            $currentUpload = $questionSetting->upload_no_of_qst;
+            $currentAttempt = $questionSetting->no_of_qst;
+
+            $newUploadTotal = $currentUpload + $additionalUpload;
+            $newAttemptTotal = $currentAttempt + $additionalAttempt;
+
+            // Prevent invalid logic
+            if ($newAttemptTotal > $newUploadTotal) {
+                return response()->json([
+                    'message' => 'Student attempt cannot exceed total uploaded.'
+                ], 422);
+            }
+
+            // Update question_settings
+            $questionSetting->update([
+                'upload_no_of_qst' => $newUploadTotal,
+                'no_of_qst' => $newAttemptTotal
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | 1️⃣ Update Existing QuestionSingle rows
+            |--------------------------------------------------------------------------
+            */
+
+            QuestionSingle::where('exam_type', $questionSetting->exam_type)
+                ->where('exam_category', $questionSetting->exam_category)
+                ->where('exam_mode', $questionSetting->exam_mode)
+                ->where('department', $questionSetting->department)
+                ->where('level', $questionSetting->level)
+                ->where('semester', $questionSetting->semester)
+                ->where('session1', $questionSetting->session1)
+                ->where('course', $questionSetting->course)
+                ->update([
+                    'upload_no_of_qst' => $newUploadTotal,
+                    'no_of_qst' => $newAttemptTotal
+                ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Insert new QuestionSingle rows
+            |--------------------------------------------------------------------------
+            */
+
+            $insertData = [];
+
+            for ($i = $currentUpload + 1; $i <= $newUploadTotal; $i++) {
+                $insertData[] = [
+                    'exam_type' => $questionSetting->exam_type,
+                    'exam_category' => $questionSetting->exam_category,
+                    'exam_mode' => $questionSetting->exam_mode,
+                    'department' => $questionSetting->department,
+                    'level' => $questionSetting->level,
+                    'semester' => $questionSetting->semester,
+                    'session1' => $questionSetting->session1,
+                    'course' => $questionSetting->course,
+                    'upload_no_of_qst' => $newUploadTotal,
+                    'no_of_qst' => $newAttemptTotal,
+                    'question_no' => $i,
+                    'answer' => 'A',
+                    'question' => 'Question'. $i,
+                    'graphic' => 'blank.jpg',
+                    'option_a' => 'A',
+                    'option_b' => 'B',
+                    'option_c' => 'C',
+                    'option_d' => 'D',
+                    'question_type' => 'text',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+
+            QuestionSingle::insert($insertData);
+
+            return response()->json([
+                'message' => 'Questions added successfully.'
+            ]);
+        });
+    }
+    
+
+    public function deleteExam(Request $request)
+    {
+        $questionId = $request->questionId;
+
+        return DB::transaction(function () use ($questionId) {
+
+            $questionSetting = QuestionSetting::find($questionId);
+
+            if (!$questionSetting) {
+                return response()->json([
+                    'message' => 'Exam not found.'
+                ], 404);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | 1️⃣ Check if exam has already been taken
+            |--------------------------------------------------------------------------
+            */
+
+            $examTaken = DB::table('cbt_evaluations')
+                ->where('exam_type', $questionSetting->exam_type)
+                ->where('exam_category', $questionSetting->exam_category)
+                ->where('exam_mode', $questionSetting->exam_mode)
+                ->where('department', $questionSetting->department)
+                ->where('level', $questionSetting->level)
+                ->where('semester', $questionSetting->semester)
+                ->where('session1', $questionSetting->session1)
+                ->where('course', $questionSetting->course)
+                ->exists();
+
+            if ($examTaken) {
+                return response()->json([
+                    'message' => 'Cannot delete. Students have already taken this exam.'
+                ], 422);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | 2️⃣ Delete QuestionSingles
+            |--------------------------------------------------------------------------
+            */
+
+            QuestionSingle::where('exam_type', $questionSetting->exam_type)
+                ->where('exam_category', $questionSetting->exam_category)
+                ->where('exam_mode', $questionSetting->exam_mode)
+                ->where('department', $questionSetting->department)
+                ->where('level', $questionSetting->level)
+                ->where('semester', $questionSetting->semester)
+                ->where('session1', $questionSetting->session1)
+                ->where('course', $questionSetting->course)
+                ->delete();
+
+            /*
+            |--------------------------------------------------------------------------
+            | 3️⃣ Delete QuestionSetting
+            |--------------------------------------------------------------------------
+            */
+
+            $questionSetting->delete();
+
+            return response()->json([
+                'message' => 'Exam and all related questions deleted successfully.'
+            ]);
+        });
+    }
+
     public function deleteTheoryImage(Request $request, $id)
     {
         $collegeSetup = CollegeSetup::first();

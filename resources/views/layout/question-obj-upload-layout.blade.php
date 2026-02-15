@@ -426,6 +426,7 @@
                 <tr>
                   <!-- <th>ID</th> -->
                   <th>Actions</th>
+                  <th></th>
                   <th>Lock/Unlock Exam</th>
                   <th>Status</th> 
                   <th>Academic Session</th>
@@ -452,6 +453,22 @@
                         $isOwner = auth()->id() == $rs->lock_id;
                         $isSuperAdmin = auth()->user()->user_type == 'superadmin';
                     @endphp 
+                    <td>
+                    @if($isOwner || $isSuperAdmin)
+                        <button type="button"
+                    class="btn btn-danger btn-gradient shadow-sm delete-btn"
+                    data-toggle="modal"
+                    data-target="#deleteModal"
+                    data-id="{{ $rs->id }}">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+                    @else
+                        <span class="badge badge-secondary">Locked by another user</span>
+                    @endif
+                    </td>
+
+
+
                     <td>
                         @if($isOwner || $isSuperAdmin)
                             <!-- Editable -->
@@ -826,7 +843,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
 
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fa fa-exclamation-triangle"></i> Confirm Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p class="font-weight-bold">Are you sure you want to delete this question and all related data?</p>
+        <p class="text-muted small">This action cannot be undone.</p>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" id="deleteConfirmBtn">Yes, Delete</button>
+        <span id="deleteProcessing" class="ml-2 text-muted" style="display:none;">
+            <i class="fa fa-spinner fa-spin"></i> Processing...
+        </span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -930,8 +975,56 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<script>
+$(document).ready(function() {
+console.log('Delete JS loaded!');  // <-- check this in browser console
 
+    let deleteQuestionId = null;
 
+    // Modal show event
+    $('#deleteModal').on('show.bs.modal', function(event) {
+        const button = $(event.relatedTarget); // Button that triggered modal
+        deleteQuestionId = button.data('id');  // Read data-id
+        console.log('Modal triggered by button with ID:', deleteQuestionId);
+
+        // Reset modal state
+        $('#deleteConfirmBtn').prop('disabled', false);
+        $('#deleteProcessing').hide();
+    });
+
+    // Use delegated event binding in case button is rendered dynamically
+    $(document).on('click', '#deleteConfirmBtn', function() {
+        console.log('Delete confirm button clicked. Current deleteQuestionId:', deleteQuestionId);
+
+        if (!deleteQuestionId) return console.warn('No question ID set!');
+
+        $(this).prop('disabled', true);
+        $('#deleteProcessing').show();
+
+        $.ajax({
+            url: "{{ route('question-delete') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                questionId: deleteQuestionId
+            },
+            success: function(res) {
+                console.log('AJAX success:', res);
+                $('#deleteModal').modal('hide'); // hide modal
+                alert(res.message);
+                location.reload();
+            },
+            error: function(xhr) {
+                console.error('AJAX error:', xhr);
+                alert('Error deleting question.');
+                $('#deleteConfirmBtn').prop('disabled', false);
+                $('#deleteProcessing').hide();
+            }
+        });
+    });
+
+});
+</script>
 
 <!-- jQuery 3 -->
 <script src="{{asset('dashboard/bower_components/jquery/dist/jquery.min.js')}}"></script>

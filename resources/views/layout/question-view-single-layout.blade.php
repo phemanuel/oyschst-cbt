@@ -464,6 +464,14 @@
                 <i class="fa fa-trash"></i> Delete Image
             </button>
 
+            <button type="button"
+                    class="btn btn-info btn-sm"
+                    style="min-width:160px; font-weight:600;"
+                    data-toggle="modal"
+                    data-target="#addMoreModal">
+                <i class="fa fa-plus"></i> Add More Question
+            </button>
+
         </div>
     </td>
 </tr>
@@ -571,6 +579,72 @@
                   <input type="hidden" name="questionId" value="{{$questionSetting->id}}">
                   <input type="hidden" name="questionNo" value="{{$question->question_no}}">
   </form>
+<!-- Add more questions modal -->
+<div class="modal fade" id="addMoreModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content shadow-lg border-0 rounded-3">
+
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold">Add More Questions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="alert alert-info">
+            <strong>Currently Uploaded:</strong>
+            {{ $questionSetting->upload_no_of_qst }}
+            <br>
+            <strong>Student Attempts:</strong>
+            {{ $questionSetting->no_of_qst }}
+        </div>
+
+        <input type="hidden" id="questionId" value="{{ $questionSetting->id }}">
+
+        <div class="mb-3">
+            <label class="form-label">Total Questions to Add</label>
+            <select class="form-control" id="totalToAdd" onchange="calculatePreview()">
+                <option value="">Select</option>
+                @for($i=10; $i<=100; $i+=10)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total Questions to Add (Student)</label>
+            <select class="form-control" id="totalAttempt" onchange="calculatePreview()">
+                <option value="">Select</option>
+                @for($i=10; $i<=100; $i+=10)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
+
+        <div class="alert alert-secondary d-none" id="previewBox">
+            <strong>New Upload Total:</strong> <span id="newUploadTotal"></span><br>
+            <strong>New Attempt Total:</strong> <span id="newAttemptTotal"></span>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-primary w-100"
+                id="saveBtn"
+                onclick="addMoreQuestions()">
+            Save Changes
+        </button>
+        <button type="button" class="btn btn-light" data-dismiss="modal" value="Cancel">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end --> 
+
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> {{$softwareVersion->version}}
@@ -811,6 +885,60 @@ function previewQuestion() {
         MathJax.typesetPromise();
     }
 }
+</script>
+
+<script>
+  function calculatePreview() {
+
+    let totalToAdd = parseInt(document.getElementById('totalToAdd').value) || 0;
+    let totalAttempt = parseInt(document.getElementById('totalAttempt').value) || 0;
+
+    let currentUpload = {{ $questionSetting->upload_no_of_qst }};
+    let currentAttempt = {{ $questionSetting->no_of_qst }};
+
+    if (totalToAdd && totalAttempt) {
+
+        document.getElementById('previewBox').classList.remove('d-none');
+
+        document.getElementById('newUploadTotal').innerText =
+            currentUpload + totalToAdd;
+
+        document.getElementById('newAttemptTotal').innerText =
+            currentAttempt + totalAttempt;
+    }
+}
+
+function addMoreQuestions() {
+
+    let btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    fetch("{{ route('add-more-questions') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            questionId: document.getElementById('questionId').value,
+            totalToAdd: document.getElementById('totalToAdd').value,
+            totalAttempt: document.getElementById('totalAttempt').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        location.reload();
+    })
+    .catch(() => {
+        alert("Something went wrong.");
+        btn.disabled = false;
+        btn.innerText = "Save Changes";
+    });
+}
+
+
 </script>
 
 <!-- jQuery 3 -->
