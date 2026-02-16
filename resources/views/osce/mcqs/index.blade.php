@@ -19,7 +19,10 @@
 
                 <!-- Right side: Add button + MCQ count -->
                 <div class="d-flex align-items-center">
-                    
+                    <span class="badge badge-dark mr-2">
+                        MCQ Duration:
+                        {{ $station->duration }} mins
+                    </span>
                     <span class="badge badge-info mr-2">
                         {{ $station->mcqQuestions->count() }} MCQ Questions{{ $station->mcqQuestions->count() !== 1 ? 's' : '' }}
                     </span>

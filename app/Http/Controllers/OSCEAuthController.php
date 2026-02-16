@@ -190,7 +190,7 @@ class OSCEAuthController extends Controller
 
             // 8. Email verification check
             if ($user->email_verified_status == 1) {
-                return redirect()->route('osce.dashboard');
+                return redirect()->route('examiner.dashboard');
             }
 
             $request->session()->forget('osce_user');

@@ -15,6 +15,8 @@ use App\Http\Controllers\OSCEDashboardController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\MCQController;
+use App\Http\Controllers\ExaminerController;
+use App\Http\Controllers\OSCEStudentController;
 /*
 /*
 |--------------------------------------------------------------------------
@@ -508,6 +510,25 @@ Route::get('/', function () {
             Route::post('/mcqs', [MCQController::class, 'store'])->name('mcqs.store');
             Route::put('/mcqs/{mcq}', [MCQController::class, 'update'])->name('mcqs.update');
             Route::delete('/mcqs/{mcq}', [MCQController::class, 'destroy'])->name('mcqs.destroy');
+
+            // Examiners route
+            Route::get('examiners', [ExaminerController::class, 'index'])->name('examiners.index');
+            Route::post('examiners', [ExaminerController::class, 'store'])->name('examiners.store');
+            Route::post('examiners/{examiner}', [ExaminerController::class, 'update'])->name('examiners.update');
+            Route::delete('examiners/{examiner}', [ExaminerController::class, 'destroy'])->name('examiners.destroy');
+
+            Route::get('/examiner/dashboard', [ExaminerController::class, 'dashboard'])->name('examiner.dashboard');
+            Route::get('/examiner/station/{station}/students', [ExaminerController::class, 'stationStudents'])
+            ->name('examiner.station.students');
+            Route::get('/examiner/station/{station}/student/{student}/procedures', [ExaminerController::class, 'studentProcedures'])
+            ->name('examiner.student.procedures');
+
+            //---Students route
+            Route::get('students', [OSCEStudentController::class, 'index'])->name('students.index');
+            Route::post('students', [OSCEStudentController::class, 'store'])->name('students.store');
+            Route::put('students/{student}', [OSCEStudentController::class, 'update'])->name('students.update');
+            Route::delete('students/{student}', [OSCEStudentController::class, 'destroy'])->name('students.destroy');
+            
 
             Route::get('/logout', [OSCEDashboardController::class, 'adminLogout'])
             ->name('osce.logout');

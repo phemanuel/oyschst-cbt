@@ -21,7 +21,7 @@
     <!-- Top Navbar -->
     <nav class="navbar navbar-expand navbar-dark bg-primary shadow-sm">
         <a class="navbar-brand font-weight-bold" href="{{ route('osce.dashboard') }}">
-            OSCE Admin
+            OSCE Examiner
         </a>
         <ul class="navbar-nav ml-auto">
             <!-- Profile Dropdown -->
@@ -50,35 +50,11 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('osce.dashboard') }}">
+                            <a class="nav-link" href="{{ route('examiner.dashboard') }}">
                                 <i class="mdi mdi-view-dashboard-outline mr-2"></i> Dashboard
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('stations.index') }}">
-                                <i class="mdi mdi-view-dashboard-outline mr-2"></i> Stations
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('procedures.index') }}">
-                                <i class="mdi mdi-clipboard-list-outline mr-2"></i> Procedures
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('mcqs.index') }}">
-                                <i class="mdi mdi-school-outline mr-2"></i> MCQs
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('examiners.index') }}">
-                                <i class="mdi mdi-account-tie mr-2"></i> Examiners
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('students.index') }}">
-                                <i class="mdi mdi-account-group mr-2"></i> Students
-                            </a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.results.index') }}">
                                 <i class="mdi mdi-file-chart-outline mr-2"></i> Results
