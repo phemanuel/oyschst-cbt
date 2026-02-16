@@ -642,6 +642,9 @@
                   <option value="80">80</option>
                   <option value="90">90</option>
                   <option value="100">100</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="250">250</option>
                   <!-- <option value="20">150</option>
                   <option value="30">200</option>
                   <option value="40">250</option>

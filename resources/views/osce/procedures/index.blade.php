@@ -12,13 +12,24 @@
     @forelse($stations as $station)
         <div class="card mb-4 shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">{{ $station->title }} - {{ $station->practical_question}}</h5>
-                <button class="btn btn-success btn-sm add-procedure-btn" 
-                        data-station-id="{{ $station->id }}"
-                        data-station-title="{{ $station->title }}"
-                        data-station-question="{{ $station->practical_question }}">
-                    Add Procedure
-                </button>
+                <!-- Station title and question -->
+                <div>
+                    <h5 class="mb-0">{{ $station->title }} - {{ $station->practical_question }}</h5>
+                </div>
+
+                <!-- Right side: Add button + Procedure count -->
+                <div class="d-flex align-items-center">
+                    <span class="badge badge-info mr-2">
+                        {{ $station->procedures->count() }} procedure{{ $station->procedures->count() !== 1 ? 's' : '' }}
+                    </span>
+
+                    <button class="btn btn-success btn-sm add-procedure-btn" 
+                            data-station-id="{{ $station->id }}"
+                            data-station-title="{{ $station->title }}"
+                            data-station-question="{{ $station->practical_question }}">
+                        Add Procedure
+                    </button>
+                </div>
             </div>
 
             {{-- Scrollable Table --}}
@@ -70,6 +81,7 @@
     @endforelse
 </div>
 @endsection
+
 
 
 <!-- Add Procedure Modal -->

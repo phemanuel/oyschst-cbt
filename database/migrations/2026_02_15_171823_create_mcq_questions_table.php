@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('station_id')->constrained()->cascadeOnDelete();
             $table->text('question');
-            $table->integer('mark')->default(1);
+            $table->decimal('marks,3,2')->default(0);
             $table->timestamps();
         });
 

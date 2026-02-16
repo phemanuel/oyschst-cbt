@@ -14,6 +14,7 @@ use App\Http\Controllers\OSCEAuthController;
 use App\Http\Controllers\OSCEDashboardController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\ProcedureController;
+use App\Http\Controllers\MCQController;
 /*
 /*
 |--------------------------------------------------------------------------
@@ -481,9 +482,7 @@ Route::get('/', function () {
             Route::get('/dashboard', [OSCEDashboardController::class, 'dashboard'])
             ->name('osce.dashboard');
             Route::get('/admin/profile', [OSCEDashboardController::class, 'adminProfile'])
-            ->name('admin.profile');  
-            Route::get('/admin/mcq', [OSCEDashboardController::class, 'adminMcq'])
-            ->name('admin.mcqs.index');
+            ->name('admin.profile');             
             Route::get('/admin/examiners', [OSCEDashboardController::class, 'adminExaminers'])
             ->name('admin.examiners.index');
             Route::get('/admin/student', [OSCEDashboardController::class, 'adminStudents'])
@@ -502,6 +501,13 @@ Route::get('/', function () {
             Route::post('/procedures', [ProcedureController::class, 'store'])->name('procedures.store');
             Route::put('/procedures/{procedure}', [ProcedureController::class, 'update'])->name('procedures.update');
             Route::delete('/procedures/{procedure}', [ProcedureController::class, 'destroy'])->name('procedures.destroy');
+
+            //---mcqs route
+           
+            Route::get('/mcqs', [MCQController::class, 'index'])->name('mcqs.index');
+            Route::post('/mcqs', [MCQController::class, 'store'])->name('mcqs.store');
+            Route::put('/mcqs/{mcq}', [MCQController::class, 'update'])->name('mcqs.update');
+            Route::delete('/mcqs/{mcq}', [MCQController::class, 'destroy'])->name('mcqs.destroy');
 
             Route::get('/logout', [OSCEDashboardController::class, 'adminLogout'])
             ->name('osce.logout');

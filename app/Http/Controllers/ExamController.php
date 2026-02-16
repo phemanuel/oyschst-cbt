@@ -1731,6 +1731,15 @@ class ExamController extends Controller
             case 100:
                 return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
                 break;
+            case 150:
+                return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
+                break;
+            case 200:
+                return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
+                break;
+            case 250:
+                return $this->calculateAnswer($studentData, $examSetting, $noOfQuestions);
+                break;
             default:
                 // Handle other cases if needed
                 break;

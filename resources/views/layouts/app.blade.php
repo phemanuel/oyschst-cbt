@@ -65,7 +65,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.mcqs.index') }}">
+                            <a class="nav-link" href="{{ route('mcqs.index') }}">
                                 <i class="mdi mdi-school-outline mr-2"></i> MCQs
                             </a>
                         </li>
