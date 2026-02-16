@@ -27,6 +27,7 @@ class MCQController extends Controller
             'question' => 'required|string',
              'mark' => 'required|numeric|between:0.25,9.9',
             'options.*.option_text' => 'required|string',
+           
         ]);
 
         // Ensure at least one correct option
@@ -49,6 +50,7 @@ class MCQController extends Controller
             'station_id' => $request->station_id,
             'question' => $request->question,
             'mark' => $request->mark,
+           
         ]);
 
         // Create options
@@ -66,7 +68,7 @@ class MCQController extends Controller
     public function update(Request $request, MCQQuestion $mcq)
     {
         $request->validate([
-            'question' => 'required|string',
+            'question' => 'required|string',            
             'mark' => 'required|numeric|between:0.25,9.9',
             'options.*.option_text' => 'required|string',
         ]);
@@ -88,7 +90,7 @@ class MCQController extends Controller
 
         $mcq->update([
             'question' => $request->question,
-            'mark' => $request->mark,
+            'mark' => $request->mark,           
         ]);
 
         // Update existing or create new options
@@ -112,12 +114,24 @@ class MCQController extends Controller
     }
 
     // ---------------- DELETE MCQ ----------------
-    public function destroy(MCQQuestion $mcq)
+    public function destroy($id)
     {
+        $mcq = MCQQuestion::withCount('studentAnswers')->findOrFail($id);
+
+        // If students have answered, block delete
+        if ($mcq->student_answers_count > 0) {
+            return response()->json([
+                'error' => 'Cannot delete. Students have already answered this MCQ.'
+            ], 400);
+        }
+
+        // Safe delete
         $mcq->options()->delete();
         $mcq->delete();
 
-        return response()->json(['success' => 'MCQ deleted successfully.']);
+        return response()->json([
+            'success' => 'MCQ deleted successfully.'
+        ]);
     }
 
 }

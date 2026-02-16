@@ -19,8 +19,13 @@
 
                 <!-- Right side: Add button + MCQ count -->
                 <div class="d-flex align-items-center">
+                    
                     <span class="badge badge-info mr-2">
                         {{ $station->mcqQuestions->count() }} MCQ Questions{{ $station->mcqQuestions->count() !== 1 ? 's' : '' }}
+                    </span>
+                    <span class="badge badge-primary mr-2">
+                        Total MCQ Marks:
+                        {{ $station->mcqQuestions->sum('mark') }}
                     </span>
 
                     <button class="btn btn-success btn-sm add-mcq-btn" 
@@ -64,6 +69,7 @@
                                             data-id="{{ $mcq->id }}"
                                             data-question="{{ $mcq->question }}"
                                             data-mark="{{ $mcq->mark }}"
+                                            data-duration="{{ $mcq->duration }}"
                                             data-options='@json($mcq->options)'>
                                         Edit
                                     </button>
@@ -119,6 +125,10 @@
                             <option value="1.5">1.5</option>
                         </select>
           </div>
+           <!-- <div class="form-group">
+            <label>Duration(Mins)</label>
+            <input type="number" name="duration" class="form-control" required>
+          </div> -->
           <div class="form-group">
             <label>Options</label>
             <div id="addOptionsWrapper"></div>
@@ -170,6 +180,11 @@
                             <option value="1.50">1.50</option>
                         </select>
                     </div>
+
+                    <!-- <div class="form-group">
+                        <label>Duration(Mins)</label>
+                        <input type="number" id="editDuration" name="duration" class="form-control" required>
+                    </div> -->
 
                     <!-- Options -->
                     <hr>
@@ -326,10 +341,12 @@ $('.edit-mcq-btn').click(function(){
     var mcqId = $(this).data('id');
     var question = $(this).data('question');
     var mark = $(this).data('mark');
+    // var duration = $(this).data('duration');
     var options = $(this).data('options');
 
     $('#editMCQForm').attr('action','/osce/mcqs/'+mcqId);
     $('#editQuestion').val(question);
+    // $('#editDuration').val(duration);
 
     // Ensure select value matches exactly
     $('#editMark').val(parseFloat(mark).toFixed(2));
@@ -479,7 +496,13 @@ $('#editMCQForm').submit(function(e){
                 setTimeout(function(){ location.reload(); }, 1000);
             },
             error: function(xhr){
-                showMessage('danger', 'Failed to delete MCQ.');
+
+                if(xhr.responseJSON && xhr.responseJSON.error){
+                    showMessage('danger', xhr.responseJSON.error);
+                }else{
+                    showMessage('danger','Delete failed.');
+                }
+
             }
         });
     });

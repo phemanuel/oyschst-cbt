@@ -9,7 +9,7 @@ class Station extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'practical_question', 'total_marks'];
+    protected $fillable = ['title', 'practical_question', 'total_marks', 'duration'];
 
     // A station has many procedures
     public function procedures()

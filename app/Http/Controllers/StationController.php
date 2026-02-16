@@ -25,12 +25,14 @@ class StationController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'practical_question' => 'required'
+            'practical_question' => 'required',
+             'duration' => 'required|integer'
         ]);
 
         Station::create([
             'title' => $request->title,
             'practical_question' => $request->practical_question,
+            'duration' => $request->duration,
         ]);
 
         return redirect()->route('stations.index')
@@ -45,6 +47,7 @@ class StationController extends Controller
             'id' => $station->id,
             'title' => $station->title,
             'practical_question' => $station->practical_question,
+            'duration' => 'required',
         ]);
     }
 
@@ -55,11 +58,13 @@ class StationController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'practical_question' => 'required|string',
+            'duration' => 'required|integer'
         ]);
 
         $station->update([
             'title' => $request->title,
             'practical_question' => $request->practical_question,
+            'duration' => $request->duration,
         ]);
 
         // Return JSON to update table row
@@ -67,6 +72,7 @@ class StationController extends Controller
             'id' => $station->id,
             'title' => $station->title,
             'practical_question' => $station->practical_question,
+            'duration' => $station->duration,
         ]);
     }
 

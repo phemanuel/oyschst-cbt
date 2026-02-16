@@ -22,6 +22,7 @@
                         <th>#</th>
                         <th>Station Name</th>
                         <th>Station Title</th>
+                        <th>MCQ Duration</th>
                         <th>Created</th>
                         <th class="text-center">Actions</th> <!-- New column for Edit/Delete buttons -->
                     </tr>
@@ -32,13 +33,15 @@
                             <td>{{ $loop->iteration }}</td>
                             <td class="station-title">{{ $station->title }}</td>
                             <td class="station-question">{{ Str::limit($station->practical_question, 50) }}</td>
+                            <td class="station-duration">{{ $station->duration }}</td>
                             <td>{{ $station->created_at->format('d M Y') }}</td>
                             <td class="text-center">
                                 <!-- Edit Button triggers modal -->
                                 <button class="btn btn-sm btn-primary edit-station-btn" 
                                         data-id="{{ $station->id }}" 
                                         data-title="{{ $station->title }}" 
-                                        data-question="{{ $station->practical_question }}">
+                                        data-question="{{ $station->practical_question }}"
+                                         data-duration="{{ $station->duration }}">
                                     <i class="mdi mdi-pencil"></i> Edit
                                 </button>
 
@@ -89,6 +92,10 @@
           <div class="form-group">
             <label>Practical Question</label>
             <textarea class="form-control" name="practical_question" id="editStationQuestion" rows="4" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>MCQ Duration</label>
+            <input type="number" class="form-control" name="duration" id="editStationDuration" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -150,11 +157,13 @@ $(document).ready(function(){
         let id = $(this).data('id');
         let title = $(this).data('title');
         let question = $(this).data('question');
+        let duration = $(this).data('duration');
         console.log('[Edit Click] Station ID:', id, 'Title:', title);
 
         $('#editStationId').val(id);
         $('#editStationTitle').val(title);
         $('#editStationQuestion').val(question);
+        $('#editStationDuration').val(duration);
 
         $('#editStationModal').modal('show');
     });
@@ -174,10 +183,18 @@ $(document).ready(function(){
                 console.log('[AJAX Edit Success] Response:', res);
                 $('#editStationModal').modal('hide');
 
-                // Update table row
-                let row = $('#station-' + id);
+                // Update table row dynamically
+                let row = $('#station-' + res.id);
+
                 row.find('.station-title').text(res.title);
                 row.find('.station-question').text(res.practical_question.substring(0,50));
+                row.find('.station-duration').text(res.duration); // Update duration
+
+                // Update the edit button attributes for next modal open
+                let editBtn = row.find('.edit-station-btn');
+                editBtn.data('title', res.title);
+                editBtn.data('question', res.practical_question);
+                editBtn.data('duration', res.duration);
 
                 showMessage('Station updated successfully!', 'success');
             },

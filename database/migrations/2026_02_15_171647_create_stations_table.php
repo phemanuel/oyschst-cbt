@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('practical_question'); // Examiner question
             $table->integer('total_marks')->default(0);
+            $table->integer('duration');
             $table->timestamps();
         });
     }

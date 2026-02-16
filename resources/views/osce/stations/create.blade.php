@@ -37,6 +37,18 @@
                     @enderror
                 </div>
 
+                <div class="form-group">
+                    <label>MCQ Duration(Mins)</label>
+                    <input type="text" name="duration"
+                        class="form-control @error('title') is-invalid @enderror"
+                        placeholder="e.g. 10">
+
+                    @error('duration')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+
                 <button type="submit" class="btn btn-primary">
                     Create Station
                 </button>
