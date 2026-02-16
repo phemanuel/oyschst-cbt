@@ -74,9 +74,20 @@
 </style>
 </head>
 <body style="background-image: url({{ url('assets/images/auth/bg2.jpg') }}); background-size: cover;">
-<div class="d-flex justify-content-center align-items-center" >
+<div class="d-flex justify-content-center align-items-center" >    
     <!-- Main Card -->
     <div class="card shadow-lg p-5" style="max-width: 900px; width: 100%; border-radius: 15px;">
+         <!-- Admin Login Button (Top Right) -->
+        <div style="position: absolute; top: 20px; right: 25px;">
+            <a href="javascript:void(0);" 
+            class="text-dark font-weight-bold"
+            style="font-size: 0.9rem; text-decoration: none;"
+            data-toggle="modal" 
+            data-target="#adminLoginModal">
+                <i class="mdi mdi-lock-outline mr-1"></i> Admin Login
+            </a>
+        </div>
+
         <div class="text-center mb-5 position-relative">
     <div class="text-center mb-5 position-relative">
     <!-- Logo with halo -->
@@ -159,6 +170,7 @@
     </div>
 </div>
 
+
 {{-- Student Login Modal --}}
 <div class="modal fade @if($errors->has('admission_no') || $errors->has('department')) show @endif" id="studentLoginModal" tabindex="-1" aria-labelledby="studentLoginLabel" aria-hidden="true" @if($errors->has('admission_no') || $errors->has('department')) style="display:block;" @endif>
     <div class="modal-dialog">
@@ -193,7 +205,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success w-100">Login as Student</button>
+                    <button type="submit" class="btn btn-dark">Login</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -229,12 +242,49 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary w-100">Login as Examiner</button>
+                    <button type="submit" class="btn btn-dark">Login</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Admin Login Modal -->
+<div class="modal fade" id="adminLoginModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form id="adminLoginForm">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Admin Login</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-dark">Login</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
@@ -256,4 +306,27 @@ document.addEventListener('DOMContentLoaded', function() {
     @endif
 });
 </script>
+
+<script>
+$('#adminLoginForm').submit(function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: "{{ route('osce.admin.login') }}",
+        type: "POST",
+        data: $(this).serialize(),
+        success: function(res){
+            if(res.status === 'success'){
+                window.location.href = res.redirect;
+            }
+        },
+        error: function(xhr){
+            let message = xhr.responseJSON?.message ?? 'Login failed.';
+            alert(message);
+        }
+    });
+});
+
+</script>
+
 

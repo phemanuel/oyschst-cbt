@@ -34,13 +34,10 @@
                         <i class="mdi mdi-account-outline mr-2"></i> Profile
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="{{ route('osce.logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <a class="dropdown-item text-danger" href="{{ route('osce.logout') }}">
                         <i class="mdi mdi-logout mr-2"></i> Logout
                     </a>
-                    <form id="logout-form" action="{{ route('osce.logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
+                    
                 </div>
             </li>
         </ul>

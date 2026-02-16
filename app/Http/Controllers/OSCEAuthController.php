@@ -125,7 +125,6 @@ class OSCEAuthController extends Controller
 
     public function examinerLogin(Request $request)
     {
-        
         try {
 
             // 1. Validate request
@@ -141,6 +140,13 @@ class OSCEAuthController extends Controller
             if (!$user) {
                 throw ValidationException::withMessages([
                     'email' => trans('auth.failed'),
+                ]);
+            }
+
+            // ✅ 3b. Check if user is examiner or superadmin
+            if (!in_array($user->user_type, ['examiner', 'superadmin'])) {
+                throw ValidationException::withMessages([
+                    'email' => 'You are not authorized to access the examiner portal.',
                 ]);
             }
 
@@ -161,10 +167,8 @@ class OSCEAuthController extends Controller
                 $request->boolean('remember')
             )) {
 
-                // Increment login attempts
                 $user->increment('login_attempts');
 
-                // Log failed login
                 FailedLogins::create([
                     'ip_address' => $request->ip(),
                     'email'      => $request->email,
@@ -178,10 +182,8 @@ class OSCEAuthController extends Controller
             // 7. Successful login
             $request->session()->regenerate();
 
-            // Set session key for OSCE middleware
             $request->session()->put('osce_user', $user->id);
 
-            // Reset login attempts
             $user->update([
                 'login_attempts' => 0,
             ]);
@@ -191,7 +193,6 @@ class OSCEAuthController extends Controller
                 return redirect()->route('osce.dashboard');
             }
 
-            // Email not verified
             $request->session()->forget('osce_user');
             Auth::logout();
             return view('auth.email-not-verify');
@@ -204,7 +205,7 @@ class OSCEAuthController extends Controller
 
         } catch (\Throwable $e) {
 
-            Log::error('Admin Login Error', [
+            Log::error('Examiner Login Error', [
                 'message' => $e->getMessage(),
                 'ip'      => $request->ip(),
             ]);
@@ -212,6 +213,56 @@ class OSCEAuthController extends Controller
             return redirect()->route('osce-home')
                 ->with('error', 'A system error occurred. Please try again.');
         }
+    }
+
+
+    public function adminLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        // User not found
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid login credentials'
+            ], 401);
+        }
+
+        // Attempt authentication
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid login credentials'
+            ], 401);
+        }
+
+        // Refresh user instance after login
+        $user = Auth::user();
+
+        // ✅ ROLE CHECK
+        if (!in_array($user->user_type, ['superadmin', 'admin'])) {
+
+            Auth::logout();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized access. Admins only.'
+            ], 403);
+        }
+
+        $request->session()->regenerate();
+        $request->session()->put('osce_user', $user->id);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login successful',
+            'redirect' => route('osce.dashboard')
+        ]);
     }
 
 

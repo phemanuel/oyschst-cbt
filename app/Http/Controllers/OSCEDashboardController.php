@@ -35,7 +35,7 @@ class OSCEDashboardController extends Controller
         
        $collegeSetup = CollegeSetup::first(); 
         $students = StudentAdmission::all();
-        $users = User::all();
+        $users = User::where('user_type', 'examiner')->get();
         $stations = Station::all();
         $departments = Department::all();
         $questions = QuestionSetting::all();

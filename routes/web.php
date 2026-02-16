@@ -473,6 +473,7 @@ Route::get('/', function () {
         Route::get('/', [OSCEAuthController::class, 'osceHome'])->name('osce-home');
         Route::post('/student', [OSCEAuthController::class, 'studentLogin'])->name('student.login');
         Route::post('/examiner', [OSCEAuthController::class, 'examinerLogin'])->name('examiner.login');
+        Route::post('/admin', [OSCEAuthController::class, 'adminLogin'])->name('osce.admin.login');
 
         // Protected OSCE routes (middleware applied)
         Route::middleware('osce.access')->group(function () {
@@ -499,7 +500,7 @@ Route::get('/', function () {
             // Procedure routes
             Route::get('/procedures', [ProcedureController::class, 'index'])->name('procedures.index');
             Route::post('/procedures', [ProcedureController::class, 'store'])->name('procedures.store');
-            Route::post('/procedures/{procedure}', [ProcedureController::class, 'update'])->name('procedures.update');
+            Route::put('/procedures/{procedure}', [ProcedureController::class, 'update'])->name('procedures.update');
             Route::delete('/procedures/{procedure}', [ProcedureController::class, 'destroy'])->name('procedures.destroy');
 
             Route::get('/logout', [OSCEDashboardController::class, 'adminLogout'])
