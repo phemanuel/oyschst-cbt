@@ -16,9 +16,9 @@ return new class extends Migration
             
             $table->unsignedBigInteger('student_id'); // match student_admissions.id
             $table->unsignedBigInteger('station_id'); // match stations.id
-            $table->integer('examiner_score')->default(0);
-            $table->integer('mcq_score')->default(0);
-            $table->integer('total_score')->default(0);
+            $table->decimal('examiner_score,3,2')->default(0);
+            $table->decimal('mcq_score,3,2')->default(0);
+            $table->decimal('total_score,3,2')->default(0);
             $table->timestamps();
 
             // Foreign keys

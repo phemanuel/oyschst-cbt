@@ -13,7 +13,21 @@
 
     <!-- Google Fonts Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+    /* Add this CSS to your page or app.css */
+.custom-modal-width {
+    max-width: 1400px; /* or whatever width you prefer */
+}
 
+.graded-students ul li {
+    padding: 2px 0;
+    font-size: 0.9rem;
+}
+.graded-students ul li .badge {
+    font-size: 0.75rem;
+}
+
+</style>
     @stack('styles')
 </head>
 <body class="bg-light">
@@ -58,6 +72,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.results.index') }}">
                                 <i class="mdi mdi-file-chart-outline mr-2"></i> Results
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('osce.logout') }}">
+                                <i class="mdi mdi-logout mr-2"></i> Logout
                             </a>
                         </li>
                     </ul>

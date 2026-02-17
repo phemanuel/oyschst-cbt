@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id'); // matches student_admissions.id
             $table->unsignedBigInteger('station_id'); // matches stations.id
             $table->unsignedBigInteger('procedure_id'); // matches procedures.id
-            $table->integer('score');
+            $table->decimal('score,3,2');
             $table->timestamps();
 
             $table->foreign('student_id')

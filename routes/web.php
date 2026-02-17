@@ -519,9 +519,12 @@ Route::get('/', function () {
 
             Route::get('/examiner/dashboard', [ExaminerController::class, 'dashboard'])->name('examiner.dashboard');
             Route::get('/examiner/station/{station}/students', [ExaminerController::class, 'stationStudents'])
-            ->name('examiner.station.students');
-            Route::get('/examiner/station/{station}/student/{student}/procedures', [ExaminerController::class, 'studentProcedures'])
-            ->name('examiner.student.procedures');
+            ->name('examiner.station.students');            
+            Route::get('/examiner/station/{station}/student/{student}', [ExaminerController::class, 'startProcedure'])
+            ->name('examiner.start.procedure');
+            Route::post('/examiner/station/{station}/student/{student}/score', [ExaminerController::class, 'storeProcedureScores'])
+            ->name('examiner.store.procedure');
+            
 
             //---Students route
             Route::get('students', [OSCEStudentController::class, 'index'])->name('students.index');

@@ -18,7 +18,7 @@
                     <label>Station Name</label>
                     <input type="text" name="title"
                         class="form-control @error('title') is-invalid @enderror"
-                        placeholder="e.g. Station 1 - Vital Signs">
+                        placeholder="e.g. Station 1">
 
                     @error('title')
                         <small class="text-danger">{{ $message }}</small>
@@ -27,14 +27,13 @@
 
                 <div class="form-group">
                     <label>Station Title</label>
-                    <textarea name="practical_question"
+                    <input type="text" name="practical_question"
                         class="form-control @error('practical_question') is-invalid @enderror"
-                        rows="5"
-                        placeholder="Enter the practical instruction for examiner..."></textarea>
+                        placeholder="e.g.  Vital Signs">
 
                     @error('practical_question')
                         <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                    @enderror                    
                 </div>
 
                 <div class="form-group">

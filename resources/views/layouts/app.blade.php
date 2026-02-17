@@ -84,6 +84,11 @@
                                 <i class="mdi mdi-file-chart-outline mr-2"></i> Results
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('osce.logout') }}">
+                                <i class="mdi mdi-logout mr-2"></i> Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>

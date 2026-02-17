@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id'); // must match student_admissions.id
             $table->unsignedBigInteger('mcq_id');     // must match mcq_questions.id
             $table->unsignedBigInteger('option_id')->nullable(); // mcq_options.id
-            $table->integer('score')->nullable();
+            $table->decimal('score,3,2')->nullable();
             $table->timestamps();
 
             // Foreign keys

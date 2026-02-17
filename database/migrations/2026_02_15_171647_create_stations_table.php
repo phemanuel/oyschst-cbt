@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // BIGINT UNSIGNED PRIMARY KEY
             $table->string('title');
             $table->text('practical_question'); // Examiner question
-            $table->integer('total_marks')->default(0);
+            $table->decimal('total_marks,3,2')->default(0);
             $table->integer('duration');
             $table->timestamps();
         });
