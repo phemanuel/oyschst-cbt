@@ -71,9 +71,10 @@
 			<hr>
             <table width="394" border="0" align="center" cellpadding="3" cellspacing="3">
   <tr>
+     <td width="185"><a href="{{route('login')}}"><img src="{{asset('dashboard/dist/img/student.png')}}" width="185" height="185" /></a> </td>
     <td width="185"><a href="{{route('admin-login')}}"><img src="{{asset('dashboard/dist/img/admin.png')}}" width="185" height="185" /></a> </td>
     <td width="10">&nbsp;</td>
-    <td width="185"><a href="{{route('login')}}"><img src="{{asset('dashboard/dist/img/student.png')}}" width="185" height="185" /></a> </td>
+   
   </tr>
 </table>
           

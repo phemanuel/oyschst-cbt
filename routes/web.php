@@ -17,6 +17,7 @@ use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\MCQController;
 use App\Http\Controllers\ExaminerController;
 use App\Http\Controllers\OSCEStudentController;
+use App\Http\Controllers\StudentExamController;
 /*
 /*
 |--------------------------------------------------------------------------
@@ -484,11 +485,7 @@ Route::get('/', function () {
             Route::get('/dashboard', [OSCEDashboardController::class, 'dashboard'])
             ->name('osce.dashboard');
             Route::get('/admin/profile', [OSCEDashboardController::class, 'adminProfile'])
-            ->name('admin.profile');             
-            Route::get('/admin/examiners', [OSCEDashboardController::class, 'adminExaminers'])
-            ->name('admin.examiners.index');
-            Route::get('/admin/student', [OSCEDashboardController::class, 'adminStudents'])
-            ->name('admin.students.index');
+            ->name('admin.profile'); 
             Route::get('/admin/results', [OSCEDashboardController::class, 'adminResults'])
             ->name('admin.results.index');
             // Stations route
@@ -510,6 +507,18 @@ Route::get('/', function () {
             Route::post('/mcqs', [MCQController::class, 'store'])->name('mcqs.store');
             Route::put('/mcqs/{mcq}', [MCQController::class, 'update'])->name('mcqs.update');
             Route::delete('/mcqs/{mcq}', [MCQController::class, 'destroy'])->name('mcqs.destroy');
+
+            // Student Dashboard
+            Route::get('/student/dashboard', [StudentExamController::class, 'studentDashboard'])
+                ->name('student.dashboard');
+            Route::get('/student/station/{station}', [StudentExamController::class, 'loadStation'])
+                ->name('student.station');
+            Route::post('/student/save-answer', [StudentExamController::class, 'saveAnswer'])
+                ->name('student.save.answer');
+            Route::post('/student/station/{station}/submit', [StudentExamController::class, 'submitStation'])
+                ->name('student.station.submit');
+            Route::post('/student/save-time', [StudentExamController::class, 'saveTime'])
+                ->name('student.save.time');
 
             // Examiners route
             Route::get('examiners', [ExaminerController::class, 'index'])->name('examiners.index');
@@ -538,6 +547,19 @@ Route::get('/', function () {
 
             // Other OSCE routes here
             // Route::get('/station/{id}', ...);
+        });
+
+        Route::middleware('osce.student')->group(function () {
+                
+            Route::get('/student/dashboard', [StudentExamController::class, 'studentDashboard'])
+                ->name('student.dashboard');
+            Route::get('/student/station/{station}', [StudentExamController::class, 'loadStation'])
+                ->name('student.station');
+            Route::post('/student/save-answer', [StudentExamController::class, 'saveAnswer'])
+                ->name('student.save.answer');
+            Route::post('/student/station/{station}/submit', [StudentExamController::class, 'submitStation'])
+                ->name('student.station.submit');
+
         });
     });
 

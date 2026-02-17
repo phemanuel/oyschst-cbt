@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSCE :: Admin</title>
+    <title>OSCE ::Student</title>
 
     <link rel="shortcut icon" href="{{ asset('/favicon.png') }}">
 
@@ -15,7 +15,21 @@
 
     <!-- Google Fonts Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+    /* Add this CSS to your page or app.css */
+.custom-modal-width {
+    max-width: 1400px; /* or whatever width you prefer */
+}
 
+.graded-students ul li {
+    padding: 2px 0;
+    font-size: 0.9rem;
+}
+.graded-students ul li .badge {
+    font-size: 0.75rem;
+}
+
+</style>
     @stack('styles')
 </head>
 <body class="bg-light">
@@ -23,13 +37,18 @@
     <!-- Top Navbar -->
     <nav class="navbar navbar-expand navbar-dark bg-primary shadow-sm">
         <a class="navbar-brand font-weight-bold" href="{{ route('osce.dashboard') }}">
-            OSCE Admin
+            OSCE Student
         </a>
         <ul class="navbar-nav ml-auto">
             <!-- Profile Dropdown -->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown">
-                    <i class="mdi mdi-account-circle-outline"></i> {{ auth()->user()->name }}
+                    <i class="mdi mdi-account-circle-outline"></i>
+                   @php
+                        $studentId = session('osce_student');
+                        $student = \App\Models\StudentAdmission::find($studentId); // or your model
+                    @endphp
+                    {{ $student->surname ?? 'Guest' }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <!-- <a class="dropdown-item" href="{{ route('admin.profile') }}">
@@ -52,40 +71,17 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('osce.dashboard') }}">
+                            <a class="nav-link" href="{{ route('student.dashboard') }}">
                                 <i class="mdi mdi-view-dashboard-outline mr-2"></i> Dashboard
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('stations.index') }}">
-                                <i class="mdi mdi-view-dashboard-outline mr-2"></i> Stations
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('procedures.index') }}">
-                                <i class="mdi mdi-clipboard-list-outline mr-2"></i> Procedures
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('mcqs.index') }}">
-                                <i class="mdi mdi-school-outline mr-2"></i> MCQs
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('examiners.index') }}">
-                                <i class="mdi mdi-account-tie mr-2"></i> Examiners
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('students.index') }}">
-                                <i class="mdi mdi-account-group mr-2"></i> Students
-                            </a>
-                        </li>
-                        <li class="nav-item">
+                        
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.results.index') }}">
                                 <i class="mdi mdi-file-chart-outline mr-2"></i> Results
                             </a>
-                        </li>
+                        </li> -->
+
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('osce.logout') }}">
                                 <i class="mdi mdi-logout mr-2"></i> Logout

@@ -35,76 +35,35 @@ class OSCEAuthController extends Controller
     public function studentLogin(Request $request)
     {
         try {
-
-            // 1. Validate input
-            $credentials = $request->validate([
+            // 1️⃣ Validate input
+            $request->validate([
                 'admission_no' => 'required|string',
                 'department'   => 'required|string',
             ]);
 
-            $normalizedAdmissionNo = $this->normalizeAdmissionNo(
-                $credentials['admission_no']
-            );
+            // 2️⃣ Normalize admission number (remove spaces, slashes, backslashes)
+            $normalizedAdmissionNo = $this->normalizeAdmissionNo($request->admission_no);
 
+            // 3️⃣ Fetch student by normalized admission number and department
             $student = StudentAdmission::where('admission_no', $normalizedAdmissionNo)
-                ->where('department', $credentials['department'])
+                ->where('department', $request->department)
                 ->first();
 
-            // 3. Check if student exists
             if (!$student) {
                 return redirect()->back()
                     ->withInput()
                     ->with('error', 'Invalid admission number or programme.');
             }
+            
+            $request->session()->regenerate();
 
-            $studentId   = $student->id;
-            $loginStatus = $student->login_status;
+            $request->session()->put('osce_student', $student->id);
 
-            // 4. Handle login status
-            switch ($loginStatus) {
-
-                case 1:
-                    return redirect()->back()
-                        ->with('error', 'You are already logged in on another system.');
-
-                case 2:
-                    return redirect()->back()
-                        ->with('error', 'You have already completed this test.');
-
-                case 0:
-
-                    // 5. Check exam availability
-                    $examSetting = ExamSetting::where('department', $student->department)
-                        ->where('level', $student->level)
-                        ->first();
-
-                    if (!$examSetting) {
-                        return redirect()->back()
-                            ->with('error', 'The exam is not available for your programme.');
-                    }
-
-                    // 6. Check if exam is locked
-                    if ($examSetting->lock_status == 1) {
-                        return redirect()->back()
-                            ->with('error', 'The exam has been locked by the examiner.');
-                    }
-
-                    // 7. Update login status
-                    $student->update([
-                        'login_status' => 1,
-                        'last_login_at' => now(), // optional but useful
-                    ]);
-
-                    // 8. Redirect to dashboard
-                    return redirect()->route('dashboard', ['id' => $studentId]);
-
-                default:
-                    return redirect()->back()
-                        ->with('error', 'Invalid login state detected.');
-            }
+            // 8️⃣ Redirect to student dashboard
+            return redirect()->route('student.dashboard', ['id' => $student->id]);
 
         } catch (\Throwable $e) {
-
+            // 9️⃣ Log error for debugging
             Log::error('Student CBT Login Error', [
                 'message' => $e->getMessage(),
                 'trace'   => $e->getTraceAsString(),
@@ -114,6 +73,8 @@ class OSCEAuthController extends Controller
                 ->with('error', 'A system error occurred. Please contact the administrator.');
         }
     }
+
+
 
     private function normalizeAdmissionNo(string $admissionNo): string
     {

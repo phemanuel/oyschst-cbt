@@ -11,6 +11,7 @@ use App\Models\StationResult;
 use App\Models\ExaminerScore;
 use App\Models\Procedure;
 use App\Models\StudentAdmission;
+use App\Models\StudentMcqAnswer;
 use Illuminate\Support\Facades\DB;
 
 class ExaminerController extends Controller
@@ -134,27 +135,76 @@ class ExaminerController extends Controller
 
         $students = $query->orderBy('surname')->limit(100)->get();
 
+        // Add hasResult flag for each student
+        $students->map(function($student) use ($stationId) {
+            $student->hasResult = ExaminerScore::where('student_id', $student->id)
+                ->where('station_id', $stationId)
+                ->exists();
+            return $student;
+        });
+
         return response()->json([
             'students' => $students
         ]);
     }
 
+
     public function startProcedure(Station $station, StudentAdmission $student)
     {
+        // Fetch all stations ordered by ID
+        $allStations = Station::orderBy('id')->get();
+
+        // Find index of current station
+        $stationIndex = $allStations->search(fn($s) => $s->id == $station->id);
+
+        // Check previous station requirements
+        if ($stationIndex > 0) {
+            $previousStation = $allStations[$stationIndex - 1];
+
+            // 1️⃣ Check previous procedure completion
+            $procedureCompleted = ExaminerScore::where('student_id', $student->id)
+                ->where('station_id', $previousStation->id)
+                ->exists();
+
+            // 2️⃣ Check previous MCQs completion
+            $previousMCQIds = $previousStation->mcqQuestions()->pluck('id')->toArray();
+            $mcqCompleted = StudentMcqAnswer::where('student_id', $student->id)
+                ->whereIn('mcq_id', $previousMCQIds)
+                ->exists();
+
+            // If either is missing, redirect with message
+            if (!$procedureCompleted || !$mcqCompleted) {
+                $message = "Student cannot start this procedure. ";
+                if (!$procedureCompleted && !$mcqCompleted) {
+                    $message .= "Previous station's procedure and MCQs are not completed.";
+                } elseif (!$procedureCompleted) {
+                    $message .= "Previous station's procedure is not completed.";
+                } elseif (!$mcqCompleted) {
+                    $message .= "Previous station's MCQs are not completed.";
+                }
+
+                return redirect()->back()->with('error', $message);
+            }
+        }
+
         // Fetch all procedures for this station
         $procedures = $station->procedures()->orderBy('id')->get();
 
         // Fetch existing examiner scores for this student and station
         $examinerScores = ExaminerScore::where('station_id', $station->id)
             ->where('student_id', $student->id)
-            ->pluck('score', 'procedure_id') // key = procedure_id, value = score
+            ->pluck('score', 'procedure_id')
             ->toArray();
+
+        // Check if student has already started/completed this procedure
+        $hasResult = !empty($examinerScores);
 
         return view('osce.examiners.start_procedure', compact(
             'station',
             'student',
             'procedures',
-            'examinerScores'
+            'examinerScores',
+            'hasResult'
         ));
     }
 
@@ -195,10 +245,11 @@ class ExaminerController extends Controller
             $stationResult = StationResult::updateOrCreate(
                 [
                     'student_id' => $student->id,
-                    'station_id' => $station->id,
+                    'station_id' => $station->id,                    
                 ],
                 [
                     'examiner_score' => $totalExaminerScore,
+                    'mcq_time_left' => $station->duration,
                 ]
             );
 
@@ -212,7 +263,7 @@ class ExaminerController extends Controller
             DB::commit();
 
             return redirect()->route('examiner.dashboard')
-                ->with('success', 'Scores saved successfully.');
+                ->with('success', 'Procedure Scores saved successfully.');
 
         } catch (\Exception $e) {
 

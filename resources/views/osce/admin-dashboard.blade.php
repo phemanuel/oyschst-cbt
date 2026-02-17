@@ -64,10 +64,10 @@
             <a href="{{route('stations.create')}}" class="btn btn-primary mr-2 mb-2">
                 Create Station
             </a>
-            <a href="#" class="btn btn-success mr-2 mb-2">
+            <a href="{{route('mcqs.index')}}" class="btn btn-success mr-2 mb-2">
                 Upload MCQ Questions
             </a>
-            <a href="#" class="btn btn-warning mr-2 mb-2">
+            <a href="{{route('students.index')}}" class="btn btn-warning mr-2 mb-2">
                 Manage Students
             </a>
             <a href="#" class="btn btn-danger mb-2">

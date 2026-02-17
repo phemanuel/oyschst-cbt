@@ -75,8 +75,26 @@
 </head>
 <body style="background-image: url({{ url('assets/images/auth/bg2.jpg') }}); background-size: cover;">
 <div class="d-flex justify-content-center align-items-center" >    
+
     <!-- Main Card -->
     <div class="card shadow-lg p-5" style="max-width: 900px; width: 100%; border-radius: 15px;">
+                @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show">
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show">
+        {{ session('error') }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+@endif
          <!-- Admin Login Button (Top Right) -->
         <div style="position: absolute; top: 20px; right: 25px;">
             <a href="javascript:void(0);" 
@@ -139,28 +157,30 @@
 </div>
 
         <div class="row justify-content-center">
-    <!-- Student Card -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm hover-card cursor-pointer" data-toggle="modal" data-target="#studentLoginModal">
-            <div class="card-body text-center py-5">
-                <i class="mdi mdi-school-outline display-4 text-success mb-3"></i>
-                <h4 class="card-title">Student</h4>
-                <p class="card-text text-muted">Login to access your MCQ stations and practical tests.</p>
+            <!-- Examiner Card -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm hover-card cursor-pointer" data-toggle="modal" data-target="#examinerLoginModal">
+                    <div class="card-body text-center py-5">
+                        <i class="mdi mdi-account-tie display-4 text-primary mb-3"></i>
+                        <h4 class="card-title">Examiner</h4>
+                        <p class="card-text text-muted">Login to grade students at practical stations.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+            
+            <!-- Student Card -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm hover-card cursor-pointer" data-toggle="modal" data-target="#studentLoginModal">
+                    <div class="card-body text-center py-5">
+                        <i class="mdi mdi-school-outline display-4 text-success mb-3"></i>
+                        <h4 class="card-title">Student</h4>
+                        <p class="card-text text-muted">Login to access your MCQ stations and practical tests.</p>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Examiner Card -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm hover-card cursor-pointer" data-toggle="modal" data-target="#examinerLoginModal">
-            <div class="card-body text-center py-5">
-                <i class="mdi mdi-account-tie display-4 text-primary mb-3"></i>
-                <h4 class="card-title">Examiner</h4>
-                <p class="card-text text-muted">Login to grade students at practical stations.</p>
-            </div>
+            
         </div>
-    </div>
-</div>
         <!-- Footer -->
         <div class="text-center mt-5">
             <small class="text-muted">

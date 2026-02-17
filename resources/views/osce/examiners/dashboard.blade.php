@@ -195,6 +195,9 @@ $(document).ready(function() {
     // Properly construct full name
     let fullName = [stu.first_name, stu.surname, stu.other_name].filter(Boolean).join(' ');
 
+    let btnClass = stu.hasResult ? 'btn-warning' : 'btn-success';
+    let btnText = stu.hasResult ? 'Review' : 'Start Procedure';
+
     tbody.append(`
         <tr class="student-row" data-student-id="${stu.id}" data-station-id="${stationId}">
             <td>${i+1}</td>
@@ -204,8 +207,8 @@ $(document).ready(function() {
             <td>${stu.department}</td>
             <td>
                 <a href="/osce/examiner/station/${stationId}/student/${stu.id}"                   
-                  class="btn btn-success btn-sm">
-                    Start Procedure
+                class="btn ${btnClass} btn-sm">
+                    ${btnText}
                 </a>
             </td>
         </tr>

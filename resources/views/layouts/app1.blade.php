@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSCE :: Admin</title>
+    <title>OSCE :: Examiner</title>
+
+    <link rel="shortcut icon" href="{{ asset('/favicon.png') }}">
 
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -44,9 +46,9 @@
                     <i class="mdi mdi-account-circle-outline"></i> {{ auth()->user()->name }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                    <!-- <a class="dropdown-item" href="{{ route('admin.profile') }}">
                         <i class="mdi mdi-account-outline mr-2"></i> Profile
-                    </a>
+                    </a> -->
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{{ route('osce.logout') }}">
                         <i class="mdi mdi-logout mr-2"></i> Logout
@@ -69,11 +71,11 @@
                             </a>
                         </li>
                         
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.results.index') }}">
                                 <i class="mdi mdi-file-chart-outline mr-2"></i> Results
                             </a>
-                        </li>
+                        </li> -->
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('osce.logout') }}">
