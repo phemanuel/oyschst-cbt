@@ -1,58 +1,86 @@
 @extends('layouts.app2')
 
 @section('content')
-<div class="container">
+<div class="container mt-4">
 
-    <h3>{{ $station->title }}</h3>
-    <p>{{ $station->practical_question }}</p>
-
-    <!-- Timer Card -->
-    <div class="mb-3">
-        <div id="timerCard" class="p-2 text-center text-white font-weight-bold" 
-             style="font-size:1.5rem; width:150px; border-radius:8px; background-color:green;">
-            Time Left: <span id="timer">{{ gmdate('i:s', $stationResult->mcq_time_left * 60) }}</span>
+    <!-- Station Info Card -->
+    <div class="card shadow-lg mb-3 border-primary">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-book-open"></i> {{ $station->title }} - {{ $station->practical_question }}</h4>
+            <div id="timerCard" class="p-2 text-center text-white font-weight-bold" 
+                 style="font-size:1.2rem; width:150px; border-radius:8px; background-color:green;">
+                <i class="fas fa-hourglass-half"></i> Time Left: 
+                <span id="timer">{{ gmdate('i:s', $stationResult->mcq_time_left * 60) }}</span>
+            </div>
         </div>
+        <!-- <div class="card-body">
+            <p></p>
+        </div> -->
     </div>
 
-    <div id="mcq-container" class="mt-3">
-        @foreach($questions as $index => $question)
-        <div class="mcq-question" data-index="{{ $index }}" style="{{ $index === 0 ? '' : 'display:none;' }}">
-            <h5>Q{{ $index+1 }}: {{ $question->question }}</h5>
-            <ul class="list-group">
-                @foreach($question->options as $option)
-                    <li class="list-group-item">
-                        <input type="radio" 
-                               name="question_{{ $question->id }}" 
-                               value="{{ $option->id }}"
-                               class="mcq-option"
-                               data-station="{{ $station->id }}"
-                               data-mark="{{ $question->mark }}"
-                               {{ isset($answers[$question->id]) && $answers[$question->id] == $option->id ? 'checked' : '' }}>
-                        {{ $option->option_text }}
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-        @endforeach
-    </div>
-
-    <div class="mt-3">
-        <button id="prevBtn" class="btn btn-secondary">Previous</button>
-        <button id="nextBtn" class="btn btn-primary">Next</button>
-        <button id="submitBtn" class="btn btn-success">Submit</button>
-    </div>
-
-    <div class="mt-3">
-        <strong>Question Navigation:</strong>
-        <div id="questionNav" class="mt-1">
+    <!-- MCQ Question Card -->
+    <div id="mcq-container" class="card shadow mb-3 border-info">
+        <div class="card-body">
             @foreach($questions as $index => $question)
-                <button type="button" class="btn btn-sm btn-outline-secondary q-nav-btn {{ isset($answers[$question->id]) ? 'btn-success' : '' }}" data-index="{{ $index }}">
-                    {{ $index+1 }}
-                </button>
+            <div class="mcq-question" data-index="{{ $index }}" style="{{ $index === 0 ? '' : 'display:none;' }}">
+                <h5><i class="fas fa-question-circle"></i> Q{{ $index+1 }}: {{ $question->question }}</h5>
+                <ul class="list-group mt-2">
+                    @foreach($question->options as $option)
+                        <li class="list-group-item">
+                            <input type="radio" 
+                                   name="question_{{ $question->id }}" 
+                                   value="{{ $option->id }}"
+                                   class="mcq-option"
+                                   data-station="{{ $station->id }}"
+                                   data-mark="{{ $question->mark }}"
+                                   {{ isset($answers[$question->id]) && $answers[$question->id] == $option->id ? 'checked' : '' }}>
+                            {{ $option->option_text }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
             @endforeach
         </div>
     </div>
+
+    <!-- Navigation Buttons Card -->
+    <div class="card shadow mb-3 border-success">
+        <div class="card-body d-flex justify-content-between">
+            <button id="prevBtn" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <div>
+                <button id="nextBtn" class="btn btn-primary mr-2">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="submitBtn" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Submit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Navigation Card -->
+    <div class="card shadow border-warning">
+        <div class="card-body">
+            <strong>Question Navigation:</strong>
+            <div id="questionNav" class="mt-2">
+                @foreach($questions as $index => $question)
+                    <button type="button" 
+                            class="btn btn-sm q-nav-btn {{ isset($answers[$question->id]) ? 'btn-success' : 'btn-outline-secondary' }}" 
+                            data-index="{{ $index }}">
+                        {{ $index+1 }}
+                    </button>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<!-- Include FontAwesome for Icons -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+
 
 <!-- Submit Confirmation Modal -->
 <div class="modal fade" id="confirmSubmitModal" tabindex="-1" role="dialog" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
@@ -152,8 +180,8 @@ $(document).ready(function(){
         if(percentage <= 10){
             timerCard.addClass('bg-danger blink text-white'); // blink stays
         } else if(percentage <= 50){
-            timerCard.addClass('bg-warning text-dark');
-            timerCard.removeClass('blink'); // remove blink if not urgent
+            timerCard.addClass('bg-warning blink text-dark');
+            // timerCard.removeClass('blink'); // remove blink if not urgent
         } else {
             timerCard.addClass('bg-success text-white');
             timerCard.removeClass('blink'); // remove blink if not urgent
