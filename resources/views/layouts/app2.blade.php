@@ -74,13 +74,8 @@
                             <a class="nav-link" href="{{ route('student.dashboard') }}">
                                 <i class="mdi mdi-view-dashboard-outline mr-2"></i> Dashboard
                             </a>
-                        </li>
+                        </li>                     
                         
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.results.index') }}">
-                                <i class="mdi mdi-file-chart-outline mr-2"></i> Results
-                            </a>
-                        </li> -->
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('osce.logout') }}">

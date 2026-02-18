@@ -7,6 +7,7 @@ use App\Models\Station;
 use App\Models\StationResult;
 use App\Models\StudentAdmission;
 use App\Models\StudentMCQAnswer;
+use App\Models\ExaminerScore;
 
 class StudentExamController extends Controller
 {
@@ -276,11 +277,11 @@ class StudentExamController extends Controller
 
         $timeLeft = $request->time_left; // in minutes
 
-            \Log::info('Saving time', [
-        'student_id' => $studentId,
-        'station_id' => $station->id,
-        'time_left' => $timeLeft
-    ]);
+    //         \Log::info('Saving time', [
+    //     'student_id' => $studentId,
+    //     'station_id' => $station->id,
+    //     'time_left' => $timeLeft
+    // ]);
 
         StationResult::updateOrCreate(
             ['student_id' => $studentId, 'station_id' => $station->id],
@@ -288,6 +289,52 @@ class StudentExamController extends Controller
         );
 
         return response()->json(['success' => true]);
+    }
+
+    // Display all stations with "Preview" buttons
+
+    public function resultsPage()
+    {
+        $stations = Station::orderBy('id')->get();
+        return view('osce.results.index', compact('stations'));
+    }
+
+    // Fetch all students who submitted MCQ for a station
+    public function getStationResults(Station $station)
+    {
+        $results = StationResult::with('student')
+            ->where('station_id', $station->id)
+            ->where('mcq_submitted', 1)
+            ->get();
+
+        return response()->json($results);
+    }
+
+    // Fetch detailed student exam preview
+    public function previewStudentResult($studentId, \App\Models\Station $station)
+    {
+        $student = StudentAdmission::findOrFail($studentId);
+
+        // Procedures
+        $procedures = ExaminerScore::with('procedure')
+            ->where('student_id', $studentId)
+            ->where('station_id', $station->id)
+            ->get();
+
+        // MCQs
+        $mcqs = $station->mcqQuestions()->with('options')->get();
+
+        $studentAnswers = \DB::table('student_mcq_answers')
+            ->where('student_id', $studentId)
+            ->whereIn('mcq_id', $mcqs->pluck('id'))
+            ->pluck('option_id', 'mcq_id');
+
+        return response()->json([
+            'student' => $student,
+            'procedures' => $procedures,
+            'mcqs' => $mcqs,
+            'studentAnswers' => $studentAnswers,
+        ]);
     }
 
 }

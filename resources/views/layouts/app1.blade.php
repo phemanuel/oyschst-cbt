@@ -71,11 +71,11 @@
                             </a>
                         </li>
                         
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.results.index') }}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('osce.results') }}">
                                 <i class="mdi mdi-file-chart-outline mr-2"></i> Results
                             </a>
-                        </li> -->
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('osce.logout') }}">

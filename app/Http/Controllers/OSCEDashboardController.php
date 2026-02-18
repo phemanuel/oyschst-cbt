@@ -54,4 +54,22 @@ class OSCEDashboardController extends Controller
 
 
     }
+
+    public function dashboardCheck()
+    {
+        $user = auth()->user();
+
+        if(empty($user)){
+            return redirect()->route('osce.home')->with('error', 'You need to logi to gain access.');
+        }
+        
+        $userType == $user->user_type;
+
+        if($userType === 'superadmin'){
+            return redirect()->route('osce.dashboard');
+        }
+        else{
+            return redirect()->route('examiner.dashboard');
+        }
+    }
 }

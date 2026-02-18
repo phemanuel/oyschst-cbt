@@ -484,10 +484,16 @@ Route::get('/', function () {
             // Example: dashboard after login
             Route::get('/dashboard', [OSCEDashboardController::class, 'dashboard'])
             ->name('osce.dashboard');
+            Route::get('/dashboard/check', [OSCEDashboardController::class, 'dashboardCheck'])
+            ->name('dashboard.check');
             Route::get('/admin/profile', [OSCEDashboardController::class, 'adminProfile'])
-            ->name('admin.profile'); 
-            Route::get('/admin/results', [OSCEDashboardController::class, 'adminResults'])
-            ->name('admin.results.index');
+            ->name('admin.profile');            
+
+            //---Students route
+            Route::get('students', [OSCEStudentController::class, 'index'])->name('students.index');
+            Route::post('students', [OSCEStudentController::class, 'store'])->name('students.store');
+            Route::put('students/{student}', [OSCEStudentController::class, 'update'])->name('students.update');
+            Route::delete('students/{student}', [OSCEStudentController::class, 'destroy'])->name('students.destroy');
             // Stations route
             Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
             Route::get('/stations/create', [StationController::class, 'create'])->name('stations.create');
@@ -501,8 +507,7 @@ Route::get('/', function () {
             Route::put('/procedures/{procedure}', [ProcedureController::class, 'update'])->name('procedures.update');
             Route::delete('/procedures/{procedure}', [ProcedureController::class, 'destroy'])->name('procedures.destroy');
 
-            //---mcqs route
-           
+            //---mcqs route           
             Route::get('/mcqs', [MCQController::class, 'index'])->name('mcqs.index');
             Route::post('/mcqs', [MCQController::class, 'store'])->name('mcqs.store');
             Route::put('/mcqs/{mcq}', [MCQController::class, 'update'])->name('mcqs.update');
@@ -521,13 +526,12 @@ Route::get('/', function () {
             ->name('examiner.start.procedure');
             Route::post('/examiner/station/{station}/student/{student}/score', [ExaminerController::class, 'storeProcedureScores'])
             ->name('examiner.store.procedure');
-            
 
-            //---Students route
-            Route::get('students', [OSCEStudentController::class, 'index'])->name('students.index');
-            Route::post('students', [OSCEStudentController::class, 'store'])->name('students.store');
-            Route::put('students/{student}', [OSCEStudentController::class, 'update'])->name('students.update');
-            Route::delete('students/{student}', [OSCEStudentController::class, 'destroy'])->name('students.destroy');
+            Route::get('/results', [StudentExamController::class, 'resultsPage'])->name('osce.results');
+            Route::get('/results/station/{station}', [StudentExamController::class, 'getStationResults'])
+                ->name('osce.results.station');
+            Route::get('/results/student/{student}/{station}', [StudentExamController::class, 'previewStudentResult'])
+                ->name('osce.results.student.preview'); 
             
 
             Route::get('/logout', [OSCEDashboardController::class, 'adminLogout'])
