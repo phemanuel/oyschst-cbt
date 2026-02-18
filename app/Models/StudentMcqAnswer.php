@@ -9,7 +9,7 @@ class StudentMcqAnswer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'mcq_id', 'option_id', 'score'];
+    protected $fillable = ['student_id', 'station_id','mcq_id', 'option_id', 'score'];
 
     public function student()
     {

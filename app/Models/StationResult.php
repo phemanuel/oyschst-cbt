@@ -9,7 +9,8 @@ class StationResult extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'station_id', 'examiner_score', 'mcq_score', 'total_score','mcq_time_left'];
+    protected $fillable = ['student_id', 'station_id', 'examiner_score', 'mcq_score', 
+    'total_score','mcq_time_left','mcq_submitted'];
 
     public function student()
     {

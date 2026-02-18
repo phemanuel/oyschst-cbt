@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Station;
-use App\Models\MCQQuestion;
-use App\Models\MCQOption;
-use App\Models\StudentMCQAnswer;
-use App\Models\StudentAdmission;
 use App\Models\StationResult;
-use Illuminate\Support\Facades\Auth;
+use App\Models\StudentAdmission;
+use App\Models\StudentMCQAnswer;
 
 class StudentExamController extends Controller
 {
@@ -18,146 +15,272 @@ class StudentExamController extends Controller
         $studentId = $request->session()->get('osce_student');
         if (!$studentId) {
             return redirect()->route('osce-home')
-        ->with('error', 'Please login as a student to access this page.');
+                ->with('error', 'Please login as a student to access this page.');
         }
 
-        $student = StudentAdmission::find($studentId); // or your StudentAdmission model
-        $stations = Station::all();
-        $completedStations = StationResult::where('student_id', $student->id)
-        ->pluck('station_id')
-        ->toArray();
+        $student = StudentAdmission::find($studentId);
 
-        return view('osce.students.dashboard', compact('stations', 'completedStations'));
+        // Fetch all stations
+        $stations = Station::orderBy('id')->get();
+
+        $completedStations = [];
+        $lockedStations = [];
+
+        foreach ($stations as $index => $station) {
+
+            // Check if procedure completed
+            $procedureDone = \DB::table('examiner_scores')
+                ->where('student_id', $studentId)
+                ->where('station_id', $station->id)
+                ->exists();
+
+            // Check if MCQ submitted
+            $stationResult = \DB::table('station_results')
+                ->where('student_id', $studentId)
+                ->where('station_id', $station->id)
+                ->first();
+
+            $mcqDone = $stationResult && $stationResult->mcq_submitted;
+
+            // Mark station completed if both procedure and MCQ are done
+            if ($procedureDone && $mcqDone) {
+                $completedStations[] = $station->id;
+            }
+
+            // Lock the station if previous station is not completed
+            if ($index > 0) {
+                $previousStation = $stations[$index - 1];
+                if (!in_array($previousStation->id, $completedStations)) {
+                    $lockedStations[$station->id] = true;
+                }
+            }
+        }
+
+        return view('osce.students.dashboard', compact('stations', 'completedStations', 'lockedStations'));
     }
-
 
     public function loadStation(Request $request, Station $station)
     {
         $studentId = $request->session()->get('osce_student');
-        $student = StudentAdmission::find($studentId);
 
-        if (!$studentId || !$student) {
+        if (!$studentId) {
             return redirect()->route('osce-home')
                 ->with('error', 'Please login as a student to access this page.');
         }
 
-        // Fetch all stations ordered by ID
+        $student = StudentAdmission::find($studentId);
+
+        if (!$student) {
+            return redirect()->route('osce-home')
+                ->with('error', 'Invalid student session.');
+        }
+
+        // Get all stations ordered
         $allStations = Station::orderBy('id')->get();
 
-        // Check which stations have been completed procedurally (examiner_scores)
-        $completedProcedures = \DB::table('examiner_scores')
-            ->where('student_id', $studentId)
-            ->pluck('station_id')
-            ->toArray();
-
-        // Check which stations' MCQs have been done
-        $completedMCQs = StationResult::where('student_id', $studentId)
-            ->where('mcq_score', '>=', 0)
-            ->pluck('station_id')
-            ->toArray();
-
-        // Find the index of the station the student wants to access
+        // Find current station index
         $stationIndex = $allStations->search(fn($s) => $s->id == $station->id);
 
-        // Check if previous station's MCQ is done (enforce MCQ sequence)
+        /*
+        |--------------------------------------------------------------------------
+        | 1️⃣ CHECK PREVIOUS STATION REQUIREMENTS
+        |--------------------------------------------------------------------------
+        */
         if ($stationIndex > 0) {
+
             $previousStationId = $allStations[$stationIndex - 1]->id;
-            if (!in_array($previousStationId, $completedMCQs)) {
+
+            // Check previous station MCQ submitted
+            $prevMCQSubmitted = StationResult::where('student_id', $studentId)
+                ->where('station_id', $previousStationId)
+                ->where('mcq_submitted', true)
+                ->exists();
+
+            if (!$prevMCQSubmitted) {
                 return redirect()->route('student.dashboard')
                     ->with('error', 'You must complete the MCQ of the previous station before attempting this one.');
             }
+
+            // Check previous station procedure completed
+            $prevProcedureDone = \DB::table('examiner_scores')
+                ->where('student_id', $studentId)
+                ->where('station_id', $previousStationId)
+                ->exists();
+
+            if (!$prevProcedureDone) {
+                return redirect()->route('student.dashboard')
+                    ->with('error', 'You must complete the procedure of the previous station before attempting this one.');
+            }
         }
 
-        // Check if the current station procedure is completed (unlocking condition)
-        if (!in_array($station->id, $completedProcedures)) {
+        /*
+        |--------------------------------------------------------------------------
+        | 2️⃣ CHECK CURRENT STATION PROCEDURE COMPLETED
+        |--------------------------------------------------------------------------
+        */
+        $currentProcedureDone = \DB::table('examiner_scores')
+            ->where('student_id', $studentId)
+            ->where('station_id', $station->id)
+            ->exists();
+
+        if (!$currentProcedureDone) {
             return redirect()->route('student.dashboard')
-                ->with('error', 'You must complete the procedure before accessing this station.');
+                ->with('error', 'You must complete the procedure before accessing this station MCQ.');
         }
 
-        // Load MCQ questions
+        /*
+        |--------------------------------------------------------------------------
+        | 3️⃣ LOAD MCQ QUESTIONS
+        |--------------------------------------------------------------------------
+        */
         $questions = $station->mcqQuestions()->with('options')->get();
 
-        // Get or create station result to track time (without overwriting existing scores)
-        $stationResult = StationResult::firstOrNew(
-            ['student_id' => $studentId, 'station_id' => $station->id]
+        $noMcqs = $questions->isEmpty();
+
+        /*
+        |--------------------------------------------------------------------------
+        | 4️⃣ CREATE OR LOAD STATION RESULT
+        |--------------------------------------------------------------------------
+        */
+        $stationResult = StationResult::firstOrCreate(
+            [
+                'student_id' => $studentId,
+                'station_id' => $station->id
+            ],
+            [
+                'mcq_score' => 0,
+                'total_score' => 0,
+                'mcq_time_left' => $station->duration,
+                'mcq_submitted' => false
+            ]
         );
 
-        if (!$stationResult->exists) {
-            $stationResult->mcq_score = 0;
-            $stationResult->mcq_time_left = $station->duration; // seconds
-            $stationResult->save();
-        }
-
-        // Get previous answers for the MCQs
+        /*
+        |--------------------------------------------------------------------------
+        | 5️⃣ LOAD PREVIOUS ANSWERS
+        |--------------------------------------------------------------------------
+        */
         $answers = StudentMCQAnswer::where('student_id', $studentId)
-            ->whereIn('mcq_id', $questions->pluck('id'))
+            ->where('station_id', $station->id)
             ->pluck('option_id', 'mcq_id');
 
-        return view('osce.students.cbt', compact('student', 'station', 'questions', 'answers', 'stationResult'));
+        /*
+        |--------------------------------------------------------------------------
+        | 6️⃣ RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
+        return view('osce.students.cbt', compact(
+            'student',
+            'station',
+            'questions',
+            'answers',
+            'stationResult',
+            'noMcqs'
+        ));
     }
 
-
+    // ---------------- Save individual answer ----------------
     public function saveAnswer(Request $request)
     {
         $studentId = $request->session()->get('osce_student');
         if (!$studentId) {
-           return redirect()->route('osce-home')
-            ->with('error', 'Please login as a student to access this page.');
+            return response()->json(['success' => false, 'message' => 'Student not logged in']);
         }
 
         $mcq_id = $request->mcq_id;
         $option_id = $request->option_id;
+        $station_id = $request->station_id;
 
-        $answer = StudentMCQAnswer::updateOrCreate(
-            [
-                'student_id' => $studentId,
-                'mcq_id' => $mcq_id
-            ],
-            ['option_id' => $option_id]
-        );
+        // Fetch mark from MCQQuestion model
+        $question = \App\Models\MCQQuestion::find($mcq_id);
+        $score = 0;
 
-        return response()->json(['success' => true]);
-    }
-
-    public function submitStation(Request $request, Station $station)
-    {
-        $studentId = $request->session()->get('osce_student');
-        if (!$studentId) {
-           return redirect()->route('osce-home')
-        ->with('error', 'Please login as a student to access this page.');
-        }
-
-        $questions = $station->mcqQuestions()->with('options')->get();
-
-        $totalScore = 0;
-
-        foreach ($questions as $question) {
-            $answer = StudentMCQAnswer::where('student_id', $studentId)
-                        ->where('mcq_id', $question->id)
-                        ->first();
-            if ($answer && $answer->selectedOption && $answer->selectedOption->is_correct) {
-                $totalScore += $question->mark;
+        if ($question) {
+            $option = $question->options()->find($option_id);
+            if ($option && $option->is_correct) {
+                $score = $question->mark;
             }
         }
 
-        // Update station result
-        $stationResult = StationResult::updateOrCreate(
-            ['student_id' => $student->id, 'station_id' => $station->id],
-            ['mcq_score' => $totalScore, 'total_score' => $totalScore] // Update only MCQ part
+        // Save or update answer
+        StudentMCQAnswer::updateOrCreate(
+            [
+                'student_id' => $studentId,
+                'station_id' => $station_id,
+                'mcq_id' => $mcq_id
+            ],
+            [
+                'option_id' => $option_id,                
+                'score' => $score
+            ]
         );
 
-        return redirect()->route('student.dashboard')->with('success', 'Station completed!');
+        return response()->json(['success' => true]);
+    }    
+
+    // ---------------- Submit station ----------------
+    public function submitStation(Request $request, Station $station)
+{
+    $studentId = session('osce_student');
+
+    if (!$studentId) {
+        return response()->json(['success' => false], 403);
     }
 
+    // ----------------------------
+    // 1️⃣ Get MCQ total (already stored per answer)
+    // ----------------------------
+    $mcqScore = \DB::table('student_mcq_answers')
+        ->where('student_id', $studentId)
+        ->where('station_id', $station->id)
+        ->sum('score');
+
+    // ----------------------------
+    // 2️⃣ Get Examiner Score
+    // ----------------------------
+    $examinerScore = \DB::table('examiner_scores')
+        ->where('student_id', $studentId)
+        ->where('station_id', $station->id)
+        ->sum('score');
+
+    // Avoid null issues
+    $mcqScore = $mcqScore ?? 0;
+    $examinerScore = $examinerScore ?? 0;
+
+    $totalScore = $mcqScore + $examinerScore;
+
+    // ----------------------------
+    // 3️⃣ Single Update (No firstOrCreate here)
+    // ----------------------------
+    \DB::table('station_results')
+        ->where('student_id', $studentId)
+        ->where('station_id', $station->id)
+        ->update([
+            'mcq_score'      => $mcqScore,
+            'total_score'    => $totalScore,
+            'mcq_submitted' => true
+        ]);
+
+    return response()->json(['success' => true]);
+}
+
+
+
+    // ---------------- Save remaining time ----------------
     public function saveTime(Request $request, Station $station)
     {
         $studentId = $request->session()->get('osce_student');
         if (!$studentId) {
-            return redirect()->route('osce-home')
-        ->with('error', 'Please login as a student to access this page.');
+            return response()->json(['success' => false]);
         }
 
-        $timeLeft = $request->time_left;
+        $timeLeft = $request->time_left; // in minutes
+
+            \Log::info('Saving time', [
+        'student_id' => $studentId,
+        'station_id' => $station->id,
+        'time_left' => $timeLeft
+    ]);
 
         StationResult::updateOrCreate(
             ['student_id' => $studentId, 'station_id' => $station->id],

@@ -506,19 +506,7 @@ Route::get('/', function () {
             Route::get('/mcqs', [MCQController::class, 'index'])->name('mcqs.index');
             Route::post('/mcqs', [MCQController::class, 'store'])->name('mcqs.store');
             Route::put('/mcqs/{mcq}', [MCQController::class, 'update'])->name('mcqs.update');
-            Route::delete('/mcqs/{mcq}', [MCQController::class, 'destroy'])->name('mcqs.destroy');
-
-            // Student Dashboard
-            Route::get('/student/dashboard', [StudentExamController::class, 'studentDashboard'])
-                ->name('student.dashboard');
-            Route::get('/student/station/{station}', [StudentExamController::class, 'loadStation'])
-                ->name('student.station');
-            Route::post('/student/save-answer', [StudentExamController::class, 'saveAnswer'])
-                ->name('student.save.answer');
-            Route::post('/student/station/{station}/submit', [StudentExamController::class, 'submitStation'])
-                ->name('student.station.submit');
-            Route::post('/student/save-time', [StudentExamController::class, 'saveTime'])
-                ->name('student.save.time');
+            Route::delete('/mcqs/{mcq}', [MCQController::class, 'destroy'])->name('mcqs.destroy'); 
 
             // Examiners route
             Route::get('examiners', [ExaminerController::class, 'index'])->name('examiners.index');
@@ -559,6 +547,8 @@ Route::get('/', function () {
                 ->name('student.save.answer');
             Route::post('/student/station/{station}/submit', [StudentExamController::class, 'submitStation'])
                 ->name('student.station.submit');
+            Route::post('/student/station/{station}/save-time', [StudentExamController::class, 'saveTime'])
+                ->name('student.save.time');
 
         });
     });

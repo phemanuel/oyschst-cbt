@@ -37,35 +37,53 @@
                         <h5 class="card-title font-weight-bold">{{ $station->title }}</h5>
                         <p class="card-text">{{ Str::limit($station->practical_question, 80) }}</p>
 
-                        <div class="d-flex justify-content-around mt-3 mb-2">
+                        <div class="d-flex flex-wrap justify-content-around mt-3 mb-2 gap-2">
                             <span class="badge badge-primary">Procedures: {{ $station->procedures->count() }}</span>                           
-                            <span class="badge badge-info">
-                                Total Procedure Marks: {{ $station->procedures->sum('marks') + $station->mcqQuestions->sum('mark') }}
-                            </span>
-                             <span class="badge badge-success">MCQs: {{ $station->mcqQuestions->count() }}</span>
+                            <span class="badge badge-info">Total Procedure Marks: {{ $station->procedures->sum('marks') }}</span>
+                            <span class="badge badge-success">MCQs: {{ $station->mcqQuestions->count() }}</span>
+                            <span class="badge badge-info">Total MCQ Marks: {{ $station->mcqQuestions->sum('mark') }}</span>
                         </div>
 
                         <!-- Graded students list -->
                          
-                        <div class="graded-students mt-3 text-left" style="max-height: 120px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 8px;">
-                            <strong>Graded Students:</strong>
-                            <ul class="list-unstyled mb-0">
-                                @php
-                                    $gradedStudents = $station->stationResults()->with('student')->get();
-                                @endphp
+                        <div class="graded-students mt-3">
+                            <h6 class="text-dark font-weight-bold border-bottom pb-1">Graded Students</h6>
+                            
+                            @php
+                                $gradedStudents = $station->stationResults()->with('student')->get();
+                            @endphp
 
-                                @if($gradedStudents->isEmpty())
-                                    <li><em>No student graded yet</em></li>
-                                @else
-                                    @foreach($gradedStudents as $result)
-                                        <li>
-                                            {{ $result->student->first_name ?? '' }} {{ $result->student->surname ?? '' }}
-                                            <span class="badge badge-success float-right">{{ $result->total_score }}</span>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
+                            @if($gradedStudents->isEmpty())
+                                <p class="text-muted"><em>No student graded yet</em></p>
+                            @else
+                                <div style="max-height: 250px; overflow-y: auto;">
+                                    <table class="table table-sm table-hover mb-0">
+                                        <thead class="thead-light sticky-top bg-white" style="z-index: 10;">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Student</th>
+                                                <th>MCQ Score</th>
+                                                <th>Procedure Score</th>
+                                                <th>Total Score</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($gradedStudents as $index => $result)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $result->student->first_name ?? '' }} {{ $result->student->surname ?? '' }}</td>
+                                                    <td><span class="badge badge-info">{{ $result->mcq_score ?? 0 }}</span></td>
+                                                    <td><span class="badge badge-warning">{{ $result->examiner_score ?? 0 }}</span></td>
+                                                    <td><span class="badge badge-success">{{ $result->total_score ?? 0 }}</span></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                         </div>
+
+
                     </div>
                 </div>
             </div>
