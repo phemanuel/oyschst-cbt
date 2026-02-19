@@ -20,12 +20,12 @@ class McqQuestion extends Model
     // MCQ has many options
     public function options()
     {
-        return $this->hasMany(MCQOption::class, 'mcq_id');
+        return $this->hasMany(McqOption::class, 'mcq_id');
     }
 
     // MCQ has many student answers
     public function studentAnswers()
     {
-        return $this->hasMany(StudentMCQAnswer::class, 'mcq_id');
+        return $this->hasMany(StudentMcqAnswer::class, 'mcq_id');
     }
 }

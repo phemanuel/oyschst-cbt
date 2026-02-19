@@ -14,12 +14,12 @@ class McqOption extends Model
     // Option belongs to a question
     public function question()
     {
-        return $this->belongsTo(MCQQuestion::class, 'mcq_id');
+        return $this->belongsTo(McqQuestion::class, 'mcq_id');
     }
 
     // Option may be selected by students
     public function studentAnswers()
     {
-        return $this->hasMany(StudentMCQAnswer::class, 'option_id');
+        return $this->hasMany(StudentMcqAnswer::class, 'option_id');
     }
 }

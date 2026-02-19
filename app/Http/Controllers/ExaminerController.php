@@ -19,7 +19,7 @@ class ExaminerController extends Controller
     // List all examiners
     public function index()
     {
-        $examiners = User::where('user_type', 'examiner')->get(); 
+        $examiners = User::whereIn('user_type', ['examiner', 'admin'])->get(); 
         return view('osce.examiners.index', compact('examiners'));
     }
 
@@ -30,14 +30,15 @@ class ExaminerController extends Controller
             'name'  => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'user_status' => 'nullable|in:active,inactive',
+            'user_status' => 'nullable|in:Active,Inactive',
+            'user_type' => 'nullable|in:admin,examiner',
         ]);
 
         $examiner = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'user_type' => 'examiner',
+            'user_type' => $request->user_type,
             'user_status' => $request->user_status ?? 'active',
             'email_verified_status' => 1,
             'login_attempts' => 0,
@@ -71,7 +72,7 @@ class ExaminerController extends Controller
         ]);
 
         return response()->json([
-            'success' => 'Examiner added successfully!',
+            'success' => 'Admin/Examiner added successfully!',
             'examiner' => $examiner
         ]);
     }
@@ -83,11 +84,13 @@ class ExaminerController extends Controller
             'name'  => 'required|string|max:255',
             'email' => ['required','email', Rule::unique('users')->ignore($examiner->id)],
             'password' => 'nullable|string|min:6',
-            'user_status' => 'nullable|in:active,inactive',
+            'user_status' => 'nullable|in:Active,Inactive',
+            'user_type' => 'nullable|in:admin,examiner',
         ]);
 
         $examiner->name = $request->name;
         $examiner->email = $request->email;
+        $examiner->user_type = $request->user_type;
         if($request->password){
             $examiner->password = Hash::make($request->password);
         }
@@ -95,7 +98,7 @@ class ExaminerController extends Controller
         $examiner->save();
 
         return response()->json([
-            'success' => 'Examiner updated successfully!',
+            'success' => 'Admin/Examiner updated successfully!',
             'examiner' => $examiner
         ]);
     }
@@ -106,7 +109,7 @@ class ExaminerController extends Controller
         $examiner->delete();
 
         return response()->json([
-            'success' => 'Examiner deleted successfully!',
+            'success' => 'Admin/Examiner deleted successfully!',
         ]);
     }
 
@@ -210,68 +213,69 @@ class ExaminerController extends Controller
 
 
     // Return procedures for selected student and station
-    public function storeProcedureScores(Request $request, Station $station, StudentAdmission $student)
-    {
-        DB::beginTransaction();
+ public function storeProcedureScores(Request $request, Station $station, StudentAdmission $student)
+{
+    DB::beginTransaction();
 
-        try {
+    try {
+        $totalExaminerScore = 0;
 
-            $procedures = $station->procedures;
+        $proceduresScores = $request->input('procedures', []); // array [procedure_id => score]
 
-            $totalExaminerScore = 0;
+        foreach ($proceduresScores as $procedureId => $score) {
+            // Check score type
+            info("Saving score: student={$student->id}, station={$station->id}, procedure={$procedureId}, score={$score}");
 
-            foreach ($procedures as $procedure) {
-
-                $score = $request->input('procedure_'.$procedure->id);
-
-                if ($score !== null) {
-
-                    ExaminerScore::updateOrCreate(
-                        [
-                            'student_id' => $student->id,
-                            'station_id' => $station->id,
-                            'procedure_id' => $procedure->id,
-                        ],
-                        [
-                            'score' => $score,
-                        ]
-                    );
-
-                    $totalExaminerScore += $score;
-                }
-            }
-
-            // Update or create station result
-            $stationResult = StationResult::updateOrCreate(
+            ExaminerScore::updateOrCreate(
                 [
-                    'student_id' => $student->id,
-                    'station_id' => $station->id,                    
+                    'student_id'   => $student->id,
+                    'station_id'   => $station->id,
+                    'procedure_id' => $procedureId,
                 ],
                 [
-                    'examiner_score' => $totalExaminerScore,
-                    'mcq_time_left' => $station->duration,
+                    'score' => $score,
                 ]
             );
 
-            // Recalculate total score (important if MCQ already exists)
-            $mcqScore = $stationResult->mcq_score ?? 0;
-
-            $stationResult->update([
-                'total_score' => $totalExaminerScore + $mcqScore
-            ]);
-
-            DB::commit();
-
-            return redirect()->route('examiner.dashboard')
-                ->with('success', 'Procedure Scores saved successfully.');
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()->with('error', 'Something went wrong.');
+            $totalExaminerScore += $score;
         }
+
+        // Update or create station result
+        $stationResult = StationResult::updateOrCreate(
+            [
+                'student_id' => $student->id,
+                'station_id' => $station->id,
+            ],
+            [
+                'examiner_score' => $totalExaminerScore,
+                'mcq_time_left' => $station->duration,
+            ]
+        );
+
+        $mcqScore = $stationResult->mcq_score ?? 0;
+
+        $stationResult->update([
+            'total_score' => $totalExaminerScore + $mcqScore
+        ]);
+
+        DB::commit();
+
+        return redirect()->route('examiner.dashboard')
+            ->with('success', 'Procedure Scores saved successfully.');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        // Log the exception so we can see it in storage/logs/laravel.log
+        \Log::error('Error saving procedure scores: '.$e->getMessage(), [
+            'student' => $student->id,
+            'station' => $station->id,
+            'request' => $request->all()
+        ]);
+
+        return back()->with('error', 'Something went wrong: '.$e->getMessage());
     }
+}
+
 
 
 

@@ -56,7 +56,6 @@ class OSCEAuthController extends Controller
             }
             
             $request->session()->regenerate();
-
             $request->session()->put('osce_student', $student->id);
 
             // 8️⃣ Redirect to student dashboard

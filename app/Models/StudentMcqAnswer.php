@@ -18,11 +18,11 @@ class StudentMcqAnswer extends Model
 
     public function question()
     {
-        return $this->belongsTo(MCQQuestion::class, 'mcq_id');
+        return $this->belongsTo(McqQuestion::class, 'mcq_id');
     }
 
     public function selectedOption()
     {
-        return $this->belongsTo(MCQOption::class, 'option_id');
+        return $this->belongsTo(McqOption::class, 'option_id');
     }
 }

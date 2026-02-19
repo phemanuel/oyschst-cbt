@@ -73,7 +73,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('examiners.index') }}">
-                                <i class="mdi mdi-account-tie mr-2"></i> Examiners
+                                <i class="mdi mdi-account-tie mr-2"></i> Admins/Examiners
                             </a>
                         </li>
                         <li class="nav-item">

@@ -60,12 +60,15 @@ class OSCEDashboardController extends Controller
         $user = auth()->user();
 
         if(empty($user)){
-            return redirect()->route('osce.home')->with('error', 'You need to logi to gain access.');
+            return redirect()->route('osce.home')->with('error', 'You need to login to gain access.');
         }
         
-        $userType == $user->user_type;
+        $userType = $user->user_type;
 
         if($userType === 'superadmin'){
+            return redirect()->route('osce.dashboard');
+        }
+        elseif($userType === 'admin'){
             return redirect()->route('osce.dashboard');
         }
         else{

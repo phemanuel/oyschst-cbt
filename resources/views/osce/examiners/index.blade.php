@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container py-5">
-    <h3 class="fw-bold mb-4">All Examiners</h3>
+    <h3 class="fw-bold mb-4">All Admin/Examiners</h3>
 
     <div id="examinerMessage" style="display:none;">
         <div class="alert"></div>
     </div>
 
-    <button class="btn btn-success mb-3" id="addExaminerBtn">Add Examiner</button>
+    <button class="btn btn-success mb-3" id="addExaminerBtn">Add Admin/Examiner</button>
 
     <table class="table table-hover">
         <thead>
@@ -16,6 +16,7 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -26,13 +27,15 @@
                 <td>{{ $loop->iteration }}</td>
                 <td class="examiner-name">{{ $examiner->name }}</td>
                 <td class="examiner-email">{{ $examiner->email }}</td>
+                <td class="examiner-user-type">{{ $examiner->user_type }}</td>
                 <td class="examiner-status">{{ ucfirst($examiner->user_status) }}</td>
                 <td>
                     <button class="btn btn-sm btn-primary edit-examiner-btn"
                         data-id="{{ $examiner->id }}"
                         data-name="{{ $examiner->name }}"
                         data-email="{{ $examiner->email }}"
-                        data-status="{{ $examiner->user_status }}">
+                        data-status="{{ $examiner->user_status }}"
+                        data-user-type="{{ $examiner->user_type }}">
                         Edit
                     </button>
                     <button class="btn btn-sm btn-danger delete-examiner-btn"
@@ -43,7 +46,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="text-center text-muted">No examiners found.</td>
+                <td colspan="5" class="text-center text-muted">No admin/examiners found.</td>
             </tr>
             @endforelse
         </tbody>
@@ -56,7 +59,7 @@
     <div class="modal-content">
       <form id="addExaminerForm">
         <div class="modal-header">
-          <h5 class="modal-title">Add Examiner</h5>
+          <h5 class="modal-title">Add Admin/Examiner</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -74,10 +77,17 @@
             <input type="password" name="password" class="form-control" required>
           </div>
           <div class="form-group">
+            <label>Role</label>
+            <select name="user_type" class="form-control">
+              <option value="admin">Admin</option>
+              <option value="examiner">Examiner</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Status</label>
             <select name="user_status" class="form-control">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
             </select>
           </div>
         </div>
@@ -96,7 +106,7 @@
     <div class="modal-content">
       <form id="editExaminerForm">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Examiner</h5>
+          <h5 class="modal-title">Edit Admin/Examiner</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -111,14 +121,21 @@
             <input type="email" id="editExaminerEmail" name="email" class="form-control" required>
           </div>
           <div class="form-group">
+            <label>Email</label>
+           <select name="user_type"  id="editExaminerUserType" class="form-control">
+              <option value="admin">Admin</option>
+              <option value="examiner">Examiner</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Password (leave blank to keep unchanged)</label>
             <input type="password" id="editExaminerPassword" name="password" class="form-control">
           </div>
           <div class="form-group">
             <label>Status</label>
             <select id="editExaminerStatus" name="user_status" class="form-control">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
             </select>
           </div>
         </div>
@@ -139,7 +156,7 @@
         @csrf
         @method('DELETE')
         <div class="modal-header">
-          <h5 class="modal-title">Delete Examiner</h5>
+          <h5 class="modal-title">Delete Admin/Examiner</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -189,6 +206,7 @@ $(document).ready(function(){
                     <td>${$('table tbody tr').length + 1}</td>
                     <td class="examiner-name">${examiner.name}</td>
                     <td class="examiner-email">${examiner.email}</td>
+                    <td class="examiner-user-type">${examiner.user_type}</td>
                     <td class="examiner-status">${examiner.user_status}</td>
                     <td>
                         <button class="btn btn-sm btn-primary edit-examiner-btn"
@@ -213,6 +231,7 @@ $(document).ready(function(){
         $('#editExaminerId').val(btn.data('id'));
         $('#editExaminerName').val(btn.data('name'));
         $('#editExaminerEmail').val(btn.data('email'));
+        $('#editExaminerUserType').val(btn.data('user-type'));
         $('#editExaminerStatus').val(btn.data('status'));
         $('#editExaminerPassword').val('');
         $('#editExaminerModal').modal('show');
@@ -229,12 +248,14 @@ $(document).ready(function(){
             let row = $('#examiner-' + id);
             row.find('.examiner-name').text(res.examiner.name);
             row.find('.examiner-email').text(res.examiner.email);
+            row.find('.examiner-user-type').text(res.examiner.user_type);
             row.find('.examiner-status').text(res.examiner.user_status);
 
             // Update button data
             row.find('.edit-examiner-btn')
                 .data('name', res.examiner.name)
                 .data('email', res.examiner.email)
+                .data('user-type', res.examiner.user_type)
                 .data('status', res.examiner.user_status);
         })
         .fail(function(err){
@@ -262,7 +283,7 @@ $(document).ready(function(){
                 $('#examiner-' + id).remove();
             },
             error: function(err){
-                showMessage('Error deleting examiner','danger');
+                showMessage('Error deleting admin/examiner','danger');
             }
         });
     });

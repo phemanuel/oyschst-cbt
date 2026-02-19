@@ -19,7 +19,7 @@
                 <th>#</th>
                 <th>Admission No</th>
                 <th>Name</th>
-                <th>Email</th>
+                <!-- <th>Email</th> -->
                 <th>Phone</th>
                 <th>Department</th>
                 <!-- <th>Status</th> -->
@@ -32,7 +32,7 @@
                 <td>{{ $index+1 }}</td>
                 <td class="student-adm">{{ $student->admission_no }}</td>
                 <td class="student-name">{{ $student->first_name }} {{ $student->surname }}</td>
-                <td class="student-email">{{ $student->email ?? '' }}</td>
+                
                 <td class="student-phone">{{ $student->phone_no ?? '' }}</td>
                 <td class="student-department">{{ $student->department ?? '' }}</td>
                 <!-- <td class="student-status">{{ $student->login_status ? 'Active' : 'Inactive' }}</td> -->
@@ -41,9 +41,9 @@
                         data-id="{{ $student->id }}"
                         data-admission="{{ $student->admission_no }}"
                         data-first_name="{{ $student->first_name }}"
-                        data-surname="{{ $student->surname }}"
-                        data-email="{{ $student->email ?? '' }}"
+                        data-surname="{{ $student->surname }}"                        
                         data-phone="{{ $student->phone_no ?? '' }}"
+                        data-department="{{ $student->department ?? '' }}"
                         data-login_status="{{ $student->login_status }}"
                         data-department="{{ $student->department ?? '' }}">
                         Edit
@@ -87,10 +87,10 @@
             <label>Surname</label>
             <input type="text" name="surname" class="form-control" required>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>Email</label>
             <input type="email" name="email" class="form-control">
-          </div>
+          </div> -->
           <div class="form-group">
             <label>Phone</label>
             <input type="text" name="phone_no" class="form-control">
@@ -149,10 +149,10 @@
             <label>Surname</label>
             <input type="text" id="editSurname" name="surname" class="form-control" required>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>Email</label>
             <input type="email" id="editEmail" name="email" class="form-control">
-          </div>
+          </div> -->
           <div class="form-group">
             <label>Phone</label>
             <input type="text" id="editPhone" name="phone_no" class="form-control">
@@ -225,7 +225,7 @@ $(document).ready(function(){
             <td>${index}</td>
             <td class="student-adm">${student.admission_no}</td>
             <td class="student-name">${student.first_name} ${student.surname}</td>
-            <td class="student-email">${student.email ?? ''}</td>
+            
             <td class="student-phone">${student.phone_no ?? ''}</td>
             <td class="student-status">${student.login_status ? 'Active' : 'Inactive'}</td>
             <td>
@@ -234,7 +234,7 @@ $(document).ready(function(){
                     data-admission="${student.admission_no}"
                     data-first_name="${student.first_name}"
                     data-surname="${student.surname}"
-                    data-email="${student.email ?? ''}"
+                    data-department="${student.department}"
                     data-phone="${student.phone_no ?? ''}"
                     data-login_status="${student.login_status}">
                     Edit
@@ -273,7 +273,7 @@ $(document).ready(function(){
         $('#editAdmission').val(student.admission);
         $('#editFirstName').val(student.first_name);
         $('#editSurname').val(student.surname);
-        $('#editEmail').val(student.email);
+        $('#editDepartment').val(student.department);
         $('#editPhone').val(student.phone);
         $('#editPassword').val(''); // force new password
 

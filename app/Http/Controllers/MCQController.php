@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\MCQQuestion;
-use App\Models\MCQOption;
+use App\Models\McqQuestion;
+use App\Models\McqOption;
 use App\Models\Station;
 use Illuminate\Support\Facades\Log;
 
@@ -46,7 +46,7 @@ class MCQController extends Controller
         }
 
         // Create MCQ
-        $mcq = MCQQuestion::create([
+        $mcq = McqQuestion::create([
             'station_id' => $request->station_id,
             'question' => $request->question,
             'mark' => $request->mark,
@@ -116,7 +116,7 @@ class MCQController extends Controller
     // ---------------- DELETE MCQ ----------------
     public function destroy($id)
     {
-        $mcq = MCQQuestion::withCount('studentAnswers')->findOrFail($id);
+        $mcq = McqQuestion::withCount('studentAnswers')->findOrFail($id);
 
         // If students have answered, block delete
         if ($mcq->student_answers_count > 0) {

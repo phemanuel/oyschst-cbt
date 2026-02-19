@@ -20,7 +20,7 @@ class Station extends Model
     // A station has many MCQs
     public function mcqQuestions()
     {
-        return $this->hasMany(MCQQuestion::class);
+        return $this->hasMany(McqQuestion::class);
     }
 
     // A station has many results
@@ -28,4 +28,5 @@ class Station extends Model
     {
         return $this->hasMany(StationResult::class);
     }
+    
 }

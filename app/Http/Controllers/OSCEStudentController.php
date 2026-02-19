@@ -26,7 +26,7 @@ class OSCEStudentController extends Controller
             'admission_no' => 'required|unique:student_admissions,admission_no',
             'first_name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:student_admissions,email',
+            // 'email' => 'nullable|email|unique:student_admissions,email',
             'password' => 'required|string|min:6',
         ]);
 
@@ -45,8 +45,7 @@ class OSCEStudentController extends Controller
             'user_name' => $request->user_name ?? null,
             'picture_name' => $request->picture_name ?? null,
             'session1' => $request->session1 ?? null,
-            'login_status' => $request->login_status ?? 0,
-            'email' => $request->email,
+            'login_status' => $request->login_status ?? 0,            
             'user_type' => 'student',
             'password' => Hash::make($request->password),
             'login_attempts' => 0,
@@ -64,8 +63,7 @@ class OSCEStudentController extends Controller
         $request->validate([
             'admission_no' => ['required', Rule::unique('student_admissions')->ignore($student->id)],
             'first_name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'email' => ['nullable','email', Rule::unique('student_admissions')->ignore($student->id)],
+            'surname' => 'required|string|max:255',           
             'password' => 'nullable|string|min:6',
         ]);
 
@@ -83,8 +81,7 @@ class OSCEStudentController extends Controller
         $student->user_name = $request->user_name ?? $student->user_name;
         $student->picture_name = $request->picture_name ?? $student->picture_name;
         $student->session1 = $request->session1 ?? $student->session1;
-        $student->login_status = $request->login_status ?? $student->login_status;
-        $student->email = $request->email ?? $student->email;
+        $student->login_status = $request->login_status ?? $student->login_status;        
         if($request->password){
             $student->password = Hash::make($request->password);
         }

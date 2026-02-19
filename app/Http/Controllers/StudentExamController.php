@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Station;
 use App\Models\StationResult;
 use App\Models\StudentAdmission;
-use App\Models\StudentMCQAnswer;
+use App\Models\StudentMcqAnswer;
 use App\Models\ExaminerScore;
 
 class StudentExamController extends Controller
@@ -80,7 +80,9 @@ class StudentExamController extends Controller
         $allStations = Station::orderBy('id')->get();
 
         // Find current station index
-        $stationIndex = $allStations->search(fn($s) => $s->id == $station->id);
+        $stationIndex = $allStations->search(function ($s) use ($station) {
+            return $s->id == $station->id;
+        });
 
         /*
         |--------------------------------------------------------------------------
@@ -336,5 +338,136 @@ class StudentExamController extends Controller
             'studentAnswers' => $studentAnswers,
         ]);
     }
+
+    public function summary()
+    {
+        $students = StudentAdmission::all();
+        $stations = Station::all();
+
+        $results = StationResult::all()
+                    ->groupBy(function ($item) {
+                        return $item->student_id . '-' . $item->station_id;
+                    });
+
+        $summary = [];
+
+        foreach ($students as $student) {
+
+            $studentData = [
+                'student' => $student,
+                'stations' => [],
+                'overall_total' => 0
+            ];
+
+            foreach ($stations as $station) {
+
+                $key = $student->id . '-' . $station->id;
+                $result = $results->get($key)?->first();
+
+                if ($result) {
+
+                    $studentData['overall_total'] += $result->total_score;
+
+                    $studentData['stations'][] = [
+                        'station_id'     => $station->id,
+                        'title'          => $station->title,
+                        'completed'      => true,
+                        'examiner_score' => $result->examiner_score,
+                        'mcq_score'      => $result->mcq_score,
+                        'total_score'    => $result->total_score,
+                    ];
+                } else {
+
+                    $studentData['stations'][] = [
+                        'station_id'     => $station->id,
+                        'title'          => $station->title,
+                        'completed'      => false,
+                        'examiner_score' => 0,
+                        'mcq_score'      => 0,
+                        'total_score'    => 0,
+                    ];
+                }
+            }
+
+            $summary[] = $studentData;
+        }
+
+        return response()->json([
+            'stations' => $stations,
+            'students' => $summary
+        ]);
+    }
+
+    public function fullSummary(StudentAdmission $student)
+    {
+        // Get stations where student has examiner scores
+        $stationIds = ExaminerScore::where('student_id', $student->id)
+            ->distinct()
+            ->pluck('station_id');
+
+        $stations = Station::whereIn('id', $stationIds)
+            ->with(['procedures', 'mcqQuestions.options'])
+            ->get();
+
+        $data = [];
+
+        foreach ($stations as $station) {
+
+            // ===============================
+            // PROCEDURES WITH SCORES
+            // ===============================
+            $procedures = $station->procedures->map(function($procedure) use ($student) {
+
+                $score = ExaminerScore::where([
+                    'student_id' => $student->id,
+                    'procedure_id' => $procedure->id
+                ])->first();
+
+                return [
+                    'name' => $procedure->name,
+                    'marks' => $procedure->marks,
+                    'score' => $score->score ?? 0,
+                ];
+            });
+
+            // ===============================
+            // MCQs WITH ANSWERS
+            // ===============================
+            $mcqs = $station->mcqQuestions->map(function($mcq) use ($student) {
+
+                $studentAnswer = StudentMcqAnswer::where([
+                    'student_id' => $student->id,
+                    'mcq_id' => $mcq->id
+                ])->first();
+
+                return [
+                    'question' => $mcq->question,
+                    'mark' => $mcq->mark,
+                    'options' => $mcq->options->map(function($opt) use ($studentAnswer){
+                        return [
+                            'text' => $opt->option_text,
+                            'is_correct' => $opt->is_correct,
+                            'is_selected' => $studentAnswer 
+                                ? $studentAnswer->option_id == $opt->id 
+                                : false
+                        ];
+                    })
+                ];
+            });
+
+            $data[] = [
+                'station_title' => $station->title,
+                'procedures' => $procedures,
+                'mcqs' => $mcqs
+            ];
+        }
+
+        return response()->json([
+            'student' => $student,
+            'stations' => $data
+        ]);
+    }
+
+
 
 }

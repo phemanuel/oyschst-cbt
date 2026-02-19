@@ -532,6 +532,10 @@ Route::get('/', function () {
                 ->name('osce.results.station');
             Route::get('/results/student/{student}/{station}', [StudentExamController::class, 'previewStudentResult'])
                 ->name('osce.results.student.preview'); 
+            Route::get('/results/summary', [StudentExamController::class, 'summary'])
+            ->name('osce.results.student.summary'); ;
+            Route::get('/results/student-full/{student}', [StudentExamController::class, 'fullSummary'])
+            ->name('osce.results.student.full');
             
 
             Route::get('/logout', [OSCEDashboardController::class, 'adminLogout'])

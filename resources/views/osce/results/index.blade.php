@@ -10,32 +10,63 @@
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <div class="container mt-4">
+
     <h3 class="mb-4">OSCE Results</h3>
-    <div class="row">
+
+    {{-- ============================= --}}
+    {{-- INDIVIDUAL STATION RESULTS --}}
+    {{-- ============================= --}}
+    <h5 class="mb-3 text-primary">Individual Station Results</h5>
+
+    <div class="row mb-4">
         @foreach($stations as $station)
         <div class="col-md-4 mb-3">
-            <div class="card shadow station-card p-3" 
-            data-station-id="{{ $station->id }}" 
-            data-station-title="{{ $station->title }}"
-            data-practical-question="{{ $station->practical_question }}"
-            style="cursor:pointer;">
+            <div class="card shadow station-card p-3"
+                 data-station-id="{{ $station->id }}"
+                 data-station-title="{{ $station->title }}"
+                 data-practical-question="{{ $station->practical_question }}"
+                 style="cursor:pointer;">
+
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ $station->title }}</h5>
                     <p class="card-text">{{ $station->practical_question }}</p>
                     <i class="fas fa-clipboard-list fa-2x text-primary"></i>
                 </div>
+
             </div>
         </div>
         @endforeach
     </div>
+
+    {{-- ============================= --}}
+    {{-- SUMMARY SECTION --}}
+    {{-- ============================= --}}
+    <h5 class="mb-3 text-success">Overall Summary</h5>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow summary-card p-3 bg-dark text-white"
+                 style="cursor:pointer;">
+
+                <div class="card-body text-center">
+                    <h5 class="card-title">Summary Report</h5>
+                    <p class="card-text">View overall student performance</p>
+                    <i class="fas fa-chart-bar fa-2x"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 <!-- Students Modal -->
 <div class="modal fade" id="stationStudentsModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Students who submitted</h5>
+        <h5 class="modal-title">Student Results</h5>
         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
@@ -80,6 +111,8 @@
 
 <script>
 $(document).ready(function(){
+
+
 
     let currentStation = {}; // store selected station info
 
@@ -140,12 +173,17 @@ $(document).ready(function(){
                 });
             }
 
+            if ($.fn.DataTable.isDataTable('#stationStudentsTable')) {
+                $('#stationStudentsTable').DataTable().destroy();
+            }
+
             $('#stationStudentsTable').DataTable({
                 paging: true,
                 searching: true,
                 info: false,
                 lengthChange: false,
-                pageLength: 10
+                pageLength: 10,
+                destroy: true
             });
 
             $('#stationStudentsModal').modal('show');
@@ -232,6 +270,7 @@ $(document).ready(function(){
                     <thead>
                         <tr>
                             <th>Procedure</th>
+                            <th>Mark Obtainable</th>
                             <th>Score</th>
                         </tr>
                     </thead>
@@ -241,7 +280,7 @@ $(document).ready(function(){
             if(data.procedures){
                 data.procedures.forEach((p, idx) => {
                     const name = p.procedure?.name ?? `Procedure ${idx+1}`;
-                    html += `<tr><td>${name}</td><td>${p.score ?? 0}</td></tr>`;
+                    html += `<tr><td>${name}</td><td>${p.procedure?.marks ?? 0}</td><td>${p.score ?? 0}</td></tr>`;
                 });
             }
 
@@ -256,16 +295,16 @@ $(document).ready(function(){
                 data.mcqs.forEach((mcq, idx) => {
                     html += `
                         <div class="mb-2">
-                            <p><strong>Q${idx+1}: ${mcq.question}</strong> - <span class="text-info">Mark: ${mcq.mark ?? 0}</span></p>
+                            <p><strong>Q${idx+1}: ${mcq.question}</strong> - <span class="text-info">Mark Obtainable: ${mcq.mark ?? 0}</span></p>
                             <ul>
                     `;
                     mcq.options.forEach(opt => {
                         const selected = data.studentAnswers?.[mcq.id] == opt.id 
                             ? '<span class="text-primary">✔ Selected</span>' 
                             : '';
-                        const correct = opt.is_correct 
-                            ? '<span class="text-success">✔ Correct</span>' 
-                            : '';
+                        const correct = Number(opt.is_correct) === 1
+                        ? '<span class="text-success">✔ Correct</span>'
+                        : '';
                         html += `<li>${opt.option_text} ${selected} ${correct}</li>`;
                     });
                     html += `</ul></div>`;
@@ -308,7 +347,351 @@ function printStudentResult(){
 }
 </script>
 
+<script>
+$(document).ready(function(){
 
+    $(document).on('click', '.summary-card', function(){
+
+        console.log('Summary clicked');
+
+        if ($.fn.DataTable.isDataTable('#stationStudentsTable')) {
+            $('#stationStudentsTable').DataTable().clear().destroy();
+        }
+
+        $('#stationStudentsTable thead tr').empty();
+        $('#stationStudentsTable tbody').empty();
+
+        $.get(`/osce/results/summary`, function(data){
+
+            // ----------------------------
+            // BUILD TABLE HEADER
+            // ----------------------------
+            let headerRow = `<th>Student</th>`;
+
+            // Add one column per station
+            data.stations.forEach(st => {
+                headerRow += `<th>${st.title}</th>`;
+            });
+
+            // Add overall + action ONCE
+            headerRow += `<th>Overall</th><th>Action</th>`;
+
+            $('#stationStudentsTable thead tr').append(headerRow);
+
+            // ----------------------------
+            // BUILD TABLE BODY
+            // ----------------------------
+            data.students.forEach(res => {
+
+                let row = `
+                    <tr>
+                        <td>
+                            ${res.student.surname ?? ''} 
+                            ${res.student.first_name ?? ''}<br>
+                            <small>${res.student.admission_no ?? ''}</small>
+                        </td>
+                `;
+
+                res.stations.forEach(st => {
+
+                    if(st.completed){
+                        row += `
+                            <td>
+                                <small>
+                                    Proc: ${st.examiner_score}<br>
+                                    MCQ: ${st.mcq_score}<br>
+                                    <strong>Total: ${st.total_score}</strong>
+                                </small>
+                            </td>
+                        `;
+                    } else {
+                        row += `
+                            <td class="text-danger">
+                                <small>Not Completed</small>
+                            </td>
+                        `;
+                    }
+
+                });
+
+                row += `
+                    <td>
+                        <strong class="text-primary">
+                            ${res.overall_total}
+                        </strong>
+                    </td>
+                    <td>
+                        ${
+                            res.overall_total > 0
+                            ? `<button class="btn btn-sm btn-dark preview-full-btn"
+                                data-student-id="${res.student.id}">
+                                Preview
+                            </button>`
+                            : `<span class="text-muted">—</span>`
+                        }
+                    </td>
+                </tr>
+                `;
+
+                $('#stationStudentsTable tbody').append(row);
+            });
+
+            $('#stationStudentsTable').DataTable({
+                paging: true,
+                searching: true,
+                info: false,
+                lengthChange: false,
+                pageLength: 10,
+                scrollX: true
+            });
+
+            $('#stationStudentsModal').modal('show');
+
+        }).fail(function(){
+            alert('Failed to load summary.');
+        });
+
+    });
+
+});
+</script>
+<script>
+$(document).on('click', '.preview-full-btn', function(){
+
+    const studentId = $(this).data('student-id');
+
+    $.get(`/osce/results/student-full/${studentId}`, function(data){
+
+        let overallProcedure = 0;
+        let overallMcq = 0;
+
+        let stationSummaries = [];
+
+        // ===============================
+        // FIRST LOOP → CALCULATE EVERYTHING
+        // ===============================
+        data.stations.forEach(st => {
+
+            let stationProcedureTotal = 0;
+            let stationProcedureMax = 0;
+            let stationMcqTotal = 0;
+            let stationMcqMax = 0;
+
+            // Procedure totals
+            st.procedures.forEach(p => {
+                stationProcedureTotal += Number(p.score);
+                stationProcedureMax += Number(p.marks);
+            });
+
+            // MCQ totals
+            st.mcqs.forEach(q => {
+                stationMcqMax += Number(q.mark);
+
+                q.options.forEach(opt => {
+                    if(opt.is_selected && opt.is_correct == 1){
+                        stationMcqTotal += Number(q.mark);
+                    }
+                });
+            });
+
+            const stationTotal = stationProcedureTotal + stationMcqTotal;
+
+            overallProcedure += stationProcedureTotal;
+            overallMcq += stationMcqTotal;
+
+            stationSummaries.push({
+                title: st.station_title,
+                procedure: stationProcedureTotal,
+                procedureMax: stationProcedureMax,
+                mcq: stationMcqTotal,
+                mcqMax: stationMcqMax,
+                total: stationTotal
+            });
+        });
+
+        const overallTotal = overallProcedure + overallMcq;
+
+        // ===============================
+        // BUILD HTML
+        // ===============================
+        let html = `
+        <div id="printFullReport">
+
+            <!-- HEADER + PRINT -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h4 class="mb-0">
+                        ${data.student.surname} ${data.student.first_name}
+                    </h4>
+                    <small>Admission No: ${data.student.admission_no}</small>
+                </div>
+
+                <button class="btn btn-dark btn-sm" onclick="printFullReport()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+            </div>
+
+            <hr>
+
+            <!-- OVERALL SUMMARY BOARD -->
+            <div class="p-3 mb-4 rounded shadow border bg-light">
+
+                <h5 class="text-center mb-3 text-uppercase text-primary">
+                    Overall Performance Summary
+                </h5>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm text-center">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Station</th>
+                                <th>Procedure</th>
+                                <th>MCQ</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        // ===============================
+        // STATION SUMMARY ROWS
+        // ===============================
+        stationSummaries.forEach(s => {
+            html += `
+                <tr>
+                    <td><strong>${s.title}</strong></td>
+                    <td class="text-primary font-weight-bold">
+                        ${s.procedure}/${s.procedureMax}
+                    </td>
+                    <td class="text-success font-weight-bold">
+                        ${s.mcq}/${s.mcqMax}
+                    </td>
+                    <td class="text-danger font-weight-bold">
+                        ${s.total}
+                    </td>
+                </tr>
+            `;
+        });
+
+        // OVERALL ROW
+        html += `
+                <tr class="bg-dark text-white font-weight-bold">
+                    <td>OVERALL</td>
+                    <td>${overallProcedure}</td>
+                    <td>${overallMcq}</td>
+                    <td>${overallTotal}</td>
+                </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+
+        // ===============================
+        // DETAILED STATION BREAKDOWN
+        // ===============================
+        data.stations.forEach((st, index) => {
+
+            html += `
+                <div class="p-3 mb-4 rounded shadow-sm border">
+
+                    <h5 class="text-primary">
+                        ${st.station_title}
+                    </h5>
+            `;
+
+            // Procedures Table
+            html += `
+                <h6 class="mt-3">Procedures</h6>
+                <table class="table table-bordered table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Procedure</th>
+                            <th>Mark Obtainable</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            st.procedures.forEach(p => {
+                html += `
+                    <tr>
+                        <td>${p.name}</td>
+                        <td>${p.marks}</td>
+                        <td class="font-weight-bold">${p.score}</td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+
+            // MCQs
+            html += `<h6 class="mt-3">MCQs</h6>`;
+
+            st.mcqs.forEach((q, idx) => {
+
+                html += `
+                    <div class="mb-2">
+                        <p>
+                            <strong>Q${idx+1}: ${q.question}</strong>
+                            <span class="text-info">(Mark Obtainable: ${q.mark})</span>
+                        </p>
+                        <ul>
+                `;
+
+                q.options.forEach(opt => {
+
+                    const selected = opt.is_selected 
+                        ? '<span class="text-primary font-weight-bold">✔ Selected</span>' 
+                        : '';
+
+                    const correct = opt.is_correct == 1
+                        ? '<span class="text-success font-weight-bold">✔ Correct</span>' 
+                        : '';
+
+                    html += `<li>${opt.text} ${selected} ${correct}</li>`;
+                });
+
+                html += `</ul></div>`;
+            });
+
+            html += `</div>`;
+        });
+
+        html += `</div>`;
+
+        $('#studentPreviewContent').html(html);
+        $('#studentPreviewModal').modal('show');
+
+    });
+
+});
+</script>
+
+
+<script>
+    function printFullReport(){
+    const content = document.getElementById('printFullReport').innerHTML;
+    const win = window.open('', '', 'width=900,height=700');
+
+    win.document.write(`
+        <html>
+        <head>
+            <title>Full OSCE Report</title>
+            <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        </head>
+        <body>${content}</body>
+        </html>
+    `);
+
+    win.document.close();
+    win.print();
+}
+
+</script>
 
 
 <!-- <script>
