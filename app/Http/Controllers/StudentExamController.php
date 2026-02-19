@@ -14,6 +14,7 @@ class StudentExamController extends Controller
     public function studentDashboard(Request $request)
     {
         $studentId = $request->session()->get('osce_student');
+
         if (!$studentId) {
             return redirect()->route('osce-home')
                 ->with('error', 'Please login as a student to access this page.');
@@ -21,21 +22,19 @@ class StudentExamController extends Controller
 
         $student = StudentAdmission::find($studentId);
 
-        // Fetch all stations
         $stations = Station::orderBy('id')->get();
 
-        $completedStations = [];
-        $lockedStations = [];
+        $stationStatus = [];
 
-        foreach ($stations as $index => $station) {
+        foreach ($stations as $station) {
 
-            // Check if procedure completed
+            // Procedure completed?
             $procedureDone = \DB::table('examiner_scores')
                 ->where('student_id', $studentId)
                 ->where('station_id', $station->id)
                 ->exists();
 
-            // Check if MCQ submitted
+            // MCQ submitted?
             $stationResult = \DB::table('station_results')
                 ->where('student_id', $studentId)
                 ->where('station_id', $station->id)
@@ -43,22 +42,18 @@ class StudentExamController extends Controller
 
             $mcqDone = $stationResult && $stationResult->mcq_submitted;
 
-            // Mark station completed if both procedure and MCQ are done
-            if ($procedureDone && $mcqDone) {
-                $completedStations[] = $station->id;
-            }
-
-            // Lock the station if previous station is not completed
-            if ($index > 0) {
-                $previousStation = $stations[$index - 1];
-                if (!in_array($previousStation->id, $completedStations)) {
-                    $lockedStations[$station->id] = true;
-                }
+            if (!$procedureDone) {
+                $stationStatus[$station->id] = 'locked';
+            } elseif ($procedureDone && !$mcqDone) {
+                $stationStatus[$station->id] = 'available';
+            } else {
+                $stationStatus[$station->id] = 'completed';
             }
         }
 
-        return view('osce.students.dashboard', compact('stations', 'completedStations', 'lockedStations'));
+        return view('osce.students.dashboard', compact('stations', 'stationStatus'));
     }
+
 
     public function loadStation(Request $request, Station $station)
     {

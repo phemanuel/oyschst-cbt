@@ -24,6 +24,7 @@ class User extends Authenticatable
         'login_attempts',
         'email_verified_status',
         'user_type',
+        'station_id',
         //--Exam Setting
         'exam_setting',
         'edit_exam_setting',
@@ -81,4 +82,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function station()
+    {
+        return $this->belongsTo(Station::class);
+    }
 }

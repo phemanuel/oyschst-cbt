@@ -17,38 +17,58 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Assigned Station</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse($examiners as $examiner)
-            <tr id="examiner-{{ $examiner->id }}">
-                <td>{{ $loop->iteration }}</td>
-                <td class="examiner-name">{{ $examiner->name }}</td>
-                <td class="examiner-email">{{ $examiner->email }}</td>
-                <td class="examiner-user-type">{{ $examiner->user_type }}</td>
-                <td class="examiner-status">{{ ucfirst($examiner->user_status) }}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary edit-examiner-btn"
-                        data-id="{{ $examiner->id }}"
-                        data-name="{{ $examiner->name }}"
-                        data-email="{{ $examiner->email }}"
-                        data-status="{{ $examiner->user_status }}"
-                        data-user-type="{{ $examiner->user_type }}">
-                        Edit
-                    </button>
-                    <button class="btn btn-sm btn-danger delete-examiner-btn"
-                        data-id="{{ $examiner->id }}">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="5" class="text-center text-muted">No admin/examiners found.</td>
-            </tr>
-            @endforelse
+<tr id="examiner-{{ $examiner->id }}">
+    <td>{{ $loop->iteration }}</td>
+    <td class="examiner-name">{{ $examiner->name }}</td>
+    <td class="examiner-email">{{ $examiner->email }}</td>
+    <td class="examiner-user-type">{{ $examiner->user_type }}</td>
+    <td class="examiner-station">
+    {{ $examiner->station->title ?? 'Not Assigned' }}
+    </td>
+    <td class="examiner-status">{{ ucfirst($examiner->user_status) }}</td>
+    <td>
+
+        {{-- Show Assign ONLY if user_type is examiner --}}
+        @if($examiner->user_type === 'examiner')
+            <button class="btn btn-sm btn-success assign-examiner-btn"
+                data-id="{{ $examiner->id }}"
+                data-name="{{ $examiner->name }}"
+                data-email="{{ $examiner->email }}"
+                data-station-id="{{ $examiner->station_id }}">
+                Assign
+            </button>
+        @endif
+
+        <button class="btn btn-sm btn-primary edit-examiner-btn"
+            data-id="{{ $examiner->id }}"
+            data-name="{{ $examiner->name }}"
+            data-email="{{ $examiner->email }}"
+            data-status="{{ $examiner->user_status }}"
+            data-user-type="{{ $examiner->user_type }}">
+            Edit
+        </button>
+
+        <button class="btn btn-sm btn-danger delete-examiner-btn"
+            data-id="{{ $examiner->id }}">
+            Delete
+        </button>
+
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="6" class="text-center text-muted">
+        No admin/examiners found.
+    </td>
+</tr>
+@endforelse
         </tbody>
     </table>
 </div>
@@ -172,6 +192,58 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="assignStationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Examiner to Station</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="assignStationForm">
+                    @csrf
+                    <input type="hidden" id="assign_user_id">
+
+                    <div class="mb-2">
+                        <label>Name</label>
+                        <input type="text" id="assign_name" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Email</label>
+                        <input type="text" id="assign_email" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Select Station</label>
+                        <select id="assign_station_id" class="form-control">
+                            <option value="">-- Select Station --</option>
+                            @foreach($stations as $station)
+                                <option value="{{ $station->id }}">
+                                    {{ $station->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveAssignBtn">
+                    Save Assignment
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 <script src="{{ asset('student/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('student/js/bootstrap.bundle.min.js') }}"></script>
@@ -290,3 +362,62 @@ $(document).ready(function(){
 
 });
 </script>
+
+<script>
+
+$(document).on('click', '.assign-examiner-btn', function(){
+
+    const id = $(this).data('id');
+    const name = $(this).data('name');
+    const email = $(this).data('email');
+    const stationId = $(this).data('station-id');
+
+    $('#assign_user_id').val(id);
+    $('#assign_name').val(name);
+    $('#assign_email').val(email);
+
+    // Reset dropdown
+    $('#assign_station_id').val('');
+
+    // Preselect if already assigned
+    if(stationId){
+        $('#assign_station_id').val(stationId);
+    }
+
+    $('#assignStationModal').modal('show');
+});
+
+
+// SAVE ASSIGNMENT
+$(document).on('click', '#saveAssignBtn', function(){
+
+    const userId = $('#assign_user_id').val();
+    const stationId = $('#assign_station_id').val();
+
+    $.ajax({
+        url: `/osce/examiner/assign-station/${userId}`,
+        method: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            station_id: stationId
+        },
+        success: function(response){
+
+            $('#assignStationModal').modal('hide');
+
+            // Update button data attribute for future reassign
+            $(`#examiner-${userId} .assign-examiner-btn`)
+                .data('station-id', stationId);
+
+            alert('Station assigned successfully');
+            location.reload();
+        },
+        error: function(){
+            alert('Assignment failed');
+        }
+    });
+
+});
+
+</script>
+

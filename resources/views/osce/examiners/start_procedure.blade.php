@@ -57,7 +57,7 @@
                             $existingScore = $examinerScores[$procedure->id] ?? null;
                         @endphp
 
-                        <select name="procedure_{{ $procedure->id }}" class="form-control">
+                        <select name="procedures[{{ $procedure->id }}]" class="form-control">
                             @foreach($sequence as $score)
                                 @if($score <= $procedure->marks)
                                     <option value="{{ $score }}" {{ $existingScore !== null && $existingScore == $score ? 'selected' : '' }}>

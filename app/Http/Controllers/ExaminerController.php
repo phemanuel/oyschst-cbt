@@ -20,7 +20,8 @@ class ExaminerController extends Controller
     public function index()
     {
         $examiners = User::whereIn('user_type', ['examiner', 'admin'])->get(); 
-        return view('osce.examiners.index', compact('examiners'));
+        $stations = Station::All();
+        return view('osce.examiners.index', compact('examiners','stations'));
     }
 
     // Store new examiner
@@ -116,9 +117,20 @@ class ExaminerController extends Controller
     // Show all stations as cards
     public function dashboard()
     {
-        $stations = Station::all();
+        $user = auth()->user();
+
+        $stations = \App\Models\Station::with([
+            'procedures',
+            'mcqQuestions',
+            'stationResults.student'
+        ])
+        ->where('id', $user->station_id) // 👈 filter by assigned station
+        ->get();
+
         return view('osce.examiners.dashboard', compact('stations'));
     }
+
+
 
     // Return students for a station (modal)
     public function stationStudents(Request $request, $stationId)
@@ -154,52 +166,16 @@ class ExaminerController extends Controller
 
     public function startProcedure(Station $station, StudentAdmission $student)
     {
-        // Fetch all stations ordered by ID
-        $allStations = Station::orderBy('id')->get();
-
-        // Find index of current station
-        $stationIndex = $allStations->search(fn($s) => $s->id == $station->id);
-
-        // Check previous station requirements
-        if ($stationIndex > 0) {
-            $previousStation = $allStations[$stationIndex - 1];
-
-            // 1️⃣ Check previous procedure completion
-            $procedureCompleted = ExaminerScore::where('student_id', $student->id)
-                ->where('station_id', $previousStation->id)
-                ->exists();
-
-            // 2️⃣ Check previous MCQs completion
-            $previousMCQIds = $previousStation->mcqQuestions()->pluck('id')->toArray();
-            $mcqCompleted = StudentMcqAnswer::where('student_id', $student->id)
-                ->whereIn('mcq_id', $previousMCQIds)
-                ->exists();
-
-            // If either is missing, redirect with message
-            if (!$procedureCompleted || !$mcqCompleted) {
-                $message = "Student cannot start this procedure. ";
-                if (!$procedureCompleted && !$mcqCompleted) {
-                    $message .= "Previous station's procedure and MCQs are not completed.";
-                } elseif (!$procedureCompleted) {
-                    $message .= "Previous station's procedure is not completed.";
-                } elseif (!$mcqCompleted) {
-                    $message .= "Previous station's MCQs are not completed.";
-                }
-
-                return redirect()->back()->with('error', $message);
-            }
-        }
-
-        // Fetch all procedures for this station
+        // Fetch procedures for this station
         $procedures = $station->procedures()->orderBy('id')->get();
 
-        // Fetch existing examiner scores for this student and station
+        // Fetch existing examiner scores
         $examinerScores = ExaminerScore::where('station_id', $station->id)
             ->where('student_id', $student->id)
             ->pluck('score', 'procedure_id')
             ->toArray();
 
-        // Check if student has already started/completed this procedure
+        // Check if already started/completed
         $hasResult = !empty($examinerScores);
 
         return view('osce.examiners.start_procedure', compact(
@@ -214,68 +190,83 @@ class ExaminerController extends Controller
 
     // Return procedures for selected student and station
  public function storeProcedureScores(Request $request, Station $station, StudentAdmission $student)
-{
-    DB::beginTransaction();
+    {
+        // dd($request->all());
+        DB::beginTransaction();
 
-    try {
-        $totalExaminerScore = 0;
+        try {
+            $totalExaminerScore = 0;
 
-        $proceduresScores = $request->input('procedures', []); // array [procedure_id => score]
+            $proceduresScores = $request->input('procedures', []); // array [procedure_id => score]
 
-        foreach ($proceduresScores as $procedureId => $score) {
-            // Check score type
-            info("Saving score: student={$student->id}, station={$station->id}, procedure={$procedureId}, score={$score}");
+            foreach ($proceduresScores as $procedureId => $score) {
+                // Check score type
+                info("Saving score: student={$student->id}, station={$station->id}, procedure={$procedureId}, score={$score}");
 
-            ExaminerScore::updateOrCreate(
+                ExaminerScore::updateOrCreate(
+                    [
+                        'student_id'   => $student->id,
+                        'station_id'   => $station->id,
+                        'procedure_id' => $procedureId,
+                    ],
+                    [
+                        'score' => $score,
+                    ]
+                );
+
+                $totalExaminerScore += $score;
+            }
+
+            // Update or create station result
+            $stationResult = StationResult::updateOrCreate(
                 [
-                    'student_id'   => $student->id,
-                    'station_id'   => $station->id,
-                    'procedure_id' => $procedureId,
+                    'student_id' => $student->id,
+                    'station_id' => $station->id,
                 ],
                 [
-                    'score' => $score,
+                    'examiner_score' => $totalExaminerScore,
+                    'mcq_time_left' => $station->duration,
                 ]
             );
 
-            $totalExaminerScore += $score;
+            $mcqScore = $stationResult->mcq_score ?? 0;
+
+            $stationResult->update([
+                'total_score' => $totalExaminerScore + $mcqScore
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('examiner.dashboard')
+                ->with('success', 'Procedure Scores saved successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log the exception so we can see it in storage/logs/laravel.log
+            \Log::error('Error saving procedure scores: '.$e->getMessage(), [
+                'student' => $student->id,
+                'station' => $station->id,
+                'request' => $request->all()
+            ]);
+
+            return back()->with('error', 'Something went wrong: '.$e->getMessage());
         }
-
-        // Update or create station result
-        $stationResult = StationResult::updateOrCreate(
-            [
-                'student_id' => $student->id,
-                'station_id' => $station->id,
-            ],
-            [
-                'examiner_score' => $totalExaminerScore,
-                'mcq_time_left' => $station->duration,
-            ]
-        );
-
-        $mcqScore = $stationResult->mcq_score ?? 0;
-
-        $stationResult->update([
-            'total_score' => $totalExaminerScore + $mcqScore
-        ]);
-
-        DB::commit();
-
-        return redirect()->route('examiner.dashboard')
-            ->with('success', 'Procedure Scores saved successfully.');
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        // Log the exception so we can see it in storage/logs/laravel.log
-        \Log::error('Error saving procedure scores: '.$e->getMessage(), [
-            'student' => $student->id,
-            'station' => $station->id,
-            'request' => $request->all()
-        ]);
-
-        return back()->with('error', 'Something went wrong: '.$e->getMessage());
     }
-}
 
+    public function assignStation(Request $request, User $user)
+    {
+        $request->validate([
+            'station_id' => 'nullable|exists:stations,id'
+        ]);
+
+        $user->update([
+            'station_id' => $request->station_id
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
 
 
 

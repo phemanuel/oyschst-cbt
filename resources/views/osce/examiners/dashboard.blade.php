@@ -27,34 +27,58 @@
     </div>
 
     <div class="row">
-        @foreach($stations as $station)
+    @foreach($stations as $station)
+
+        @if($station->id == auth()->user()->station_id)
+
             <div class="col-md-4 mb-4">
                 <div class="card station-card shadow-sm cursor-pointer" 
-                data-station-id="{{ $station->id }}" 
-                data-station-title="{{ $station->title }}" 
-                data-practical-question="{{ $station->practical_question }}">
+                    data-station-id="{{ $station->id }}" 
+                    data-station-title="{{ $station->title }}" 
+                    data-practical-question="{{ $station->practical_question }}">
+
                     <div class="card-body text-center">
-                        <h5 class="card-title font-weight-bold">{{ $station->title }}</h5>
-                        <p class="card-text">{{ Str::limit($station->practical_question, 80) }}</p>
+
+                        <h5 class="card-title font-weight-bold">
+                            {{ $station->title }}
+                        </h5>
+
+                        <p class="card-text">
+                            {{ Str::limit($station->practical_question, 80) }}
+                        </p>
 
                         <div class="d-flex flex-wrap justify-content-around mt-3 mb-2 gap-2">
-                            <span class="badge badge-primary">Procedures: {{ $station->procedures->count() }}</span>                           
-                            <span class="badge badge-info">Total Procedure Marks: {{ $station->procedures->sum('marks') }}</span>
-                            <span class="badge badge-success">MCQs: {{ $station->mcqQuestions->count() }}</span>
-                            <span class="badge badge-info">Total MCQ Marks: {{ $station->mcqQuestions->sum('mark') }}</span>
+                            <span class="badge badge-primary">
+                                Procedures: {{ $station->procedures->count() }}
+                            </span>                           
+
+                            <span class="badge badge-info">
+                                Total Procedure Marks: {{ $station->procedures->sum('marks') }}
+                            </span>
+
+                            <span class="badge badge-success">
+                                MCQs: {{ $station->mcqQuestions->count() }}
+                            </span>
+
+                            <span class="badge badge-info">
+                                Total MCQ Marks: {{ $station->mcqQuestions->sum('mark') }}
+                            </span>
                         </div>
 
                         <!-- Graded students list -->
-                         
                         <div class="graded-students mt-3">
-                            <h6 class="text-dark font-weight-bold border-bottom pb-1">Graded Students</h6>
-                            
+                            <h6 class="text-dark font-weight-bold border-bottom pb-1">
+                                Graded Students
+                            </h6>
+
                             @php
                                 $gradedStudents = $station->stationResults()->with('student')->get();
                             @endphp
 
                             @if($gradedStudents->isEmpty())
-                                <p class="text-muted"><em>No student graded yet</em></p>
+                                <p class="text-muted">
+                                    <em>No student graded yet</em>
+                                </p>
                             @else
                                 <div style="max-height: 250px; overflow-y: auto;">
                                     <table class="table table-sm table-hover mb-0">
@@ -71,10 +95,25 @@
                                             @foreach($gradedStudents as $index => $result)
                                                 <tr>
                                                     <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $result->student->first_name ?? '' }} {{ $result->student->surname ?? '' }}</td>
-                                                    <td><span class="badge badge-info">{{ $result->mcq_score ?? 0 }}</span></td>
-                                                    <td><span class="badge badge-warning">{{ $result->examiner_score ?? 0 }}</span></td>
-                                                    <td><span class="badge badge-success">{{ $result->total_score ?? 0 }}</span></td>
+                                                    <td>
+                                                        {{ $result->student->first_name ?? '' }}
+                                                        {{ $result->student->surname ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-info">
+                                                            {{ $result->mcq_score ?? 0 }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-warning">
+                                                            {{ $result->examiner_score ?? 0 }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-success">
+                                                            {{ $result->total_score ?? 0 }}
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -83,12 +122,15 @@
                             @endif
                         </div>
 
-
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+
+        @endif
+
+    @endforeach
+</div>
+
 
 
 </div>
@@ -174,18 +216,22 @@ $(document).ready(function() {
 
     // Click on station card
     $(document).on('click', '.station-card', function() {
+
         let stationId = $(this).data('station-id');
         let stationTitle = $(this).data('station-title');
         let practicalQuestion = $(this).data('practical-question');
 
         // Combine both into a single display
         let displayText = stationTitle;
-        if(practicalQuestion && practicalQuestion.trim() !== '') {
-            displayText += ' – ' + practicalQuestion; // Use a dash or any separator
+        if (practicalQuestion && practicalQuestion.trim() !== '') {
+            displayText += ' – ' + practicalQuestion;
         }
 
-    // Set combined text in modal
-    $('#modalStationTitle').text(displayText);
+        // Set combined text in modal
+        $('#modalStationTitle').text(displayText);
+
+        // Store stationId in modal (important for search)
+        $('#studentsModal').data('station-id', stationId);
 
         // Fetch students (initial load)
         fetchStudents(stationId);
@@ -194,50 +240,62 @@ $(document).ready(function() {
         $('#studentsModal').modal('show');
     });
 
+
     // Search students in modal
     $(document).on('input', '#studentSearch', function() {
-        let stationId = $('#studentsModal').data('station-id');
+
+        let stationId = $('#studentsModal').data('station-id'); // get saved id
         let q = $(this).val();
+
         fetchStudents(stationId, q);
     });
 
+
+    // =========================
+    // FETCH STUDENTS FUNCTION
+    // =========================
     function fetchStudents(stationId, search = '') {
+
         $.get(`/osce/examiner/station/${stationId}/students`, { q: search }, function(res) {
+
             let tbody = $('#studentsTable tbody');
             tbody.empty();
+
             res.students.forEach((stu, i) => {
-    let picture = stu.picture_name 
-        ? `<img src="/uploads/${stu.picture_name}.jpg" class="rounded-circle" width="40">` 
-        : `<img src="/uploads/blank.jpg" class="rounded-circle" width="40">`;
 
-    // Properly construct full name
-    let fullName = [stu.first_name, stu.surname, stu.other_name].filter(Boolean).join(' ');
+                let picture = stu.picture_name 
+                    ? `<img src="/uploads/${stu.picture_name}.jpg" class="rounded-circle" width="40">`
+                    : `<img src="/uploads/blank.jpg" class="rounded-circle" width="40">`;
 
-    let btnClass = stu.hasResult ? 'btn-warning' : 'btn-success';
-    let btnText = stu.hasResult ? 'Review' : 'Start Procedure';
+                let fullName = [stu.first_name, stu.surname, stu.other_name]
+                    .filter(Boolean)
+                    .join(' ');
 
-    tbody.append(`
-        <tr class="student-row" data-student-id="${stu.id}" data-station-id="${stationId}">
-            <td>${i+1}</td>
-            <td>${picture}</td>
-            <td>${stu.admission_no}</td>
-            <td>${fullName}</td>
-            <td>${stu.department}</td>
-            <td>
-                <a href="/osce/examiner/station/${stationId}/student/${stu.id}"                   
-                class="btn ${btnClass} btn-sm">
-                    ${btnText}
-                </a>
-            </td>
-        </tr>
-    `);
-});
-            // Save stationId in modal for search
-            $('#studentsModal').data('station-id', res.station_id);
+                let btnClass = stu.hasResult ? 'btn-warning' : 'btn-success';
+                let btnText  = stu.hasResult ? 'Review' : 'Start Procedure';
+
+                // ✅ USE stationId passed into function
+                tbody.append(`
+                    <tr class="student-row" data-student-id="${stu.id}" data-station-id="${stationId}">
+                        <td>${i+1}</td>
+                        <td>${picture}</td>
+                        <td>${stu.admission_no}</td>
+                        <td>${fullName}</td>
+                        <td>${stu.department}</td>
+                        <td>
+                            <a href="/osce/examiner/station/${stationId}/students/${stu.id}"                   
+                               class="btn ${btnClass} btn-sm">
+                                ${btnText}
+                            </a>
+                        </td>
+                    </tr>
+                `);
+
+            });
+
         });
+
     }
 
 });
-
-
 </script>

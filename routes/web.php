@@ -518,11 +518,12 @@ Route::get('/', function () {
             Route::post('examiners', [ExaminerController::class, 'store'])->name('examiners.store');
             Route::post('examiners/{examiner}', [ExaminerController::class, 'update'])->name('examiners.update');
             Route::delete('examiners/{examiner}', [ExaminerController::class, 'destroy'])->name('examiners.destroy');
+            Route::post('/examiner/assign-station/{user}', [ExaminerController::class, 'assignStation'])->name('examiners.assign');;
 
             Route::get('/examiner/dashboard', [ExaminerController::class, 'dashboard'])->name('examiner.dashboard');
             Route::get('/examiner/station/{station}/students', [ExaminerController::class, 'stationStudents'])
             ->name('examiner.station.students');            
-            Route::get('/examiner/station/{station}/student/{student}', [ExaminerController::class, 'startProcedure'])
+            Route::get('/examiner/station/{station}/students/{student}', [ExaminerController::class, 'startProcedure'])
             ->name('examiner.start.procedure');
             Route::post('/examiner/station/{station}/student/{student}/score', [ExaminerController::class, 'storeProcedureScores'])
             ->name('examiner.store.procedure');

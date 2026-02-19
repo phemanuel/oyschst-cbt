@@ -5,57 +5,41 @@
     <h4>Available Stations</h4>
 
     <div class="row">
-        @foreach($stations as $index => $station)
+    @foreach($stations as $station)
 
-            @php
-                $previousStation = $stations[$index - 1] ?? null;
+        @php
+            $status = $stationStatus[$station->id] ?? 'locked';
+            $hasMcqs = $station->mcqQuestions()->count() > 0;
+        @endphp
 
-                // Determine if station has MCQs
-                $hasMcqs = $station->mcqQuestions()->count() > 0;
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>{{ $station->title }}</h5>
 
-                // Completed if procedure + MCQ submitted
-                $isCompleted = in_array($station->id, $completedStations);
+                    @if(!$hasMcqs)
+                        <span class="badge bg-warning text-dark">No MCQs</span>
 
-                // Determine if student can access
-                $canAccess = false;
-                if($hasMcqs){
-                    if($previousStation){
-                        $prevCompleted = in_array($previousStation->id, $completedStations);
-                        $currentProcedureDone = \DB::table('examiner_scores')
-                            ->where('student_id', session('osce_student'))
-                            ->where('station_id', $station->id)
-                            ->exists();
-                        $canAccess = $prevCompleted && $currentProcedureDone;
-                    } else {
-                        // First station
-                        $canAccess = true;
-                    }
-                }
-            @endphp
+                    @elseif($status === 'completed')
+                        <span class="badge bg-success">Completed</span>
 
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body text-center">
-                        <h5>{{ $station->title }}</h5>
+                    @elseif($status === 'locked')
+                        <span class="badge bg-danger">Locked</span>
 
-                        @if(!$hasMcqs)
-                            <span class="badge badge-warning">No MCQs</span>
-                        @elseif($isCompleted)
-                            <span class="badge badge-success">Completed</span>
-                        @elseif(!$canAccess)
-                            <span class="badge badge-danger">Locked</span>
-                        @else
-                            <button class="btn btn-primary mt-2 start-mcq-btn"
-                                    data-station-id="{{ $station->id }}">
-                                Start MCQ
-                            </button>
-                        @endif
-                    </div>
+                    @elseif($status === 'available')
+                        <button class="btn btn-primary mt-2 start-mcq-btn"
+                                data-station-id="{{ $station->id }}">
+                            Start MCQ
+                        </button>
+                    @endif
+
                 </div>
             </div>
+        </div>
 
-        @endforeach
-    </div>
+    @endforeach
+</div>
+
 </div>
 
 <!-- No MCQ Modal -->
