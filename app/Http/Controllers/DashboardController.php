@@ -37,10 +37,17 @@ class DashboardController extends Controller
         $studentData = StudentAdmission::where('id', $id)
                         //->where('department', $department)
                         ->first();
+        if(!$studentData){
+            return redirect()->back()->with('error', 'Student information unavailable.');
+        }
 
         $examSetting = ExamSetting::where('department', $studentData->department)
         ->where('level', $studentData->level)
-        ->first();    
+        ->first();   
+        
+        if(!$examSetting){
+            return redirect()->back()->with('error', 'Exam setting has not been configured.');
+        }
 
         return view('student.pages.dashboard', compact('softwareVersion', 'collegeSetup', 'studentData',
     'examSetting'));

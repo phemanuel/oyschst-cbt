@@ -42,11 +42,17 @@
     {{-- SUMMARY SECTION --}}
     {{-- ============================= --}}
     <h5 class="mb-3 text-success">Overall Summary</h5>
-
+        <div class="row mb-3">
+            <!--<div class="col-md-4">-->
+            <!--    <label>Select Exam Date</label>-->
+            <!--    <input type="date" id="summaryDateInput" class="form-control">-->
+            <!--</div>-->
+        </div>
     <div class="row">
         <div class="col-md-4 mb-3">
             <div class="card shadow summary-card p-3 bg-dark text-white"
-                 style="cursor:pointer;">
+            
+             style="cursor:pointer;">
 
                 <div class="card-body text-center">
                     <h5 class="card-title">Summary Report</h5>
@@ -65,11 +71,39 @@
 <div class="modal fade" id="stationStudentsModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
+      
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Student Results</h5>
+        <h5 class="modal-title">
+            Student Results - <span id="summaryDateLabel"></span>
+        </h5>
         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
       </div>
+      
       <div class="modal-body">
+
+        <!-- Controls: Print, Export, Date Picker -->
+        <div class="d-flex flex-wrap align-items-end mb-3">
+
+          <button class="btn btn-sm btn-primary mr-2 mb-2" id="printSummaryBtn">
+            Print Scored Students
+          </button>
+
+          <button class="btn btn-sm btn-success mr-2 mb-2" id="exportExcelBtn">
+            Export to Excel
+          </button>
+
+          <div class="form-group mb-2">
+            <label for="summaryDateInput" class="mr-2"><strong>Filter by Date</strong></label>
+            <input type="date" id="summaryDateInput" class="form-control d-inline-block" style="width:auto;">
+          </div>
+
+          <button class="btn btn-primary mb-2 ml-2" id="loadSummaryBtn">
+            Load Results
+          </button>
+
+        </div>
+
+        <!-- Students Table -->
         <table class="table table-bordered table-hover" id="stationStudentsTable">
             <thead class="thead-light">
                 <tr>
@@ -83,11 +117,11 @@
             </thead>
             <tbody></tbody>
         </table>
+
       </div>
     </div>
   </div>
 </div>
-
 
 <!-- Student Preview Modal -->
 <div class="modal fade" id="studentPreviewModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -108,92 +142,99 @@
 <script src="{{ asset('student/js/bootstrap.bundle.min.js') }}"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
+<script>
+    const resultsStationUrl = "{{ route('osce.results.station', ':id') }}";
+</script>
 <script>
 $(document).ready(function(){
 
 
 
-    let currentStation = {}; // store selected station info
+    let currentStation = {};
 
-    // =========================
-    // CLICK STATION CARD
-    // =========================
-    $('.station-card').on('click', function(){
+// =========================
+// INIT DATA TABLE (once only)
+// =========================
+const stationTable = $('#stationStudentsTable').DataTable({
+    paging: true,
+    searching: true,
+    info: false,
+    lengthChange: false,
+    pageLength: 10,
+    destroy: true,
+    columns: [
+        { data: 'admission_no' },
+        { data: 'full_name' },
+        { data: 'examiner_score' },
+        { data: 'mcq_score' },
+        { data: 'total_score' },
+        { data: 'action' }
+    ],
+    language: {
+        emptyTable: "No students found"
+    }
+});
 
-        const stationId = $(this).data('station-id');
 
-        currentStation = {
-            id: stationId,
-            title: $(this).data('station-title') ?? 'N/A',
-            practicalQuestion: $(this).data('practical-question') ?? 'N/A'
-        };
+// =========================
+// CLICK STATION CARD
+// =========================
+$('.station-card').on('click', function () {
 
-        // Destroy previous DataTable safely
-        if ($.fn.DataTable.isDataTable('#stationStudentsTable')) {
-            $('#stationStudentsTable').DataTable().clear().destroy();
-        }
+    const stationId = $(this).data('station-id');
 
-        $('#stationStudentsTable tbody').empty();
+    currentStation = {
+        id: stationId,
+        title: $(this).data('station-title') ?? 'N/A',
+        practicalQuestion: $(this).data('practical-question') ?? 'N/A'
+    };
 
-        $.get(`/osce/results/station/${stationId}`, function(data){
+    $.get(resultsStationUrl.replace(':id', stationId), function (data) {
 
-            if(data.length === 0){
-                $('#stationStudentsTable tbody').append(`
-                    <tr>
-                        <td colspan="6" class="text-center">No students found</td>
-                    </tr>
-                `);
-            } else {
-                data.forEach(res => {
+        // clear existing rows safely
+        stationTable.clear();
 
-                    const fullName = `${res.student.surname ?? ''} ${res.student.first_name ?? ''} ${res.student.other_name ?? ''}`;
+        if (data && data.length > 0) {
 
-                    $('#stationStudentsTable tbody').append(`
-                        <tr>
-                            <td>${res.student.admission_no ?? '-'}</td>
-                            <td>${fullName}</td>
-                            <td>${res.examiner_score ?? 0}</td>
-                            <td>${res.mcq_score ?? 0}</td>
-                            <td>${res.total_score ?? 0}</td>
-                            <td>
-                                <button class="btn btn-sm btn-info preview-student-btn" 
-                                    data-student-id="${res.student.id}"
-                                    data-station-id="${currentStation.id}"
-                                    data-station-title="${currentStation.title}"
-                                    data-practical-question="${currentStation.practicalQuestion}"
-                                    data-procedure-total="${res.examiner_score ?? 0}"
-                                    data-mcq-total="${res.mcq_score ?? 0}"
-                                    data-overall-total="${res.total_score ?? 0}">
-                                    Preview <i class="fas fa-eye"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `);
-                });
-            }
+            const formatted = data.map(res => {
 
-            if ($.fn.DataTable.isDataTable('#stationStudentsTable')) {
-                $('#stationStudentsTable').DataTable().destroy();
-            }
+                const fullName = `${res.student?.surname ?? ''} ${res.student?.first_name ?? ''} ${res.student?.other_name ?? ''}`.trim();
 
-            $('#stationStudentsTable').DataTable({
-                paging: true,
-                searching: true,
-                info: false,
-                lengthChange: false,
-                pageLength: 10,
-                destroy: true
+                return {
+                    admission_no: res.student?.admission_no ?? '-',
+                    full_name: fullName || '-',
+                    examiner_score: res.examiner_score ?? 0,
+                    mcq_score: res.mcq_score ?? 0,
+                    total_score: res.total_score ?? 0,
+                    action: `
+                        <button class="btn btn-sm btn-info preview-student-btn"
+                            data-student-id="${res.student?.id}"
+                            data-station-id="${currentStation.id}"
+                            data-station-title="${currentStation.title}"
+                            data-practical-question="${currentStation.practicalQuestion}"
+                            data-procedure-total="${res.examiner_score ?? 0}"
+                            data-mcq-total="${res.mcq_score ?? 0}"
+                            data-overall-total="${res.total_score ?? 0}">
+                            Preview <i class="fas fa-eye"></i>
+                        </button>
+                    `
+                };
             });
 
-            $('#stationStudentsModal').modal('show');
+            stationTable.rows.add(formatted);
+        }
 
-        }).fail(function(err){
-            console.error('Error fetching students', err);
-            alert('Failed to fetch students for this station.');
-        });
+        stationTable.draw();
 
+        $('#stationStudentsModal').modal('show');
+
+    }).fail(function (err) {
+        console.error('Error fetching students', err);
+        alert('Failed to fetch students for this station.');
     });
+});
 
     // =========================
     // PREVIEW STUDENT RESULT
@@ -208,7 +249,11 @@ $(document).ready(function(){
         const mcqTotal = $(this).data('mcq-total') ?? 0;
         const overallTotal = $(this).data('overall-total') ?? 0;
 
-        $.get(`/osce/results/student/${studentId}/${stationId}`, function(data){
+            let url = "{{ route('osce.results.student.preview', ['student' => ':student', 'station' => ':station']) }}"
+        .replace(':student', studentId)
+        .replace(':station', stationId);
+    
+    $.get(url, function(data) {
 
             // -----------------------------
             // BUILD HTML
@@ -347,12 +392,19 @@ function printStudentResult(){
 }
 </script>
 
+<!--Summary result data-->
 <script>
-$(document).ready(function(){
+$(function () {
 
-    $(document).on('click', '.summary-card', function(){
+    let summaryData = null; // stores currently loaded data
 
-        console.log('Summary clicked');
+    // =====================================
+    // OPEN SUMMARY MODAL
+    // =====================================
+    $(document).on('click', '.summary-card', function () {
+
+        $('#summaryDateInput').val('');
+        $('#summaryDateLabel').text('');
 
         if ($.fn.DataTable.isDataTable('#stationStudentsTable')) {
             $('#stationStudentsTable').DataTable().clear().destroy();
@@ -361,106 +413,357 @@ $(document).ready(function(){
         $('#stationStudentsTable thead tr').empty();
         $('#stationStudentsTable tbody').empty();
 
-        $.get(`/osce/results/summary`, function(data){
+        // Load all results by default
+        $.get("{{ route('osce.results.student.summary') }}")
+    .done(function (data) {
+                summaryData = data;
 
-            // ----------------------------
-            // BUILD TABLE HEADER
-            // ----------------------------
-            let headerRow = `<th>Student</th>`;
+                buildTableHeader(data.stations);
+                buildTableBody(data.students);
 
-            // Add one column per station
-            data.stations.forEach(st => {
-                headerRow += `<th>${st.title}</th>`;
-            });
-
-            // Add overall + action ONCE
-            headerRow += `<th>Overall</th><th>Action</th>`;
-
-            $('#stationStudentsTable thead tr').append(headerRow);
-
-            // ----------------------------
-            // BUILD TABLE BODY
-            // ----------------------------
-            data.students.forEach(res => {
-
-                let row = `
-                    <tr>
-                        <td>
-                            ${res.student.surname ?? ''} 
-                            ${res.student.first_name ?? ''}<br>
-                            <small>${res.student.admission_no ?? ''}</small>
-                        </td>
-                `;
-
-                res.stations.forEach(st => {
-
-                    if(st.completed){
-                        row += `
-                            <td>
-                                <small>
-                                    Proc: ${st.examiner_score}<br>
-                                    MCQ: ${st.mcq_score}<br>
-                                    <strong>Total: ${st.total_score}</strong>
-                                </small>
-                            </td>
-                        `;
-                    } else {
-                        row += `
-                            <td class="text-danger">
-                                <small>Not Completed</small>
-                            </td>
-                        `;
-                    }
-
+                $('#stationStudentsTable').DataTable({
+                    paging: true,
+                    searching: true,
+                    info: false,
+                    lengthChange: false,
+                    pageLength: 10,
+                    scrollX: true
                 });
 
-                row += `
-                    <td>
-                        <strong class="text-primary">
-                            ${res.overall_total}
-                        </strong>
-                    </td>
-                    <td>
-                        ${
-                            res.overall_total > 0
-                            ? `<button class="btn btn-sm btn-dark preview-full-btn"
-                                data-student-id="${res.student.id}">
-                                Preview
-                            </button>`
-                            : `<span class="text-muted">—</span>`
-                        }
-                    </td>
-                </tr>
-                `;
-
-                $('#stationStudentsTable tbody').append(row);
+                $('#stationStudentsModal').modal('show');
+            })
+            .fail(function () {
+                alert('Failed to load summary.');
             });
-
-            $('#stationStudentsTable').DataTable({
-                paging: true,
-                searching: true,
-                info: false,
-                lengthChange: false,
-                pageLength: 10,
-                scrollX: true
-            });
-
-            $('#stationStudentsModal').modal('show');
-
-        }).fail(function(){
-            alert('Failed to load summary.');
-        });
 
     });
 
+
+    // =====================================
+    // LOAD RESULTS FOR SELECTED DATE
+    // =====================================
+    $(document).on('click', '#loadSummaryBtn', function () {
+
+        let selectedDate = $('#summaryDateInput').val();
+
+        if (!selectedDate) {
+            alert('Please select exam date');
+            return;
+        }
+
+        $('#summaryDateLabel').text(selectedDate);
+
+        if ($.fn.DataTable.isDataTable('#stationStudentsTable')) {
+            $('#stationStudentsTable').DataTable().clear().destroy();
+        }
+
+        $('#stationStudentsTable thead tr').empty();
+        $('#stationStudentsTable tbody').empty();
+
+        // Get summary filtered by selected date
+$.get("{{ route('osce.results.student.summary') }}", { date: selectedDate })
+    .done(function (data) {
+                summaryData = data;
+
+                buildTableHeader(data.stations);
+                buildTableBody(data.students);
+
+                $('#stationStudentsTable').DataTable({
+                    paging: true,
+                    searching: true,
+                    info: false,
+                    lengthChange: false,
+                    pageLength: 10,
+                    scrollX: true
+                });
+
+            })
+            .fail(function () {
+                alert('Failed to load summary for selected date.');
+            });
+
+    });
+
+
+    // =====================================
+    // BUILD TABLE HEADER
+    // =====================================
+    function buildTableHeader(stations) {
+    let headerRow = `
+        <th>Student Name</th>
+        <th>Department</th>
+    `;
+
+    stations.forEach(st => {
+        headerRow += `<th title="${st.title}">${st.title}</th>`;
+    });
+
+    headerRow += `<th>Overall</th><th>Action</th>`;
+
+    $('#stationStudentsTable thead tr').html(headerRow);
+}
+
+
+    // =====================================
+    // BUILD TABLE BODY
+    // =====================================
+    function buildTableBody(students) {
+    $('#stationStudentsTable tbody').empty();
+
+    students.forEach(res => {
+
+        let row = `
+            <tr>
+                <td>
+                    ${res.student.surname ?? ''} ${res.student.first_name ?? ''}<br>
+                    <small>${res.student.admission_no ?? ''}</small>
+                </td>
+                <td>${res.student.department ?? '—'}</td>
+        `;
+
+        res.stations.forEach(st => {
+
+            if (st.completed) {
+
+                row += `
+                    <td>
+                        <div><strong>Procedure:</strong> ${st.examiner_score}</div>
+                        <div><strong>MCQ:</strong> ${st.mcq_score}</div>
+                        <div><strong>Total:</strong> ${st.total_score}</div>
+                    </td>
+                `;
+
+            } else {
+                row += `<td class="text-danger"><small>Not Completed</small></td>`;
+            }
+        });
+
+        row += `
+            <td><strong class="text-primary">${res.overall_total}</strong></td>
+            <td>
+                ${
+                    res.overall_total > 0
+                        ? `<button class="btn btn-sm btn-dark preview-full-btn" data-student-id="${res.student.id}">Preview</button>`
+                        : `<span class="text-muted">—</span>`
+                }
+            </td>
+        </tr>
+        `;
+
+        $('#stationStudentsTable tbody').append(row);
+    });
+}
+
+
+   // =====================================
+// EXPORT TO EXCEL
+// =====================================
+$(document).on('click', '#exportExcelBtn', function () {
+
+    if (!summaryData) {
+        alert('No data available.');
+        return;
+    }
+
+    let excelData = [];
+
+    // =========================
+    // HEADER
+    // =========================
+    let headerRow = ['Student Name', 'Department'];
+
+    summaryData.stations.forEach(st => {
+        headerRow.push(`${st.title} (Proc)`);
+        headerRow.push(`${st.title} (MCQ)`);
+        headerRow.push(`${st.title} (Total)`);
+    });
+
+    headerRow.push('Overall');
+
+    excelData.push(headerRow);
+
+    // =========================
+    // BODY
+    // =========================
+    summaryData.students.forEach(res => {
+
+        let row = [];
+
+        row.push(`${res.student.surname ?? ''} ${res.student.first_name ?? ''} (${res.student.admission_no ?? ''})`);
+        row.push(res.student.department ?? '—');
+
+        res.stations.forEach(st => {
+
+            if (st.completed) {
+                row.push(st.examiner_score);
+                row.push(st.mcq_score);
+                row.push(st.total_score);
+            } else {
+                row.push(0, 0, 0);
+            }
+        });
+
+        row.push(res.overall_total);
+
+        excelData.push(row);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "OSCE Summary");
+
+    let selectedDate = $('#summaryDateInput').val();
+    let fileDate = selectedDate ? selectedDate.replace(/-/g, '') : 'AllDates';
+
+    XLSX.writeFile(wb, `OSCE_Summary_${fileDate}.xlsx`);
 });
+
+    // =====================================
+    // PRINT SUMMARY
+    // =====================================
+    // =====================================
+// PRINT SUMMARY (REFINED)
+// =====================================
+$(document).on('click', '#printSummaryBtn', function () {
+
+    if (!summaryData) {
+        alert('No data available to print.');
+        return;
+    }
+
+    let printHtml = `
+        <table border="1" cellspacing="0" cellpadding="5" width="100%">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Department</th>
+    `;
+
+    // =========================
+    // HEADER (Station Names)
+    // =========================
+    summaryData.stations.forEach(st => {
+        printHtml += `
+            <th>
+                ${st.title}<br>
+                <small>Proc / MCQ / Total</small>
+            </th>
+        `;
+    });
+
+    printHtml += `<th>Overall</th></tr></thead><tbody>`;
+
+    // =========================
+    // BODY
+    // =========================
+    summaryData.students.forEach(res => {
+
+        const hasScore = res.stations.some(st => st.completed);
+        if (!hasScore) return;
+
+        printHtml += `
+            <tr>
+                <td>
+                    ${res.student.surname ?? ''} ${res.student.first_name ?? ''}<br>
+                    <small>${res.student.admission_no ?? ''}</small>
+                </td>
+                <td>${res.student.department ?? '—'}</td>
+        `;
+
+        // =========================
+        // STATION CELLS
+        // =========================
+        res.stations.forEach(st => {
+
+            if (st.completed) {
+                printHtml += `
+                    <td>
+                        ${st.examiner_score} /
+                        ${st.mcq_score} /
+                        ${st.total_score}
+                    </td>
+                `;
+            } else {
+                printHtml += `<td>—</td>`;
+            }
+        });
+
+        printHtml += `
+            <td><strong>${res.overall_total}</strong></td>
+        </tr>
+        `;
+    });
+
+    printHtml += `</tbody></table>`;
+
+    openPrintWindow(printHtml);
+});
+
+
+// =====================================
+// PRINT WINDOW (UNCHANGED BUT CLEAN)
+// =====================================
+function openPrintWindow(content) {
+    const win = window.open('', '', 'width=1200,height=700');
+
+    win.document.write(`
+        <html>
+            <head>
+                <title>OSCE Summary Report</title>
+                <style>
+                    body {
+                        font-family: Arial;
+                        padding: 20px;
+                    }
+
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                    th {
+                        background: #f2f2f2;
+                    }
+
+                    th, td {
+                        padding: 6px;
+                        text-align: center;
+                        font-size: 13px;
+                    }
+
+                    h3 {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h3>OSCE Summary Report</h3>
+                ${content}
+            </body>
+        </html>
+    `);
+
+    win.document.close();
+    win.focus();
+    win.print();
+}
+
+});
+
 </script>
+
+
+
 <script>
 $(document).on('click', '.preview-full-btn', function(){
 
     const studentId = $(this).data('student-id');
 
-    $.get(`/osce/results/student-full/${studentId}`, function(data){
+   $.get(
+    "{{ route('osce.results.student.full', ':student') }}"
+        .replace(':student', studentId),
+    function(data){
 
         let overallProcedure = 0;
         let overallMcq = 0;

@@ -250,7 +250,7 @@ $(document).ready(function(){
     });
 
     $('#exitDashboardBtn').click(function(){
-        window.location.href = "{{ route('student.dashboard') }}";
+        window.location.href = "{{ route('osce.logout') }}";
     });
 
     setInterval(function(){

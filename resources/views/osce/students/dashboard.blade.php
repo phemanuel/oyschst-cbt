@@ -1,6 +1,23 @@
 @extends('layouts.app2')
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show">
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show">
+        {{ session('error') }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+@endif
 <div class="container mt-4">
     <h4>Available Stations</h4>
 
@@ -8,7 +25,7 @@
     @foreach($stations as $station)
 
         @php
-            $status = $stationStatus[$station->id] ?? 'locked';
+            $status = $stationStatus[$station->id] ?? 'available';
             $hasMcqs = $station->mcqQuestions()->count() > 0;
         @endphp
 
@@ -23,11 +40,9 @@
                     @elseif($status === 'completed')
                         <span class="badge bg-success">Completed</span>
 
-                    @elseif($status === 'locked')
-                        <span class="badge bg-danger">Locked</span>
-
-                    @elseif($status === 'available')
-                        <button class="btn btn-primary mt-2 start-mcq-btn"
+                    @else
+                        <button type="button"
+                                class="btn btn-primary mt-2 start-mcq-btn"
                                 data-station-id="{{ $station->id }}">
                             Start MCQ
                         </button>
@@ -39,6 +54,7 @@
 
     @endforeach
 </div>
+
 
 </div>
 

@@ -1023,6 +1023,10 @@ class QuestionController extends Controller
             'answer',
         ];
 
+        if (empty($rows) || !isset($rows[0])) {
+            return back()->with('error', 'Uploaded file is empty or invalid format.');
+        }
+
         $fileHeaders = array_map(fn($h) => strtolower(trim($h)), array_keys($rows[0]));
 
         if ($fileHeaders !== $expectedHeaders) {
@@ -2149,6 +2153,17 @@ class QuestionController extends Controller
         $headers = array_map('trim', fgetcsv($handle, 10000, ','));
 
         while (($row = fgetcsv($handle, 10000, ',')) !== false) {
+
+            // Skip empty rows
+            if (count(array_filter($row)) == 0) {
+                continue;
+            }
+
+            // Ensure equal column count
+            if (count($headers) !== count($row)) {
+                continue; // skip bad row instead of crashing
+            }
+
             $rows[] = array_combine($headers, $row);
         }
 
@@ -2158,14 +2173,27 @@ class QuestionController extends Controller
 
     private function readExcel($file)
     {
-        $spreadsheet = IOFactory::load($file->getRealPath());
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getRealPath());
         $sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
         $headers = array_map('trim', array_shift($sheet));
         $rows = [];
 
         foreach ($sheet as $row) {
-            $rows[] = array_combine($headers, array_values($row));
+
+            $rowValues = array_values($row);
+
+            // Skip empty rows
+            if (count(array_filter($rowValues)) == 0) {
+                continue;
+            }
+
+            // Ensure equal column count
+            if (count($headers) !== count($rowValues)) {
+                continue; // skip bad row
+            }
+
+            $rows[] = array_combine($headers, $rowValues);
         }
 
         return $rows;

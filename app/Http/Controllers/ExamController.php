@@ -72,9 +72,18 @@ class ExamController extends Controller
     {
         try {            
             $studentData = StudentAdmission::where('id', $id)->first();
+            
+            if(!$studentData){
+                return redirect()->back()->with('error', 'Student information unavailable.');
+            }
+            
             $examSetting = ExamSetting::where('department', $studentData->department)
             ->where('level', $studentData->level)
             ->first(); 
+
+            if(!$examSetting){
+                return redirect()->back()->with('error', 'Exam settings has not be configured.');
+            }
             
             $examViewType = $examSetting->exam_view_type;
 

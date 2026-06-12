@@ -28,7 +28,7 @@ class StudentExamController extends Controller
 
         foreach ($stations as $station) {
 
-            // Procedure completed?
+            // Check if procedure completed (optional now)
             $procedureDone = \DB::table('examiner_scores')
                 ->where('student_id', $studentId)
                 ->where('station_id', $station->id)
@@ -42,9 +42,8 @@ class StudentExamController extends Controller
 
             $mcqDone = $stationResult && $stationResult->mcq_submitted;
 
-            if (!$procedureDone) {
-                $stationStatus[$station->id] = 'locked';
-            } elseif ($procedureDone && !$mcqDone) {
+            // NEW LOGIC: MCQ always available unless already completed
+            if (!$mcqDone) {
                 $stationStatus[$station->id] = 'available';
             } else {
                 $stationStatus[$station->id] = 'completed';
@@ -57,6 +56,11 @@ class StudentExamController extends Controller
 
     public function loadStation(Request $request, Station $station)
     {
+        \Log::info('loadStation hit', [
+            'station_id' => $station->id,
+            'session_student' => $request->session()->get('osce_student')
+        ]);
+
         $studentId = $request->session()->get('osce_student');
 
         if (!$studentId) {
@@ -67,77 +71,25 @@ class StudentExamController extends Controller
         $student = StudentAdmission::find($studentId);
 
         if (!$student) {
+            \Log::warning('Invalid student session', [
+                'student_id' => $studentId
+            ]);
+
             return redirect()->route('osce-home')
                 ->with('error', 'Invalid student session.');
         }
 
-        // Get all stations ordered
-        $allStations = Station::orderBy('id')->get();
-
-        // Find current station index
-        $stationIndex = $allStations->search(function ($s) use ($station) {
-            return $s->id == $station->id;
-        });
-
         /*
         |--------------------------------------------------------------------------
-        | 1️⃣ CHECK PREVIOUS STATION REQUIREMENTS
-        |--------------------------------------------------------------------------
-        */
-        if ($stationIndex > 0) {
-
-            $previousStationId = $allStations[$stationIndex - 1]->id;
-
-            // Check previous station MCQ submitted
-            $prevMCQSubmitted = StationResult::where('student_id', $studentId)
-                ->where('station_id', $previousStationId)
-                ->where('mcq_submitted', true)
-                ->exists();
-
-            if (!$prevMCQSubmitted) {
-                return redirect()->route('student.dashboard')
-                    ->with('error', 'You must complete the MCQ of the previous station before attempting this one.');
-            }
-
-            // Check previous station procedure completed
-            $prevProcedureDone = \DB::table('examiner_scores')
-                ->where('student_id', $studentId)
-                ->where('station_id', $previousStationId)
-                ->exists();
-
-            if (!$prevProcedureDone) {
-                return redirect()->route('student.dashboard')
-                    ->with('error', 'You must complete the procedure of the previous station before attempting this one.');
-            }
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | 2️⃣ CHECK CURRENT STATION PROCEDURE COMPLETED
-        |--------------------------------------------------------------------------
-        */
-        $currentProcedureDone = \DB::table('examiner_scores')
-            ->where('student_id', $studentId)
-            ->where('station_id', $station->id)
-            ->exists();
-
-        if (!$currentProcedureDone) {
-            return redirect()->route('student.dashboard')
-                ->with('error', 'You must complete the procedure before accessing this station MCQ.');
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | 3️⃣ LOAD MCQ QUESTIONS
+        | 1️⃣ LOAD MCQ QUESTIONS (No procedure restriction anymore)
         |--------------------------------------------------------------------------
         */
         $questions = $station->mcqQuestions()->with('options')->get();
-
         $noMcqs = $questions->isEmpty();
 
         /*
         |--------------------------------------------------------------------------
-        | 4️⃣ CREATE OR LOAD STATION RESULT
+        | 2️⃣ CREATE OR LOAD STATION RESULT
         |--------------------------------------------------------------------------
         */
         $stationResult = StationResult::firstOrCreate(
@@ -155,7 +107,7 @@ class StudentExamController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 5️⃣ LOAD PREVIOUS ANSWERS
+        | 3️⃣ LOAD PREVIOUS ANSWERS
         |--------------------------------------------------------------------------
         */
         $answers = StudentMCQAnswer::where('student_id', $studentId)
@@ -164,7 +116,7 @@ class StudentExamController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 6️⃣ RETURN VIEW
+        | 4️⃣ RETURN VIEW
         |--------------------------------------------------------------------------
         */
         return view('osce.students.cbt', compact(
@@ -176,6 +128,7 @@ class StudentExamController extends Controller
             'noMcqs'
         ));
     }
+
 
     // ---------------- Save individual answer ----------------
     public function saveAnswer(Request $request)
@@ -334,35 +287,74 @@ class StudentExamController extends Controller
         ]);
     }
 
-    public function summary()
+    public function summary(Request $request)
     {
-        $students = StudentAdmission::all();
-        $stations = Station::all();
-
-        $results = StationResult::all()
-                    ->groupBy(function ($item) {
-                        return $item->student_id . '-' . $item->station_id;
-                    });
-
+        $date = $request->date;
+    
+        $resultsQuery = StationResult::query();
+    
+        if ($date) {
+            $resultsQuery->whereDate('created_at', $date);
+        }
+    
+        $results = $resultsQuery->get();
+    
+        // If no results, return empty structure
+        if ($results->isEmpty()) {
+            return response()->json([
+                'stations' => [],
+                'students' => []
+            ]);
+        }
+    
+        // =====================================
+        // Extract ONLY relevant IDs
+        // =====================================
+        $stationIds = $results->pluck('station_id')->unique()->values();
+        $studentIds = $results->pluck('student_id')->unique()->values();
+    
+        // =====================================
+        // Fetch ONLY used stations (ordered)
+        // =====================================
+        $stations = Station::whereIn('id', $stationIds)->get();
+    
+        // preserve result order
+        $stations = $stations->sortBy(function ($station) use ($stationIds) {
+            return array_search($station->id, $stationIds->toArray());
+        })->values();
+    
+        // =====================================
+        // Fetch ONLY active students
+        // =====================================
+        $students = StudentAdmission::whereIn('id', $studentIds)->get();
+    
+        // =====================================
+        // Group results for fast lookup
+        // =====================================
+        $grouped = $results->groupBy(function ($item) {
+            return $item->student_id . '-' . $item->station_id;
+        });
+    
+        // =====================================
+        // Build summary
+        // =====================================
         $summary = [];
-
+    
         foreach ($students as $student) {
-
+    
             $studentData = [
                 'student' => $student,
                 'stations' => [],
                 'overall_total' => 0
             ];
-
+    
             foreach ($stations as $station) {
-
+    
                 $key = $student->id . '-' . $station->id;
-                $result = $results->get($key)?->first();
-
+                $result = $grouped->get($key)?->first();
+    
                 if ($result) {
-
-                    $studentData['overall_total'] += $result->total_score;
-
+    
                     $studentData['stations'][] = [
                         'station_id'     => $station->id,
                         'title'          => $station->title,
@@ -371,8 +363,11 @@ class StudentExamController extends Controller
                         'mcq_score'      => $result->mcq_score,
                         'total_score'    => $result->total_score,
                     ];
+    
+                    $studentData['overall_total'] += $result->total_score;
+    
                 } else {
-
+                    // still keep structure aligned with stations
                     $studentData['stations'][] = [
                         'station_id'     => $station->id,
                         'title'          => $station->title,
@@ -383,15 +378,16 @@ class StudentExamController extends Controller
                     ];
                 }
             }
-
+    
             $summary[] = $studentData;
         }
-
+    
         return response()->json([
             'stations' => $stations,
             'students' => $summary
         ]);
     }
+
 
     public function fullSummary(StudentAdmission $student)
     {
