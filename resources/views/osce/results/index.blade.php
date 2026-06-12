@@ -186,10 +186,11 @@ $('.station-card').on('click', function () {
     const stationId = $(this).data('station-id');
 
     currentStation = {
-        id: stationId,
-        title: $(this).data('station-title') ?? 'N/A',
-        practicalQuestion: $(this).data('practical-question') ?? 'N/A'
-    };
+    id: stationId,
+    title: $(this).data('station-title') ?? 'N/A',
+    practicalQuestion: $(this).data('practical-question') ?? 'N/A',
+    mode: 'station'
+};
 
     $.get(resultsStationUrl.replace(':id', stationId), function (data) {
 
@@ -227,6 +228,19 @@ $('.station-card').on('click', function () {
         }
 
         stationTable.draw();
+        // Configure modal for station mode
+        $('#summaryDateInput').closest('.form-group').hide();
+        $('#loadSummaryBtn').hide();
+        
+        $('#printSummaryBtn')
+            .show()
+            .text('Print Station Results');
+        
+        $('#exportExcelBtn')
+            .show()
+            .text('Export Station Results');
+        
+        $('#summaryDateLabel').text(currentStation.title);
 
         $('#stationStudentsModal').modal('show');
 
@@ -367,29 +381,119 @@ $('.station-card').on('click', function () {
         });
 
     });
+    
+    // =========================
+    // PRINT STATION RESULTS
+    // =========================
+    $('#printSummaryBtn').on('click', function () {
+    
+        if (currentStation.mode !== 'station') {
+            return;
+        }
+    
+        let rows = '';
+    
+        stationTable.rows().data().each(function (row) {
+    
+            rows += `
+                <tr>
+                    <td>${row.admission_no}</td>
+                    <td>${row.full_name}</td>
+                    <td>${row.examiner_score}</td>
+                    <td>${row.mcq_score}</td>
+                    <td>${row.total_score}</td>
+                </tr>
+            `;
+        });
+    
+        const printWindow = window.open('', '', 'width=1000,height=700');
+    
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>${currentStation.title}</title>
+                <link rel="stylesheet"
+                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            </head>
+            <body class="p-4">
+    
+                <h3>${currentStation.title}</h3>
+    
+                <p>
+                    <strong>Practical Question:</strong>
+                    ${currentStation.practicalQuestion}
+                </p>
+    
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Student No</th>
+                            <th>Name</th>
+                            <th>Examiner Score</th>
+                            <th>MCQ Score</th>
+                            <th>Total Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+    
+            </body>
+            </html>
+        `);
+    
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+    });
+    
+    // =========================
+    // EXPORT STATION RESULTS
+    // =========================
+    $('#exportExcelBtn').on('click', function () {
+    
+        if (currentStation.mode !== 'station') {
+            return;
+        }
+    
+        let csv =
+            'Student No,Name,Examiner Score,MCQ Score,Total Score\n';
+    
+        stationTable.rows().data().each(function (row) {
+    
+            csv += [
+                `"${row.admission_no}"`,
+                `"${row.full_name}"`,
+                row.examiner_score,
+                row.mcq_score,
+                row.total_score
+            ].join(',') + '\n';
+        });
+    
+        const blob = new Blob(
+            [csv],
+            { type: 'text/csv;charset=utf-8;' }
+        );
+    
+        const link = document.createElement('a');
+    
+        link.href = URL.createObjectURL(blob);
+    
+        link.download =
+            currentStation.title.replace(/[^a-z0-9]/gi, '_') +
+            '_results.csv';
+    
+        document.body.appendChild(link);
+    
+        link.click();
+    
+        document.body.removeChild(link);
+    });
 
 });
 
-// =========================
-// PRINT FUNCTION
-// =========================
-function printStudentResult(){
-    const content = document.getElementById('printableArea').innerHTML;
-    const printWindow = window.open('', '', 'width=900,height=700');
 
-    printWindow.document.write(`
-        <html>
-        <head>
-            <title>Student Result</title>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        </head>
-        <body>${content}</body>
-        </html>
-    `);
-
-    printWindow.document.close();
-    printWindow.print();
-}
 </script>
 
 <!--Summary result data-->
@@ -621,9 +725,7 @@ $(document).on('click', '#exportExcelBtn', function () {
     // =====================================
     // PRINT SUMMARY
     // =====================================
-    // =====================================
-// PRINT SUMMARY (REFINED)
-// =====================================
+    
 $(document).on('click', '#printSummaryBtn', function () {
 
     if (!summaryData) {
