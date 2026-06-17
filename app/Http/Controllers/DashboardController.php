@@ -49,6 +49,15 @@ class DashboardController extends Controller
             return redirect()->back()->with('error', 'Exam setting has not been configured.');
         }
 
+                if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Admin Dashboard successfully logged in by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return view('student.pages.dashboard', compact('softwareVersion', 'collegeSetup', 'studentData',
     'examSetting'));
     }
@@ -61,6 +70,15 @@ class DashboardController extends Controller
         $departments = Department::all();
         $questions = QuestionSetting::all();
         $softwareVersion = SoftwareVersion::first();
+
+                if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Admin Dashboard successfully logged in by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('dashboard.admin-dashboard', compact('students', 'users', 'departments', 'questions',
     'softwareVersion', 'collegeSetup'));
@@ -77,7 +95,16 @@ class DashboardController extends Controller
 
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();        
-        $examSetting = ExamSetting::All();        
+        $examSetting = ExamSetting::All();  
+        
+                if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Exam Setting viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         
         return view('dashboard.exam-setting-view', compact('softwareVersion','examSetting', 'collegeSetup'));
     }
@@ -98,7 +125,16 @@ class DashboardController extends Controller
         $examtype = ExamType::orderBy('exam_type')->get();
         $examSetting = ExamSetting::findOrFail($id);
         $level = CbtClass::orderBy('level')->get();
-        $courseData = Courses::orderBy('course')->get();        
+        $courseData = Courses::orderBy('course')->get();  
+        
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Exam Setting Edit page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('dashboard.exam-setting', compact('softwareVersion', 'dept', 'acad_sessions', 
         'examtype','examSetting', 'collegeSetup', 'level','courseData'));
@@ -109,6 +145,15 @@ class DashboardController extends Controller
         $collegeSetup = CollegeSetup::first();
         $examType = ExamType::Paginate(10);
         $softwareVersion = SoftwareVersion::first();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Exam type page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.exam-type', compact('softwareVersion', 'examType', 'collegeSetup'));
     }
 
@@ -130,6 +175,15 @@ class DashboardController extends Controller
             $examType = ExamType::create([
                 'exam_type' => $validatedData['exam_type'],                              
             ]);
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Exam Type created by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             return redirect()->route('exam-type')->with('success', 'Exam type has been created successfully.');
         } catch (ValidationException $e) {
@@ -181,6 +235,15 @@ class DashboardController extends Controller
                 'course' => $validatedData['course'],   
                 'check_result' => $validatedData['check_result'],                                       
             ]);
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Exam Setting created by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
             
             // Redirect back with success message
             return redirect()->back()->with('success', 'Exam setting updated successfully.');
@@ -208,6 +271,15 @@ class DashboardController extends Controller
             $collegeSetup = CollegeSetup::first();
             $users = User::paginate(10);
             $softwareVersion = SoftwareVersion::first();
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Users page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
             
             return view('dashboard.users', compact('users', 'softwareVersion', 'collegeSetup'));
         } catch (\Exception $e) {
@@ -230,6 +302,15 @@ class DashboardController extends Controller
 
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Add User page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.add-user', compact('softwareVersion', 'collegeSetup'));
     }
 
@@ -307,6 +388,15 @@ class DashboardController extends Controller
                 'grading_report' => $request->has('grading_report') ? 1 : 0,
             ]);
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New User added by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('users')->with('success', 'User added successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Failed to add user. ' . $e->getMessage()]);
@@ -326,6 +416,15 @@ class DashboardController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
         $user = User::findOrFail($id);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Edit User page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('dashboard.edit-user', compact('softwareVersion', 'collegeSetup','user'));
     }
@@ -398,6 +497,14 @@ class DashboardController extends Controller
             $user->export_report = $request->has('export_report') ? 1 : 0;
             $user->grading_report = $request->has('grading_report') ? 1 : 0;
             
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $request->input('name') . ' edited by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             $user->save();
 
@@ -413,6 +520,15 @@ class DashboardController extends Controller
         $collegeSetup = CollegeSetup::first();
         $courses = Department::paginate(10);
         $softwareVersion = SoftwareVersion::first();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Add Course page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.add-course', compact('courses', 'softwareVersion', 'collegeSetup'));
     }
 
@@ -431,6 +547,16 @@ class DashboardController extends Controller
         $courses = CourseStudyAll::paginate(10);
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
+
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Add Department page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.add-department', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
@@ -446,6 +572,15 @@ class DashboardController extends Controller
             $dept = Department::create([
                 'department' => $validatedData['department'],                     
             ]);
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New course added by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             return redirect()->route('add-course')->with('success', 'Department has been created successfully.');
         } catch (ValidationException $e) {
@@ -473,6 +608,15 @@ class DashboardController extends Controller
         $courses = Department::paginate(9);
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'College setup page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.college-setup', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
@@ -492,6 +636,15 @@ class DashboardController extends Controller
         $courses = Department::paginate(9);
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Admin Setup page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.admin-setup', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
@@ -511,6 +664,15 @@ class DashboardController extends Controller
         $courses = Department::paginate(9);
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Add Class page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.add-class', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
@@ -540,6 +702,15 @@ class DashboardController extends Controller
                 'level' => $validatedData['level'],                     
             ]);
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New Class added by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('add-class')->with('success-class', 'Class/Level has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -565,6 +736,15 @@ class DashboardController extends Controller
             $class = cbtClass::findOrFail($id);
             $class->delete();
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Class Deleted by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('add-class')->with('success-class', 'Class/Level deleted successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-delete class: ' . $e->getMessage();
@@ -587,6 +767,15 @@ class DashboardController extends Controller
         $courses = Department::all();
         $classes = CbtClass::paginate(10);
         $courseData = Courses::paginate(10);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Add Subject page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.add-subject', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
@@ -623,6 +812,15 @@ class DashboardController extends Controller
                 'level' => $validatedData['level'],                  
             ]);
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New Subject added by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('add-subject')->with('success-subject', 'Subject/Course has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -649,6 +847,15 @@ class DashboardController extends Controller
         $courses = Department::all();
         $classes = CbtClass::paginate(10);
         $courseData = Courses::where('id', '=', $id)->first();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Subject Edit page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('dashboard.edit-subject', compact('courses', 'softwareVersion','collegeSetup',
     'classes', 'courseData'));
         
@@ -684,6 +891,15 @@ class DashboardController extends Controller
 
             $checkSubject->save();
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Subject Edited by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('add-subject')->with('success-subject', 'Subject/Course has been updated successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -709,6 +925,14 @@ class DashboardController extends Controller
         try {
             $subject = Courses::findOrFail($id);
             $subject->delete();
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Subject Deleted by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             return redirect()->route('add-subject')->with('success-subject', 'Subject/Course deleted successfully.');
         } catch (\Exception $e) {
@@ -748,6 +972,15 @@ class DashboardController extends Controller
                 'start_level' => $validatedData['startLevel'],              
             ]);
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New course-study added by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('add-department')->with('success-dept', 'Programme has been created successfully.');
         } catch (ValidationException $e) {
             // Validation failed. Redirect back with validation errors.
@@ -775,6 +1008,15 @@ class DashboardController extends Controller
 
             $courseStudy = CourseStudyAll::where('department', $dept->department);
             $courseStudy->delete();
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Department Deleted by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             return redirect()->route('add-department')->with('success-dept', 'Programme deleted successfully.');
         } catch (\Exception $e) {
@@ -826,6 +1068,15 @@ class DashboardController extends Controller
                 'web_url' => $validatedData['web_url'],
             ]);
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'College setup by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             // Redirect back with success message
             return redirect()->back()->with('success-college', 'College setup updated successfully.');
             }catch (ValidationException $e) {
@@ -875,6 +1126,15 @@ class DashboardController extends Controller
             $user->user_status = "Inactive";
             $user->save();
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $user->name . ' deactivated by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
             return redirect()->route('users')->with('success', 'User deactivated successfully.');
         } catch (\Exception $e) {
             $errorMessage = 'Error-deactivating user: ' . $e->getMessage();
@@ -889,6 +1149,15 @@ class DashboardController extends Controller
             $user = User::findOrFail($id);
             $user->user_status = "Active";
             $user->save();
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $user->name . ' activated by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             return redirect()->route('users')->with('success', 'User activated successfully.');
         } catch (\Exception $e) {
@@ -969,6 +1238,18 @@ class DashboardController extends Controller
             ]);
         }
 
+        $logValue = $examSetting->course . "-" . $examSetting->department . "-" . $examSetting->semester
+        . "-" . $examSetting->session1 ;
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $logValue . ' locked by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return $this->redirectAfterLock($questionSetting->exam_mode, 'Exam locked successfully.');
     }
 
@@ -1032,6 +1313,18 @@ class DashboardController extends Controller
                 'lock_status' => 0,
             ]);
         }
+
+         $logValue = $examSetting->course . "-" . $examSetting->department . "-" . $examSetting->semester
+        . "-" . $examSetting->session1 ;
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $logValue . ' unlocked by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return $this->redirectAfterLock($questionSetting->exam_mode, 'Exam unlocked successfully.');
     }

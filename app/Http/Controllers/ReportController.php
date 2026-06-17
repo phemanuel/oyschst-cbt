@@ -114,7 +114,7 @@ class ReportController extends Controller
         $examViewType = $questionSetting->exam_view_type;
         $questionId = $id;
 
-        // Join TheoryAnswer with StudentAdmission to get picturename
+        // Join  with StudentAdmission to get picturename
         $student = CbtEvaluation::where('cbt_evaluations.session1', $questionSetting->session1) 
         ->where('cbt_evaluations.department', $questionSetting->department)
         ->where('cbt_evaluations.level', $questionSetting->level)

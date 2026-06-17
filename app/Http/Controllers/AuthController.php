@@ -208,6 +208,14 @@ class AuthController extends Controller
 
             // 8. Email verification check
             if ($user->email_verified_status == 1) {
+                if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => auth()->user()->name . ' Logged in. ' ,
+                        'activity_date' => now(),
+                    ]);
+                }
                 return redirect()->route('admin-dashboard');
             }
 

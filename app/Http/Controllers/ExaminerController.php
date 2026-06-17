@@ -21,6 +21,15 @@ class ExaminerController extends Controller
     {
         $examiners = User::whereIn('user_type', ['examiner', 'admin'])->get(); 
         $stations = Station::All();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Osce Examiner page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return view('osce.examiners.index', compact('examiners','stations'));
     }
 
@@ -72,6 +81,15 @@ class ExaminerController extends Controller
             'grading_report' => 0,
         ]);
 
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New Examiner-' . $request->name . ' created by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return response()->json([
             'success' => 'Admin/Examiner added successfully!',
             'examiner' => $examiner
@@ -98,6 +116,15 @@ class ExaminerController extends Controller
         $examiner->user_status = $request->user_status ?? $examiner->user_status;
         $examiner->save();
 
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Examiner-' . $request->name . ' updated by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return response()->json([
             'success' => 'Admin/Examiner updated successfully!',
             'examiner' => $examiner
@@ -108,6 +135,15 @@ class ExaminerController extends Controller
     public function destroy(User $examiner)
     {
         $examiner->delete();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Examiner-' . $examiner->name . ' created by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return response()->json([
             'success' => 'Admin/Examiner deleted successfully!',
@@ -126,6 +162,15 @@ class ExaminerController extends Controller
         ])
         ->where('id', $user->station_id) // 👈 filter by assigned station
         ->get();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Examiner-' . $user->name . ' logged in',
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('osce.examiners.dashboard', compact('stations'));
     }
@@ -177,6 +222,15 @@ class ExaminerController extends Controller
 
         // Check if already started/completed
         $hasResult = !empty($examinerScores);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'New Procedure started by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('osce.examiners.start_procedure', compact(
             'station',
@@ -236,6 +290,15 @@ class ExaminerController extends Controller
             ]);
 
             DB::commit();
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Procedure Scores stored by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
             return redirect()->route('examiner.dashboard')
                 ->with('success', 'Procedure Scores saved successfully.');

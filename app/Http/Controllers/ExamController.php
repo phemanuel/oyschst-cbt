@@ -2380,7 +2380,14 @@ class ExamController extends Controller
         $examType = ExamType::Paginate(10);
         $courseData = Courses::orderBy('course')->get();
 
-        
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Compute all Student results page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('layout.student-compute-all', compact('softwareVersion','collegeSetup','level',
     'dept','acad_sessions', 'examType','courseData'));
@@ -2449,6 +2456,17 @@ class ExamController extends Controller
             }
         }
 
+        $logValue = $examSetting->course . "-" . $examSetting->department . "-" . $examSetting->semester
+        . "-" . $examSetting->session1 ;
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $logValue . ' computed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
         return back()->with('success', "{$computed} students computed successfully. {$skipped} skipped.");
     } 
 
