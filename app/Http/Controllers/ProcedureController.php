@@ -16,6 +16,15 @@ class ProcedureController extends Controller
     {
         $stations = Station::with('procedures')->get();
 
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Procedure Home-Page viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return view('osce.procedures.index', compact('stations'));
     }
 
@@ -30,6 +39,15 @@ class ProcedureController extends Controller
         ]);
 
         $procedure = Procedure::create($request->all());
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Procedure Stored by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return response()->json($procedure);
     }
@@ -53,6 +71,15 @@ class ProcedureController extends Controller
 
         // Refresh the model to get latest values
         $procedure->refresh();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Procedure Updated by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return response()->json([
             'message' => 'Procedure updated successfully',

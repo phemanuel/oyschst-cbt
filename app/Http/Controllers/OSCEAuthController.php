@@ -150,6 +150,15 @@ class OSCEAuthController extends Controller
 
             // 8. Email verification check
             if ($user->email_verified_status == 1) {
+
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Examiner- ' . auth()->user()->name . ' logged in',
+                        'activity_date' => now(),
+                    ]);
+                }
                 return redirect()->route('examiner.dashboard');
             }
 
@@ -217,6 +226,15 @@ class OSCEAuthController extends Controller
 
         $request->session()->regenerate();
         $request->session()->put('osce_user', $user->id);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Admin- ' . auth()->user()->name . ' logged in',
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return response()->json([
             'status' => 'success',

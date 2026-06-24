@@ -386,6 +386,9 @@ class DashboardController extends Controller
                 'check_report' => $request->has('check_report') ? 1 : 0,
                 'export_report' => $request->has('export_report') ? 1 : 0,
                 'grading_report' => $request->has('grading_report') ? 1 : 0,
+                'station_id' => $request->user_type == 'examiner'
+                    ? $request->station_id
+                    : null,
             ]);
 
             if (auth()->check()) {

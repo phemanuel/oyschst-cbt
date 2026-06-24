@@ -41,6 +41,15 @@ class OSCEDashboardController extends Controller
         $questions = QuestionSetting::all();
         $softwareVersion = SoftwareVersion::first();
 
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Admin- ' . auth()->user()->name . ' logged in to admin dashboard',
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return view('osce.admin-dashboard', compact('students', 'users', 'stations'));
     }
 

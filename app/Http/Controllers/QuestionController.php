@@ -45,6 +45,15 @@ class QuestionController extends Controller
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
 
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Questions Bank Page Viewed by ' . auth()->user()->name ,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return view('questions.question', compact('softwareVersion','collegeSetup'));        
     }
 
@@ -62,7 +71,16 @@ class QuestionController extends Controller
         $questionSetting = QuestionSetting::where('exam_mode', 'OBJECTIVE')
                             // ->orderBy('exam_status', 'desc')
                             ->orderBy('created_at', 'desc')
-                            ->get();        
+                            ->get();    
+                            
+                    if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Questions Objective Page Viewed by ' . auth()->user()->name ,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('questions.question-obj-upload', compact('softwareVersion','collegeSetup','questionSetting'));
     }
@@ -84,7 +102,14 @@ class QuestionController extends Controller
         $examType = ExamType::Paginate(10);
         $courseData = Courses::orderBy('course')->get();
 
-        
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Questions Page Viewed by ' . auth()->user()->name ,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return view('questions.question-upload-obj', compact('softwareVersion','collegeSetup','level',
     'dept','acad_sessions', 'examType','courseData'));
@@ -173,6 +198,18 @@ class QuestionController extends Controller
                 }            
                 
                 $questionId = $questionSetting->id;
+
+                $logValue = $questionSetting->session1 . "-" . $questionSetting->department . "-" . $questionSetting->level .
+                "-" . $questionSetting->semester . "-" . $questionSetting->course;
+
+                if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => $logValue . '-Questions saved by ' . auth()->user()->name ,
+                        'activity_date' => now(),
+                    ]);
+                }
         
                 return redirect()->route('question-view', ['questionId' => $questionId])->with('success', 'You can start to enter your questions.');
             }
@@ -283,10 +320,27 @@ class QuestionController extends Controller
         }
         
         if($examViewType == 'Multi-Page'){
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Questions-View Page Viewed by ' . auth()->user()->name ,
+                        'activity_date' => now(),
+                    ]);
+                }
             return view('questions.question-view', compact('softwareVersion', 'collegeSetup'
             ,'question','questionSetting'));
         }
         elseif($examViewType == 'Single-Page'){
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Questions-View Page Viewed by ' . auth()->user()->name ,
+                        'activity_date' => now(),
+                    ]);
+                }
             return view('questions.question-view-single', compact('softwareVersion', 'collegeSetup'
             ,'question','questionSetting'));
         }

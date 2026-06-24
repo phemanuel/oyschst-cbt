@@ -322,9 +322,20 @@ class ExaminerController extends Controller
             'station_id' => 'nullable|exists:stations,id'
         ]);
 
+        $station = Station::where('id', $request->station_id)->first();
+
         $user->update([
             'station_id' => $request->station_id
         ]);
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Station-' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
 
         return response()->json([
             'success' => true

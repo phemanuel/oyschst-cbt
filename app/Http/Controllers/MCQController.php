@@ -15,6 +15,16 @@ class MCQController extends Controller
     public function index()
     {
         $stations = Station::with('mcqQuestions.options')->get();
+
+        if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'MCQ Home viewed by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
         return view('osce.mcqs.index', compact('stations'));
     }
 
