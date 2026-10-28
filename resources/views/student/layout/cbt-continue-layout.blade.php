@@ -1,306 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
-<!-- Mirrored from www.urbanui.com/melody/template/pages/layout/horizontal-menu.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:05:55 GMT -->
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>@yield('pageTitle')</title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="{{asset('student/vendors/iconfonts/font-awesome/css/all.min.css')}}">
-  <link rel="stylesheet" href="{{asset('student/vendors/css/vendor.bundle.base.css')}}">
-  <link rel="stylesheet" href="{{asset('student/vendors/css/vendor.bundle.addons.css')}}">
-  <!-- endinject -->
-  <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="{{asset('student/css/style.css')}}">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="{{asset('favicon.png')}}" />
-  <style>
-    .bold-text {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-}
-
-    .bold-text-font {
-    font-size: 14px;
-    font-weight: bold;    
-}
-
-    .bold-font {
-    font-size: 24px;
-    font-weight: bold;
-}
-  </style>
-  	<style>
-    /* Success Alert */
-    .alert.alert-success {
-        background-color: #28a745; /* Green background color */
-        color: #fff; /* White text color */
-        font-size: 14px; /*
-        padding: 10px; /* Padding around the text */
-        border-radius: 5px; /* Rounded corners */
-    }
-
-    /* Error Alert */
-    .alert.alert-danger {
-        background-color: #dc3545; /* Red background color */
-        color: #fff; /* White text color */
-        font-size: 14px; /*
-        padding: 10px; /* Padding around the text */
-        border-radius: 5px; /* Rounded corners */
-    }
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Resume Examination | {{ $collegeSetup->name ?? 'CBT Portal' }}</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
+    <link rel="stylesheet" href="{{ asset('student/vendors/iconfonts/font-awesome/css/all.min.css') }}">
+    <style>
+        :root { --green:#123d31; --green2:#18734f; --ink:#172b28; --muted:#6c7f75; --line:#e1e9e4; --bg:#f4f7f5; }
+        *, *::before, *::after { box-sizing:border-box; }
+        html, body { margin:0; min-height:100%; }
+        body { background:var(--bg); color:var(--ink); font-family:Arial,Helvetica,sans-serif; line-height:1.5; }
+        .cbt-header { background:var(--green); color:white; padding:18px max(24px,calc((100vw - 1180px)/2)); }
+        .cbt-header-inner { display:flex; align-items:center; gap:15px; min-width:0; }
+        .cbt-college-logo { width:55px; height:55px; object-fit:contain; background:#fff; border-radius:12px; padding:6px; flex-shrink:0; }
+        .cbt-college-name { font-weight:700; font-size:17px; line-height:1.35; }
+        .cbt-header-subtitle { font-size:12px; color:#c2ded0; margin-top:3px; }
+        .cbt-container { max-width:1180px; margin:auto; padding:35px 24px 50px; }
+        .cbt-page-intro { margin-bottom:24px; }
+        .cbt-eyebrow { color:var(--green2); text-transform:uppercase; letter-spacing:1.3px; font-weight:800; font-size:11px; margin-bottom:8px; }
+        .cbt-page-intro h1 { font-size:clamp(25px,3vw,35px); letter-spacing:-.6px; margin:0 0 8px; line-height:1.2; }
+        .cbt-page-intro p { color:var(--muted); margin:0; font-size:14px; }
+        .cbt-alert { padding:15px 18px; border-radius:10px; margin-bottom:20px; font-size:14px; }
+        .cbt-alert-success { color:#17603d; background:#e6f6ed; border:1px solid #b8dfc9; }
+        .cbt-alert-error { color:#a52727; background:#fff1f1; border:1px solid #edc8c8; }
+        .cbt-layout { display:grid; grid-template-columns:minmax(0,1.28fr) minmax(320px,0.9fr); gap:22px; align-items:start; }
+        .cbt-card { border:1px solid var(--line); background:white; border-radius:18px; box-shadow:0 8px 32px rgba(20,55,40,.04); overflow:hidden; }
+        .cbt-card-header { padding:22px 26px; border-bottom:1px solid var(--line); }
+        .cbt-card-header h2 { margin:0; font-size:18px; display:flex; align-items:center; gap:10px; }
+        .cbt-card-header h2 i { color:var(--green2); }
+        .cbt-card-header p { margin:7px 0 0; font-size:13px; color:var(--muted); }
+        .cbt-card-body { padding:26px; }
+        .cbt-student-summary { display:flex; align-items:center; gap:17px; padding-bottom:23px; border-bottom:1px solid var(--line); margin-bottom:23px; }
+        .cbt-photo { width:84px; height:84px; object-fit:cover; border-radius:15px; background:#edf3ef; border:3px solid #e4efe8; }
+        .cbt-student-name { font-weight:800; font-size:20px; line-height:1.25; margin:0 0 7px; }
+        .cbt-student-meta { color:var(--muted); font-size:13px; margin:2px 0; }
+        .cbt-status { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:100px; color:#865514; background:#fff4db; font-size:12px; font-weight:700; margin-bottom:16px; }
+        .cbt-resume-title { font-size:20px; margin:0 0 10px; }
+        .cbt-resume-desc { font-size:14px; color:var(--muted); line-height:1.75; margin:0 0 22px; }
+        .cbt-time-card { background:#edf7f0; border:1px solid #c8e8d4; border-radius:13px; padding:19px 21px; margin-bottom:24px; }
+        .cbt-time-label { color:#426b56; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+        .cbt-time-value { color:var(--green); font-weight:800; font-size:30px; line-height:1.2; }
+        .cbt-time-note { font-size:12px; color:#5a7966; margin-top:7px; }
+        .cbt-resume-button { display:flex; justify-content:center; align-items:center; gap:10px; width:100%; padding:16px 20px; background:var(--green2); color:white; text-decoration:none; text-align:center; font-size:15px; font-weight:800; border-radius:11px; transition:background .2s, transform .2s; }
+        .cbt-resume-button:hover, .cbt-resume-button:focus { background:#105c3e; color:white; text-decoration:none; }
+        .cbt-resume-button:focus-visible { outline:3px solid #80bda0; outline-offset:3px; }
+        .cbt-help { margin:15px 0 0; color:var(--muted); text-align:center; font-size:12px; }
+        .cbt-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:21px; }
+        .cbt-stat { background:#f3f8f5; border-radius:12px; padding:15px; }
+        .cbt-stat strong { display:block; font-size:23px; color:var(--green); }
+        .cbt-stat span { font-size:12px; color:var(--muted); }
+        .cbt-detail-list { margin:0; }
+        .cbt-detail { display:grid; grid-template-columns:minmax(120px,40%) minmax(0,1fr); gap:12px; padding:14px 0; border-bottom:1px solid var(--line); align-items:start; }
+        .cbt-detail:last-child { border-bottom:0; }
+        .cbt-detail dt { color:var(--muted); font-size:13px; }
+        .cbt-detail dd { margin:0; font-size:13px; font-weight:700; overflow-wrap:anywhere; }
+        .cbt-guidance { padding:16px 19px; margin-top:17px; border:1px solid #e7e5d5; border-radius:12px; background:#fdfbf0; font-size:13px; color:#665d37; line-height:1.65; }
+        .cbt-footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; border-top:1px solid var(--line); margin-top:35px; padding-top:18px; color:#819087; font-size:11px; }
+        @media(max-width:850px) { .cbt-layout { grid-template-columns:1fr; } .cbt-container { padding-top:25px; } }
+        @media(max-width:520px) { .cbt-header { padding:14px 18px; } .cbt-container { padding:22px 16px 35px; } .cbt-card-header,.cbt-card-body { padding:20px; } .cbt-student-name { font-size:17px; } .cbt-photo { width:70px; height:70px; } .cbt-college-name { font-size:14px; } .cbt-college-logo { width:46px; height:46px; } .cbt-time-value { font-size:27px; } }
+    </style>
 </head>
-<body class="horizontal-menu">
-  <div class="container-scroller">
-    <nav class="navbar horizontal-layout-navbar fixed-top navbar-expand-lg">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <!-- <a class="navbar-brand brand-logo" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="#"><img src="{{asset($collegeSetup->avatar)}}" alt="logo" /></a>                     -->
-      </div>
-      <div class="navbar-menu-wrapper d-flex flex-grow">
-        <ul class="navbar-nav navbar-nav-left collapse navbar-collapse" id="horizontal-top-example">
-          
-          <li class="nav-item dropdown">            
-            <a class="nav-link active" href="#" id="projects-dropdown" data-toggle="dropdown" aria-expanded="false">
-            <!-- <img src="{{asset($collegeSetup->avatar)}}" alt="" width="50" height="50"> -->
-            <strong><p class="bold-text">{{$collegeSetup->name}}</p></strong>
-            </a>            
-          </li>        
-          
-        </ul>
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item nav-profile">
-            <a class="nav-link">
-              <div class="nav-profile-text">              
-              </div>
-              <div class="nav-profile-img">
-                <img src="{{asset($collegeSetup->avatar)}}" alt="image" class="img-xs rounded-circle ml-3">
-                <span class="availability-status online"></span>             
-              </div>
-            </a>
-          </li>
-          <li class="nav-item nav-search">
-            <div class="nav-link">
-              <div class="search-field d-none d-md-block">
-                
-              </div>
+<body>
+    <header class="cbt-header">
+        <div class="cbt-header-inner">
+            @if(!empty($collegeSetup->avatar))
+                <img class="cbt-college-logo" src="{{ asset($collegeSetup->avatar) }}" alt="College logo">
+            @endif
+            <div>
+                <div class="cbt-college-name">{{ $collegeSetup->name ?? 'College CBT Portal' }}</div>
+                <div class="cbt-header-subtitle">Computer-Based Examination Portal</div>
             </div>
-          </li>
-          <li class="nav-item">
-            <!-- <a class="nav-link">
-              <i class="fas fa-power-off font-weight-bold icon-sm"></i>
-            </a> -->
-          </li>
-        </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center ml-auto" type="button" data-toggle="collapse" data-target="#horizontal-top-example">
-          <span class="fa fa-bars"></span>
-        </button>
-      </div>
-    </nav>
-    <div class="container-fluid page-body-wrapper">
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title">
-              Computer Based Test - Check all information carefully before you proceed.
-            </h3>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('login')}}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Computer Based Test</li>
-              </ol>
-            </nav>
-          </div>
-          <div>
-          @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
-          </div>
-          
-          <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    <i class="fas fa-thumbtack"></i>
-                    Computer Based Test
-                  </h4>
-                  <div class="border-bottom text-center pb-4">
-                        <img src="{{asset('uploads/'. $studentData->picture_name . '.jpg')}}" alt="profile" class="img-lg rounded-circle mb-3"/>
-                        
-                        
-                      </div>
-									<div class="list-wrapper">
-                  <ul class="d-flex flex-column-reverse todo-list">
-                    <table class="table">   
-                    <li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-                              <td><p class="bold-font">You have not completed the test, <strong>Click Continue Computer based test</strong>.</p></td>
-                          </label>
-												</div>	
-                        </tr>											
-											</li> 
-											
-                      <li>
-                      <tr>
-												<div class="form-check">
-													<label class="form-check-label">
-														
-                              <td><p class="bold-font">Time Left: {{$studentMin}} Mins</p></td>
-                              <td><p class="bold-font"></p></td>
-                            
-													</label>
-												</div>
-                        </tr>												
-											</li>                     
-                    </table>
-										</ul> 
-                    <form action="" method="post">
-                      @csrf
-                      <div class="form-check">
-													<label class="form-check-label">
-                          <a href="{{route('cbt-page', ['id' => $studentData->id])}}" class="btn btn-success btn-block">Continue Computer Based Test</a>                            
-													</label>
-												</div> 
-                    </form>                   
-												                      											
-											
+        </div>
+    </header>
 
-									</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-5 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    <i class="fas fa-rocket"></i>
-                    Exam Information
-                  </h4>
-                  <div class="table-responsive">
-                    <table class="table">
-                     <tr>
-                      <td><p class="bold-text-font">Academic Session</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->session1}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Programme</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->department}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Level</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->level}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     @if($examSetting->exam_category == 'GENERAL')
-                      <!-- <tr>
-                      <td><p class="bold-text-font">Subject/Course</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr> -->
-                     @elseif($examSetting->exam_category == 'SEMESTER')
-                     <tr>
-                      <td><p class="bold-text-font">Subject/Course</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->course}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     @endif
-                     <tr>
-                      <td><p class="bold-text-font">Exam Mode</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_mode}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Exam Category</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_category}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Exam Type</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->exam_type}}</p></td>
-                      <td></td>
-                      <td></td>
-                     </tr>
-                     <tr>
-                      <td><p class="bold-text-font">Total no of Question</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->no_of_qst}}</p></td>
-                      <td><p class="bold-text-font">Duration</p></td>
-                      <td><p class="bold-text-font">{{$examSetting->duration}}mins</p></td>
-                     </tr>                     
-                     <!-- <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                     </tr> -->
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-</div>
+    <main class="cbt-container">
+        <div class="cbt-page-intro">
+            <div class="cbt-eyebrow">Examination in progress</div>
+            <h1>Resume Your Examination</h1>
+            <p>Your examination has not yet been completed. Review the details below and continue where you left off.</p>
         </div>
 
-        
-        <!-- partial:../../partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2020 - <?php echo date('Y') ; ?> <a href="{{$collegeSetup->web_url}}" target="_blank">{{$collegeSetup->name}}</a>. </span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Version : {{$softwareVersion->version}} </span>
-          </div>
+        @if(session('success'))
+            <div class="cbt-alert cbt-alert-success" role="status">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+            <div class="cbt-alert cbt-alert-error" role="alert">{{ session('error') }}</div>
+        @endif
+
+        <div class="cbt-layout">
+            <section class="cbt-card" aria-labelledby="resume-heading">
+                <div class="cbt-card-header">
+                    <h2 id="resume-heading"><i class="fas fa-user-graduate" aria-hidden="true"></i> Student &amp; Examination Status</h2>
+                    <p>Confirm your information before returning to the test.</p>
+                </div>
+                <div class="cbt-card-body">
+                    <div class="cbt-student-summary">
+                        <img class="cbt-photo" src="{{ asset('uploads/' . $studentData->picture_name . '.jpg') }}" alt="Student photograph">
+                        <div>
+                            <h3 class="cbt-student-name">{{ $studentData->surname }} {{ $studentData->first_name }} {{ $studentData->other_name }}</h3>
+                            <p class="cbt-student-meta">{{ $studentData->department }}</p>
+                            <p class="cbt-student-meta">Level: {{ $studentData->level }}</p>
+                        </div>
+                    </div>
+
+                    <div class="cbt-status"><i class="fas fa-hourglass-half" aria-hidden="true"></i> Examination not completed</div>
+                    <h3 class="cbt-resume-title">Your test is still in progress</h3>
+                    <p class="cbt-resume-desc">You have not completed this examination. Select <strong>Continue Examination</strong> to return to your test. Your examination time may continue to elapse while you are away.</p>
+
+                    <div class="cbt-time-card">
+                        <div class="cbt-time-label">Time left (as reported by the system)</div>
+                        <div class="cbt-time-value">{{ $studentMin }} <span style="font-size:16px; font-weight:700">minutes</span></div>
+                        <div class="cbt-time-note">The remaining time shown here is not a live countdown. The examination page controls the active timer.</div>
+                    </div>
+
+                    <a class="cbt-resume-button" href="{{ route('cbt-page', ['id' => $studentData->id]) }}" id="cbt-continue-link">
+                        <span>Continue Examination</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                    <p class="cbt-help">Need assistance? Inform your invigilator.</p>
+                </div>
+            </section>
+
+            <aside class="cbt-card" aria-labelledby="exam-details-heading">
+                <div class="cbt-card-header">
+                    <h2 id="exam-details-heading"><i class="fas fa-clipboard-list" aria-hidden="true"></i> Examination Information</h2>
+                    <p>Details of your current examination.</p>
+                </div>
+                <div class="cbt-card-body">
+                    <div class="cbt-stats">
+                        <div class="cbt-stat"><strong>{{ $examSetting->no_of_qst }}</strong><span>Total questions</span></div>
+                        <div class="cbt-stat"><strong>{{ $examSetting->duration }}</strong><span>Duration (minutes)</span></div>
+                    </div>
+                    <dl class="cbt-detail-list">
+                        <div class="cbt-detail"><dt>Academic Session</dt><dd>{{ $examSetting->session1 }}</dd></div>
+                        <div class="cbt-detail"><dt>Programme</dt><dd>{{ $examSetting->department }}</dd></div>
+                        <div class="cbt-detail"><dt>Level</dt><dd>{{ $examSetting->level }}</dd></div>
+                        @if($examSetting->exam_category == 'SEMESTER')
+                            <div class="cbt-detail"><dt>Subject / Course</dt><dd>{{ $examSetting->course }}</dd></div>
+                        @endif
+                        <div class="cbt-detail"><dt>Exam Mode</dt><dd>{{ $examSetting->exam_mode }}</dd></div>
+                        <div class="cbt-detail"><dt>Exam Category</dt><dd>{{ $examSetting->exam_category }}</dd></div>
+                        <div class="cbt-detail"><dt>Exam Type</dt><dd>{{ $examSetting->exam_type }}</dd></div>
+                    </dl>
+                    <div class="cbt-guidance"><i class="fas fa-info-circle" aria-hidden="true"></i> Please remain in fullscreen mode and follow your invigilator's instructions throughout the examination.</div>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="cbt-footer">
+            <span>&copy; 2020 - {{ date('Y') }} {{ $collegeSetup->name ?? 'College CBT Portal' }}</span>
+            <span>Version: {{ $softwareVersion->version ?? 'N/A' }}</span>
         </footer>
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-  </div>
-  <!-- container-scroller -->
-
-  <!-- plugins:js -->
-  <script src="{{asset('student/vendors/js/vendor.bundle.base.js')}}"></script>
-  <script src="{{asset('student/vendors/js/vendor.bundle.addons.js')}}"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page-->
-  <!-- End plugin js for this page-->
-  <!-- inject:js -->
-  <script src="{{asset('student/js/off-canvas.js')}}"></script>
-  <script src="{{asset('student/js/hoverable-collapse.js')}}"></script>
-  <script src="{{asset('student/js/misc.js')}}"></script>
-  <script src="{{asset('student/js/settings.js')}}"></script>
-  <script src="{{asset('student/js/todolist.js')}}"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="{{asset('student/js/dashboard.js')}}"></script>
-  <!-- End custom js for this page-->
+    </main>
 </body>
-
-
-<!-- Mirrored from www.urbanui.com/melody/template/pages/layout/horizontal-menu.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:05:55 GMT -->
 </html>

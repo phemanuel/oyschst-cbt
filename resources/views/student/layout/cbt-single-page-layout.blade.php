@@ -19,6 +19,12 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="{{asset('student/css/style.css')}}">
+
+  <link rel="stylesheet"
+      href="{{ asset('student/css/cbt-single-question-redesign.css') }}">
+
+      <link rel="stylesheet"
+      href="{{ asset('student/css/cbt-single-three-column.css') }}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('favicon.png')}}" />
   <style>
@@ -69,7 +75,7 @@
     color: black;
 }
   </style>
-  	<style>
+    <style>
     /* Success Alert */
     .alert.alert-success {
         background-color: #28a745; /* Green background color */
@@ -370,6 +376,413 @@
 
 </style>
 
+<style>
+    /* ==========================================
+   CBT EXAM LAYOUT
+========================================== */
+
+.cbt-layout{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:stretch;
+
+}
+
+/* LEFT */
+
+.cbt-left{
+
+    flex:1;
+
+}
+
+/* RIGHT */
+
+.cbt-right{
+    width:340px;
+    display:flex;
+}
+
+.cbt-nav-card{
+
+    display:flex;
+    flex-direction:column;
+
+    width:100%;
+
+    height:100%;
+
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:8px;
+
+}
+
+.cbt-nav-header{
+
+    background:#3b3407;
+
+    color:#fff;
+
+    padding:15px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    flex-shrink:0;
+
+}
+
+.cbt-nav-body{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:15px;
+
+}
+
+/* PANEL */
+
+.cbt-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#fff;
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+
+}
+
+/* HEADER */
+
+.cbt-header{
+
+    padding:18px;
+
+    border-bottom:1px solid #eee;
+
+    background:#fafafa;
+
+}
+
+.cbt-header h4{
+
+    margin:0;
+
+}
+
+/* BODY */
+
+.cbt-body{
+
+    padding:20px;
+
+}
+
+/* FOOTER */
+
+.cbt-footer{
+
+    padding:15px 20px;
+
+    border-top:1px solid #eee;
+
+    display:flex;
+
+    justify-content:space-between;
+
+}
+
+/* QUESTION */
+
+.cbt-question-box{
+
+    padding:20px;
+
+    background:#fafafa;
+
+    border:1px solid #e5e5e5;
+
+    border-radius:6px;
+
+    min-height:180px;
+
+    font-size:26px;
+
+    margin-bottom:20px;
+
+}
+
+/* OPTIONS */
+
+.cbt-options{
+
+    width:100%;
+
+}
+
+.cbt-options td{
+
+    padding:12px;
+
+}
+
+.cbt-options label{
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+/* NAVIGATION */
+
+.cbt-nav-header{
+
+    background:#3b3407;
+
+    color:#fff;
+
+    padding:18px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+}
+
+.cbt-nav-body{
+
+    padding:15px;
+
+    overflow-y:auto;
+
+}
+
+/* GRID */
+
+.cbt-button-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(5,1fr);
+
+    gap:10px;
+
+}
+
+/* BUTTON */
+
+.question-btn{
+
+    width:50px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#474204;
+
+    color:#fff;
+
+    position:relative;
+
+    font-weight:bold;
+
+}
+
+.question-btn.active{
+
+    background:#0d6efd;
+
+}
+
+.tick-icon{
+
+    display:none;
+
+    position:absolute;
+
+    top:7px;
+
+    right:7px;
+
+    font-size:11px;
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:991px){
+
+    .cbt-layout{
+
+        flex-direction:column;
+
+    }
+
+    .cbt-right{
+
+        width:100%;
+
+    }
+
+}
+</style>
+<style>
+    /* ================= CBT CALCULATOR ================= */
+
+.cbt-calculator {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+}
+
+.cbt-calculator-toggle {
+    background: #18734f;
+    color: #fff;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 18px rgba(0,0,0,.18);
+}
+
+.cbt-calculator-toggle:hover {
+    background: #125c3f;
+}
+
+.cbt-calculator-panel {
+    position: absolute;
+    right: 0;
+    bottom: 65px;
+    width: 310px;
+    max-width: calc(100vw - 30px);
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,.22);
+    border: 1px solid #dce7e0;
+}
+
+.cbt-calculator-panel[hidden] {
+    display: none !important;
+}
+
+.cbt-calculator-header {
+    background: #166534;
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    cursor: move;
+    user-select: none;
+}
+
+.cbt-calculator-header button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.cbt-calculator-display {
+    width: calc(100% - 28px);
+    box-sizing: border-box;
+    margin: 14px;
+    padding: 14px;
+    background: #f4f7f5;
+    border: 1px solid #d8e3dc;
+    border-radius: 8px;
+    font-size: 23px;
+    text-align: right;
+    font-weight: 700;
+    color: #152c22;
+}
+
+.cbt-calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 0 14px 14px;
+}
+
+.cbt-calculator-keys button {
+    padding: 13px 4px;
+    border-radius: 8px;
+    border: 1px solid #e4e7e5;
+    background: #f5f6f5;
+    font-size: 17px;
+    font-weight: 600;
+    color: #202b25;
+    cursor: pointer;
+}
+
+.cbt-calculator-keys button:hover {
+    background: #e7eee9;
+}
+
+.cbt-calculator-keys .calc-operator {
+    background: #e4f2e9;
+    color: #166534;
+}
+
+.cbt-calculator-keys .calc-clear {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.cbt-calculator-keys .calc-equals {
+    grid-column: span 4;
+    background: #166534;
+    color: #fff;
+    border: none;
+}
+
+.cbt-calculator-keys .calc-equals:hover {
+    background: #12502a;
+}
+
+@media (max-width: 600px) {
+    .cbt-calculator {
+        right: 12px;
+        bottom: 12px;
+    }
+
+    .cbt-calculator-panel {
+        width: 285px;
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+}
+
+@media print {
+    .cbt-calculator {
+        display: none !important;
+    }
+}
+</style>
 
     <!-- MathJax Configuration -->
 <script>
@@ -610,132 +1023,153 @@
 
     </ul>
 </nav>
-
-      <!-- partial -->
+           <!-- partial -->
       <div class="main-panel">
-        <div class="content-wrapper">          
-          
-          <div>
-          @if(session('success'))
-						<div class="alert alert-success">
-							{{ session('success') }}
-						</div>
-          @elseif(session('error'))
-						<div class="alert alert-danger">
-							{{ session('error') }}
-						</div>
-						@endif	
-          </div>
-          <!-- question-Loaded -->
-          <div class="row d-flex">
-    <!-- Left Column: Question & Options -->
-<div class="col-md-8 d-flex">
-    <div class="card flex-fill d-flex flex-column" style="max-height:100%; overflow-y:auto;">
-        <div class="card-body d-flex flex-column" style="padding-bottom:0;">
-            <form action="" class="answer-form" data-question-number="1">
-                <!-- Question Header -->
-                <h4 class="card-title mb-3">
-                    <strong>Question <span id="current-question-number">1</span> of {{ $examSetting->no_of_qst }}</strong>
-                </h4>     
+    <div class="content-wrapper">
 
-                <!-- Question Container -->
-                <div class="question-container mb-3" style="padding:15px; font-size:30px; background-color:#f9f9f9; border-radius:4px;">
-                    <div id="current-question"></div>
-                </div>
-
-                <!-- Options Table -->
-                <table class="options-container w-100" style="border-collapse: collapse;">
-                    @foreach(['A','B','C','D'] as $opt)
-                    <tr class="options-row" style="height:40px;">
-                        <td style="padding:4px 8px;">
-                            <input type="radio" name="option" id="option_{{ strtolower($opt) }}" value="{{ $opt }}" />
-                            <label for="option_{{ strtolower($opt) }}" style="margin-left:6px; font-size:18px; cursor:pointer;">
-                                <i class="fa fa-circle-o me-1"></i> Option {{ $opt }}
-                            </label>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-
-            </form>
-        </div>
-
-        <!-- Previous / Next Buttons in a separate footer card -->
-        <div class="card mt-2" style="background-color:#f0f0f0; border-radius:6px; margin:8px;">
-            <div class="card-body d-flex justify-content-between p-2">
-                <button id="prev-button" class="btn d-flex align-items-center" 
-                        style="background-color:#3b3407; color:#fff; font-weight:bold; gap:5px; border-radius:6px;">
-                    <i class="fa fa-arrow-left"></i> Previous
-                </button>
-
-                <button id="next-button" class="btn d-flex align-items-center" 
-                        style="background-color:#28a745; color:#fff; font-weight:bold; gap:5px; border-radius:6px;">
-                    Next <i class="fa fa-arrow-right"></i>
-                </button>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
-        </div>
-    </div>
-</div>
-
-
-
-    <!-- Right Column: Question Navigation -->
-    <div class="col-md-4 d-flex">
-        <div class="card flex-fill d-flex flex-column" style="max-height:100%;">
-            <!-- Sticky Header -->
-            <div class="card-header text-center" 
-                 style="font-weight:bold; font-size:16px; background-color:#3b3407; color:#fff; position:sticky; top:0; z-index:10; border-radius:6px 6px 0 0;">
-                Question Navigation
+        @elseif(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
             </div>
+        @endif
 
-            <!-- Scrollable Buttons -->
-            <div class="card-body flex-fill" style="padding:10px; overflow-y:auto;">
-               <div id="question-buttons" class="question-buttons-wrapper" 
-                    data-admission-no="{{ $studentData->admission_no }}" 
-                    style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+        <div class="cbt-layout">
 
-                    @for ($i = 1; $i <= $examSetting->no_of_qst; $i++)
-                        <button type="button" 
-                                class="btn question-btn {{ $i === 1 ? 'active' : '' }}" 
-                                data-question-number="{{ $i }}"
-                                style="
-                                    position:relative;
-                                    width:50px; 
-                                    height:50px; 
-                                    border-radius:50%; 
-                                    background-color:#474204; 
-                                    color:#fff; 
-                                    font-weight:bold; 
-                                    font-size:16px; 
-                                    border:none; 
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-                                    transition: all 0.2s;
-                                ">
-                            <span class="question-number">{{ $i }}</span>
-                            <!-- Tick icon in top-right corner -->
-                            <i class="fa fa-check tick-icon" 
-                            style="
-                                position:absolute; 
-                                top:10px; 
-                                right:10px; 
-                                color:#fff; 
-                                display:none; 
-                                font-size:14px;
-                            "></i>
+            <!-- ================= LEFT PANEL ================= -->
+
+            <section class="cbt-left">
+
+                <div class="cbt-panel">
+
+                    <div class="cbt-header">
+
+                        <h4>
+                            Question
+                            <span id="current-question-number">1</span>
+                            of {{ $examSetting->no_of_qst }}
+                        </h4>
+
+                    </div>
+
+                    <div class="cbt-body">
+
+                        <form class="answer-form">
+
+                            <div class="cbt-question-box">
+
+                                <div id="current-question"></div>
+
+                            </div>
+
+                            <table class="cbt-options">
+
+                                @foreach(['A','B','C','D'] as $opt)
+
+                                <tr>
+
+                                    <td>
+
+                                        <input
+                                            type="radio"
+                                            id="option_{{ strtolower($opt) }}"
+                                            name="option"
+                                            value="{{ $opt }}">
+
+                                        <label for="option_{{ strtolower($opt) }}">
+
+                                            <i class="fa fa-circle-o"></i>
+
+                                            Option {{ $opt }}
+
+                                        </label>
+
+                                    </td>
+
+                                </tr>
+
+                                @endforeach
+
+                            </table>
+
+                        </form>
+
+                    </div>
+
+                    <div class="cbt-footer">
+
+                        <button
+                            id="prev-button"
+                            class="btn btn-warning">
+
+                            <i class="fa fa-arrow-left"></i>
+
+                            Previous
+
                         </button>
-                    @endfor
+
+                        <button
+                            id="next-button"
+                            class="btn btn-success">
+
+                            Next
+
+                            <i class="fa fa-arrow-right"></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
+            </section>
 
+            <!-- ================= RIGHT PANEL ================= -->
 
-            </div>
+           <aside class="cbt-right">
+
+                <div class="cbt-nav-card">
+            
+                    <div class="cbt-nav-header">
+                        Question Navigation
+                    </div>
+            
+                    <div class="cbt-nav-body">
+            
+                        <div id="question-buttons"
+                             class="cbt-button-grid"
+                             data-admission-no="{{ $studentData->admission_no }}">
+            
+                            @for($i=1;$i<=$examSetting->no_of_qst;$i++)
+            
+                                <button
+                                    type="button"
+                                    class="question-btn {{ $i==1 ? 'active':'' }}"
+                                    data-question-number="{{ $i }}">
+            
+                                    {{ $i }}
+            
+                                    <i class="fa fa-check tick-icon"></i>
+            
+                                </button>
+            
+                            @endfor
+            
+                        </div>
+            
+                    </div>
+            
+                </div>
+            
+            </aside>
+
         </div>
+
     </div>
 </div>
-
 
 
           
@@ -786,6 +1220,74 @@
 
   <!-- Time counter -->
 <!-- Time counter -->
+
+<!-- ================= CBT CALCULATOR ================= -->
+
+<div id="cbt-calculator" class="cbt-calculator">
+
+    <button type="button"
+            id="cbt-calculator-toggle"
+            class="cbt-calculator-toggle">
+        🧮 Calculator
+    </button>
+
+    <div id="cbt-calculator-panel"
+         class="cbt-calculator-panel"
+         hidden>
+
+        <div id="cbt-calculator-header" class="cbt-calculator-header">
+            <span>🧮 Calculator</span>
+
+            <button type="button"
+                    id="cbt-calculator-close"
+                    aria-label="Close calculator">
+                &times;
+            </button>
+        </div>
+
+        <input type="text"
+               id="cbt-calculator-display"
+               class="cbt-calculator-display"
+               value="0"
+               readonly
+               aria-label="Calculator display">
+
+        <div class="cbt-calculator-keys">
+
+            <button type="button" data-calc="C" class="calc-clear">AC</button>
+            <button type="button" data-calc="(">(</button>
+            <button type="button" data-calc=")">)</button>
+            <button type="button" data-calc="/" class="calc-operator">÷</button>
+
+            <button type="button" data-calc="7">7</button>
+            <button type="button" data-calc="8">8</button>
+            <button type="button" data-calc="9">9</button>
+            <button type="button" data-calc="*" class="calc-operator">×</button>
+
+            <button type="button" data-calc="4">4</button>
+            <button type="button" data-calc="5">5</button>
+            <button type="button" data-calc="6">6</button>
+            <button type="button" data-calc="-" class="calc-operator">−</button>
+
+            <button type="button" data-calc="1">1</button>
+            <button type="button" data-calc="2">2</button>
+            <button type="button" data-calc="3">3</button>
+            <button type="button" data-calc="+" class="calc-operator">+</button>
+
+            <button type="button" data-calc="%">%</button>
+            <button type="button" data-calc="0">0</button>
+            <button type="button" data-calc=".">.</button>
+            <button type="button" data-calc="DEL">⌫</button>
+
+            <button type="button"
+                    data-calc="="
+                    class="calc-equals">
+                =
+            </button>
+
+        </div>
+    </div>
+</div>
 <script>
 "use strict";
 
@@ -879,7 +1381,7 @@ startTimer();
 <script src="{{asset('student/js/jquery-3.6.0.min.js')}}"></script>
 
 <!-- Question rendering -->
-<!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<!-- 
 <script id="MathJax-script" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script> -->
@@ -1190,6 +1692,10 @@ if (data.questionType === 'text') {
                 updateButtonStates(parseInt(questionNumber));
                 updateAttemptedCounter();
                 updateNavButtonsState(parseInt(questionNumber));
+                
+                requestAnimationFrame(() => {
+                    syncNavigationHeight();
+                });
 
             })
             .catch(err => {
@@ -1269,10 +1775,264 @@ if (data.questionType === 'text') {
     // ===============================
     // Initial load
     // ===============================
-    loadQuestion(parseInt(buttons[0].dataset.questionNumber));
-});
+   loadQuestion(parseInt(buttons[0].dataset.questionNumber));
+
+    window.addEventListener('load', function () {
+        requestAnimationFrame(syncNavigationHeight);
+    });
+    
+    window.addEventListener('resize', syncNavigationHeight);
+    });
 </script>
 
+<script>
+    function syncNavigationHeight() {
+
+    const left = document.querySelector('.cbt-panel');
+    const right = document.querySelector('.cbt-nav-card');
+    const body = document.querySelector('.cbt-nav-body');
+
+    if (!left || !right || !body) return;
+
+    // Make right card same height as left card
+    right.style.height = left.offsetHeight + 'px';
+
+    // Calculate available height for scroll area
+    const headerHeight = document.querySelector('.cbt-nav-header').offsetHeight;
+
+    body.style.height = (left.offsetHeight - headerHeight) + 'px';
+}
+</script>
+
+<script>
+
+window.onload = function(){
+
+    let left = document.querySelector('.cbt-left');
+
+    let right = document.querySelector('.cbt-nav-card');
+
+    if(left && right){
+
+        right.style.height = left.offsetHeight + 'px';
+
+    }
+
+};
+
+window.onresize = function(){
+
+    let left = document.querySelector('.cbt-left');
+
+    let right = document.querySelector('.cbt-nav-card');
+
+    if(left && right){
+
+        right.style.height = left.offsetHeight + 'px';
+
+    }
+
+};
+
+</script>
+
+
+<script>
+(function () {
+    'use strict';
+
+    var container = document.getElementById('cbt-calculator');
+    var toggle = document.getElementById('cbt-calculator-toggle');
+    var panel = document.getElementById('cbt-calculator-panel');
+    var close = document.getElementById('cbt-calculator-close');
+    var display = document.getElementById('cbt-calculator-display');
+    var header = document.getElementById('cbt-calculator-header');
+
+    if (!container || !toggle || !panel || !display) return;
+
+    var expression = '';
+    var calculated = false;
+
+    function updateDisplay(value) {
+        display.value = value || '0';
+    }
+
+    function calculate(input) {
+        var tokens = input.match(/\d+(?:\.\d*)?|\.\d+|[()+*/%-]/g);
+
+        if (!tokens || tokens.join('') !== input.replace(/\s+/g, '')) {
+            throw new Error('Invalid expression');
+        }
+
+        var pos = 0;
+
+        function primary() {
+            var token = tokens[pos++];
+
+            if (token === undefined) throw new Error('Incomplete expression');
+
+            if (token === '+') return primary();
+            if (token === '-') return -primary();
+
+            var value;
+
+            if (token === '(') {
+                value = addition();
+                if (tokens[pos++] !== ')') throw new Error('Missing bracket');
+            } else {
+                value = Number(token);
+                if (!isFinite(value)) throw new Error('Invalid number');
+            }
+
+            while (tokens[pos] === '%') {
+                pos++;
+                value /= 100;
+            }
+
+            return value;
+        }
+
+        function multiplication() {
+            var value = primary();
+
+            while (tokens[pos] === '*' || tokens[pos] === '/') {
+                var op = tokens[pos++];
+                var next = primary();
+
+                if (op === '*') {
+                    value *= next;
+                } else {
+                    if (next === 0) throw new Error('Division by zero');
+                    value /= next;
+                }
+            }
+
+            return value;
+        }
+
+        function addition() {
+            var value = multiplication();
+
+            while (tokens[pos] === '+' || tokens[pos] === '-') {
+                var op = tokens[pos++];
+                var next = multiplication();
+
+                value = op === '+' ? value + next : value - next;
+            }
+
+            return value;
+        }
+
+        var result = addition();
+
+        if (pos !== tokens.length || !isFinite(result)) {
+            throw new Error('Invalid expression');
+        }
+
+        return Number(result.toPrecision(12));
+    }
+
+    function pressKey(key) {
+        if (key === 'C') {
+            expression = '';
+            calculated = false;
+            updateDisplay('0');
+            return;
+        }
+
+        if (key === 'DEL') {
+            expression = expression.slice(0, -1);
+            calculated = false;
+            updateDisplay(expression);
+            return;
+        }
+
+        if (key === '=') {
+            if (!expression) return;
+
+            try {
+                var result = calculate(expression);
+                expression = String(result);
+                calculated = true;
+                updateDisplay(expression);
+            } catch (error) {
+                updateDisplay('Error');
+                expression = '';
+                calculated = false;
+            }
+
+            return;
+        }
+
+        if (calculated && /[0-9.(]/.test(key)) {
+            expression = '';
+        }
+
+        calculated = false;
+
+        if (expression.length >= 100) return;
+
+        expression += key;
+        updateDisplay(expression);
+    }
+
+    container.querySelectorAll('[data-calc]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            pressKey(btn.getAttribute('data-calc'));
+        });
+    });
+
+    toggle.addEventListener('click', function () {
+        panel.hidden = !panel.hidden;
+    });
+
+    close.addEventListener('click', function () {
+        panel.hidden = true;
+    });
+
+    // Drag the calculator without interfering with exam controls.
+    var dragging = false;
+    var offsetX = 0;
+    var offsetY = 0;
+
+    header.addEventListener('mousedown', function (event) {
+        if (event.target.closest('button')) return;
+
+        var rect = panel.getBoundingClientRect();
+
+        offsetX = event.clientX - rect.left;
+        offsetY = event.clientY - rect.top;
+
+        dragging = true;
+        event.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function (event) {
+        if (!dragging) return;
+
+        var left = Math.max(
+            0,
+            Math.min(event.clientX - offsetX, window.innerWidth - panel.offsetWidth)
+        );
+
+        var top = Math.max(
+            0,
+            Math.min(event.clientY - offsetY, window.innerHeight - panel.offsetHeight)
+        );
+
+        panel.style.position = 'fixed';
+        panel.style.left = left + 'px';
+        panel.style.top = top + 'px';
+        panel.style.right = 'auto';
+        panel.style.bottom = 'auto';
+    });
+
+    document.addEventListener('mouseup', function () {
+        dragging = false;
+    });
+
+})();
+</script>
 
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->

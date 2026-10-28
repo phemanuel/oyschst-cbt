@@ -371,65 +371,109 @@ class StudentController extends Controller
     'dept','acad_sessions'));
     }
 
+
     public function studentCreateAction(Request $request)
     {
-        
         try {
+
             // Validate form input
             $validatedData = $request->validate([
-                'session1' => 'required|string',
+                'session1'     => 'required|string',
                 'admission_no' => 'required|string',
-                'surname' => 'required|string',
-                'first_name' => 'required|string',
-                'other_name' => 'required|string',
-                'department' => 'required|string',
-                'sex' => 'required|string',
-                'level' => 'required|string',
-                'phone_no' => 'required|string',
-                'state' => 'required|string',
-                'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'surname'      => 'required|string',
+                'first_name'   => 'required|string',
+                'other_name'   => 'required|string',
+                'department'   => 'required|string',
+                'sex'          => 'required|string',
+                'level'        => 'required|string',
+                'phone_no'     => 'required|string',
+                'state'        => 'required|string',
+                'file'         => 'required|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
+            // Normalize admission number
+            $admissionNo = $this->normalizeAdmissionNo(
+                trim($validatedData['admission_no'])
+            );
+
+            // Check if admission number already exists
+            $studentExists = StudentAdmission::where(
+                'admission_no',
+                $admissionNo
+            )->exists();
+
+            if ($studentExists) {
+
+                return redirect()->back()
+                    ->with('error-college', 
+                        'A student with admission number ' .
+                        $admissionNo .
+                        ' already exists.'
+                    )
+                    ->withInput();
+            }
+
+            // Upload student picture
             if ($request->hasFile('file')) {
+
                 $image = $request->file('file');
-                $imageName = $validatedData['admission_no'] . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('uploads'), $imageName);                             
-            }            
-            
-            //===Create student
-            $studentCreate = StudentAdmission::create([
-                'session1' => $validatedData['session1'],
-                'admission_no' => $validatedData['admission_no'], 
-                'surname' => $validatedData['surname'], 
-                'first_name' => $validatedData['first_name'],
-                'other_name' => $validatedData['other_name'],
-                'department' => $validatedData['department'], 
-                'sex'        => $validatedData['sex'],  
-                'level'      => $validatedData['level'],  
-                'phone_no'   => $validatedData['phone_no'], 
-                'phone_no1'   => $validatedData['phone_no'],
-                'user_name'   => $validatedData['phone_no'],
-                'password'   => $validatedData['phone_no'],
-                'user_type'   => "student",
-                'login_status' => 0,
+
+                $imageName = $admissionNo . '.' .
+                    $image->getClientOriginalExtension();
+
+                $image->move(
+                    public_path('uploads'),
+                    $imageName
+                );
+            }
+
+            // Create student
+            StudentAdmission::create([
+                'session1'       => $validatedData['session1'],
+                'admission_no'   => $admissionNo,
+                'surname'        => $validatedData['surname'],
+                'first_name'     => $validatedData['first_name'],
+                'other_name'     => $validatedData['other_name'],
+                'department'     => $validatedData['department'],
+                'sex'            => $validatedData['sex'],
+                'level'          => $validatedData['level'],
+                'phone_no'       => $validatedData['phone_no'],
+                'phone_no1'      => $validatedData['phone_no'],
+                'user_name'      => $validatedData['phone_no'],
+                'password'       => $validatedData['phone_no'],
+                'user_type'      => 'student',
+                'login_status'   => 0,
                 'login_attempts' => 0,
-                'state'      => $validatedData['state'], 
-                'picture_name' => $validatedData['admission_no'],
-                             
+                'state'          => $validatedData['state'],
+                'picture_name'   => $admissionNo,
             ]);
 
-            return redirect()->back()->with('success', 'Student admission record created successfully.');
+            return redirect()->back()->with(
+                'success',
+                'Student admission record created successfully.'
+            );
 
-        }catch (ValidationException $e) {
-            // Validation failed. Redirect back with validation errors.
-            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (ValidationException $e) {
+
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
+
         } catch (Exception $e) {
-            // Log the error
-            Log::error('Error during student registration: ' . $e->getMessage());
 
-            return redirect()->back()->with('error-college', 'An error occurred during student registration. Please try again.');
+            Log::error(
+                'Error during student registration: ' .
+                $e->getMessage()
+            );
+
+            return redirect()->back()->with(
+                'error-college',
+                'An error occurred during student registration. Please try again.'
+            );
         }
     }
+
+
 
     // public function search(Request $request)
     // {

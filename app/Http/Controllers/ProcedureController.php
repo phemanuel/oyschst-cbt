@@ -94,6 +94,16 @@ class ProcedureController extends Controller
         try {
             $procedure->delete();
 
+            if (auth()->check()) {
+                    \App\Models\LogActivity::create([
+                        'user_id' => auth()->id(),
+                        'ip_address' => request()->ip(),
+                        'activity' => 'Procedure Deleted by ' . auth()->user()->name,
+                        'activity_date' => now(),
+                    ]);
+                }
+
+
             return response()->json([
                 'message' => 'Procedure deleted successfully',
                 'id'      => $procedure->id

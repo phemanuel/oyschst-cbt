@@ -1,0 +1,191 @@
+/* ============================================================
+   CBT SINGLE-QUESTION EXAM — VISUAL REDESIGN ONLY
+   Load after student/css/style.css and all inline page <style> tags.
+   Preserves all existing ids/classes, JS events and form behavior.
+   ============================================================ */
+:root {
+  --exam-green: #123d31;
+  --exam-green-2: #18734f;
+  --exam-border: #e0e9e3;
+  --exam-ink: #20332a;
+  --exam-muted: #667b70;
+  --exam-bg: #f3f7f4;
+}
+body.sidebar-fixed { background: var(--exam-bg); color: var(--exam-ink); }
+/* Don’t let nested layout components overflow their columns */
+.cbt-layout, .cbt-layout * { box-sizing: border-box; }
+.cbt-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+}
+.cbt-left { flex: 1 1 0; min-width: 0; }
+.cbt-right { flex: 0 0 315px; width: 315px; min-width: 0; display: block; }
+
+/* Question panel — always on the left */
+.cbt-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--exam-border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 7px 26px rgba(16, 48, 34, .07);
+  overflow: hidden;
+}
+.cbt-header { background: #f2f8f4; padding: 17px 24px; border-bottom: 1px solid var(--exam-border); }
+.cbt-header h4 { margin: 0; font-size: 17px; font-weight: 700; color: var(--exam-green); }
+#current-question-number { color: var(--exam-green-2); font-weight: 800; }
+.cbt-body { padding: 25px 26px 18px; min-width: 0; }
+.cbt-question-box {
+  min-height: 145px;
+  padding: 23px;
+  margin: 0 0 22px;
+  background: #f8faf8;
+  border: 1px solid var(--exam-border);
+  border-left: 4px solid var(--exam-green-2);
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+#current-question { color: #26392f; line-height: 1.55; overflow-wrap: anywhere; }
+#current-question p { max-width: 100%; line-height: 1.5; }
+#current-question img, #current-question svg, #current-question video { max-width: 100% !important; height: auto !important; object-fit: contain; }
+#current-question mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+
+/* Radio options: keep the original input ids and label nodes */
+.cbt-options { width: 100%; border-collapse: separate; border-spacing: 0 9px; table-layout: fixed; }
+.cbt-options tr { background: #fff; }
+.cbt-options td { padding: 0 !important; border: none !important; min-width: 0; }
+.cbt-options td { position: relative; }
+.cbt-options input[type="radio"] {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 19px;
+  height: 19px;
+  margin: 0;
+  accent-color: var(--exam-green-2);
+  cursor: pointer;
+  z-index: 1;
+}
+.cbt-options label {
+  display: block;
+  margin: 0;
+  padding: 15px 15px 15px 49px;
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid #dde9e0;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--exam-ink);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.cbt-options label:hover { border-color: #a0cbb3; background: #f7fbf8; }
+.cbt-options tr:has(input:checked) label { background: #eaf7ee; border-color: var(--exam-green-2); box-shadow: 0 0 0 1px rgba(24,115,79,.12); }
+.cbt-options label img { max-width: 100%; height: auto; }
+.cbt-options label .fa-circle-o { display: none; }
+.cbt-footer { background: #fff; border-top: 1px solid var(--exam-border); padding: 17px 24px; gap: 12px; }
+.cbt-footer .btn { min-width: 130px; border-radius: 9px; padding: 10px 18px; font-size: 14px; font-weight: 700; }
+.cbt-footer .btn-success { background: var(--exam-green-2); border-color: var(--exam-green-2); }
+.cbt-footer .btn-warning { background: #f3f1e6; border-color: #dedac3; color: #554b27; }
+.cbt-footer .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Right navigation: JS may set explicit height, CSS MAX-HEIGHT caps it.
+   It will match a shorter question panel, but never stretch past this cap. */
+.cbt-nav-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: min(620px, calc(100dvh - 155px));
+  background: #fff;
+  border: 1px solid var(--exam-border);
+  border-radius: 16px;
+  box-shadow: 0 7px 26px rgba(16,48,34,.07);
+  overflow: hidden;
+}
+.cbt-nav-header {
+  flex: 0 0 auto;
+  padding: 17px 14px;
+  background: var(--exam-green);
+  color: #fff;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+}
+/* Existing syncNavigationHeight() writes body.style.height.
+   This declaration supersedes only that height calculation. */
+.cbt-nav-body {
+  height: auto !important;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: 14px !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #a9bdb0 #f1f5f2;
+}
+#question-buttons.cbt-button-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 9px;
+  width: 100%;
+  margin: 0;
+  justify-content: unset;
+  align-items: start;
+}
+#question-buttons .question-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #d8e7dc;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: none;
+  /* Existing JS sets button.style.backgroundColor. Leave it intact. */
+}
+#question-buttons .question-btn.active { outline: 2px solid #a8cdb5; outline-offset: 2px; }
+#question-buttons .tick-icon { top: 2px; right: 3px; bottom: auto; font-size: 10px; }
+#question-buttons .question-btn:focus-visible { outline: 3px solid #8fb8df; outline-offset: 2px; }
+
+/* Leave the exam timer, warning IDs and modal hooks intact. */
+#timer { font-variant-numeric: tabular-nums; }
+#exampleModal-2 .modal-content { border: none; border-radius: 14px; overflow: hidden; }
+#exampleModal-2 .modal-header { background: #f3f8f4; border-bottom: 1px solid var(--exam-border); }
+
+@media (max-width: 1100px) {
+  .cbt-right { flex-basis: 280px; width: 280px; }
+  #question-buttons.cbt-button-grid { gap: 7px; }
+  #question-buttons .question-btn { height: 42px; }
+  .cbt-body { padding: 18px; }
+}
+@media (max-width: 767px) {
+  .cbt-layout { flex-direction: column; }
+  .cbt-left, .cbt-right { width: 100%; flex: none; }
+  .cbt-nav-card { max-height: 285px; }
+  .cbt-nav-body { padding: 12px !important; }
+  #question-buttons.cbt-button-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .cbt-header, .cbt-footer { padding: 14px; }
+  .cbt-question-box { padding: 16px; min-height: 110px; }
+  .cbt-options label { padding-top: 12px; padding-bottom: 12px; }
+}
+@media (max-width: 420px) {
+  #question-buttons.cbt-button-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .cbt-footer .btn { min-width: 0; flex: 1; padding: 10px 9px; }
+}

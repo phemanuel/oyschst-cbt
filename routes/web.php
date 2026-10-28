@@ -18,6 +18,7 @@ use App\Http\Controllers\MCQController;
 use App\Http\Controllers\ExaminerController;
 use App\Http\Controllers\OSCEStudentController;
 use App\Http\Controllers\StudentExamController;
+use App\Http\Controllers\PastQuestionDownloadController;
 /*
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,12 @@ Route::get('/', function () {
     //     ->name('password.update');
 
     // Home route
+    // Persistent CBT fullscreen shell
+    
+    // Route::get('/', function () {
+    //     return view('cbt.fullscreen-shell');
+    // })->name('cbt.shell');
+
     Route::get('/', [AuthController::class, 'login'])->name('login');
     Route::get('/test-blink', [AuthController::class, 'testBlink'])->name('test-blink');
     // Route::get('/', [AuthController::class, 'home'])->name('home');
@@ -283,7 +290,7 @@ Route::get('/', function () {
         Route::post('edit-subject/{id}', [DashboardController::class, 'editSubjectAction'])
         ->name('edit-subject.action');
         Route::get('subject/{id}', [DashboardController::class, 'deleteSubjectAction'])
-        ->name('delete-subject.action'); 
+        ->name('delete-subject.action');  
         //--college update
         Route::get('admin-setup', [DashboardController::class, 'adminSetup'])
         ->name('admin-setup');
@@ -339,6 +346,15 @@ Route::get('/', function () {
         ->name('add-more-questions');  
         Route::post('/question-delete',[QuestionController::class, 'deleteExam'])
         ->name('question-delete');
+
+        //-----Question Download----
+        Route::post('/admin/questions/download/verify', [PastQuestionDownloadController::class, 'verify'])
+            ->middleware('auth')->name('admin.questions.verify');
+        Route::get('/admin/questions/download/filters', [PastQuestionDownloadController::class, 'filters'])
+            ->middleware('auth')->name('admin.questions.filters');
+        Route::get('/admin/questions/download/export', [PastQuestionDownloadController::class, 'download'])
+            ->middleware('auth')->name('admin.questions.download');
+
         //---Questions Fill in the Gaps
         Route::get('question-upload-fill-gap', [QuestionController::class, 'questionUploadFillGap'])
         ->name('question-upload-fill-gap');
@@ -561,6 +577,131 @@ Route::get('/', function () {
 
         });
     });
+
+    /*
+|--------------------------------------------------------------------------
+| CBT Admin Emergency Exit
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| FULLSCREEN EMERGENCY ACCESS
+|--------------------------------------------------------------------------
+*/
+
+// Get current CSRF token
+Route::get('/system-access/token', function (
+    \Illuminate\Http\Request $request
+) {
+    return response()->json([
+        'csrf_token' => $request->session()->token()
+    ]);
+})->name('fullscreen.emergency.token');
+
+
+// Verify administrator PIN
+Route::post('/system-access/verify', function (
+    \Illuminate\Http\Request $request
+) {
+    $request->validate([
+        'pin' => 'required|digits:4'
+    ]);
+
+    // Your administrator PIN
+    $adminPin = '1933'; // Replace with your actual PIN
+
+    if (!hash_equals($adminPin, (string) $request->input('pin'))) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Incorrect administrator PIN.'
+        ], 403);
+    }
+
+    return response()->json([
+        'success' => true
+    ]);
+
+})->middleware('throttle:5,1')
+  ->name('fullscreen.emergency.verify');
+
+
+// Emergency exit destination
+Route::get('/system-access/exited', function () {
+
+    return response(<<<'HTML'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CBT Emergency Exit</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f7f5;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .exit-card {
+            background: #fff;
+            padding: 45px;
+            border-radius: 15px;
+            max-width: 450px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.08);
+        }
+
+        h2 {
+            color: #166534;
+        }
+
+        p {
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .return-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 28px;
+    background: #166534;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.return-btn:hover {
+    background: #14532d;
+}
+    </style>
+</head>
+<body>
+    <div class="exit-card">
+        <h2>CBT Fullscreen Exited</h2>
+        <p>
+            The examination fullscreen interface has been
+            closed by an authorized administrator.
+        </p>
+        <p>
+            You may now troubleshoot the issue.
+        </p>
+        <a href="/" class="return-btn">
+            Return to CBT Login
+        </a>
+    </div>
+</body>
+</html>
+HTML, 200);
+
+})->name('fullscreen.emergency.exited');
 
     Route::get('test-chatgpt', [AIController::class, 'testOpenAI'])
         ->name('test-chatgpt'); 

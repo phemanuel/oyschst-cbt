@@ -1,0 +1,220 @@
+/* CBT SINGLE PAGE — THREE COLUMNS
+   Exam details | Question (widest) | Navigation
+   Load AFTER all existing <style> blocks and cbt-single-question-redesign.css.
+   CSS only: leaves timer, question fetch, save, navigation and modal JS intact.
+*/
+:root { --three-sidebar: 235px; --three-nav: 285px; --three-gap: 16px; --three-top: 90px; }
+body.sidebar-fixed { background: #f3f7f4; }
+body.sidebar-fixed .container-scroller { min-height: 100dvh; }
+/* The existing navbar has a tall, vertically stacked student-information UL.
+   Make it a horizontal strip so it cannot consume the exam viewport. */
+body.sidebar-fixed .default-layout-navbar.cbt-navbar {
+    height: var(--three-top) !important;
+    min-height: var(--three-top) !important;
+    align-items: center;
+    background: #123d31 !important;
+}
+body.sidebar-fixed .cbt-navbar .navbar-menu-wrapper {
+    min-width: 0;
+    height: 100%;
+    gap: 10px;
+    padding: 8px 16px;
+    align-items: center !important;
+    overflow: hidden;
+}
+body.sidebar-fixed .cbt-navbar .navbar-info {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: row !important;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: auto !important;
+    min-width: 0;
+    margin: 0 !important;
+    background: transparent !important;
+    overflow: hidden !important;
+    gap: 8px;
+}
+body.sidebar-fixed .cbt-navbar .navbar-info > li {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 3px 8px !important;
+    text-align: left !important;
+    border: 0 !important;
+}
+body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(2) { flex: 1 1 210px; }
+body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(3) { flex: 1 1 155px; }
+body.sidebar-fixed .cbt-navbar .navbar-info > li > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px !important;
+}
+body.sidebar-fixed .cbt-navbar .navbar-info > li > div:last-child { font-size: 13px !important; }
+body.sidebar-fixed .cbt-navbar .navbar-nav-right { margin: 0 !important; flex: 0 0 auto; }
+body.sidebar-fixed .cbt-navbar .nav-link { padding: 0 5px !important; }
+body.sidebar-fixed .cbt-navbar .timer-btn { background: #e8f4ec !important; color: #123d31 !important; }
+body.sidebar-fixed .cbt-navbar .timer-btn p,
+body.sidebar-fixed .cbt-navbar .timer-btn #timer { color: #123d31 !important; margin: 0 !important; }
+body.sidebar-fixed .cbt-navbar .navbar-menu-wrapper > div:last-child { flex: 0 0 auto; margin: 0 !important; }
+/* Three independent areas below the header */
+body.sidebar-fixed .page-body-wrapper {
+    display: block !important;
+    min-height: calc(100dvh - var(--three-top));
+    padding-top: var(--three-top) !important;
+    margin: 0 !important;
+}
+/* Existing left sidebar is retained, including #time-warning and #attempted-counter. */
+body.sidebar-fixed .page-body-wrapper > #sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: var(--three-top) !important;
+    bottom: 0 !important;
+    width: var(--three-sidebar) !important;
+    height: auto !important;
+    max-height: calc(100dvh - var(--three-top));
+    z-index: 101;
+    padding: 13px 10px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    background: #fff;
+    border-right: 1px solid #deebe2;
+    box-shadow: none;
+    scrollbar-width: thin;
+}
+body.sidebar-fixed #sidebar .nav { display: block; padding: 0 !important; }
+body.sidebar-fixed #sidebar .nav > li { display: block; width: 100%; }
+body.sidebar-fixed #sidebar .exam-details-panel {
+    margin: 8px 0 !important;
+    border-left: 3px solid #18734f;
+    border-radius: 9px;
+    box-shadow: none;
+    background: #f8faf9;
+    overflow-wrap: anywhere;
+}
+body.sidebar-fixed #sidebar .exam-details-panel .panel-body { padding: 11px !important; }
+body.sidebar-fixed #sidebar .exam-details-panel .table { width: 100%; table-layout: fixed; }
+body.sidebar-fixed #sidebar .exam-details-panel .table td { white-space: normal; padding: 9px 7px; }
+body.sidebar-fixed #sidebar .dl-vertical dt { font-size: 12px; color: #64776b; }
+body.sidebar-fixed #sidebar .dl-vertical dd { font-size: 13px; color: #17352a; overflow-wrap: anywhere; }
+body.sidebar-fixed #sidebar #attempted-counter { font-size: 13px !important; line-height: 1.5; }
+body.sidebar-fixed #sidebar #time-warning { display: flex; font-size: 12px !important; padding: 10px !important; }
+body.sidebar-fixed #sidebar #time-warning.hidden { display: none !important; }
+/* Main area now contains BOTH the centre question and right navigation. */
+body.sidebar-fixed .page-body-wrapper > .main-panel {
+    width: calc(100% - var(--three-sidebar)) !important;
+    min-height: calc(100dvh - var(--three-top));
+    margin-left: var(--three-sidebar) !important;
+    padding: 0 !important;
+    float: none !important;
+    flex: none !important;
+}
+body.sidebar-fixed .main-panel > .content-wrapper {
+    width: 100%;
+    padding: 18px !important;
+    min-height: auto;
+    background: #f3f7f4;
+}
+body.sidebar-fixed .cbt-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) var(--three-nav);
+    gap: var(--three-gap);
+    align-items: start !important;
+    width: 100%;
+    min-width: 0;
+}
+body.sidebar-fixed .cbt-layout > .cbt-left,
+body.sidebar-fixed .cbt-layout > .cbt-right { width: auto !important; min-width: 0; flex: none !important; }
+body.sidebar-fixed .cbt-layout .cbt-panel,
+body.sidebar-fixed .cbt-layout .cbt-nav-card { width: 100% !important; }
+/* Navigation is bounded: JS may set inline heights, but the max-height caps the card. */
+body.sidebar-fixed .cbt-nav-card {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: min(600px, calc(100dvh - var(--three-top) - 36px)) !important;
+    min-height: 0;
+    overflow: hidden !important;
+}
+body.sidebar-fixed .cbt-nav-header { flex: 0 0 auto; }
+body.sidebar-fixed .cbt-nav-body {
+    flex: 1 1 auto;
+    min-height: 0 !important;
+    height: auto !important; /* overrides JS inline calculated height */
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+}
+body.sidebar-fixed #question-buttons.cbt-button-grid {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0,1fr)) !important;
+    gap: 7px !important;
+}
+body.sidebar-fixed #question-buttons .question-btn {
+    width: 100% !important;
+    height: 42px;
+    min-width: 0;
+    margin: 0 !important;
+}
+body.sidebar-fixed #current-question img,
+body.sidebar-fixed .cbt-options label img { max-width: 100% !important; height: auto !important; }
+/* Narrow laptop: keep all three columns, give question most of the width */
+@media (max-width: 1190px) {
+    :root { --three-sidebar: 205px; --three-nav: 245px; --three-gap: 12px; }
+    body.sidebar-fixed .main-panel > .content-wrapper { padding: 12px !important; }
+    body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(3),
+    body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(4),
+    body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(6) { display: none; }
+}
+/* Tablets/mobile: cannot keep readable 3 columns, so stack gracefully. */
+@media (max-width: 850px) {
+    :root { --three-top: 78px; }
+    body.sidebar-fixed .page-body-wrapper > #sidebar {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-height: 190px;
+        height: auto !important;
+        overflow-y: auto !important;
+    }
+    body.sidebar-fixed .page-body-wrapper > .main-panel {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+    body.sidebar-fixed .cbt-layout { grid-template-columns: minmax(0, 1fr) !important; }
+    body.sidebar-fixed .cbt-nav-card { max-height: 260px !important; }
+    body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(n+3) { display: none; }
+    body.sidebar-fixed .cbt-navbar .navbar-info > li:nth-child(2) { display: none; }
+}
+
+/* =====================================
+   CBT PREVIOUS BUTTON
+===================================== */
+
+#prev-button {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+
+    font-size: 15px;
+    font-weight: 700;
+    padding: 12px 26px;
+    border-radius: 9px;
+
+    transition: all 0.2s ease;
+}
+
+#prev-button:hover:not(:disabled) {
+    background-color: #1e293b !important;
+    border-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+#prev-button:disabled {
+    background-color: #cbd5e1 !important;
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+    opacity: 1;
+    cursor: not-allowed;
+}

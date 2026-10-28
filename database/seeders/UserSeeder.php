@@ -23,8 +23,8 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'email_verified_status' => 1,
                 'login_attempts' => 0,
-                'exam_settings' => 1,
-                'edit_exam_settings' => 1, // Added attribute
+                'exam_setting' => 1,
+                'edit_exam_setting' => 1, // Added attribute
                 'qst_bank' => 1,
                 'create_question_bank' => 1, // Added attribute
                 'edit_question_bank' => 1, // Added attribute

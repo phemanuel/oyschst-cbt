@@ -2075,68 +2075,152 @@ class ExamController extends Controller
 
     }
 
+   
     public function cbtObjPage($id)
     {
         $collegeSetup = CollegeSetup::first();
         $softwareVersion = SoftwareVersion::first();
+
+        // ==========================================
+        // 1. Get Student
+        // ==========================================
+
         $studentData = StudentAdmission::where('id', $id)->first();
+
+        if (!$studentData) {
+            return redirect()->route('login')
+                ->with('error', 'Student record could not be found. Please contact the examination administrator.');
+        }
+
+        // ==========================================
+        // 2. Get Examination Settings
+        // ==========================================
+
         $examSetting = ExamSetting::where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->first(); 
-        $examViewType= $examSetting->exam_view_type;
+            ->where('level', $studentData->level)
+            ->first();
+
+        if (!$examSetting) {
+            return redirect()->back()
+                ->with('error', 'Examination settings are not available for your programme and level. Please contact your invigilator.');
+        }
+
+        $examViewType = $examSetting->exam_view_type;
+
+        // ==========================================
+        // 3. Get CBT Evaluation
+        // ==========================================
 
         $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
-                        ->where('session1', $examSetting->session1)
-                        ->where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->where('semester', $examSetting->semester)
-                        ->where('course', $examSetting->course)
-                        ->where('exam_mode', $examSetting->exam_mode)
-                        ->where('exam_type', $examSetting->exam_type)
-                        ->where('exam_category', $examSetting->exam_category)
-                        ->where('noofquestion' , $examSetting->no_of_qst)
-                        ->first();
+            ->where('session1', $examSetting->session1)
+            ->where('department', $studentData->department)
+            ->where('level', $studentData->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        if (!$cbtEvaluation) {
+            return redirect()->back()
+                ->with('error', 'Your examination record could not be found. Please contact your invigilator.');
+        }
+
+        // ==========================================
+        // 4. Get Student Answers
+        // ==========================================
 
         $studentAnswer = CbtEvaluation2::where('studentno', $studentData->admission_no)
-                        ->where('session1', $examSetting->session1)
-                        ->where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->where('semester', $examSetting->semester)
-                        ->where('course', $examSetting->course)
-                        ->where('exam_mode', $examSetting->exam_mode)
-                        ->where('exam_type', $examSetting->exam_type)
-                        ->where('exam_category', $examSetting->exam_category)
-                        ->where('noofquestion' , $examSetting->no_of_qst)
-                        ->first();  
-            
-        $currentQuestion = QuestionSingle::where('session1', $examSetting->session1)
-                        ->where('department', $studentData->department)
-                        ->where('level', $studentData->level)
-                        ->where('course', $examSetting->course)
-                        ->where('exam_mode', $examSetting->exam_mode)
-                        ->where('exam_type', $examSetting->exam_type)
-                        ->where('exam_category', $examSetting->exam_category)
-                        ->where('no_of_qst', $examSetting->no_of_qst)
-                        ->where('semester', $examSetting->semester)
-                        ->where('question_no', $cbtEvaluation->A1)
-                        ->first();
+            ->where('session1', $examSetting->session1)
+            ->where('department', $studentData->department)
+            ->where('level', $studentData->level)
+            ->where('semester', $examSetting->semester)
+            ->where('course', $examSetting->course)
+            ->where('exam_mode', $examSetting->exam_mode)
+            ->where('exam_type', $examSetting->exam_type)
+            ->where('exam_category', $examSetting->exam_category)
+            ->where('noofquestion', $examSetting->no_of_qst)
+            ->first();
+
+        // ==========================================
+        // 5. Common Examination Variables
+        // ==========================================
 
         $pageNo = 1;
         $currentQuestionNo = 1;
-        $currentQuestionType = $currentQuestion->question_type;
         $studentMin = $cbtEvaluation->minute;
 
-        if($examViewType == 'Multi-Page'){
-            return view('student.pages.cbt-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','pageNo','studentMin'));
-        }
-        elseif($examViewType == 'Single-Page'){
-            return view('student.pages.cbt-single-page', compact('collegeSetup', 'softwareVersion', 'studentData',
-        'examSetting','pageNo','studentMin','studentAnswer','currentQuestion','currentQuestionNo','currentQuestionType'));
-        }
-        
+        // ==========================================
+        // 6. Multi-Page Examination
+        // ==========================================
 
+        if ($examViewType == 'Multi-Page') {
+
+            return view('student.pages.cbt-page', compact(
+                'collegeSetup',
+                'softwareVersion',
+                'studentData',
+                'examSetting',
+                'pageNo',
+                'studentMin'
+            ));
+        }
+
+        // ==========================================
+        // 7. Single-Page Examination
+        // ==========================================
+
+        elseif ($examViewType == 'Single-Page') {
+
+            $currentQuestion = QuestionSingle::where('session1', $examSetting->session1)
+                ->where('department', $studentData->department)
+                ->where('level', $studentData->level)
+                ->where('course', $examSetting->course)
+                ->where('exam_mode', $examSetting->exam_mode)
+                ->where('exam_type', $examSetting->exam_type)
+                ->where('exam_category', $examSetting->exam_category)
+                ->where('no_of_qst', $examSetting->no_of_qst)
+                ->where('semester', $examSetting->semester)
+                ->where('question_no', $cbtEvaluation->A1)
+                ->first();
+
+            // Check whether the question exists
+            if (!$currentQuestion) {
+
+                return redirect()->back()->with(
+                    'error',
+                    'The examination questions are not available at the moment. Please contact your invigilator for assistance.'
+                );
+            }
+
+            $currentQuestionType = $currentQuestion->question_type;
+
+            return view('student.pages.cbt-single-page', compact(
+                'collegeSetup',
+                'softwareVersion',
+                'studentData',
+                'examSetting',
+                'pageNo',
+                'studentMin',
+                'studentAnswer',
+                'currentQuestion',
+                'currentQuestionNo',
+                'currentQuestionType'
+            ));
+        }
+
+        // ==========================================
+        // 8. Invalid Examination View Type
+        // ==========================================
+
+        return redirect()->back()->with(
+            'error',
+            'The examination display configuration is invalid. Please contact the examination administrator.'
+        );
     }
+
 
     public function cbtTheoryPage($id)
     {
@@ -2405,7 +2489,7 @@ class ExamController extends Controller
             'course'     => 'required',
         ]);
 
-        $examSetting = ExamSetting::where([
+        $questionSetting = QuestionSetting::where([
             'session1'   => $request->session1,
             'department' => $request->department,
             'level'      => $request->level,
@@ -2414,22 +2498,22 @@ class ExamController extends Controller
             'course'     => $request->course,
         ])->first();
 
-        if (!$examSetting) {
-            return back()->with('error', 'Exam setting not found.');
+        if (!$questionSetting) {
+            return back()->with('error', 'Questions not found.');
         }
 
-        $noOfQuestions = $examSetting->no_of_qst;
+        $noOfQuestions = $questionSetting->no_of_qst;
 
         // 🔥 Fetch ALL questions for this exam ONCE
         $questions = QuestionSingle::where([
-            'session1'      => $examSetting->session1,
-            'department'    => $examSetting->department,
-            'level'         => $examSetting->level,
-            'semester'      => $examSetting->semester,
-            'course'        => $examSetting->course,
-            'exam_mode'     => $examSetting->exam_mode,
-            'exam_type'     => $examSetting->exam_type,
-            'exam_category' => $examSetting->exam_category,
+            'session1'      => $questionSetting->session1,
+            'department'    => $questionSetting->department,
+            'level'         => $questionSetting->level,
+            'semester'      => $questionSetting->semester,
+            'course'        => $questionSetting->course,
+            'exam_mode'     => $questionSetting->exam_mode,
+            'exam_type'     => $questionSetting->exam_type,
+            'exam_category' => $questionSetting->exam_category,
         ])->get()->keyBy('question_no');
 
         $students = StudentAdmission::where([
@@ -2444,7 +2528,7 @@ class ExamController extends Controller
 
             $result = $this->computeStudentResultOptimized(
                 $student,
-                $examSetting,
+                $questionSetting,
                 $questions,
                 $noOfQuestions
             );
@@ -2456,8 +2540,8 @@ class ExamController extends Controller
             }
         }
 
-        $logValue = $examSetting->course . "-" . $examSetting->department . "-" . $examSetting->semester
-        . "-" . $examSetting->session1 ;
+        $logValue = $questionSetting->course . "-" . $questionSetting->department . "-" . $questionSetting->semester
+        . "-" . $questionSetting->session1 ;
 
         if (auth()->check()) {
                     \App\Models\LogActivity::create([
@@ -2472,21 +2556,21 @@ class ExamController extends Controller
 
     private function computeStudentResultOptimized(
         $studentData,
-        $examSetting,
+        $questionSetting,
         $questions,
         $noOfQuestions
     )
 
     {
         $cbtEvaluation = CbtEvaluation::where('studentno', $studentData->admission_no)
-            ->where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
+            ->where('session1', $questionSetting->session1)
+            ->where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('semester', $questionSetting->semester)
+            ->where('course', $questionSetting->course)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('exam_type', $questionSetting->exam_type)
+            ->where('exam_category', $questionSetting->exam_category)
             ->where('noofquestion', $noOfQuestions)
             ->first();
 
@@ -2495,14 +2579,14 @@ class ExamController extends Controller
         }
 
         $studentAnswers = CbtEvaluation2::where('studentno', $studentData->admission_no)
-            ->where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
+            ->where('session1', $questionSetting->session1)
+            ->where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('semester', $questionSetting->semester)
+            ->where('course', $questionSetting->course)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('exam_type', $questionSetting->exam_type)
+            ->where('exam_category', $questionSetting->exam_category)
             ->where('noofquestion', $noOfQuestions)
             ->first();
 
@@ -2563,18 +2647,18 @@ class ExamController extends Controller
         return false;
     }
 
-    private function buildCorrectAnswersFromQuestions($examSetting)
+    private function buildCorrectAnswersFromQuestions($questionSetting)
     {
-        $noOfQuestions = $examSetting->no_of_qst;
+        $noOfQuestions = $questionSetting->no_of_qst;
 
-        $questions = QuestionSingle::where('session1', $examSetting->session1)
-            ->where('department', $examSetting->department)
-            ->where('level', $examSetting->level)
-            ->where('semester', $examSetting->semester)
-            ->where('course', $examSetting->course)
-            ->where('exam_mode', $examSetting->exam_mode)
-            ->where('exam_type', $examSetting->exam_type)
-            ->where('exam_category', $examSetting->exam_category)
+        $questions = QuestionSingle::where('session1', $questionSetting->session1)
+            ->where('department', $questionSetting->department)
+            ->where('level', $questionSetting->level)
+            ->where('semester', $questionSetting->semester)
+            ->where('course', $questionSetting->course)
+            ->where('exam_mode', $questionSetting->exam_mode)
+            ->where('exam_type', $questionSetting->exam_type)
+            ->where('exam_category', $questionSetting->exam_category)
             ->orderBy('question_no')
             ->limit($noOfQuestions)
             ->get();
@@ -2584,14 +2668,14 @@ class ExamController extends Controller
         }
 
         $data = [
-            'session1'      => $examSetting->session1,
-            'department'    => $examSetting->department,
-            'level'         => $examSetting->level,
-            'semester'      => $examSetting->semester,
-            'course'        => $examSetting->course,
-            'exam_mode'     => $examSetting->exam_mode,
-            'exam_type'     => $examSetting->exam_type,
-            'exam_category' => $examSetting->exam_category,
+            'session1'      => $questionSetting->session1,
+            'department'    => $questionSetting->department,
+            'level'         => $questionSetting->level,
+            'semester'      => $questionSetting->semester,
+            'course'        => $questionSetting->course,
+            'exam_mode'     => $questionSetting->exam_mode,
+            'exam_type'     => $equestionSetting->exam_type,
+            'exam_category' => $questionSetting->exam_category,
             'noofquestion'  => $noOfQuestions,
         ];
 
@@ -2602,14 +2686,14 @@ class ExamController extends Controller
 
         CbtEvaluation1::updateOrCreate(
             [
-                'session1'      => $examSetting->session1,
-                'department'    => $examSetting->department,
-                'level'         => $examSetting->level,
-                'semester'      => $examSetting->semester,
-                'course'        => $examSetting->course,
-                'exam_mode'     => $examSetting->exam_mode,
-                'exam_type'     => $examSetting->exam_type,
-                'exam_category' => $examSetting->exam_category,
+                'session1'      => $questionSetting->session1,
+                'department'    => $questionSetting->department,
+                'level'         => $questionSetting->level,
+                'semester'      => $questionSetting->semester,
+                'course'        => $questionSetting->course,
+                'exam_mode'     => $questionSetting->exam_mode,
+                'exam_type'     => $questionSetting->exam_type,
+                'exam_category' => $questionSetting->exam_category,
             ],
             $data
         );

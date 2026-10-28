@@ -18,6 +18,9 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="{{asset('student/css/style.css')}}">
+
+  <link rel="stylesheet"
+      href="{{ asset('student/css/cbt-exam-layout.css') }}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('favicon.png')}}" />
   <style>
